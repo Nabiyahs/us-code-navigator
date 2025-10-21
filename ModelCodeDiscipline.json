@@ -1,0 +1,52 @@
+[
+  {
+    "ModelCodeID":"MC001",
+    "DisciplineID":"D001",
+    "ModelCodeName":"IBC"
+  },
+  {
+    "ModelCodeID":"MC002",
+    "DisciplineID":"D001",
+    "ModelCodeName":"ADA"
+  },
+  {
+    "ModelCodeID":"MC003",
+    "DisciplineID":"D002",
+    "ModelCodeName":"IMC"
+  },
+  {
+    "ModelCodeID":"MC004",
+    "DisciplineID":"D002",
+    "ModelCodeName":"IPC"
+  },
+  {
+    "ModelCodeID":"MC005",
+    "DisciplineID":"D002",
+    "ModelCodeName":"ASHRAE"
+  },
+  {
+    "ModelCodeID":"MC006",
+    "DisciplineID":"D003",
+    "ModelCodeName":"NEC"
+  },
+  {
+    "ModelCodeID":"MC007",
+    "DisciplineID":"D004",
+    "ModelCodeName":"NFPA 13: Standard for the Installation of Sprinkler Systems"
+  },
+  {
+    "ModelCodeID":"MC008",
+    "DisciplineID":"D004",
+    "ModelCodeName":"NFPA 14: Standard for the Installation of Standpipe and Hose Systems"
+  },
+  {
+    "ModelCodeID":"MC009",
+    "DisciplineID":"D004",
+    "ModelCodeName":"NFPA 20: Standard for the Installation of Stationary Pumps for Fire Protection"
+  },
+  {
+    "ModelCodeID":"MC010",
+    "DisciplineID":"D004",
+    "ModelCodeName":"NFPA 72"
+  }
+]

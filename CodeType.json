@@ -1,0 +1,17 @@
+[
+  {
+    "CodeTypeID":"CT001",
+    "CodeTypeName":"Model Code",
+    "Description":"IBC, IFC, NEC 등"
+  },
+  {
+    "CodeTypeID":"CT002",
+    "CodeTypeName":"Jurisdiction",
+    "Description":"각 주별 법규"
+  },
+  {
+    "CodeTypeID":"CT003",
+    "CodeTypeName":"Other Jurisdictions",
+    "Description":"기타 법규"
+  }
+]
