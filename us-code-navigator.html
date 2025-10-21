@@ -1,117 +1,7 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
-    <meta char
-        
-        // ==================== LANGUAGE SUPPORT ====================
-        
-        
-        function getText(section, field) {
-            const enField = field + 'EN';
-            return section[enField] || '';
-        }
-        // ==================== AUTO-LINKING FUNCTIONS ====================
-        
-        /**
-         * Creates internal or Google search links for Chapter and Section references
-         * @param {string} text - The text content to process
-         * @param {object} code - The current code object
-         * @param {string} currentSectionKey - Current section key to avoid self-linking
-         * @returns {string} - HTML with links
-         */
-        function autoLinkReferences(text, code, currentSectionKey) {
-            if (!text) return '';
-            
-            // Regular expressions for matching Chapter and Section references
-            const chapterRegex = /\b(Chapter)\s+(\d+)\b/gi;
-            const sectionRegex = /\b(Section)\s+(\d+(?:\.\d+)*(?:\.\d+)?(?:\.\d+)?)\b/gi;
-            
-            let linkedText = text;
-            const replacements = [];
-            
-            let match;
-            while ((match = chapterRegex.exec(text)) !== null) {
-                const fullMatch = match[0];
-                const chapterNum = match[2];
-                replacements.push({
-                    original: fullMatch,
-                    type: 'chapter',
-                    number: chapterNum,
-                    index: match.index
-                });
-            }
-            
-            while ((match = sectionRegex.exec(text)) !== null) {
-                const fullMatch = match[0];
-                const sectionNum = match[2];
-                replacements.push({
-                    original: fullMatch,
-                    type: 'section',
-                    number: sectionNum,
-                    index: match.index
-                });
-            }
-            
-            replacements.sort((a, b) => b.index - a.index);
-            
-            replacements.forEach(item => {
-                let link;
-                let found = false;
-                let targetSectionKey = null;
-                
-                if (item.type === 'chapter') {
-                    targetSectionKey = Object.keys(code.sections).find(key => {
-                        const section = code.sections[key];
-                        return section.chapter.toString() === item.number && !section.section;
-                    });
-                    
-                    if (targetSectionKey) {
-                        found = true;
-                        link = `<a href="#${targetSectionKey}" class="code-reference internal-link" onclick="scrollToSection('${targetSectionKey}'); return false;" title="Jump to Chapter ${item.number}">${item.original}</a>`;
-                    }
-                } else if (item.type === 'section') {
-                    targetSectionKey = Object.keys(code.sections).find(key => {
-                        const section = code.sections[key];
-                        return section.section && section.section.toString() === item.number;
-                    });
-                    
-                    if (targetSectionKey) {
-                        found = true;
-                        link = `<a href="#${targetSectionKey}" class="code-reference internal-link" onclick="scrollToSection('${targetSectionKey}'); return false;" title="Jump to Section ${item.number}">${item.original}</a>`;
-                    }
-                }
-                
-                // If not found in current code, create Google search link
-                if (!found) {
-                    const searchQuery = encodeURIComponent(`${code.title} ${item.type} ${item.number}`);
-                    const googleUrl = `https://www.google.com/search?q=${searchQuery}`;
-                    link = `<a href="${googleUrl}" class="code-reference external-link" target="_blank" rel="noopener noreferrer" title="Search on Google: ${code.title} ${item.type} ${item.number}">🔍 ${item.original}</a>`;
-                }
-                
-                // Replace in text (working backwards preserves indices)
-                const before = linkedText.substring(0, item.index);
-                const after = linkedText.substring(item.index + item.original.length);
-                linkedText = before + link + after;
-            });
-            
-            return linkedText;
-        }
-        
-        function scrollToSection(sectionKey) {
-            const element = document.getElementById(sectionKey);
-            if (element) {
-                element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                // Highlight the section briefly
-                element.style.backgroundColor = 'rgba(20, 156, 220, 0.1)';
-                setTimeout(() => {
-                    element.style.backgroundColor = '';
-                }, 2000);
-            }
-        }
-
-            return section[enField] || section[krField] || '';
-        }
-set="UTF-8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>US Code Navigator</title>
     <style>
@@ -1276,6 +1166,112 @@ set="UTF-8">
 
     
     <script>
+        // ==================== LANGUAGE SUPPORT ====================
+
+        function getText(section, field) {
+            const krField = field + 'KR';
+            return section[krField] || '';
+        }
+
+        // ==================== AUTO-LINKING FUNCTIONS ====================
+
+        /**
+         * Creates internal or Google search links for Chapter and Section references
+         * @param {string} text - The text content to process
+         * @param {object} code - The current code object
+         * @param {string} currentSectionKey - Current section key to avoid self-linking
+         * @returns {string} - HTML with links
+         */
+        function autoLinkReferences(text, code, currentSectionKey) {
+            if (!text) return '';
+
+            // Regular expressions for matching Chapter and Section references
+            const chapterRegex = /\b(Chapter)\s+(\d+)\b/gi;
+            const sectionRegex = /\b(Section)\s+(\d+(?:\.\d+)*(?:\.\d+)?(?:\.\d+)?)\b/gi;
+
+            let linkedText = text;
+            const replacements = [];
+
+            let match;
+            while ((match = chapterRegex.exec(text)) !== null) {
+                const fullMatch = match[0];
+                const chapterNum = match[2];
+                replacements.push({
+                    original: fullMatch,
+                    type: 'chapter',
+                    number: chapterNum,
+                    index: match.index
+                });
+            }
+
+            while ((match = sectionRegex.exec(text)) !== null) {
+                const fullMatch = match[0];
+                const sectionNum = match[2];
+                replacements.push({
+                    original: fullMatch,
+                    type: 'section',
+                    number: sectionNum,
+                    index: match.index
+                });
+            }
+
+            replacements.sort((a, b) => b.index - a.index);
+
+            replacements.forEach(item => {
+                let link;
+                let found = false;
+                let targetSectionKey = null;
+
+                if (item.type === 'chapter') {
+                    targetSectionKey = Object.keys(code.sections).find(key => {
+                        const section = code.sections[key];
+                        return section.chapter.toString() === item.number && !section.section;
+                    });
+
+                    if (targetSectionKey) {
+                        found = true;
+                        link = `<a href="#${targetSectionKey}" class="code-reference internal-link" onclick="scrollToSection('${targetSectionKey}'); return false;" title="Jump to Chapter ${item.number}">${item.original}</a>`;
+                    }
+                } else if (item.type === 'section') {
+                    targetSectionKey = Object.keys(code.sections).find(key => {
+                        const section = code.sections[key];
+                        return section.section && section.section.toString() === item.number;
+                    });
+
+                    if (targetSectionKey) {
+                        found = true;
+                        link = `<a href="#${targetSectionKey}" class="code-reference internal-link" onclick="scrollToSection('${targetSectionKey}'); return false;" title="Jump to Section ${item.number}">${item.original}</a>`;
+                    }
+                }
+
+                // If not found in current code, create Google search link
+                if (!found) {
+                    const searchQuery = encodeURIComponent(`${code.title} ${item.type} ${item.number}`);
+                    const googleUrl = `https://www.google.com/search?q=${searchQuery}`;
+                    link = `<a href="${googleUrl}" class="code-reference external-link" target="_blank" rel="noopener noreferrer" title="Search on Google: ${code.title} ${item.type} ${item.number}">🔍 ${item.original}</a>`;
+                }
+
+                // Replace in text (working backwards preserves indices)
+                const before = linkedText.substring(0, item.index);
+                const after = linkedText.substring(item.index + item.original.length);
+                linkedText = before + link + after;
+            });
+
+            return linkedText;
+        }
+
+        function scrollToSection(sectionKey) {
+            const element = document.getElementById(sectionKey);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                // Highlight the section briefly
+                element.style.backgroundColor = 'rgba(20, 156, 220, 0.1)';
+                setTimeout(() => {
+                    element.style.backgroundColor = '';
+                }, 2000);
+            }
+        }
+
         // ==================== EMBEDDED JSON DATA ====================
         const US_CODE_DATA = {
   "schema": {
