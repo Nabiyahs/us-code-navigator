@@ -2,6 +2,16 @@
 
 A professional, modern web application for searching, displaying, and comparing US building codes and standards (IBC, NFPA, etc.).
 
+**Now with Real Data Integration!** This application includes actual code content from:
+- IBC (International Building Code) 2021 & 2024
+- NFPA 13 (Sprinkler Systems) 2025
+- NFPA 14 (Standpipe Systems) 2024
+- NFPA 20 (Fire Pumps) 2025
+- NFPA 72 (Fire Alarm Systems)
+- And more!
+
+**Bilingual Support:** All content available in both English and Korean with easy language toggle.
+
 ## Features
 
 ### 1. **Home Page**
@@ -10,10 +20,12 @@ A professional, modern web application for searching, displaying, and comparing 
 - **Global Search Bar**: Search across all codes from any page
 
 ### 2. **코드 (Code) Section**
-- Dropdown navigation showing all available codes
-- Click to view full code content with all sections
+- Dropdown navigation showing all available codes (dynamically populated from database)
+- Click to view full code content with all sections and chapters
 - Organized by sections with formatted text display
+- **Bilingual content**: Toggle between English and Korean
 - Easy navigation between different code standards
+- Chapter comments and notes included where available
 
 ### 3. **검색 (Search) - Advanced Search**
 Multiple filter options:
@@ -76,6 +88,32 @@ Search results include:
 - Section 17.4: Smoke Detector Spacing
 - Section 23.8: Fire Alarm Control Units
 
+## Data Structure & JSON Files
+
+The application uses a relational data model with the following JSON files:
+
+### Core Schema Files
+- **`schema-meta.json`**: Complete database schema definition with tables, relationships, and foreign keys
+- **`CodeType.json`**: Code type classifications (Model Code, Jurisdiction, etc.)
+- **`ModelCode.json`**: Model code definitions (IBC, NFPA 13, NFPA 20, etc.)
+- **`ModelCodeVersion.json`**: Version information for each code (year, edition)
+- **`Discipline.json`**: Engineering disciplines (Arch/Struct, MEP, Electrical, Fire, EHS)
+
+### Content Files
+- **`CodeChapter.json`**: Chapter information for each code version (bilingual titles, comments)
+- **`CodeContent.json`**: **Main content file (722KB)** - Full text of all code sections in English and Korean
+- **`CodeAttachment.json`**: Attachments and supplementary materials
+- **`Jurisdiction.json`**: US state jurisdictions
+- **`ModelCodeDiscipline.json`**: Mapping between codes and disciplines
+
+### Data Integration
+All JSON data is **embedded directly into the HTML file** for Confluence compatibility. The application:
+1. Loads all JSON data on startup (~900KB total)
+2. Builds a searchable code database with proper relationships
+3. Dynamically populates dropdowns, featured codes, and navigation
+4. Supports bilingual content switching
+5. Enables fast client-side search and filtering
+
 ## Technical Implementation
 
 ### Structure
@@ -86,15 +124,20 @@ Search results include:
 
 ### Key Functions
 
+#### Data Processing
+- `buildCodeDatabase()`: Builds searchable database from JSON data with proper relationships
+- `toggleLanguage()`: Switches between English and Korean content
+- `getText(section, field)`: Gets text in current language
+
 #### Navigation
 - `navigateToPage(page)`: Switch between main pages
-- `viewCode(codeId)`: Display specific code content
+- `viewCode(codeId)`: Display specific code content with bilingual support
 - `toggleDropdown()`: Show/hide code dropdown menu
 
 #### Search
 - `performGlobalSearch(query)`: Quick search from header
 - `performAdvancedSearch()`: Filter-based search
-- `searchCodes(filters)`: Search algorithm with multiple filters
+- `searchCodes(filters)`: Search algorithm supporting bilingual content
 - `displaySearchResults(results, searchTerm)`: Render search results with highlighting
 
 #### Comparison

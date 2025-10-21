@@ -1,0 +1,27 @@
+[
+  {
+    "DisciplineID":"D001",
+    "DisciplineNameEN":"Arch\/Struct",
+    "DisciplineNameKR":"건축\/구조"
+  },
+  {
+    "DisciplineID":"D002",
+    "DisciplineNameEN":"MEP",
+    "DisciplineNameKR":"기계\/배관"
+  },
+  {
+    "DisciplineID":"D003",
+    "DisciplineNameEN":"Elec",
+    "DisciplineNameKR":"전기"
+  },
+  {
+    "DisciplineID":"D004",
+    "DisciplineNameEN":"Fire",
+    "DisciplineNameKR":"소방\/안전"
+  },
+  {
+    "DisciplineID":"D005",
+    "DisciplineNameEN":"EHS",
+    "DisciplineNameKR":"환경\/보건"
+  }
+]

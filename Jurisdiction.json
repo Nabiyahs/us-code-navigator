@@ -1,0 +1,20 @@
+[
+  {
+    "JurisdictionID":"J001",
+    "JurisdictionName":"Georgia",
+    "StateName":"Georgia",
+    "StateCode":"GA"
+  },
+  {
+    "JurisdictionID":"J002",
+    "JurisdictionName":"Louisiana",
+    "StateName":"Louisiana",
+    "StateCode":"LA"
+  },
+  {
+    "JurisdictionID":"J003",
+    "JurisdictionName":"Texas",
+    "StateName":"Texas",
+    "StateCode":"TX"
+  }
+]
