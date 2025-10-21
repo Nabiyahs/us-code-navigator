@@ -12,7 +12,7 @@ A professional, modern web application for searching, displaying, and comparing 
 
 **Bilingual Support:** All content available in both English and Korean with easy language toggle.
 
-**NEW! Enhanced Navigation:** Table of Contents panel, Bookmarks, History tracking, and more professional features.
+**Enterprise-Ready:** Secure, offline-capable wiki page with no external dependencies or data collection.
 
 ## Features
 
@@ -21,37 +21,31 @@ A professional, modern web application for searching, displaying, and comparing 
 - **Featured Codes**: Direct access to commonly used codes (IBC 2024, NFPA 13, NFPA 20, NFPA 72)
 - **Global Search Bar**: Search across all codes from any page
 
-### 2. **코드 (Code) Section** - Now with Enhanced Navigation!
+### 2. **코드 (Code) Section** - Professional & Secure
 - Dropdown navigation showing all available codes (dynamically populated from database)
 - Click to view full code content with all sections and chapters
 - **📑 Table of Contents Panel**:
   - Collapsible chapter/section tree view
   - Click any item to jump instantly
   - Reading progress indicator
-  - Toggleable via button or FAB
-- **⭐ Bookmarks System**:
-  - Star any section for quick access
-  - Bookmark manager with easy removal
-  - Persistent across sessions
-- **🕐 Recent History**:
-  - Automatically tracks last 20 viewed sections
-  - Time-ago display (e.g., "5 min ago")
-  - Quick navigation to previous sections
+  - Toggleable via FAB button
 - **🧭 Breadcrumb Navigation**:
-  - Shows current location path
+  - Shows current location path (Home > Code > Chapter > Section)
   - Each level clickable
   - Context-aware display
-- **Section Toolbars**:
-  - Bookmark button per section
-  - Share link generation
-  - Print button
+- **📋 Copy & Print Functions** (Icon-only toolbar):
+  - 📋 One-click copy section text
+  - 🖨️ Print individual sections with optimized stylesheet
+  - Visual feedback on actions
 - **Bilingual content**: Toggle between English and Korean
 - **Smart Auto-Linking**: Automatic hyperlinks for Chapter and Section references
-  - Internal links jump to referenced sections within the same code
-  - External links search Google when section doesn't exist
+  - Internal-only links (no external dependencies)
+  - Jump to referenced sections within the same code
   - Smooth scrolling with visual highlighting
 - Easy navigation between different code standards
 - Chapter comments and notes included where available
+- **No external links**: Secure for corporate environments
+- **No data collection**: All features work offline in the browser
 
 ### 3. **검색 (Search) - Advanced Search**
 Multiple filter options:
@@ -162,17 +156,14 @@ All JSON data is **embedded directly into the HTML file** for Confluence compati
 - `scrollToSection(sectionKey)`: Smooth scroll to referenced section with highlight animation
 
 #### Auto-Linking
-- `autoLinkReferences(text, code, sectionKey)`: Automatically creates links for Chapter/Section references
-- Supports internal navigation and external Google searches
+- `autoLinkReferences(text, code, sectionKey)`: Automatically creates internal links for Chapter/Section references
+- Internal-only navigation (no external links)
 - Pattern matching for "Chapter X" and "Section X.X.X" formats
 
-#### Bookmarks & History
-- `toggleBookmark(codeId, sectionKey, title)`: Add/remove bookmark for a section
-- `isBookmarked(codeId, sectionKey)`: Check if section is bookmarked
-- `addToHistory(codeId, sectionKey, title)`: Track viewed sections
-- `updateBookmarksUI()`: Refresh bookmarks panel display
-- `updateHistoryUI()`: Refresh history panel display
-- `navigateToBookmark(codeId, sectionKey)`: Jump to bookmarked section
+#### Copy & Print
+- `copySection(sectionKey)`: Copy section text to clipboard with visual feedback
+- `printSection(sectionKey)`: Print individual section with optimized layout
+- Print stylesheet for clean, professional output
 
 #### Table of Contents
 - `buildTOC(code)`: Generate interactive TOC from code structure
@@ -182,11 +173,6 @@ All JSON data is **embedded directly into the HTML file** for Confluence compati
 
 #### Breadcrumb
 - `updateBreadcrumb(codeId, sectionKey)`: Update navigation path display
-
-#### Data Persistence
-- `AppStorage.get(key, defaultValue)`: Retrieve from LocalStorage
-- `AppStorage.set(key, value)`: Save to LocalStorage
-- `AppStorage.remove(key)`: Delete from LocalStorage
 
 #### Search
 - `performGlobalSearch(query)`: Quick search from header

@@ -33,14 +33,12 @@
             if (!text) return '';
             
             // Regular expressions for matching Chapter and Section references
-            // Matches: "Chapter 3", "Section 903.3.1", "Section 10", etc.
             const chapterRegex = /\b(Chapter)\s+(\d+)\b/gi;
             const sectionRegex = /\b(Section)\s+(\d+(?:\.\d+)*(?:\.\d+)?(?:\.\d+)?)\b/gi;
             
             let linkedText = text;
             const replacements = [];
             
-            // Find all Chapter references
             let match;
             while ((match = chapterRegex.exec(text)) !== null) {
                 const fullMatch = match[0];
@@ -53,7 +51,6 @@
                 });
             }
             
-            // Find all Section references
             while ((match = sectionRegex.exec(text)) !== null) {
                 const fullMatch = match[0];
                 const sectionNum = match[2];
@@ -65,96 +62,36 @@
                 });
             }
             
-            // Sort by index in reverse order to maintain string positions
             replacements.sort((a, b) => b.index - a.index);
             
-            // Replace each match with appropriate link
             replacements.forEach(item => {
-                let link;
-                let found = false;
                 let targetSectionKey = null;
                 
                 if (item.type === 'chapter') {
-                    // Look for chapter in current code
                     targetSectionKey = Object.keys(code.sections).find(key => {
                         const section = code.sections[key];
                         return section.chapter.toString() === item.number && !section.section;
                     });
-                    
-                    if (targetSectionKey) {
-                        found = true;
-                        link = `<a href="#${targetSectionKey}" class="code-reference internal-link" onclick="scrollToSection('${targetSectionKey}'); return false;" title="Jump to Chapter ${item.number}">${item.original}</a>`;
-                    }
                 } else if (item.type === 'section') {
-                    // Look for section in current code
                     targetSectionKey = Object.keys(code.sections).find(key => {
                         const section = code.sections[key];
                         return section.section && section.section.toString() === item.number;
                     });
-                    
-                    if (targetSectionKey) {
-                        found = true;
-                        link = `<a href="#${targetSectionKey}" class="code-reference internal-link" onclick="scrollToSection('${targetSectionKey}'); return false;" title="Jump to Section ${item.number}">${item.original}</a>`;
-                    }
                 }
                 
-                // If not found in current code, create Google search link
-                if (!found) {
-                    const searchQuery = encodeURIComponent(`${code.title} ${item.type} ${item.number}`);
-                    const googleUrl = `https://www.google.com/search?q=${searchQuery}`;
-                    link = `<a href="${googleUrl}" class="code-reference external-link" target="_blank" rel="noopener noreferrer" title="Search on Google: ${code.title} ${item.type} ${item.number}">\u{1F50D} ${item.original}</a>`;
+                // Only create link if section exists in current code
+                if (targetSectionKey) {
+                    const link = `<a href="#${targetSectionKey}" class="code-reference internal-link" onclick="scrollToSection('${targetSectionKey}'); return false;" title="Jump to ${item.type} ${item.number}">${item.original}</a>`;
+                    const before = linkedText.substring(0, item.index);
+                    const after = linkedText.substring(item.index + item.original.length);
+                    linkedText = before + link + after;
                 }
-                
-                // Replace in text (working backwards preserves indices)
-                const before = linkedText.substring(0, item.index);
-                const after = linkedText.substring(item.index + item.original.length);
-                linkedText = before + link + after;
             });
             
             return linkedText;
         }
         
-        /**
-         * Scrolls to a specific section within the code content
-         * @param {string} sectionKey - The section key to scroll to
-         */
-        
-        
-        // ==================== BREADCRUMB NAVIGATION ====================
-        function updateBreadcrumb(codeId, sectionKey) {
-            const breadcrumb = document.getElementById('breadcrumbNav');
-            const content = document.getElementById('breadcrumbContent');
-            
-            if (!codeId) {
-                breadcrumb.style.display = 'none';
-                return;
-            }
-            
-            const code = codeDatabase[codeId];
-            if (!code) return;
-            
-            let html = '<a href="#" class="breadcrumb-item" onclick="navigateToPage('home'); return false;">Home</a>';
-            html += '<span class="breadcrumb-separator">›</span>';
-            html += '<a href="#" class="breadcrumb-item" onclick="navigateToPage('home'); return false;">코드</a>';
-            html += '<span class="breadcrumb-separator">›</span>';
-            html += `<span class="breadcrumb-item current">${escapeHtml(code.title)}</span>`;
-            
-            if (sectionKey && code.sections[sectionKey]) {
-                const section = code.sections[sectionKey];
-                html += '<span class="breadcrumb-separator">›</span>';
-                
-                let sectionLabel = 'Chapter ' + section.chapter;
-                if (section.section) {
-                    sectionLabel = 'Section ' + section.section;
-                }
-                
-                html += `<span class="breadcrumb-item current">${sectionLabel}</span>`;
-            }
-            
-            content.innerHTML = html;
-            breadcrumb.style.display = 'flex';
-        }
-function scrollToSection(sectionKey) {
+        function scrollToSection(sectionKey) {
             const element = document.getElementById(sectionKey);
             if (element) {
                 element.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -772,6 +709,7 @@ set="UTF-8">
         }
     
         /* ==================== CODE REFERENCE LINKS ==================== */
+        
         .code-reference {
             color: var(--primary-blue);
             text-decoration: none;
@@ -779,23 +717,16 @@ set="UTF-8">
             border-bottom: 2px solid var(--medium-blue);
             transition: all 0.3s ease;
             padding: 0 0.2rem;
-        }
-        
-        .code-reference.internal-link:hover {
-            background-color: rgba(20, 156, 220, 0.1);
-            border-bottom-color: var(--primary-blue);
             cursor: pointer;
         }
         
-        .code-reference.external-link {
-            color: var(--dark-blue);
-            border-bottom-style: dashed;
+        .code-reference:hover {
+            background-color: rgba(20, 156, 220, 0.1);
+            border-bottom-color: var(--primary-blue);
         }
+
         
-        .code-reference.external-link:hover {
-            background-color: rgba(12, 84, 132, 0.1);
-            border-bottom-style: solid;
-        }
+        
         
         .code-section {
             scroll-margin-top: 2rem;
@@ -970,132 +901,7 @@ set="UTF-8">
             font-weight: 600;
         }
 
-        /* ==================== BOOKMARKS PANEL ==================== */
-        .feature-panel {
-            position: fixed;
-            left: 250px;
-            top: 140px;
-            width: 350px;
-            max-height: calc(100vh - 160px);
-            background-color: var(--white);
-            box-shadow: 4px 4px 12px var(--shadow);
-            border-radius: 12px;
-            padding: 1.5rem;
-            z-index: 1000;
-            overflow-y: auto;
-            display: none;
-        }
-
-        .feature-panel.active {
-            display: block;
-            animation: slideInLeft 0.3s ease;
-        }
-
-        @keyframes slideInLeft {
-            from {
-                opacity: 0;
-                transform: translateX(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        .panel-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-            padding-bottom: 0.75rem;
-            border-bottom: 2px solid var(--primary-blue);
-        }
-
-        .panel-header h3 {
-            color: var(--dark-blue);
-            font-size: 1.2rem;
-            margin: 0;
-        }
-
-        .panel-close-btn {
-            background: none;
-            border: none;
-            color: var(--charcoal);
-            cursor: pointer;
-            font-size: 1.5rem;
-            padding: 0;
-            transition: color 0.3s ease;
-        }
-
-        .panel-close-btn:hover {
-            color: var(--primary-blue);
-        }
-
-        .bookmark-item,
-        .history-item {
-            padding: 1rem;
-            margin-bottom: 0.75rem;
-            background-color: var(--light-gray);
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border-left: 4px solid var(--primary-blue);
-        }
-
-        .bookmark-item:hover,
-        .history-item:hover {
-            background-color: var(--medium-blue);
-            transform: translateX(5px);
-        }
-
-        .bookmark-title,
-        .history-title {
-            font-weight: 600;
-            color: var(--dark-blue);
-            margin-bottom: 0.25rem;
-        }
-
-        .bookmark-meta,
-        .history-meta {
-            font-size: 0.85rem;
-            color: var(--charcoal);
-        }
-
-        .bookmark-actions {
-            margin-top: 0.5rem;
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        .bookmark-action-btn {
-            background: none;
-            border: none;
-            color: var(--charcoal);
-            cursor: pointer;
-            font-size: 0.9rem;
-            padding: 0.25rem 0.5rem;
-            border-radius: 4px;
-            transition: all 0.3s ease;
-        }
-
-        .bookmark-action-btn:hover {
-            background-color: var(--white);
-            color: var(--primary-blue);
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 2rem;
-            color: var(--charcoal);
-        }
-
-        .empty-state-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            opacity: 0.5;
-        }
-
-        /* ==================== FLOATING ACTION BUTTONS ==================== */
+        
         .fab-container {
             position: fixed;
             bottom: 2rem;
@@ -21957,25 +21763,20 @@ Where required, the fire alarm system shall be monitored for alarm, supervisory,
                     }
                 }
                 
-                // Check if bookmarked
-                const bookmarked = isBookmarked(codeId, sectionKey);
-                const bookmarkIcon = bookmarked ? '⭐' : '☆';
+                
                 
                 // Apply auto-linking BEFORE escaping HTML
                 const contentLinked = autoLinkReferences(contentRaw, code, sectionKey);
                 const contentEscaped = contentLinked; // Already has HTML links, don't escape
                 
-                // Add section toolbar
+                // Add simple icon-only toolbar
                 const toolbar = `
                     <div class="section-toolbar">
-                        <button class="toolbar-btn ${bookmarked ? 'active' : ''}" onclick="toggleBookmark('${codeId}', '${sectionKey}', '${escapeHtml(title).replace(/'/g, "\\'")}'); event.stopPropagation();" title="Bookmark this section">
-                            ${bookmarkIcon} Bookmark
+                        <button class="toolbar-btn icon-only" onclick="copySection('${sectionKey}'); event.stopPropagation();" title="Copy section text">
+                            📋
                         </button>
-                        <button class="toolbar-btn" onclick="navigator.clipboard.writeText(window.location.origin + window.location.pathname + '#code=${codeId}&section=${sectionKey}'); alert('Link copied!');" title="Copy link">
-                            🔗 Share
-                        </button>
-                        <button class="toolbar-btn" onclick="window.print();" title="Print">
-                            🖨️ Print
+                        <button class="toolbar-btn icon-only" onclick="printSection('${sectionKey}'); event.stopPropagation();" title="Print section">
+                            🖨️
                         </button>
                     </div>
                 `;
@@ -21989,8 +21790,7 @@ Where required, the fire alarm system shall be monitored for alarm, supervisory,
                     </div>
                 `;
                 
-                // Add to history
-                addToHistory(codeId, sectionKey, sectionLabel + ': ' + title);
+                
             });
 
             if (!contentHTML) {
@@ -22026,201 +21826,250 @@ Where required, the fire alarm system shall be monitored for alarm, supervisory,
         function viewCodeOLD(codeId) {// Keep old function as backup
 
         
-        // ==================== DATA PERSISTENCE ====================
-        const AppStorage = {
-            get(key, defaultValue = null) {
-                try {
-                    const item = localStorage.getItem('usCodeNav_' + key);
-                    return item ? JSON.parse(item) : defaultValue;
-                } catch (e) {
-                    console.error('Storage get error:', e);
-                    return defaultValue;
-                }
-            },
-
-            set(key, value) {
-                try {
-                    localStorage.setItem('usCodeNav_' + key, JSON.stringify(value));
-                } catch (e) {
-                    console.error('Storage set error:', e);
-                }
-            },
-
-            remove(key) {
-                localStorage.removeItem('usCodeNav_' + key);
-            }
-        };
-
-        // ==================== BOOKMARKS SYSTEM ====================
+        // ====================
         let bookmarks = AppStorage.get('bookmarks', []);
 
-        function isBookmarked(codeId, sectionKey) {
-            return bookmarks.some(b => b.codeId === codeId && b.sectionKey === sectionKey);
-        }
+        
 
-        function toggleBookmark(codeId, sectionKey, title) {
-            const index = bookmarks.findIndex(b => b.codeId === codeId && b.sectionKey === sectionKey);
-            
-            if (index > -1) {
-                bookmarks.splice(index, 1);
-            } else {
-                bookmarks.unshift({
-                    id: 'bm_' + Date.now(),
-                    codeId: codeId,
-                    sectionKey: sectionKey,
-                    title: title,
-                    date: new Date().toISOString()
-                });
-            }
-            
-            AppStorage.set('bookmarks', bookmarks);
-            updateBookmarksUI();
-            updateSectionToolbar();
-        }
+        
 
-        function removeBookmark(id) {
-            bookmarks = bookmarks.filter(b => b.id !== id);
-            AppStorage.set('bookmarks', bookmarks);
-            updateBookmarksUI();
-        }
+        
 
-        function updateBookmarksUI() {
-            const container = document.getElementById('bookmarksContent');
-            const count = document.getElementById('bookmarkCount');
+        
+
+        
+
+        
+
+        
+        
+        // ==================== COPY & PRINT FUNCTIONS ====================
+        
+        function copySection(sectionKey) {
+            const sectionEl = document.getElementById(sectionKey);
+            if (!sectionEl) return;
             
-            count.textContent = bookmarks.length;
+            const titleEl = sectionEl.querySelector('h3');
+            const contentEl = sectionEl.querySelector('.code-text');
             
-            if (bookmarks.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <div class="empty-state-icon">⭐</div>
-                        <p>No bookmarks yet</p>
-                        <p style="font-size: 0.9rem; color: var(--charcoal);">
-                            Click the star icon on any section to bookmark it
-                        </p>
-                    </div>
-                `;
+            if (!contentEl) return;
+            
+            const title = titleEl ? titleEl.textContent : '';
+            const content = contentEl.textContent;
+            
+            const textToCopy = title + '\n\n' + content;
+            
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                // Visual feedback
+                const btn = event.target;
+                const originalText = btn.textContent;
+                btn.textContent = '✓';
+                btn.style.backgroundColor = '#4CAF50';
+                btn.style.color = 'white';
+                
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.style.backgroundColor = '';
+                    btn.style.color = '';
+                }, 1500);
+            }).catch(err => {
+                alert('Copy failed. Please try again.');
+            });
+        }
+        
+        function printSection(sectionKey) {
+            const sectionEl = document.getElementById(sectionKey);
+            if (!sectionEl) {
+                window.print();
                 return;
             }
             
-            let html = '';
-            bookmarks.forEach(bookmark => {
-                const code = codeDatabase[bookmark.codeId];
-                const codeTitle = code ? code.title : bookmark.codeId;
-                const dateStr = new Date(bookmark.date).toLocaleDateString();
-                
-                html += `
-                    <div class="bookmark-item" onclick="navigateToBookmark('${bookmark.codeId}', '${bookmark.sectionKey}')">
-                        <div class="bookmark-title">${escapeHtml(bookmark.title)}</div>
-                        <div class="bookmark-meta">${escapeHtml(codeTitle)} · ${dateStr}</div>
-                        <div class="bookmark-actions">
-                            <button class="bookmark-action-btn" onclick="event.stopPropagation(); removeBookmark('${bookmark.id}')" title="Remove bookmark">
-                                🗑️ Remove
-                            </button>
-                        </div>
-                    </div>
-                `;
-            });
+            // Create print window with just this section
+            const titleEl = sectionEl.querySelector('h3');
+            const contentEl = sectionEl.querySelector('.code-text');
+            const commentEl = sectionEl.querySelector('[style*="background: #FFF3CD"]');
             
-            container.innerHTML = html;
+            const title = titleEl ? titleEl.outerHTML : '';
+            const content = contentEl ? contentEl.outerHTML : '';
+            const comment = commentEl ? commentEl.outerHTML : '';
+            
+            const printWindow = window.open('', '', 'width=800,height=600');
+            printWindow.document.write(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>Print - ${currentCode ? codeDatabase[currentCode].title : 'Code Section'}</title>
+                    <style>
+                        body {
+                            font-family: 'Times New Roman', serif;
+                            line-height: 1.6;
+                            margin: 2cm;
+                            color: #000;
+                        }
+                        h3 {
+                            color: #000;
+                            border-bottom: 2px solid #000;
+                            padding-bottom: 0.5rem;
+                            margin-bottom: 1rem;
+                        }
+                        .code-text {
+                            white-space: pre-wrap;
+                            font-family: 'Courier New', monospace;
+                            font-size: 11pt;
+                            line-height: 1.8;
+                        }
+                        a {
+                            color: #000;
+                            text-decoration: underline;
+                        }
+                        @page {
+                            margin: 2cm;
+                        }
+                    
+        .toolbar-btn.icon-only {
+            padding: 0.5rem;
+            min-width: 44px;
+            height: 44px;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--white);
+            border: 2px solid var(--medium-blue);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
         }
 
-        function navigateToBookmark(codeId, sectionKey) {
-            closeFeaturesPanel();
-            viewCode(codeId);
-            setTimeout(() => scrollToSection(sectionKey), 500);
+        .toolbar-btn.icon-only:hover {
+            background-color: var(--primary-blue);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px var(--shadow);
         }
 
-        function toggleBookmarksPanel() {
-            closeFeaturesPanel();
-            const panel = document.getElementById('bookmarksPanel');
-            panel.classList.add('active');
-            updateBookmarksUI();
+        .toolbar-btn.icon-only:active {
+            transform: translateY(0);
         }
 
-        // ==================== HISTORY TRACKING ====================
-        let history = AppStorage.get('history', []);
-
-        function addToHistory(codeId, sectionKey, title) {
-            // Remove if already exists
-            history = history.filter(h => !(h.codeId === codeId && h.sectionKey === sectionKey));
-            
-            // Add to beginning
-            history.unshift({
-                codeId: codeId,
-                sectionKey: sectionKey,
-                title: title,
-                timestamp: Date.now()
-            });
-            
-            // Keep only last 20
-            if (history.length > 20) {
-                history = history.slice(0, 20);
+        /* ==================== PRINT STYLESHEET ==================== */
+        @media print {
+            /* Hide non-printable elements */
+            .header,
+            .sidebar,
+            .toc-panel,
+            .breadcrumb-nav,
+            .fab-container,
+            .section-toolbar,
+            .search-button,
+            .compare-button,
+            .nav-item,
+            button {
+                display: none !important;
             }
-            
-            AppStorage.set('history', history);
-            updateHistoryUI();
-        }
 
-        function updateHistoryUI() {
-            const container = document.getElementById('historyContent');
-            const count = document.getElementById('historyCount');
-            
-            count.textContent = history.length;
-            
-            if (history.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <div class="empty-state-icon">🕐</div>
-                        <p>No history yet</p>
-                        <p style="font-size: 0.9rem; color: var(--charcoal);">
-                            Your recently viewed sections will appear here
-                        </p>
-                    </div>
-                `;
-                return;
+            /* Reset layout for print */
+            body {
+                background-color: white;
+                color: black;
             }
-            
-            let html = '';
-            history.forEach(item => {
-                const code = codeDatabase[item.codeId];
-                const codeTitle = code ? code.title : item.codeId;
-                const timeAgo = getTimeAgo(item.timestamp);
-                
-                html += `
-                    <div class="history-item" onclick="navigateToBookmark('${item.codeId}', '${item.sectionKey}')">
-                        <div class="history-title">${escapeHtml(item.title)}</div>
-                        <div class="history-meta">${escapeHtml(codeTitle)} · ${timeAgo}</div>
-                    </div>
-                `;
-            });
-            
-            container.innerHTML = html;
-        }
 
-        function getTimeAgo(timestamp) {
-            const seconds = Math.floor((Date.now() - timestamp) / 1000);
-            
-            if (seconds < 60) return 'Just now';
-            if (seconds < 3600) return Math.floor(seconds / 60) + ' min ago';
-            if (seconds < 86400) return Math.floor(seconds / 3600) + ' hr ago';
-            return Math.floor(seconds / 86400) + ' days ago';
-        }
+            .main-container {
+                display: block;
+                min-height: auto;
+            }
 
-        function toggleHistoryPanel() {
-            closeFeaturesPanel();
-            const panel = document.getElementById('historyPanel');
-            panel.classList.add('active');
-            updateHistoryUI();
-        }
+            .content-area {
+                padding: 0;
+                background-color: white;
+            }
 
-        function closeFeaturesPanel() {
-            document.querySelectorAll('.feature-panel').forEach(panel => {
-                panel.classList.remove('active');
-            });
-        }
+            .code-content,
+            .code-section {
+                page-break-inside: avoid;
+                background-color: white;
+                box-shadow: none;
+                border: none;
+            }
 
-        // ==================== TABLE OF CONTENTS ====================
+            /* Optimize typography for print */
+            h1, h2, h3 {
+                color: black;
+                page-break-after: avoid;
+            }
+
+            .code-section h3 {
+                border-color: black;
+                margin-top: 1.5rem;
+            }
+
+            .code-text {
+                background-color: transparent;
+                font-family: 'Courier New', monospace;
+                font-size: 10pt;
+                line-height: 1.6;
+                color: black;
+                white-space: pre-wrap;
+                page-break-inside: avoid;
+            }
+
+            /* Print links */
+            a {
+                color: black;
+                text-decoration: underline;
+            }
+
+            /* Page setup */
+            @page {
+                margin: 2cm;
+                size: A4;
+            }
+
+            /* Show URLs for external links */
+            a[href^="http"]:after {
+                content: " (" attr(href) ")";
+                font-size: 0.8em;
+            }
+
+            /* Page breaks */
+            .code-section {
+                page-break-before: auto;
+                page-break-after: auto;
+            }
+
+            /* Header for each page */
+            .code-header {
+                page-break-after: avoid;
+            }
+
+            /* Ensure code title appears on first page */
+            .code-header h2 {
+                font-size: 18pt;
+                font-weight: bold;
+                margin-bottom: 0.5cm;
+            }
+
+            .code-meta {
+                font-size: 10pt;
+                margin-bottom: 1cm;
+            }
+        }
+</style>
+                </head>
+                <body>
+                    ${title}
+                    ${content}
+                    ${comment}
+                </body>
+                </html>
+            `);
+            printWindow.document.close();
+            printWindow.focus();
+            setTimeout(() => {
+                printWindow.print();
+                printWindow.close();
+            }, 250);
+        }
+// ==================== TABLE OF CONTENTS ====================
         function buildTOC(code) {
             const tocContent = document.getElementById('tocContent');
             
@@ -22684,6 +22533,41 @@ Where required, the fire alarm system shall be monitored for alarm, supervisory,
             
             compare1.innerHTML = compareOptions;
             compare2.innerHTML = compareOptions;
+        });
+            
+            dropdown.innerHTML = dropdownHTML;
+            
+            // Populate featured codes
+            const featuredGrid = document.getElementById('featuredCodesGrid');
+            let featuredHTML = '';
+            
+            // Show first 6 codes as featured
+            Object.keys(codeDatabase).slice(0, 6).forEach(codeKey => {
+                const code = codeDatabase[codeKey];
+                const badgeText = code.category.split(' ')[0] || 'Code';
+                featuredHTML += `
+                    <div class="code-card" onclick="viewCode('${codeKey}')">
+                        <h3>${code.title}</h3>
+                        <p>${code.category}</p>
+                        <span class="code-badge">${badgeText}</span>
+                    </div>
+                `;
+            });
+            
+            featuredGrid.innerHTML = featuredHTML;
+            
+            // Populate compare code selectors
+            const compare1 = document.getElementById('compareCode1');
+            const compare2 = document.getElementById('compareCode2');
+            let compareOptions = '<option value="">Select code...</option>';
+            
+            Object.keys(codeDatabase).forEach(codeKey => {
+                const code = codeDatabase[codeKey];
+                compareOptions += `<option value="${codeKey}">${code.title}</option>`;
+            });
+            
+            compare1.innerHTML = compareOptions;
+            compare2.innerHTML = compareOptions;
             
             // Initialize bookmarks and history UI
             updateBookmarksUI();
@@ -22693,24 +22577,7 @@ Where required, the fire alarm system shall be monitored for alarm, supervisory,
             handleDeepLink();
         });
         
-        // Deep link handler
-        function handleDeepLink() {
-            const hash = window.location.hash.substring(1);
-            if (!hash) return;
-            
-            const params = new URLSearchParams(hash);
-            if (params.has('code')) {
-                const codeId = params.get('code');
-                const sectionKey = params.get('section');
-                const lang = params.get('lang');
-                
-                if (lang) currentLanguage = lang;
-                
-                viewCode(codeId);
-                
-                if (sectionKey) {
-                    setTimeout(() => scrollToSection(sectionKey), 800);
-                }
+        
             }
         }
     </script>
@@ -22735,18 +22602,7 @@ Where required, the fire alarm system shall be monitored for alarm, supervisory,
         </div>
     </aside>
 
-    <!-- BOOKMARKS PANEL -->
-    <div class="feature-panel" id="bookmarksPanel">
-        <div class="panel-header">
-            <h3>⭐ Bookmarks (<span id="bookmarkCount">0</span>)</h3>
-            <button class="panel-close-btn" onclick="closeFeaturesPanel()">✕</button>
-        </div>
-        <div id="bookmarksContent">
-            <!-- Dynamically generated -->
-        </div>
-    </div>
-
-    <!-- HISTORY PANEL -->
+    
     <div class="feature-panel" id="historyPanel">
         <div class="panel-header">
             <h3>🕐 Recent History (<span id="historyCount">0</span>)</h3>
@@ -22757,16 +22613,11 @@ Where required, the fire alarm system shall be monitored for alarm, supervisory,
         </div>
     </div>
 
+    
     <!-- FLOATING ACTION BUTTONS -->
     <div class="fab-container">
         <button class="fab-button secondary" onclick="toggleTOC()" title="Table of Contents">
             📑
-        </button>
-        <button class="fab-button secondary" onclick="toggleBookmarksPanel()" title="Bookmarks">
-            ⭐
-        </button>
-        <button class="fab-button secondary" onclick="toggleHistoryPanel()" title="History">
-            🕐
         </button>
         <button class="fab-button" onclick="scrollToTop()" title="Scroll to Top">
             ⬆️
