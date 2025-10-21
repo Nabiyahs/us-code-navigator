@@ -4,22 +4,12 @@
     <meta char
         
         // ==================== LANGUAGE SUPPORT ====================
-        let currentLanguage = 'EN'; // 'EN' or 'KR'
         
-        function toggleLanguage() {
-            currentLanguage = currentLanguage === 'EN' ? 'KR' : 'EN';
-            // Refresh current view
-            if (currentPage === 'code' && currentCode) {
-                viewCode(currentCode);
-            }
-        }
         
         function getText(section, field) {
             const enField = field + 'EN';
-            const krField = field + 'KR';
-            if (currentLanguage === 'KR' && section[krField]) {
-                return section[krField];
-            }
+            return section[enField] || '';
+        }
         // ==================== AUTO-LINKING FUNCTIONS ====================
         
         /**
@@ -1072,11 +1062,7 @@ set="UTF-8">
             <input type="text" class="search-bar" id="globalSearch" placeholder="Search US codes, regulations, and standards...">
         </div>
     
-        <div style="text-align: center; margin-top: 1rem;">
-            <button onclick="toggleLanguage()" style="background: rgba(255,255,255,0.2); color: white; border: 2px solid white; padding: 0.5rem 1.5rem; border-radius: 20px; cursor: pointer; font-weight: 600;">
-                <span id="langToggle">🌐 한국어 / English</span>
-            </button>
-        </div>
+        
     </header>
         <!-- BREADCRUMB NAVIGATION -->
         <nav class="breadcrumb-nav" id="breadcrumbNav" style="display: none;">
@@ -21502,186 +21488,6 @@ set="UTF-8">
         // For debugging
         console.log('Code database built:', Object.keys(codeDatabase));
         
-// ==================== DATA STRUCTURE ====================
-        const codeDatabase = {
-            ibc: {
-                id: 'ibc',
-                title: 'International Building Code (IBC) 2024',
-                year: '2024',
-                category: 'Building Construction',
-                sections: {
-                    '903.3.1': {
-                        title: 'NFPA 13 Installation',
-                        content: `903.3.1 NFPA 13 Installation
-
-Where required by this code, automatic sprinkler systems shall be installed in accordance with Section 903.3.1.1, 903.3.1.2 or 903.3.1.3.
-
-Exception: In buildings and structures, other than one- and two-family dwellings, equipped throughout with an automatic sprinkler system in accordance with this section, and where the building or structure has a building area not exceeding 5,000 square feet (465 m²), automatic sprinklers shall be installed throughout the building or structure.
-
-903.3.1.1 NFPA 13 Sprinkler Systems
-Where required, automatic sprinkler systems shall be installed throughout in accordance with NFPA 13, including the provisions for monitoring and supervision.
-
-Exception: Spaces where sprinklers are not required by Section 903.3.1.1.1.
-
-903.3.1.2 NFPA 13R Sprinkler Systems
-Automatic sprinkler systems installed in one- and two-family dwellings, Group R-3 and R-4 congregate living facilities shall be installed in accordance with NFPA 13R or Section 903.3.1.3.`,
-                        type: 'Fire Protection',
-                        keywords: ['sprinkler', 'NFPA 13', 'installation', 'automatic']
-                    },
-                    '1003.2': {
-                        title: 'Ceiling Height',
-                        content: `1003.2 Ceiling Height
-
-The means of egress shall have a ceiling height of not less than 7 feet 6 inches (2286 mm).
-
-Exceptions:
-1. Sloped ceilings in accordance with Section 1003.2.1.
-2. Ceilings of dwelling units and sleeping units within residential occupancies in accordance with Section 1208.2.
-3. Allowable projections in accordance with Section 1003.3.
-4. Stair headroom in accordance with Section 1011.3.
-5. Door height in accordance with Section 1010.1.1.`,
-                        type: 'Building Construction',
-                        keywords: ['ceiling', 'height', 'egress', 'means of egress']
-                    }
-                }
-            },
-            nfpa13: {
-                id: 'nfpa13',
-                title: 'NFPA 13 - Standard for the Installation of Sprinkler Systems',
-                year: '2022',
-                category: 'Fire Protection - Sprinkler Systems',
-                sections: {
-                    '8.3.1': {
-                        title: 'Sprinkler Spacing',
-                        content: `8.3.1 Distance Between Sprinklers
-
-8.3.1.1 The distance between sprinklers shall not exceed the maximum spacing indicated in Table 8.6.2.2.1(a), Table 8.6.2.2.1(b), Table 8.6.2.2.1(c), or Table 8.6.2.2.1(d), as applicable.
-
-8.3.1.2 The minimum distance between sprinklers shall be 6 ft (1.8 m).
-
-Exception: Sprinklers installed in staggered or opposite rows may be installed closer than 6 ft (1.8 m) when the distance between adjacent sprinklers on the same branch line is not less than 6 ft (1.8 m).
-
-8.3.1.3 Sprinklers on the same branch line shall be equally spaced or nearly equally spaced as practicable.`,
-                        type: 'Sprinkler Systems',
-                        keywords: ['sprinkler spacing', 'distance', 'installation', 'branch line']
-                    },
-                    '10.1': {
-                        title: 'Water Supply Requirements',
-                        content: `10.1 Water Supply Requirements
-
-10.1.1 General
-Every automatic sprinkler system shall have at least one automatic water supply.
-
-10.1.2 Minimum Water Supply
-The water supply shall be capable of delivering the design demand, including the hose stream allowance where provided, for the prescribed design areas and densities specified in Chapter 11 through Chapter 23.
-
-10.1.3 Duration
-The water supply shall be capable of delivering the required demand for a minimum duration as specified in the applicable occupancy design criteria.
-
-10.1.4 Water Supply Sources
-Acceptable water supply sources shall include one or more of the following:
-(1) Waterworks systems
-(2) Elevated tanks
-(3) Pressure tanks
-(4) Pump(s) taking suction from sources such as underground tanks, reservoirs, or other reliable sources`,
-                        type: 'Sprinkler Systems',
-                        keywords: ['water supply', 'automatic', 'demand', 'tank', 'pump']
-                    }
-                }
-            },
-            nfpa20: {
-                id: 'nfpa20',
-                title: 'NFPA 20 - Standard for the Installation of Stationary Pumps',
-                year: '2022',
-                category: 'Fire Protection - Fire Pumps',
-                sections: {
-                    '4.8': {
-                        title: 'Pump Room Requirements',
-                        content: `4.8 Pump Room Requirements
-
-4.8.1 General
-Fire pump rooms shall be used only for fire pumps and related equipment.
-
-4.8.2 Ventilation
-The pump room shall be adequately ventilated to prevent a temperature rise that would adversely affect the operation of the pump or driver.
-
-4.8.3 Drainage
-The pump room shall be provided with adequate drainage to remove water from leaks, drains, or testing operations.
-
-4.8.4 Lighting
-The pump room shall have adequate permanent lighting and at least one emergency light source.
-
-4.8.5 Access
-The pump room shall have adequate access for installation and maintenance of equipment.`,
-                        type: 'Fire Pumps',
-                        keywords: ['pump room', 'ventilation', 'drainage', 'lighting', 'requirements']
-                    },
-                    '4.14': {
-                        title: 'Controllers',
-                        content: `4.14 Controllers
-
-4.14.1 General
-Each fire pump shall be provided with an approved controller conforming to the requirements of this chapter and to the listings of an approved testing laboratory.
-
-4.14.2 Controller Location
-Controllers shall be located as close as practicable to the motors that they control and shall be within sight of the motors.
-
-Exception: Controllers for vertical turbine pumps shall be permitted to be remotely located where the pump and motor are readily accessible and visible from the controller location.
-
-4.14.3 Controller Type
-Controllers shall be of the automatic type that starts the pump at a pressure drop and stops the pump when normal system pressure is restored.`,
-                        type: 'Fire Pumps',
-                        keywords: ['controller', 'automatic', 'motor', 'pressure', 'pump']
-                    }
-                }
-            },
-            nfpa72: {
-                id: 'nfpa72',
-                title: 'NFPA 72 - National Fire Alarm and Signaling Code',
-                year: '2022',
-                category: 'Fire Protection - Fire Alarm Systems',
-                sections: {
-                    '17.4': {
-                        title: 'Smoke Detector Spacing',
-                        content: `17.4 Smoke Detector Spacing
-
-17.4.1 General
-Smoke detectors shall be located on the ceiling or, if on a sidewall, between the ceiling and 12 in. (300 mm) down from the ceiling to the top of the detector.
-
-17.4.2 Spacing - Smooth Ceiling
-17.4.2.1 All points on the ceiling shall have a detector within a distance equal to 0.7 times the listed spacing of the detector.
-
-17.4.2.2 Detectors shall be spaced with a minimum of two detectors in each room or space.
-
-17.4.3 Spot-Type Detectors - Spacing
-The spacing of smoke detectors shall not exceed their listed spacing, and the distance from a detector to the nearest wall or partition shall not exceed one-half the listed spacing.`,
-                        type: 'Fire Alarm Systems',
-                        keywords: ['smoke detector', 'spacing', 'ceiling', 'installation']
-                    },
-                    '23.8': {
-                        title: 'Fire Alarm Control Units',
-                        content: `23.8 Fire Alarm Control Units
-
-23.8.1 General
-The fire alarm control unit(s) shall be listed for the application and installed in accordance with the listing.
-
-23.8.2 Location
-Fire alarm control units shall be located in a room or area that is continuously accessible to authorized personnel.
-
-23.8.3 Environmental Conditions
-Fire alarm control units shall be located where ambient conditions do not exceed the environmental limits specified in the product listing.
-
-23.8.4 Power Supply
-The fire alarm control unit shall be provided with both primary and secondary power supplies in accordance with Chapter 10.
-
-23.8.5 Monitoring
-Where required, the fire alarm system shall be monitored for alarm, supervisory, and trouble signals at a constantly attended location.`,
-                        type: 'Fire Alarm Systems',
-                        keywords: ['control unit', 'FACU', 'power supply', 'monitoring', 'installation']
-                    }
-                }
-            }
-        };
 
         // ==================== NAVIGATION ====================
         let currentPage = 'home';
@@ -21765,7 +21571,7 @@ Where required, the fire alarm system shall be monitored for alarm, supervisory,
             // Build Table of Contents
             buildTOC(code);
 
-            // Build sections content with language support
+            // Build sections content
             let contentHTML = '';
             const sections = Object.values(code.sections).sort((a, b) => {
                 return (a.orderKey || '').localeCompare(b.orderKey || '');
@@ -21794,34 +21600,29 @@ Where required, the fire alarm system shall be monitored for alarm, supervisory,
                     }
                 }
                 
-                
-                
-                // Apply auto-linking BEFORE escaping HTML
+                // Apply auto-linking
                 const contentLinked = autoLinkReferences(contentRaw, code, sectionKey);
-                const contentEscaped = contentLinked; // Already has HTML links, don't escape
                 
-                // Add simple icon-only toolbar
-                const toolbar = `
+                // Simple icon-only toolbar
+                const toolbar = \`
                     <div class="section-toolbar">
-                        <button class="toolbar-btn icon-only" onclick="copySection('${sectionKey}'); event.stopPropagation();" title="Copy section text">
+                        <button class="toolbar-btn icon-only" onclick="copySection('\${sectionKey}'); event.stopPropagation();" title="Copy section text">
                             📋
                         </button>
-                        <button class="toolbar-btn icon-only" onclick="printSection('${sectionKey}'); event.stopPropagation();" title="Print section">
+                        <button class="toolbar-btn icon-only" onclick="printSection('\${sectionKey}'); event.stopPropagation();" title="Print section">
                             🖨️
                         </button>
                     </div>
-                `;
+                \`;
                 
-                contentHTML += `
-                    <div class="code-section" id="${sectionKey}">
-                        <h3>${sectionLabel}: ${escapeHtml(title)}</h3>
-                        ${toolbar}
-                        <div class="code-text">${contentEscaped}</div>
-                        ${section.comment ? '<div style="background: #FFF3CD; padding: 1rem; margin-top: 0.5rem; border-left: 4px solid #FFC107; border-radius: 4px;"><strong>Note:</strong> ' + escapeHtml(section.comment) + '</div>' : ''}
+                contentHTML += \`
+                    <div class="code-section" id="\${sectionKey}">
+                        <h3>\${sectionLabel}: \${escapeHtml(title)}</h3>
+                        \${toolbar}
+                        <div class="code-text">\${contentLinked}</div>
+                        \${section.comment ? '<div style="background: #FFF3CD; padding: 1rem; margin-top: 0.5rem; border-left: 4px solid #FFC107; border-radius: 4px;"><strong>Note:</strong> ' + escapeHtml(section.comment) + '</div>' : ''}
                     </div>
-                `;
-                
-                
+                \`;
             });
 
             if (!contentHTML) {
@@ -21837,13 +21638,16 @@ Where required, the fire alarm system shall be monitored for alarm, supervisory,
             document.querySelectorAll('.dropdown-item').forEach(item => {
                 item.classList.remove('active');
             });
-            const dropdownItem = document.querySelector(`.dropdown-item[data-code="${codeId}"]`);
+            const dropdownItem = document.querySelector(\`.dropdown-item[data-code="\${codeId}"]\`);
             if (dropdownItem) {
                 dropdownItem.classList.add('active');
             }
             
             // Show TOC panel
-            document.getElementById('tocPanel').classList.remove('hidden');
+            const tocPanel = document.getElementById('tocPanel');
+            if (tocPanel) {
+                tocPanel.classList.remove('hidden');
+            }
             
             // Setup scroll listener
             const contentArea = document.querySelector('.content-area');
@@ -21851,7 +21655,10 @@ Where required, the fire alarm system shall be monitored for alarm, supervisory,
                 contentArea.removeEventListener('scroll', updateScrollProgress);
                 contentArea.addEventListener('scroll', updateScrollProgress);
             }
-        };
+            
+            // Update breadcrumb
+            updateBreadcrumb(codeId, null);
+        }
         
         // Keep old function as backup
         function viewCodeOLD(codeId) {// Keep old function as backup
@@ -22103,6 +21910,9 @@ Where required, the fire alarm system shall be monitored for alarm, supervisory,
 // ==================== TABLE OF CONTENTS ====================
         function buildTOC(code) {
             const tocContent = document.getElementById('tocContent');
+            if (!tocContent || !code || !code.sections) {
+                return;
+            }
             
             // Group sections by chapter
             const chapters = {};
@@ -22128,14 +21938,14 @@ Where required, the fire alarm system shall be monitored for alarm, supervisory,
                 const firstSection = chapter.sections[0].section;
                 const chapterTitle = getText(firstSection, 'title') || 'Chapter ' + chNum;
                 
-                html += `
+                html += \`
                     <li class="toc-chapter">
                         <div class="toc-chapter-title" onclick="toggleTOCChapter(this)">
-                            <span>Chapter ${chNum}: ${escapeHtml(chapterTitle.substring(0, 30))}${chapterTitle.length > 30 ? '...' : ''}</span>
+                            <span>Chapter \${chNum}: \${escapeHtml(chapterTitle.substring(0, 30))}\${chapterTitle.length > 30 ? '...' : ''}</span>
                             <span>▼</span>
                         </div>
                         <ul class="toc-sections">
-                `;
+                \`;
                 
                 chapter.sections.forEach(({key, section}) => {
                     const title = getText(section, 'title');
@@ -22146,23 +21956,23 @@ Where required, the fire alarm system shall be monitored for alarm, supervisory,
                         label = title.substring(0, 25);
                     }
                     
-                    html += `
-                        <li class="toc-section-item" data-section="${key}" onclick="scrollToSection('${key}')">
-                            ${escapeHtml(label)}
+                    html += \`
+                        <li class="toc-section-item" data-section="\${key}" onclick="scrollToSection('\${key}')">
+                            \${escapeHtml(label)}
                         </li>
-                    `;
+                    \`;
                 });
                 
-                html += `
+                html += \`
                         </ul>
                     </li>
-                `;
+                \`;
             });
             
             html += '</ul>';
             tocContent.innerHTML = html;
         }
-
+        
         function toggleTOCChapter(element) {
             const sectionsEl = element.nextElementSibling;
             sectionsEl.classList.toggle('expanded');
@@ -22305,18 +22115,22 @@ Where required, the fire alarm system shall be monitored for alarm, supervisory,
                         match = false;
                     }
 
-                    // Filter by keyword
+                    // Get English text for searching
+                    const title = getText(section, 'title');
+                    const content = getText(section, 'content');
+
+                    // Filter by keyword (search in title and content)
                     if (filters.keyword) {
                         const keywordLower = filters.keyword.toLowerCase();
-                        const hasKeyword = section.keywords.some(k => k.includes(keywordLower)) ||
-                                         section.title.toLowerCase().includes(keywordLower);
+                        const hasKeyword = title.toLowerCase().includes(keywordLower) ||
+                                         content.toLowerCase().includes(keywordLower);
                         if (!hasKeyword) match = false;
                     }
 
                     // Filter by full text
                     if (filters.fullText) {
                         const textLower = filters.fullText.toLowerCase();
-                        const hasText = section.content.toLowerCase().includes(textLower);
+                        const hasText = content.toLowerCase().includes(textLower);
                         if (!hasText) match = false;
                     }
 
@@ -22325,9 +22139,9 @@ Where required, the fire alarm system shall be monitored for alarm, supervisory,
                             codeId: codeId,
                             codeTitle: code.title,
                             sectionNum: sectionNum,
-                            sectionTitle: section.title,
-                            content: section.content,
-                            type: section.type
+                            sectionTitle: title,
+                            content: content,
+                            type: section.comment || '' // Use comment as type
                         });
                     }
                 }
