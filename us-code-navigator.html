@@ -118,7 +118,43 @@
          * Scrolls to a specific section within the code content
          * @param {string} sectionKey - The section key to scroll to
          */
-        function scrollToSection(sectionKey) {
+        
+        
+        // ==================== BREADCRUMB NAVIGATION ====================
+        function updateBreadcrumb(codeId, sectionKey) {
+            const breadcrumb = document.getElementById('breadcrumbNav');
+            const content = document.getElementById('breadcrumbContent');
+            
+            if (!codeId) {
+                breadcrumb.style.display = 'none';
+                return;
+            }
+            
+            const code = codeDatabase[codeId];
+            if (!code) return;
+            
+            let html = '<a href="#" class="breadcrumb-item" onclick="navigateToPage('home'); return false;">Home</a>';
+            html += '<span class="breadcrumb-separator">›</span>';
+            html += '<a href="#" class="breadcrumb-item" onclick="navigateToPage('home'); return false;">코드</a>';
+            html += '<span class="breadcrumb-separator">›</span>';
+            html += `<span class="breadcrumb-item current">${escapeHtml(code.title)}</span>`;
+            
+            if (sectionKey && code.sections[sectionKey]) {
+                const section = code.sections[sectionKey];
+                html += '<span class="breadcrumb-separator">›</span>';
+                
+                let sectionLabel = 'Chapter ' + section.chapter;
+                if (section.section) {
+                    sectionLabel = 'Section ' + section.section;
+                }
+                
+                html += `<span class="breadcrumb-item current">${sectionLabel}</span>`;
+            }
+            
+            content.innerHTML = html;
+            breadcrumb.style.display = 'flex';
+        }
+function scrollToSection(sectionKey) {
             const element = document.getElementById(sectionKey);
             if (element) {
                 element.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -765,6 +801,429 @@ set="UTF-8">
             scroll-margin-top: 2rem;
             transition: background-color 0.5s ease;
         }
+
+        /* ==================== TABLE OF CONTENTS PANEL ==================== */
+        .toc-panel {
+            position: fixed;
+            right: 0;
+            top: 140px;
+            width: 300px;
+            height: calc(100vh - 160px);
+            background-color: var(--white);
+            box-shadow: -4px 0 12px var(--shadow);
+            overflow-y: auto;
+            padding: 1.5rem;
+            z-index: 999;
+            transition: transform 0.3s ease;
+        }
+
+        .toc-panel.hidden {
+            transform: translateX(100%);
+        }
+
+        .toc-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--primary-blue);
+        }
+
+        .toc-header h3 {
+            color: var(--dark-blue);
+            font-size: 1.1rem;
+            margin: 0;
+        }
+
+        .toc-toggle-btn {
+            background: none;
+            border: none;
+            color: var(--charcoal);
+            cursor: pointer;
+            font-size: 1.2rem;
+            padding: 0.25rem;
+            transition: color 0.3s ease;
+        }
+
+        .toc-toggle-btn:hover {
+            color: var(--primary-blue);
+        }
+
+        .toc-tree {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .toc-chapter {
+            margin-bottom: 0.5rem;
+        }
+
+        .toc-chapter-title {
+            font-weight: 600;
+            color: var(--dark-blue);
+            padding: 0.5rem;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .toc-chapter-title:hover {
+            background-color: var(--light-gray);
+        }
+
+        .toc-chapter-title.active {
+            background-color: rgba(20, 156, 220, 0.1);
+            color: var(--primary-blue);
+            border-left: 3px solid var(--primary-blue);
+        }
+
+        .toc-sections {
+            list-style: none;
+            padding-left: 1rem;
+            margin: 0.25rem 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .toc-sections.expanded {
+            max-height: 1000px;
+        }
+
+        .toc-section-item {
+            padding: 0.4rem 0.5rem;
+            cursor: pointer;
+            color: var(--charcoal);
+            font-size: 0.9rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .toc-section-item:hover {
+            background-color: var(--medium-blue);
+            color: var(--white);
+        }
+
+        .toc-section-item.active {
+            background-color: var(--primary-blue);
+            color: var(--white);
+        }
+
+        .toc-progress {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--medium-blue);
+        }
+
+        .toc-progress-label {
+            font-size: 0.85rem;
+            color: var(--charcoal);
+            margin-bottom: 0.5rem;
+        }
+
+        .toc-progress-bar {
+            height: 8px;
+            background-color: var(--light-gray);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .toc-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-blue), var(--dark-blue));
+            transition: width 0.3s ease;
+        }
+
+        /* ==================== BREADCRUMB NAVIGATION ==================== */
+        .breadcrumb-nav {
+            background-color: var(--white);
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 4px var(--shadow);
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .breadcrumb-item {
+            color: var(--charcoal);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.3s ease;
+        }
+
+        .breadcrumb-item:hover {
+            color: var(--primary-blue);
+        }
+
+        .breadcrumb-separator {
+            margin: 0 0.5rem;
+            color: var(--medium-blue);
+        }
+
+        .breadcrumb-item.current {
+            color: var(--primary-blue);
+            font-weight: 600;
+        }
+
+        /* ==================== BOOKMARKS PANEL ==================== */
+        .feature-panel {
+            position: fixed;
+            left: 250px;
+            top: 140px;
+            width: 350px;
+            max-height: calc(100vh - 160px);
+            background-color: var(--white);
+            box-shadow: 4px 4px 12px var(--shadow);
+            border-radius: 12px;
+            padding: 1.5rem;
+            z-index: 1000;
+            overflow-y: auto;
+            display: none;
+        }
+
+        .feature-panel.active {
+            display: block;
+            animation: slideInLeft 0.3s ease;
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid var(--primary-blue);
+        }
+
+        .panel-header h3 {
+            color: var(--dark-blue);
+            font-size: 1.2rem;
+            margin: 0;
+        }
+
+        .panel-close-btn {
+            background: none;
+            border: none;
+            color: var(--charcoal);
+            cursor: pointer;
+            font-size: 1.5rem;
+            padding: 0;
+            transition: color 0.3s ease;
+        }
+
+        .panel-close-btn:hover {
+            color: var(--primary-blue);
+        }
+
+        .bookmark-item,
+        .history-item {
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            background-color: var(--light-gray);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-left: 4px solid var(--primary-blue);
+        }
+
+        .bookmark-item:hover,
+        .history-item:hover {
+            background-color: var(--medium-blue);
+            transform: translateX(5px);
+        }
+
+        .bookmark-title,
+        .history-title {
+            font-weight: 600;
+            color: var(--dark-blue);
+            margin-bottom: 0.25rem;
+        }
+
+        .bookmark-meta,
+        .history-meta {
+            font-size: 0.85rem;
+            color: var(--charcoal);
+        }
+
+        .bookmark-actions {
+            margin-top: 0.5rem;
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .bookmark-action-btn {
+            background: none;
+            border: none;
+            color: var(--charcoal);
+            cursor: pointer;
+            font-size: 0.9rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .bookmark-action-btn:hover {
+            background-color: var(--white);
+            color: var(--primary-blue);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 2rem;
+            color: var(--charcoal);
+        }
+
+        .empty-state-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        /* ==================== FLOATING ACTION BUTTONS ==================== */
+        .fab-container {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            z-index: 1000;
+        }
+
+        .fab-button {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue));
+            color: var(--white);
+            border: none;
+            box-shadow: 0 4px 12px var(--shadow);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .fab-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px var(--hover-shadow);
+        }
+
+        .fab-button.secondary {
+            width: 48px;
+            height: 48px;
+            background: var(--white);
+            color: var(--primary-blue);
+            font-size: 1.2rem;
+        }
+
+        /* ==================== SECTION TOOLBAR ==================== */
+        .section-toolbar {
+            display: flex;
+            gap: 0.5rem;
+            padding: 0.75rem;
+            background-color: rgba(20, 156, 220, 0.05);
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .toolbar-btn {
+            padding: 0.5rem 1rem;
+            background-color: var(--white);
+            border: 2px solid var(--medium-blue);
+            border-radius: 6px;
+            color: var(--dark-blue);
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .toolbar-btn:hover {
+            background-color: var(--primary-blue);
+            color: var(--white);
+            border-color: var(--primary-blue);
+        }
+
+        .toolbar-btn.active {
+            background-color: var(--primary-blue);
+            color: var(--white);
+            border-color: var(--primary-blue);
+        }
+
+        /* ==================== RESPONSIVE ADJUSTMENTS ==================== */
+        @media (max-width: 1400px) {
+            .toc-panel {
+                width: 250px;
+            }
+        }
+
+        @media (max-width: 1200px) {
+            .toc-panel {
+                transform: translateX(100%);
+            }
+
+            .toc-panel.active {
+                transform: translateX(0);
+            }
+
+            .feature-panel {
+                left: 0;
+                right: 0;
+                width: 90%;
+                max-width: 500px;
+                margin: 0 auto;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .breadcrumb-nav {
+                padding: 0.75rem 1rem;
+            }
+
+            .breadcrumb-item {
+                font-size: 0.85rem;
+            }
+
+            .fab-container {
+                bottom: 1rem;
+                right: 1rem;
+            }
+
+            .fab-button {
+                width: 48px;
+                height: 48px;
+                font-size: 1.2rem;
+            }
+
+            .fab-button.secondary {
+                width: 40px;
+                height: 40px;
+                font-size: 1rem;
+            }
+        }
 </style>
 </head>
 <body>
@@ -782,6 +1241,11 @@ set="UTF-8">
             </button>
         </div>
     </header>
+        <!-- BREADCRUMB NAVIGATION -->
+        <nav class="breadcrumb-nav" id="breadcrumbNav" style="display: none;">
+            <span id="breadcrumbContent"></span>
+        </nav>
+    
 
     <!-- MAIN CONTAINER -->
     <div class="main-container">
@@ -21436,6 +21900,14 @@ Where required, the fire alarm system shall be monitored for alarm, supervisory,
             document.querySelector('.nav-item[data-page="code"]').classList.remove('open');
 
             currentPage = page;
+            
+            // Update breadcrumb
+            if (page === 'home') {
+                updateBreadcrumb(null, null);
+            } else if (page === 'code' && currentCode) {
+                updateBreadcrumb(currentCode, null);
+            }
+
         }
 
         function viewCode(codeId) {
@@ -21452,6 +21924,9 @@ Where required, the fire alarm system shall be monitored for alarm, supervisory,
             document.getElementById('codeTitle').textContent = code.title;
             document.getElementById('codeYear').textContent = code.year;
             document.getElementById('codeCategory').textContent = code.category;
+
+            // Build Table of Contents
+            buildTOC(code);
 
             // Build sections content with language support
             let contentHTML = '';
@@ -21482,17 +21957,40 @@ Where required, the fire alarm system shall be monitored for alarm, supervisory,
                     }
                 }
                 
+                // Check if bookmarked
+                const bookmarked = isBookmarked(codeId, sectionKey);
+                const bookmarkIcon = bookmarked ? '⭐' : '☆';
+                
                 // Apply auto-linking BEFORE escaping HTML
                 const contentLinked = autoLinkReferences(contentRaw, code, sectionKey);
                 const contentEscaped = contentLinked; // Already has HTML links, don't escape
                 
-                contentHTML += \`
+                // Add section toolbar
+                const toolbar = `
+                    <div class="section-toolbar">
+                        <button class="toolbar-btn ${bookmarked ? 'active' : ''}" onclick="toggleBookmark('${codeId}', '${sectionKey}', '${escapeHtml(title).replace(/'/g, "\\'")}'); event.stopPropagation();" title="Bookmark this section">
+                            ${bookmarkIcon} Bookmark
+                        </button>
+                        <button class="toolbar-btn" onclick="navigator.clipboard.writeText(window.location.origin + window.location.pathname + '#code=${codeId}&section=${sectionKey}'); alert('Link copied!');" title="Copy link">
+                            🔗 Share
+                        </button>
+                        <button class="toolbar-btn" onclick="window.print();" title="Print">
+                            🖨️ Print
+                        </button>
+                    </div>
+                `;
+                
+                contentHTML += `
                     <div class="code-section" id="${sectionKey}">
                         <h3>${sectionLabel}: ${escapeHtml(title)}</h3>
+                        ${toolbar}
                         <div class="code-text">${contentEscaped}</div>
                         ${section.comment ? '<div style="background: #FFF3CD; padding: 1rem; margin-top: 0.5rem; border-left: 4px solid #FFC107; border-radius: 4px;"><strong>Note:</strong> ' + escapeHtml(section.comment) + '</div>' : ''}
                     </div>
-                \`;
+                `;
+                
+                // Add to history
+                addToHistory(codeId, sectionKey, sectionLabel + ': ' + title);
             });
 
             if (!contentHTML) {
@@ -21512,9 +22010,315 @@ Where required, the fire alarm system shall be monitored for alarm, supervisory,
             if (dropdownItem) {
                 dropdownItem.classList.add('active');
             }
+            
+            // Show TOC panel
+            document.getElementById('tocPanel').classList.remove('hidden');
+            
+            // Setup scroll listener
+            const contentArea = document.querySelector('.content-area');
+            if (contentArea) {
+                contentArea.removeEventListener('scroll', updateScrollProgress);
+                contentArea.addEventListener('scroll', updateScrollProgress);
+            }
         };
         
         // Keep old function as backup
+        function viewCodeOLD(codeId) {// Keep old function as backup
+
+        
+        // ==================== DATA PERSISTENCE ====================
+        const AppStorage = {
+            get(key, defaultValue = null) {
+                try {
+                    const item = localStorage.getItem('usCodeNav_' + key);
+                    return item ? JSON.parse(item) : defaultValue;
+                } catch (e) {
+                    console.error('Storage get error:', e);
+                    return defaultValue;
+                }
+            },
+
+            set(key, value) {
+                try {
+                    localStorage.setItem('usCodeNav_' + key, JSON.stringify(value));
+                } catch (e) {
+                    console.error('Storage set error:', e);
+                }
+            },
+
+            remove(key) {
+                localStorage.removeItem('usCodeNav_' + key);
+            }
+        };
+
+        // ==================== BOOKMARKS SYSTEM ====================
+        let bookmarks = AppStorage.get('bookmarks', []);
+
+        function isBookmarked(codeId, sectionKey) {
+            return bookmarks.some(b => b.codeId === codeId && b.sectionKey === sectionKey);
+        }
+
+        function toggleBookmark(codeId, sectionKey, title) {
+            const index = bookmarks.findIndex(b => b.codeId === codeId && b.sectionKey === sectionKey);
+            
+            if (index > -1) {
+                bookmarks.splice(index, 1);
+            } else {
+                bookmarks.unshift({
+                    id: 'bm_' + Date.now(),
+                    codeId: codeId,
+                    sectionKey: sectionKey,
+                    title: title,
+                    date: new Date().toISOString()
+                });
+            }
+            
+            AppStorage.set('bookmarks', bookmarks);
+            updateBookmarksUI();
+            updateSectionToolbar();
+        }
+
+        function removeBookmark(id) {
+            bookmarks = bookmarks.filter(b => b.id !== id);
+            AppStorage.set('bookmarks', bookmarks);
+            updateBookmarksUI();
+        }
+
+        function updateBookmarksUI() {
+            const container = document.getElementById('bookmarksContent');
+            const count = document.getElementById('bookmarkCount');
+            
+            count.textContent = bookmarks.length;
+            
+            if (bookmarks.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">⭐</div>
+                        <p>No bookmarks yet</p>
+                        <p style="font-size: 0.9rem; color: var(--charcoal);">
+                            Click the star icon on any section to bookmark it
+                        </p>
+                    </div>
+                `;
+                return;
+            }
+            
+            let html = '';
+            bookmarks.forEach(bookmark => {
+                const code = codeDatabase[bookmark.codeId];
+                const codeTitle = code ? code.title : bookmark.codeId;
+                const dateStr = new Date(bookmark.date).toLocaleDateString();
+                
+                html += `
+                    <div class="bookmark-item" onclick="navigateToBookmark('${bookmark.codeId}', '${bookmark.sectionKey}')">
+                        <div class="bookmark-title">${escapeHtml(bookmark.title)}</div>
+                        <div class="bookmark-meta">${escapeHtml(codeTitle)} · ${dateStr}</div>
+                        <div class="bookmark-actions">
+                            <button class="bookmark-action-btn" onclick="event.stopPropagation(); removeBookmark('${bookmark.id}')" title="Remove bookmark">
+                                🗑️ Remove
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+
+        function navigateToBookmark(codeId, sectionKey) {
+            closeFeaturesPanel();
+            viewCode(codeId);
+            setTimeout(() => scrollToSection(sectionKey), 500);
+        }
+
+        function toggleBookmarksPanel() {
+            closeFeaturesPanel();
+            const panel = document.getElementById('bookmarksPanel');
+            panel.classList.add('active');
+            updateBookmarksUI();
+        }
+
+        // ==================== HISTORY TRACKING ====================
+        let history = AppStorage.get('history', []);
+
+        function addToHistory(codeId, sectionKey, title) {
+            // Remove if already exists
+            history = history.filter(h => !(h.codeId === codeId && h.sectionKey === sectionKey));
+            
+            // Add to beginning
+            history.unshift({
+                codeId: codeId,
+                sectionKey: sectionKey,
+                title: title,
+                timestamp: Date.now()
+            });
+            
+            // Keep only last 20
+            if (history.length > 20) {
+                history = history.slice(0, 20);
+            }
+            
+            AppStorage.set('history', history);
+            updateHistoryUI();
+        }
+
+        function updateHistoryUI() {
+            const container = document.getElementById('historyContent');
+            const count = document.getElementById('historyCount');
+            
+            count.textContent = history.length;
+            
+            if (history.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">🕐</div>
+                        <p>No history yet</p>
+                        <p style="font-size: 0.9rem; color: var(--charcoal);">
+                            Your recently viewed sections will appear here
+                        </p>
+                    </div>
+                `;
+                return;
+            }
+            
+            let html = '';
+            history.forEach(item => {
+                const code = codeDatabase[item.codeId];
+                const codeTitle = code ? code.title : item.codeId;
+                const timeAgo = getTimeAgo(item.timestamp);
+                
+                html += `
+                    <div class="history-item" onclick="navigateToBookmark('${item.codeId}', '${item.sectionKey}')">
+                        <div class="history-title">${escapeHtml(item.title)}</div>
+                        <div class="history-meta">${escapeHtml(codeTitle)} · ${timeAgo}</div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+
+        function getTimeAgo(timestamp) {
+            const seconds = Math.floor((Date.now() - timestamp) / 1000);
+            
+            if (seconds < 60) return 'Just now';
+            if (seconds < 3600) return Math.floor(seconds / 60) + ' min ago';
+            if (seconds < 86400) return Math.floor(seconds / 3600) + ' hr ago';
+            return Math.floor(seconds / 86400) + ' days ago';
+        }
+
+        function toggleHistoryPanel() {
+            closeFeaturesPanel();
+            const panel = document.getElementById('historyPanel');
+            panel.classList.add('active');
+            updateHistoryUI();
+        }
+
+        function closeFeaturesPanel() {
+            document.querySelectorAll('.feature-panel').forEach(panel => {
+                panel.classList.remove('active');
+            });
+        }
+
+        // ==================== TABLE OF CONTENTS ====================
+        function buildTOC(code) {
+            const tocContent = document.getElementById('tocContent');
+            
+            // Group sections by chapter
+            const chapters = {};
+            Object.entries(code.sections).forEach(([key, section]) => {
+                const chNum = section.chapter;
+                if (!chapters[chNum]) {
+                    chapters[chNum] = {
+                        number: chNum,
+                        sections: []
+                    };
+                }
+                chapters[chNum].sections.push({
+                    key: key,
+                    section: section
+                });
+            });
+            
+            // Build TOC HTML
+            let html = '<ul class="toc-tree">';
+            
+            Object.keys(chapters).sort((a, b) => Number(a) - Number(b)).forEach(chNum => {
+                const chapter = chapters[chNum];
+                const firstSection = chapter.sections[0].section;
+                const chapterTitle = getText(firstSection, 'title') || 'Chapter ' + chNum;
+                
+                html += `
+                    <li class="toc-chapter">
+                        <div class="toc-chapter-title" onclick="toggleTOCChapter(this)">
+                            <span>Chapter ${chNum}: ${escapeHtml(chapterTitle.substring(0, 30))}${chapterTitle.length > 30 ? '...' : ''}</span>
+                            <span>▼</span>
+                        </div>
+                        <ul class="toc-sections">
+                `;
+                
+                chapter.sections.forEach(({key, section}) => {
+                    const title = getText(section, 'title');
+                    let label = '';
+                    if (section.section) {
+                        label = 'Sec. ' + section.section;
+                    } else {
+                        label = title.substring(0, 25);
+                    }
+                    
+                    html += `
+                        <li class="toc-section-item" data-section="${key}" onclick="scrollToSection('${key}')">
+                            ${escapeHtml(label)}
+                        </li>
+                    `;
+                });
+                
+                html += `
+                        </ul>
+                    </li>
+                `;
+            });
+            
+            html += '</ul>';
+            tocContent.innerHTML = html;
+        }
+
+        function toggleTOCChapter(element) {
+            const sectionsEl = element.nextElementSibling;
+            sectionsEl.classList.toggle('expanded');
+            const arrow = element.querySelector('span:last-child');
+            arrow.textContent = sectionsEl.classList.contains('expanded') ? '▲' : '▼';
+        }
+
+        function toggleTOC() {
+            const panel = document.getElementById('tocPanel');
+            panel.classList.toggle('hidden');
+        }
+
+        function updateScrollProgress() {
+            const contentArea = document.querySelector('.content-area');
+            if (!contentArea) return;
+            
+            const scrolled = contentArea.scrollTop;
+            const total = contentArea.scrollHeight - contentArea.clientHeight;
+            const progress = total > 0 ? (scrolled / total) * 100 : 0;
+            
+            const fill = document.getElementById('progressFill');
+            const text = document.getElementById('progressText');
+            
+            if (fill) fill.style.width = progress + '%';
+            if (text) text.textContent = Math.round(progress) + '%';
+        }
+
+        // ==================== UTILITY FUNCTIONS ====================
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function updateSectionToolbar() {
+            // This will be called when viewing a section
+            // to update bookmark button state
+        }
         function viewCodeOLD(codeId) {
             currentCode = codeId;
             const code = codeDatabase[codeId];
@@ -21836,7 +22640,138 @@ Where required, the fire alarm system shall be monitored for alarm, supervisory,
         // ==================== INITIALIZATION ====================
         document.addEventListener('DOMContentLoaded', function() {
             console.log('US Code Navigator initialized');
+            console.log('Available codes:', Object.keys(codeDatabase));
+            
+            // Populate dropdown menu
+            const dropdown = document.getElementById('codeDropdown');
+            let dropdownHTML = '';
+            
+            Object.keys(codeDatabase).forEach(codeKey => {
+                const code = codeDatabase[codeKey];
+                dropdownHTML += `<div class="dropdown-item" data-code="${codeKey}" onclick="viewCode('${codeKey}')">${code.title}</div>`;
+            });
+            
+            dropdown.innerHTML = dropdownHTML;
+            
+            // Populate featured codes
+            const featuredGrid = document.getElementById('featuredCodesGrid');
+            let featuredHTML = '';
+            
+            // Show first 6 codes as featured
+            Object.keys(codeDatabase).slice(0, 6).forEach(codeKey => {
+                const code = codeDatabase[codeKey];
+                const badgeText = code.category.split(' ')[0] || 'Code';
+                featuredHTML += `
+                    <div class="code-card" onclick="viewCode('${codeKey}')">
+                        <h3>${code.title}</h3>
+                        <p>${code.category}</p>
+                        <span class="code-badge">${badgeText}</span>
+                    </div>
+                `;
+            });
+            
+            featuredGrid.innerHTML = featuredHTML;
+            
+            // Populate compare code selectors
+            const compare1 = document.getElementById('compareCode1');
+            const compare2 = document.getElementById('compareCode2');
+            let compareOptions = '<option value="">Select code...</option>';
+            
+            Object.keys(codeDatabase).forEach(codeKey => {
+                const code = codeDatabase[codeKey];
+                compareOptions += `<option value="${codeKey}">${code.title}</option>`;
+            });
+            
+            compare1.innerHTML = compareOptions;
+            compare2.innerHTML = compareOptions;
+            
+            // Initialize bookmarks and history UI
+            updateBookmarksUI();
+            updateHistoryUI();
+            
+            // Handle deep links
+            handleDeepLink();
         });
+        
+        // Deep link handler
+        function handleDeepLink() {
+            const hash = window.location.hash.substring(1);
+            if (!hash) return;
+            
+            const params = new URLSearchParams(hash);
+            if (params.has('code')) {
+                const codeId = params.get('code');
+                const sectionKey = params.get('section');
+                const lang = params.get('lang');
+                
+                if (lang) currentLanguage = lang;
+                
+                viewCode(codeId);
+                
+                if (sectionKey) {
+                    setTimeout(() => scrollToSection(sectionKey), 800);
+                }
+            }
+        }
     </script>
-</body>
+
+    <!-- TABLE OF CONTENTS PANEL -->
+    <aside class="toc-panel hidden" id="tocPanel">
+        <div class="toc-header">
+            <h3>📑 Table of Contents</h3>
+            <button class="toc-toggle-btn" onclick="toggleTOC()" title="Hide TOC">✕</button>
+        </div>
+        <div id="tocContent">
+            <!-- Dynamically generated -->
+        </div>
+        <div class="toc-progress">
+            <div class="toc-progress-label">Reading Progress</div>
+            <div class="toc-progress-bar">
+                <div class="toc-progress-fill" id="progressFill" style="width: 0%"></div>
+            </div>
+            <div style="text-align: center; margin-top: 0.5rem; font-size: 0.85rem; color: var(--charcoal);">
+                <span id="progressText">0%</span>
+            </div>
+        </div>
+    </aside>
+
+    <!-- BOOKMARKS PANEL -->
+    <div class="feature-panel" id="bookmarksPanel">
+        <div class="panel-header">
+            <h3>⭐ Bookmarks (<span id="bookmarkCount">0</span>)</h3>
+            <button class="panel-close-btn" onclick="closeFeaturesPanel()">✕</button>
+        </div>
+        <div id="bookmarksContent">
+            <!-- Dynamically generated -->
+        </div>
+    </div>
+
+    <!-- HISTORY PANEL -->
+    <div class="feature-panel" id="historyPanel">
+        <div class="panel-header">
+            <h3>🕐 Recent History (<span id="historyCount">0</span>)</h3>
+            <button class="panel-close-btn" onclick="closeFeaturesPanel()">✕</button>
+        </div>
+        <div id="historyContent">
+            <!-- Dynamically generated -->
+        </div>
+    </div>
+
+    <!-- FLOATING ACTION BUTTONS -->
+    <div class="fab-container">
+        <button class="fab-button secondary" onclick="toggleTOC()" title="Table of Contents">
+            📑
+        </button>
+        <button class="fab-button secondary" onclick="toggleBookmarksPanel()" title="Bookmarks">
+            ⭐
+        </button>
+        <button class="fab-button secondary" onclick="toggleHistoryPanel()" title="History">
+            🕐
+        </button>
+        <button class="fab-button" onclick="scrollToTop()" title="Scroll to Top">
+            ⬆️
+        </button>
+    </div>
+
+    </body>
 </html>

@@ -12,6 +12,8 @@ A professional, modern web application for searching, displaying, and comparing 
 
 **Bilingual Support:** All content available in both English and Korean with easy language toggle.
 
+**NEW! Enhanced Navigation:** Table of Contents panel, Bookmarks, History tracking, and more professional features.
+
 ## Features
 
 ### 1. **Home Page**
@@ -19,10 +21,30 @@ A professional, modern web application for searching, displaying, and comparing 
 - **Featured Codes**: Direct access to commonly used codes (IBC 2024, NFPA 13, NFPA 20, NFPA 72)
 - **Global Search Bar**: Search across all codes from any page
 
-### 2. **코드 (Code) Section**
+### 2. **코드 (Code) Section** - Now with Enhanced Navigation!
 - Dropdown navigation showing all available codes (dynamically populated from database)
 - Click to view full code content with all sections and chapters
-- Organized by sections with formatted text display
+- **📑 Table of Contents Panel**:
+  - Collapsible chapter/section tree view
+  - Click any item to jump instantly
+  - Reading progress indicator
+  - Toggleable via button or FAB
+- **⭐ Bookmarks System**:
+  - Star any section for quick access
+  - Bookmark manager with easy removal
+  - Persistent across sessions
+- **🕐 Recent History**:
+  - Automatically tracks last 20 viewed sections
+  - Time-ago display (e.g., "5 min ago")
+  - Quick navigation to previous sections
+- **🧭 Breadcrumb Navigation**:
+  - Shows current location path
+  - Each level clickable
+  - Context-aware display
+- **Section Toolbars**:
+  - Bookmark button per section
+  - Share link generation
+  - Print button
 - **Bilingual content**: Toggle between English and Korean
 - **Smart Auto-Linking**: Automatic hyperlinks for Chapter and Section references
   - Internal links jump to referenced sections within the same code
@@ -143,6 +165,28 @@ All JSON data is **embedded directly into the HTML file** for Confluence compati
 - `autoLinkReferences(text, code, sectionKey)`: Automatically creates links for Chapter/Section references
 - Supports internal navigation and external Google searches
 - Pattern matching for "Chapter X" and "Section X.X.X" formats
+
+#### Bookmarks & History
+- `toggleBookmark(codeId, sectionKey, title)`: Add/remove bookmark for a section
+- `isBookmarked(codeId, sectionKey)`: Check if section is bookmarked
+- `addToHistory(codeId, sectionKey, title)`: Track viewed sections
+- `updateBookmarksUI()`: Refresh bookmarks panel display
+- `updateHistoryUI()`: Refresh history panel display
+- `navigateToBookmark(codeId, sectionKey)`: Jump to bookmarked section
+
+#### Table of Contents
+- `buildTOC(code)`: Generate interactive TOC from code structure
+- `toggleTOC()`: Show/hide TOC panel
+- `toggleTOCChapter(element)`: Expand/collapse chapter sections
+- `updateScrollProgress()`: Track and display reading progress
+
+#### Breadcrumb
+- `updateBreadcrumb(codeId, sectionKey)`: Update navigation path display
+
+#### Data Persistence
+- `AppStorage.get(key, defaultValue)`: Retrieve from LocalStorage
+- `AppStorage.set(key, value)`: Save to LocalStorage
+- `AppStorage.remove(key)`: Delete from LocalStorage
 
 #### Search
 - `performGlobalSearch(query)`: Quick search from header
