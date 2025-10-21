@@ -39,13 +39,12 @@ A professional, modern web application for searching, displaying, and comparing 
   - Visual feedback on actions
 - **Bilingual content**: Toggle between English and Korean
 - **Smart Auto-Linking**: Automatic hyperlinks for Chapter and Section references
-  - Internal-only links (no external dependencies)
-  - Jump to referenced sections within the same code
+  - Internal links jump to referenced sections within the same code
+  - External links search Google when section doesn't exist (🔍 icon)
   - Smooth scrolling with visual highlighting
 - Easy navigation between different code standards
 - Chapter comments and notes included where available
-- **No external links**: Secure for corporate environments
-- **No data collection**: All features work offline in the browser
+- **No data collection**: No bookmarks, history, or tracking features
 
 ### 3. **검색 (Search) - Advanced Search**
 Multiple filter options:
@@ -156,8 +155,9 @@ All JSON data is **embedded directly into the HTML file** for Confluence compati
 - `scrollToSection(sectionKey)`: Smooth scroll to referenced section with highlight animation
 
 #### Auto-Linking
-- `autoLinkReferences(text, code, sectionKey)`: Automatically creates internal links for Chapter/Section references
-- Internal-only navigation (no external links)
+- `autoLinkReferences(text, code, sectionKey)`: Automatically creates links for Chapter/Section references
+- Internal links for sections that exist in current code
+- External Google search links (🔍) for missing sections
 - Pattern matching for "Chapter X" and "Section X.X.X" formats
 
 #### Copy & Print

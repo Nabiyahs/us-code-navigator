@@ -65,6 +65,8 @@
             replacements.sort((a, b) => b.index - a.index);
             
             replacements.forEach(item => {
+                let link;
+                let found = false;
                 let targetSectionKey = null;
                 
                 if (item.type === 'chapter') {
@@ -72,20 +74,34 @@
                         const section = code.sections[key];
                         return section.chapter.toString() === item.number && !section.section;
                     });
+                    
+                    if (targetSectionKey) {
+                        found = true;
+                        link = `<a href="#${targetSectionKey}" class="code-reference internal-link" onclick="scrollToSection('${targetSectionKey}'); return false;" title="Jump to Chapter ${item.number}">${item.original}</a>`;
+                    }
                 } else if (item.type === 'section') {
                     targetSectionKey = Object.keys(code.sections).find(key => {
                         const section = code.sections[key];
                         return section.section && section.section.toString() === item.number;
                     });
+                    
+                    if (targetSectionKey) {
+                        found = true;
+                        link = `<a href="#${targetSectionKey}" class="code-reference internal-link" onclick="scrollToSection('${targetSectionKey}'); return false;" title="Jump to Section ${item.number}">${item.original}</a>`;
+                    }
                 }
                 
-                // Only create link if section exists in current code
-                if (targetSectionKey) {
-                    const link = `<a href="#${targetSectionKey}" class="code-reference internal-link" onclick="scrollToSection('${targetSectionKey}'); return false;" title="Jump to ${item.type} ${item.number}">${item.original}</a>`;
-                    const before = linkedText.substring(0, item.index);
-                    const after = linkedText.substring(item.index + item.original.length);
-                    linkedText = before + link + after;
+                // If not found in current code, create Google search link
+                if (!found) {
+                    const searchQuery = encodeURIComponent(`${code.title} ${item.type} ${item.number}`);
+                    const googleUrl = `https://www.google.com/search?q=${searchQuery}`;
+                    link = `<a href="${googleUrl}" class="code-reference external-link" target="_blank" rel="noopener noreferrer" title="Search on Google: ${code.title} ${item.type} ${item.number}">🔍 ${item.original}</a>`;
                 }
+                
+                // Replace in text (working backwards preserves indices)
+                const before = linkedText.substring(0, item.index);
+                const after = linkedText.substring(item.index + item.original.length);
+                linkedText = before + link + after;
             });
             
             return linkedText;
@@ -724,6 +740,21 @@ set="UTF-8">
             background-color: rgba(20, 156, 220, 0.1);
             border-bottom-color: var(--primary-blue);
         }
+        
+        .code-reference.internal-link:hover {
+            background-color: rgba(20, 156, 220, 0.1);
+        }
+        
+        .code-reference.external-link {
+            color: var(--dark-blue);
+            border-bottom-style: dashed;
+        }
+        
+        .code-reference.external-link:hover {
+            background-color: rgba(12, 84, 132, 0.1);
+            border-bottom-style: solid;
+        }
+
 
         
         
