@@ -20,6 +20,116 @@
             if (currentLanguage === 'KR' && section[krField]) {
                 return section[krField];
             }
+        // ==================== AUTO-LINKING FUNCTIONS ====================
+        
+        /**
+         * Creates internal or Google search links for Chapter and Section references
+         * @param {string} text - The text content to process
+         * @param {object} code - The current code object
+         * @param {string} currentSectionKey - Current section key to avoid self-linking
+         * @returns {string} - HTML with links
+         */
+        function autoLinkReferences(text, code, currentSectionKey) {
+            if (!text) return '';
+            
+            // Regular expressions for matching Chapter and Section references
+            // Matches: "Chapter 3", "Section 903.3.1", "Section 10", etc.
+            const chapterRegex = /\b(Chapter)\s+(\d+)\b/gi;
+            const sectionRegex = /\b(Section)\s+(\d+(?:\.\d+)*(?:\.\d+)?(?:\.\d+)?)\b/gi;
+            
+            let linkedText = text;
+            const replacements = [];
+            
+            // Find all Chapter references
+            let match;
+            while ((match = chapterRegex.exec(text)) !== null) {
+                const fullMatch = match[0];
+                const chapterNum = match[2];
+                replacements.push({
+                    original: fullMatch,
+                    type: 'chapter',
+                    number: chapterNum,
+                    index: match.index
+                });
+            }
+            
+            // Find all Section references
+            while ((match = sectionRegex.exec(text)) !== null) {
+                const fullMatch = match[0];
+                const sectionNum = match[2];
+                replacements.push({
+                    original: fullMatch,
+                    type: 'section',
+                    number: sectionNum,
+                    index: match.index
+                });
+            }
+            
+            // Sort by index in reverse order to maintain string positions
+            replacements.sort((a, b) => b.index - a.index);
+            
+            // Replace each match with appropriate link
+            replacements.forEach(item => {
+                let link;
+                let found = false;
+                let targetSectionKey = null;
+                
+                if (item.type === 'chapter') {
+                    // Look for chapter in current code
+                    targetSectionKey = Object.keys(code.sections).find(key => {
+                        const section = code.sections[key];
+                        return section.chapter.toString() === item.number && !section.section;
+                    });
+                    
+                    if (targetSectionKey) {
+                        found = true;
+                        link = `<a href="#${targetSectionKey}" class="code-reference internal-link" onclick="scrollToSection('${targetSectionKey}'); return false;" title="Jump to Chapter ${item.number}">${item.original}</a>`;
+                    }
+                } else if (item.type === 'section') {
+                    // Look for section in current code
+                    targetSectionKey = Object.keys(code.sections).find(key => {
+                        const section = code.sections[key];
+                        return section.section && section.section.toString() === item.number;
+                    });
+                    
+                    if (targetSectionKey) {
+                        found = true;
+                        link = `<a href="#${targetSectionKey}" class="code-reference internal-link" onclick="scrollToSection('${targetSectionKey}'); return false;" title="Jump to Section ${item.number}">${item.original}</a>`;
+                    }
+                }
+                
+                // If not found in current code, create Google search link
+                if (!found) {
+                    const searchQuery = encodeURIComponent(`${code.title} ${item.type} ${item.number}`);
+                    const googleUrl = `https://www.google.com/search?q=${searchQuery}`;
+                    link = `<a href="${googleUrl}" class="code-reference external-link" target="_blank" rel="noopener noreferrer" title="Search on Google: ${code.title} ${item.type} ${item.number}">\u{1F50D} ${item.original}</a>`;
+                }
+                
+                // Replace in text (working backwards preserves indices)
+                const before = linkedText.substring(0, item.index);
+                const after = linkedText.substring(item.index + item.original.length);
+                linkedText = before + link + after;
+            });
+            
+            return linkedText;
+        }
+        
+        /**
+         * Scrolls to a specific section within the code content
+         * @param {string} sectionKey - The section key to scroll to
+         */
+        function scrollToSection(sectionKey) {
+            const element = document.getElementById(sectionKey);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                // Highlight the section briefly
+                element.style.backgroundColor = 'rgba(20, 156, 220, 0.1)';
+                setTimeout(() => {
+                    element.style.backgroundColor = '';
+                }, 2000);
+            }
+        }
+
             return section[enField] || section[krField] || '';
         }
 set="UTF-8">
@@ -624,7 +734,38 @@ set="UTF-8">
         .mb-2 {
             margin-bottom: 2rem;
         }
-    </style>
+    
+        /* ==================== CODE REFERENCE LINKS ==================== */
+        .code-reference {
+            color: var(--primary-blue);
+            text-decoration: none;
+            font-weight: 600;
+            border-bottom: 2px solid var(--medium-blue);
+            transition: all 0.3s ease;
+            padding: 0 0.2rem;
+        }
+        
+        .code-reference.internal-link:hover {
+            background-color: rgba(20, 156, 220, 0.1);
+            border-bottom-color: var(--primary-blue);
+            cursor: pointer;
+        }
+        
+        .code-reference.external-link {
+            color: var(--dark-blue);
+            border-bottom-style: dashed;
+        }
+        
+        .code-reference.external-link:hover {
+            background-color: rgba(12, 84, 132, 0.1);
+            border-bottom-style: solid;
+        }
+        
+        .code-section {
+            scroll-margin-top: 2rem;
+            transition: background-color 0.5s ease;
+        }
+</style>
 </head>
 <body>
     <!-- HEADER -->
@@ -21320,9 +21461,9 @@ Where required, the fire alarm system shall be monitored for alarm, supervisory,
             
             sections.forEach(section => {
                 const title = getText(section, 'title');
-                const content = getText(section, 'content');
+                const contentRaw = getText(section, 'content');
                 
-                if (!title && !content) return; // Skip empty sections
+                if (!title && !contentRaw) return; // Skip empty sections
                 
                 let sectionLabel = 'Chapter ' + section.chapter;
                 if (section.section) {
@@ -21332,13 +21473,26 @@ Where required, the fire alarm system shall be monitored for alarm, supervisory,
                     }
                 }
                 
-                contentHTML += `
-                    <div class="code-section">
-                        <h3>${sectionLabel}: ${title}</h3>
-                        <div class="code-text">${escapeHtml(content)}</div>
+                // Create unique section key for anchor
+                let sectionKey = 'ch' + section.chapter;
+                if (section.section) {
+                    sectionKey += '_s' + section.section;
+                    if (section.subsection) {
+                        sectionKey += '_' + section.subsection;
+                    }
+                }
+                
+                // Apply auto-linking BEFORE escaping HTML
+                const contentLinked = autoLinkReferences(contentRaw, code, sectionKey);
+                const contentEscaped = contentLinked; // Already has HTML links, don't escape
+                
+                contentHTML += \`
+                    <div class="code-section" id="${sectionKey}">
+                        <h3>${sectionLabel}: ${escapeHtml(title)}</h3>
+                        <div class="code-text">${contentEscaped}</div>
                         ${section.comment ? '<div style="background: #FFF3CD; padding: 1rem; margin-top: 0.5rem; border-left: 4px solid #FFC107; border-radius: 4px;"><strong>Note:</strong> ' + escapeHtml(section.comment) + '</div>' : ''}
                     </div>
-                `;
+                \`;
             });
 
             if (!contentHTML) {

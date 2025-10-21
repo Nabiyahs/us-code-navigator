@@ -24,6 +24,10 @@ A professional, modern web application for searching, displaying, and comparing 
 - Click to view full code content with all sections and chapters
 - Organized by sections with formatted text display
 - **Bilingual content**: Toggle between English and Korean
+- **Smart Auto-Linking**: Automatic hyperlinks for Chapter and Section references
+  - Internal links jump to referenced sections within the same code
+  - External links search Google when section doesn't exist
+  - Smooth scrolling with visual highlighting
 - Easy navigation between different code standards
 - Chapter comments and notes included where available
 
@@ -131,8 +135,14 @@ All JSON data is **embedded directly into the HTML file** for Confluence compati
 
 #### Navigation
 - `navigateToPage(page)`: Switch between main pages
-- `viewCode(codeId)`: Display specific code content with bilingual support
+- `viewCode(codeId)`: Display specific code content with bilingual support and auto-linking
 - `toggleDropdown()`: Show/hide code dropdown menu
+- `scrollToSection(sectionKey)`: Smooth scroll to referenced section with highlight animation
+
+#### Auto-Linking
+- `autoLinkReferences(text, code, sectionKey)`: Automatically creates links for Chapter/Section references
+- Supports internal navigation and external Google searches
+- Pattern matching for "Chapter X" and "Section X.X.X" formats
 
 #### Search
 - `performGlobalSearch(query)`: Quick search from header
