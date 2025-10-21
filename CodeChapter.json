@@ -1,0 +1,146 @@
+[
+  {
+    "ChapterID":"CH001",
+    "ModelCodeVersionID":"MCV002",
+    "Chapter":1,
+    "TitleEN":"Area",
+    "TitleKR":" 면적, 구획",
+    "ChapterComment":null
+  },
+  {
+    "ChapterID":"CH002",
+    "ModelCodeVersionID":"MCV002",
+    "Chapter":2,
+    "TitleEN":"Definition",
+    "TitleKR":"정의",
+    "ChapterComment":"Chapter 2는 용어 정의를 다루는 챕터입니다.\n\nIBC를 정확히 이해하기 위해 용어 정의의 정확한 이해가 필수적입니다.\n용어를 잘못 이해하면 코드 해석이 의도와 다르게 되어, 디자인 단계에서 코드 적용 오류로 이어질 수 있습니다.\n\n본 Chapter에서는 기본 용어와 산업시설 관련 용어를 정의하고 있습니다."
+  },
+  {
+    "ChapterID":"CH003",
+    "ModelCodeVersionID":"MCV002",
+    "Chapter":3,
+    "TitleEN":"Occupancy Classification and Use",
+    "TitleKR":"용도 분류 및 사용",
+    "ChapterComment":"Chapter 3는 건물 및 실 용도에 대한 구분 입니다.\n\nIBC는 모든 규정의 시작이 건물 및 실의 용도 구분 부터 시작합니다.  IBC 에서는 공통 사항(General Requirements)을 제외 하고는 요구 사항들이 건물 별 또는 실 별의 용도로 구성되어 있습니다.  이에, 건물 및 실 별의 용도를 정확히 구분하지 못하면 IBC 코드 분석이 잘못 될 수 있고 설계 진행이 못된 방향으로 진행될 수 있습니다.  이에, 건물과 실의 용도를 명확히 구분하는 것이 IBC 를 이해하고 분석하는데 있어서 선행되어져야 할 중요한 사항입니다.  본 보고서에 기술되는 건물및 실의 용도는 산업시설 건물에 산업시설 건물에 주로 적용되는 Occupancy 들로 제한합니다.  "
+  },
+  {
+    "ChapterID":"CH004",
+    "ModelCodeVersionID":"MCV002",
+    "Chapter":4,
+    "TitleEN":"Special Detailed Requirements based on Occupancy and Use",
+    "TitleKR":"용도 및 사용에 따른 특별 세부 요건",
+    "ChapterComment":"Chapter 4 에서는 Chapter 3 에서 구분된 용도를 더 세분화 한 특별한 용도에 관해 기술하고 있습니다.  특히, 산업시설에서 취급되는 Hazardous 물질, H Occupancy, 들은 건축의 설계 (면적, 높이, 구획 등에 제한) 에 중대한 영향을 미칠 수 있어, 양이 방대하고 복잡하지만, 반드시 이해하고 숙지해야 할 사항입니다.  "
+  },
+  {
+    "ChapterID":"CH005",
+    "ModelCodeVersionID":"MCV002",
+    "Chapter":5,
+    "TitleEN":"General Building Heights and Areas",
+    "TitleKR":null,
+    "ChapterComment":null
+  },
+  {
+    "ChapterID":"CH006",
+    "ModelCodeVersionID":"MCV002",
+    "Chapter":6,
+    "TitleEN":"Type of construction",
+    "TitleKR":null,
+    "ChapterComment":null
+  },
+  {
+    "ChapterID":"CH007",
+    "ModelCodeVersionID":"MCV002",
+    "Chapter":7,
+    "TitleEN":"Fire and smoke protection features",
+    "TitleKR":null,
+    "ChapterComment":null
+  },
+  {
+    "ChapterID":"CH008",
+    "ModelCodeVersionID":"MCV002",
+    "Chapter":8,
+    "TitleEN":"Interior finishes",
+    "TitleKR":null,
+    "ChapterComment":null
+  },
+  {
+    "ChapterID":"CH009",
+    "ModelCodeVersionID":"MCV002",
+    "Chapter":9,
+    "TitleEN":"Fire protection and life safety systems",
+    "TitleKR":null,
+    "ChapterComment":null
+  },
+  {
+    "ChapterID":"CH010",
+    "ModelCodeVersionID":"MCV002",
+    "Chapter":10,
+    "TitleEN":"Means of Egress",
+    "TitleKR":null,
+    "ChapterComment":null
+  },
+  {
+    "ChapterID":"CH011",
+    "ModelCodeVersionID":"MCV002",
+    "Chapter":30,
+    "TitleEN":"Elevators and Conveying Systems",
+    "TitleKR":null,
+    "ChapterComment":null
+  },
+  {
+    "ChapterID":"CH012",
+    "ModelCodeVersionID":"MCV003",
+    "Chapter":3,
+    "TitleEN":"Definitions",
+    "TitleKR":null,
+    "ChapterComment":"한국과 달리 미국 대부분 지역에서의 소화용수 수압은 높은 편입니다. Light Hazard나 Ordinary Hazard의 경우 소화펌프 없이 제공되는 소화용수 압력만으로 설계가 가능합니다.\n\n지역에 따라 다르지만, 어떤 지역은 소방서에서 Flow Test 값을 보유하고 있는 경우도 있고, 다른 지역에서는 소방 설계 담당자가 직접 현장에서 소방관 입회하에 Flow Test를 실시하는 경우도 있습니다."
+  },
+  {
+    "ChapterID":"CH013",
+    "ModelCodeVersionID":"MCV003",
+    "Chapter":4,
+    "TitleEN":"Standard for the Installation of Sprinkler Systems",
+    "TitleKR":"스프링클러 시스템의 설치 표준",
+    "ChapterComment":"NFPA 13 자체는 독립적인 기준으로 직접적인 법적 구속력은 없으나 IBC 등 다른 법령에서 스프링클러 설계 시 NFPA 13 기준 준수를 규정하고 있어 사실상 강제적 적용 기준입니다.\n\n설계를 시작 전 선행되어야 하는 사항은 위험도 분류입니다. 용도의 위험도에 따라 설계 기준이 달라지므로 정확한 위험도 분석은 정확한 설계의 출발점입니다. Section 4.3에서는 위험도에 따라 건물 및 실의 위험도를 구분하고 있습니다.\n\nNFPA 13의 용도 구분은 스프링클러 설계를 위한 전용 분류체계로서 다른 건축 코드의 용도 분류와는 목적을 달리합니다."
+  },
+  {
+    "ChapterID":"CH014",
+    "ModelCodeVersionID":"MCV003",
+    "Chapter":9,
+    "TitleEN":"Sprinkler Location Requirements",
+    "TitleKR":"스프링클러 위치 요구 사항",
+    "ChapterComment":"반도체 및 배터리 제조시설(Fab)은 필연적으로 다수의 은닉공간(Concealed Space)을 포함하며, 이러한 공간의 스프링클러 설치 여부가 설계 이슈가 될 수 있습니다.\n\n해당 조항들은 조건별로 스프링클러 적용 여부를 규정하고 있습니다.\n\n다만 NFPA 13은 재산 보호뿐만 아니라 인명 안전을 위한 최소 기준이므로, 관할 당국(AHJ)에서는 본 조항보다 더 엄격한 기준을 적용하여 은닉공간의 스프링클러 설치를 요구할 수 있습니다."
+  },
+  {
+    "ChapterID":"CH015",
+    "ModelCodeVersionID":"MCV003",
+    "Chapter":10,
+    "TitleEN":"Installation Requirements for Standard Pendent, Upright, Pendent, Sidewall Spray Sprinkler",
+    "TitleKR":null,
+    "ChapterComment":"NFPA 13에서는 스프링클러 살수 방해에 관한 다양한 조항들을 규정하고 있습니다. 그러나 실제 프로젝트의 특성과 현장에서의 공종 간 간섭 상황이 NFPA 13에 명시된 경우와 일치하지 않는 경우가 많습니다.\n\n이러한 경우 시공 중인 스프링클러 제조사의 Data Sheet에서 제시하는 Spray Pattern을 면밀히 분석하고, 유사한 조건의 NFPA 13 조항들을 적용하여 살수 방해로 인한 미보호 구역(Unprotected Area)이 발생하지 않도록 해야 합니다.\n\nNote: 스프링클러는 바닥면을 기준으로 보호 구역을 설정합니다."
+  },
+  {
+    "ChapterID":"CH016",
+    "ModelCodeVersionID":"MCV003",
+    "Chapter":20,
+    "TitleEN":"General Requirements for Storage",
+    "TitleKR":null,
+    "ChapterComment":"NFPA 13에서 창고(Storage)에 관한 내용은 Chapter 20부터 25까지 기술되어 있습니다. 저장 물질, 저장 방법, 건물 높이, 랙(Rack)의 형태 및 높이 등 다양한 요소들을 다루고 있습니다.\n\nStorage의 설계 기준(Density\/Area)은 하나의 정답이 있는 것이 아니라 여러 방법으로 결정됩니다. 공사비용 및 시공성 등을 종합적으로 고려하여 가장 최적화된 설계 기준을 선정하는 것이 중요합니다."
+  },
+  {
+    "ChapterID":"CH017",
+    "ModelCodeVersionID":"MCV004",
+    "Chapter":8,
+    "TitleEN":"System Requirements",
+    "TitleKR":"시스템 요구 사항",
+    "ChapterComment":"Standpipe System은 소방대가 현장에 도착했을 때 사용할 수 있는 입상 배관 설비입니다. IBC에서는 지상 출입구 기준 30 ft(9,144 mm) 이상 높이에 바닥이 있는 건물의 계단에 Standpipe를 요구하고 있으며, 앞서 언급한 특수 용도(Storage)에서는 Hose Connection을 요구하기도 합니다.\n\nStandpipe는 소방대 진입 경로와 직접 연계되도록 요구하고 있으며, 건물 외부 FDC (Fire Department Connection)와 반드시 연결되어야 합니다.\n\nStandpipe 분류\n- Class I: 소방대원 전용\n- Class II: 일반인도 사용 가능  \n- Class III: 소방대와 일반인 모두 사용 가능 (Class I과 II의 결합)\n\n대부분 요구되는 시스템은 Class I입니다. 과거에는 Class II도 요구되었지만, 일반인들의 사용 미숙으로 인해 현재는 대부분 Class I을 요구하고 있습니다."
+  },
+  {
+    "ChapterID":"CH018",
+    "ModelCodeVersionID":"MCV005",
+    "Chapter":4,
+    "TitleEN":"General Requirements",
+    "TitleKR":"일반 요구 사항",
+    "ChapterComment":"Chapter 4는 소방펌프에 대한 일반 요구사항을 포함하고 있습니다. NFPA 20은 소방펌프 설치 요구사항을 규정하지 않는다는 점이 중요합니다. 소방펌프의 필요성은 진압 시스템의 수리학적 요구량과 이용 가능한 급수원에서 제공되는 유량 및 압력을 기준으로 결정됩니다.\n\n이용 가능한 급수원이 적절한 유량을 제공하지만 압력이 부족한 경우, 소방펌프를 사용하여 압력을 증가시킬 수 있습니다. 이용 가능한 급수원이 필요한 유량을 공급할 수 없는 경우에는 보조 급수원이 필요합니다.\n\n소방펌프 구동 형식\n\n1. 전동 모터 구동(Electric Motor Driven Pump)\n   - 가장 보편적, 전원 신뢰성이 확보된 건물에서 사용\n2. 디젤 엔진 구동(Diesel Engine Driven Pump)\n   - 대형 건물, 전력 공급 불안정 지역에서 사용\n   - 연료 저장탱크, 배기, 환기 시스템 필요\n3. 스팀 터빈 구동(Steam Turbine Pump)\n   - 산업 플랜트, 발전소 등 특수 현장\n\n펌프 형식\nEnd-suction, Horizontal split-case, Vertical turbine, Vertical inline 등\n\n용량 및 압력\n설계에서 요구하는 유량과 압력을 확보해야 하며(스탠드파이프 100 psi 이상 등), 흡입 측(Suction)의 안정적인 급수원 확보 및 토출 측(Discharge)에서 체크밸브, OS&Y 게이트밸브, 압력계 설치가 필수적입니다.\n\n펌프실 요구사항\n방수·배수·환기 확보, 화재 시 펌프 보호 가능 구조\n\nController & Power Supply\n1. 펌프 컨트롤러는 UL\/FM 승인 제품 사용\n2. 자동 기동(Automatic Start): 압력 스위치 또는 감지 신호에 의해 자동 기동\n3. 수동 기동(Manual Start) 가능\n4. 비상 전원: 전기 펌프의 경우 신뢰성 있는 전원 필요, 디젤 펌프는 자체 비상전원 기능 요구"
+  }
+]
