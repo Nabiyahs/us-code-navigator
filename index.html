@@ -431,12 +431,39 @@
 </svg>
         홈
       </div>
-<div class="sidebar-item flex items-center px-6 py-3 text-white" data-section="library">
+<div class="sidebar-item flex items-center px-6 py-3 text-white relative" data-section="library" onclick="toggleLibrarySubmenu(event)">
 <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewbox="0 0 24 24">
 <path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
 </svg>
         라이브러리
-      </div>
+      <svg class="w-4 h-4 ml-auto transition-transform" fill="none" id="libraryChevron" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg></div><div class="library-submenu overflow-hidden transition-all duration-300" id="librarySubmenu" style="max-height: 0;">
+<div class="submenu-item pl-12 py-2 text-sm text-white hover:bg-[#374785] cursor-pointer transition-all rounded-r-lg" data-code-id="MC001" data-version-id="MCV002" onclick="loadCodeFromSidebar('MCV002', 'MC001')">
+<div class="flex items-center justify-between">
+<span>IBC 2024</span>
+<span class="w-2 h-2 rounded-full bg-[#A8D0E6] opacity-70"></span>
+</div>
+</div>
+<div class="submenu-item pl-12 py-2 text-sm text-white hover:bg-[#374785] cursor-pointer transition-all rounded-r-lg" data-code-id="MC007" data-version-id="MCV003" onclick="loadCodeFromSidebar('MCV003', 'MC007')">
+<div class="flex items-center justify-between">
+<span>NFPA 13 2025</span>
+<span class="w-2 h-2 rounded-full bg-[#F76C6C] opacity-70"></span>
+</div>
+</div>
+<div class="submenu-item pl-12 py-2 text-sm text-white hover:bg-[#374785] cursor-pointer transition-all rounded-r-lg" data-code-id="MC008" data-version-id="MCV004" onclick="loadCodeFromSidebar('MCV004', 'MC008')">
+<div class="flex items-center justify-between">
+<span>NFPA 14 2024</span>
+<span class="w-2 h-2 rounded-full bg-[#F76C6C] opacity-70"></span>
+</div>
+</div>
+<div class="submenu-item pl-12 py-2 text-sm text-white hover:bg-[#374785] cursor-pointer transition-all rounded-r-lg" data-code-id="MC009" data-version-id="MCV005" onclick="loadCodeFromSidebar('MCV005', 'MC009')">
+<div class="flex items-center justify-between">
+<span>NFPA 20 2025</span>
+<span class="w-2 h-2 rounded-full bg-[#F76C6C] opacity-70"></span>
+</div>
+</div>
+</div>
 <div class="sidebar-item flex items-center px-6 py-3 text-white" data-section="search">
 <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewbox="0 0 24 24">
 <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
@@ -21354,6 +21381,50 @@ function copyContent(sectionNumber) {
             alert('Content copied to clipboard!');
         });
     }
+}
+
+// Sidebar library submenu functions
+function toggleLibrarySubmenu(event) {
+    event.stopPropagation();
+    const submenu = document.getElementById('librarySubmenu');
+    const chevron = document.getElementById('libraryChevron');
+
+    if (submenu.style.maxHeight === '0px' || submenu.style.maxHeight === '') {
+        // 펼치기
+        submenu.style.maxHeight = submenu.scrollHeight + 'px';
+        chevron.style.transform = 'rotate(180deg)';
+    } else {
+        // 접기
+        submenu.style.maxHeight = '0px';
+        chevron.style.transform = 'rotate(0deg)';
+    }
+}
+
+function loadCodeFromSidebar(versionId, codeId) {
+    // Switch to library section
+    document.querySelectorAll('.section-content').forEach(s => s.classList.remove('active'));
+    document.getElementById('librarySection').classList.add('active');
+
+    // Update sidebar active state
+    document.querySelectorAll('.sidebar-item').forEach(item => {
+        if (item.dataset.section === 'library') {
+            item.classList.add('active');
+        } else {
+            item.classList.remove('active');
+        }
+    });
+
+    // Highlight selected submenu item
+    document.querySelectorAll('.submenu-item').forEach(item => {
+        if (item.dataset.versionId === versionId) {
+            item.style.backgroundColor = '#374785';
+        } else {
+            item.style.backgroundColor = '';
+        }
+    });
+
+    // Load chapters
+    loadChapters(versionId, codeId);
 }
 
 // Search function

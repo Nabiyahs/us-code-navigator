@@ -278,11 +278,100 @@ def escape_js_string(s):
         return ''
     return s.replace('\\', '\\\\').replace("'", "\\'").replace('"', '\\"').replace('\n', '\\n').replace('\r', '\\r')
 
+def create_sidebar_library_submenu(hierarchy):
+    """사이드바 라이브러리 하위메뉴를 생성합니다."""
+    submenu_items = []
+
+    # 데이터가 있는 코드만 필터링
+    for model_code in hierarchy.data['ModelCode']:
+        model_code_id = model_code['ModelCodeID']
+        code_name = model_code['ModelCodeName']
+
+        # 최신 버전 찾기
+        versions = [v for v in hierarchy.data['ModelCodeVersion'] if v['ModelCodeID'] == model_code_id]
+        latest_version = max(versions, key=lambda v: v.get('Year') or 0) if versions else None
+
+        if not latest_version:
+            continue
+
+        # 챕터가 있는지 확인
+        chapters = hierarchy.get_children('ModelCodeVersion', latest_version)
+        if 'CodeChapter' not in chapters or len(chapters['CodeChapter']) == 0:
+            continue
+
+        # 버전 텍스트
+        if latest_version.get('Year'):
+            year = int(latest_version['Year'])
+            display_name = f"{code_name.split(':')[0].strip()} {year}"
+        else:
+            display_name = code_name.split(':')[0].strip()
+
+        # Discipline 찾기 (배지 색상용)
+        badge_class = 'bg-[#A8D0E6]'
+        for mcd in hierarchy.data['ModelCodeDiscipline']:
+            if mcd['ModelCodeID'] == model_code_id:
+                discipline = hierarchy.get_related('ModelCodeDiscipline', mcd, 'Discipline')
+                if discipline and ('소방' in discipline['DisciplineNameKR'] or '안전' in discipline['DisciplineNameKR']):
+                    badge_class = 'bg-[#F76C6C]'
+                break
+
+        submenu_html = f'''
+        <div class="submenu-item pl-12 py-2 text-sm text-white hover:bg-[#374785] cursor-pointer transition-all rounded-r-lg"
+             data-code-id="{model_code_id}"
+             data-version-id="{latest_version['ModelCodeVersionID']}"
+             onclick="loadCodeFromSidebar('{latest_version['ModelCodeVersionID']}', '{model_code_id}')">
+            <div class="flex items-center justify-between">
+                <span>{display_name}</span>
+                <span class="w-2 h-2 rounded-full {badge_class} opacity-70"></span>
+            </div>
+        </div>'''
+
+        submenu_items.append(submenu_html)
+
+    return '\n'.join(submenu_items)
+
 def generate_html(hierarchy):
     """최종 HTML을 생성합니다."""
     print("Parsing reference HTML...")
     html_content = load_html()
     soup = BeautifulSoup(html_content, 'lxml')
+
+    # 사이드바의 라이브러리 메뉴에 접기/펴기 아이콘과 하위메뉴 추가
+    print("Adding collapsible submenu to sidebar library...")
+    sidebar = soup.find('aside', class_='fixed')
+    if sidebar:
+        # 라이브러리 메뉴 항목 찾기
+        library_item = None
+        for item in sidebar.find_all('div', class_='sidebar-item'):
+            if item.get('data-section') == 'library':
+                library_item = item
+                break
+
+        if library_item:
+            # 기존 라이브러리 항목에 chevron 아이콘 추가
+            library_item['onclick'] = 'toggleLibrarySubmenu(event)'
+            library_item['class'] = library_item.get('class', []) + ['relative']
+
+            # SVG 아이콘 뒤에 chevron 추가
+            chevron_html = '''
+            <svg class="w-4 h-4 ml-auto transition-transform" id="libraryChevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+            '''
+            chevron_soup = BeautifulSoup(chevron_html, 'lxml')
+            library_item.append(chevron_soup.find('svg'))
+
+            # 하위메뉴 생성
+            submenu_html = f'''
+            <div class="library-submenu overflow-hidden transition-all duration-300" style="max-height: 0;" id="librarySubmenu">
+                {create_sidebar_library_submenu(hierarchy)}
+            </div>
+            '''
+            submenu_soup = BeautifulSoup(submenu_html, 'lxml')
+
+            # 라이브러리 항목 다음에 하위메뉴 삽입
+            library_item.insert_after(submenu_soup.find('div'))
+            print("✓ Sidebar library submenu added!")
 
     # Libraries 섹션의 코드 카드들을 교체
     print("Generating library cards from schema hierarchy...")
@@ -580,6 +669,50 @@ function copyContent(sectionNumber) {{
             alert('Content copied to clipboard!');
         }});
     }}
+}}
+
+// Sidebar library submenu functions
+function toggleLibrarySubmenu(event) {{
+    event.stopPropagation();
+    const submenu = document.getElementById('librarySubmenu');
+    const chevron = document.getElementById('libraryChevron');
+
+    if (submenu.style.maxHeight === '0px' || submenu.style.maxHeight === '') {{
+        // 펼치기
+        submenu.style.maxHeight = submenu.scrollHeight + 'px';
+        chevron.style.transform = 'rotate(180deg)';
+    }} else {{
+        // 접기
+        submenu.style.maxHeight = '0px';
+        chevron.style.transform = 'rotate(0deg)';
+    }}
+}}
+
+function loadCodeFromSidebar(versionId, codeId) {{
+    // Switch to library section
+    document.querySelectorAll('.section-content').forEach(s => s.classList.remove('active'));
+    document.getElementById('librarySection').classList.add('active');
+
+    // Update sidebar active state
+    document.querySelectorAll('.sidebar-item').forEach(item => {{
+        if (item.dataset.section === 'library') {{
+            item.classList.add('active');
+        }} else {{
+            item.classList.remove('active');
+        }}
+    }});
+
+    // Highlight selected submenu item
+    document.querySelectorAll('.submenu-item').forEach(item => {{
+        if (item.dataset.versionId === versionId) {{
+            item.style.backgroundColor = '#374785';
+        }} else {{
+            item.style.backgroundColor = '';
+        }}
+    }});
+
+    // Load chapters
+    loadChapters(versionId, codeId);
 }}
 
 // Search function
