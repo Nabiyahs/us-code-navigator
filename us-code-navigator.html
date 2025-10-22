@@ -19549,6 +19549,7 @@
         .sidebar-menu a.active {
             background-color: #3498DB;
             color: #FFFFFF;
+        }
         .sidebar-menu a i {
             margin-right: 12px;
             width: 18px;
@@ -19588,6 +19589,7 @@
             width: 16px;
             height: 16px;
 
+        }
         .menu-toggle.open {
             transform: rotate(90deg);
         }
@@ -19623,7 +19625,6 @@
             position: relative;
             display: flex;
             align-items: center;
-            position: relative;
         }
 
         .search-bar input {
@@ -19668,9 +19669,7 @@
 
         /* Main Container */
         .main-container {
-            max-width: calc(1600px + 240px);
             margin-left: 240px;
-            margin: 0 auto;
             padding: 32px;
         }
 
@@ -19713,7 +19712,9 @@
             border: none;
             text-decoration: none;
             display: inline-block;
-            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .btn-primary {
@@ -19723,6 +19724,12 @@
 
         .btn-primary:hover {
             background-color: #2980B9;
+        .btn i {
+            width: 16px;
+            height: 16px;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
         }
 
         /* Stats Section */
@@ -19902,13 +19909,6 @@
             transform: none;
         }
 
-            display: flex;
-            justify-content: space-between;
-            padding-top: 16px;
-            border-top: 1px solid #DEE2E6;
-            font-size: 13px;
-            color: #6C757D;
-        }
 
         /* Comparison Page */
         .comparison-grid {
@@ -20200,7 +20200,7 @@
             <div class="hero">
                 <h1>US Code Navigator</h1>
                 <p>Comprehensive access to building codes, fire safety regulations, and technical standards</p>
-                <button class="btn btn-primary" onclick="showAdvancedSearch()">🔍 Advanced Search</button>
+                <button class="btn btn-primary" onclick="showAdvancedSearch()"><i data-lucide="search"></i> Advanced Search</button>
             </div>
 
 
@@ -20376,8 +20376,8 @@
         }
 
         function showCodeDetail(modelCodeId) {
+            setActiveMenu(null);
             const code = DATA.modelCodes.find(c => c.ModelCodeID === modelCodeId);
-            setActiveMenu(null); // Remove active state from all menu items
             if (!code) return;
             const contents = DATA.codeContent.filter(c => c.ModelCodeID === modelCodeId);
             if (contents.length === 0) return;
@@ -20393,6 +20393,8 @@
                         <span><i data-lucide="calendar"></i> ${versions.map(v => v.Year || 'N/A').join(', ')}</span>
                         <span><i data-lucide="book-open"></i> ${chapters.length} Chapters</span>
                     </div>
+                </div>
+                ${chapters.map(chapterNum => {
                     const chapterInfo = DATA.codeChapters.find(ch => 
                         ch.Chapter === chapterNum && 
                         DATA.modelCodeVersions.some(v => v.ModelCodeVersionID === ch.ModelCodeVersionID && v.ModelCodeID === modelCodeId)
@@ -20413,13 +20415,13 @@
                             `).join('')}
                             ${chapterContents.length > 5 ? `<div style="text-align: center; color: #6C757D; font-size: 14px;">... and ${chapterContents.length - 5} more sections</div>` : ''}
                         </div>
-            showPage('codeDetail');
-            lucide.createIcons();
+                    `;
                 }).join('')}
             `;
             showPage('codeDetail');
-            document.querySelectorAll('.sidebar-menu a').forEach(a => a.classList.remove('active'));
+            lucide.createIcons();
         }
+
 
 
         function init() {
@@ -20438,9 +20440,6 @@
             // Initialize Lucide icons
             lucide.createIcons();
         }
-            displayImages();
-        }
-
         function populateFeaturedCodes() {
             const container = document.getElementById('featuredCodes');
             const codesWithInfo = DATA.modelCodes.map(code => {
@@ -20453,8 +20452,6 @@
                 if (!a.hasData && b.hasData) return 1;
                 return 0;
             });
-            container.innerHTML = codesWithInfo.map(code => `
-                <div class="code-card ${code.hasData ? '' : 'disabled'}" onclick="${code.hasData ? `showCodeDetail('${code.ModelCodeID}')` : ''}">
             container.innerHTML = codesWithInfo.map(code => `
                 <div class="code-card ${code.hasData ? '' : 'disabled'}" onclick="${code.hasData ? `showCodeDetail('${code.ModelCodeID}')` : ''}">
                     <div class="code-card-header">
@@ -20472,11 +20469,8 @@
                 </div>
             `).join('');
             lucide.createIcons();
-                </div>
-            `).join('');
         }
 
-        }
 
         function populateFilters() {
             // Code types
