@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>US Code Navigator</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
     <script>
         // Embedded JSON Data
         const DATA = {
@@ -19548,9 +19549,10 @@
         .sidebar-menu a.active {
             background-color: #3498DB;
             color: #FFFFFF;
-        }
-
-        .sidebar-icon {
+        .sidebar-menu a i {
+            margin-right: 12px;
+            width: 18px;
+            height: 18px;
             margin-right: 12px;
         }
 
@@ -19569,6 +19571,11 @@
             padding-left: 52px;
             font-size: 13px;
         }
+        .submenu li a i {
+            width: 14px;
+            height: 14px;
+            margin-right: 8px;
+        }
 
         .submenu li a.disabled {
             color: #ADB5BD;
@@ -19578,7 +19585,8 @@
         .menu-toggle {
             margin-left: auto;
             transition: transform 0.3s;
-        }
+            width: 16px;
+            height: 16px;
 
         .menu-toggle.open {
             transform: rotate(90deg);
@@ -19597,7 +19605,7 @@
 
         .header-content {
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
             max-width: 1600px;
             margin: 0 auto;
@@ -19611,9 +19619,10 @@
         }
 
         .search-bar {
-            flex: 1;
-            max-width: 600px;
-            margin: 0 32px;
+            width: 600px;
+            position: relative;
+            display: flex;
+            align-items: center;
             position: relative;
         }
 
@@ -19632,6 +19641,8 @@
             top: 50%;
             transform: translateY(-50%);
             color: #6C757D;
+            width: 18px;
+            height: 18px;
         }
 
         .header-tabs {
@@ -19782,6 +19793,11 @@
             font-size: 24px;
         }
 
+        .action-icon i {
+            width: 28px;
+            height: 28px;
+            color: #3498DB;
+        }
         .action-card h3 {
             font-size: 18px;
             font-weight: 600;
@@ -19832,6 +19848,17 @@
         }
 
         .code-meta {
+            display: flex;
+            gap: 16px;
+            font-size: 13px;
+            color: #6C757D;
+        }
+        .code-meta i {
+            width: 14px;
+            height: 14px;
+            margin-right: 4px;
+        }
+
         .code-card-header {
             display: flex;
             align-items: center;
@@ -19848,6 +19875,11 @@
             border-radius: 4px;
             font-size: 13px;
             font-weight: 600;
+        }
+        .code-badge i {
+            width: 14px;
+            height: 14px;
+            margin-right: 6px;
         }
 
         .code-card.disabled .code-badge {
@@ -20140,37 +20172,27 @@
         <div class="sidebar-logo" onclick="showPage('home')">US Code Navigator</div>
         <div class="sidebar-section">
             <ul class="sidebar-menu">
-                <li><a class="active" onclick="showPage('home')"><span class="sidebar-icon">🏠</span> Home</a></li>
+                <li><a class="active" onclick="showPage('home')"><i data-lucide="home"></i> Home</a></li>
                 <li>
                     <a onclick="toggleSubmenu(this)">
-                        <span class="sidebar-icon">📚</span> Library
-                        <span class="menu-toggle">▶</span>
+                        <i data-lucide="library"></i> 라이브러리
+                        <i data-lucide="chevron-right" class="menu-toggle"></i>
                     </a>
                     <ul class="submenu" id="librarySubmenu"></ul>
                 </li>
-                <li><a onclick="showAdvancedSearch()"><span class="sidebar-icon">🔍</span> Advanced Search</a></li>
-                <li><a onclick="showPage('comparison')"><span class="sidebar-icon">⚖️</span> Code Comparison</a></li>
-                <li><a onclick="showPage('images')"><span class="sidebar-icon">🖼️</span> Images</a></li>
+                <li><a onclick="showAdvancedSearch()"><i data-lucide="search"></i> 고급검색</a></li>
+                <li><a onclick="showPage('comparison')"><i data-lucide="git-compare"></i> 코드비교</a></li>
             </ul>
         </div>
     </div>
-
-    <!-- Header -->
     <div class="header">
         <div class="header-content">
-            <div class="logo" onclick="showPage('home')">US Code Navigator</div>
             <div class="search-bar">
-                <span class="search-icon">🔍</span>
+                <i data-lucide="search" class="search-icon"></i>
                 <input type="text" id="globalSearch" placeholder="Search US codes, titles, sections..." oninput="performGlobalSearch()">
-            </div>
-            <div class="header-tabs">
-                <button class="tab-btn active" onclick="showPage('home')">Home</button>
-                <button class="tab-btn" onclick="showPage('comparison')">Compare</button>
-                <button class="tab-btn" onclick="showPage('images')">Images</button>
             </div>
         </div>
     </div>
-
     <!-- Main Container -->
     <div class="main-container">
         <!-- Home Page -->
@@ -20185,19 +20207,14 @@
             <h2 class="section-title">Quick Actions</h2>
             <div class="quick-actions-grid">
                 <div class="action-card" onclick="showAdvancedSearch()">
-                    <div class="action-icon">🔍</div>
-                    <h3>Advanced Search</h3>
-                    <p>Search across all US codes with advanced filters</p>
+                    <div class="action-icon"><i data-lucide="search"></i></div>
+                    <h3>고급검색</h3>
+                    <p>고급 필터를 사용하여 모든 미국 법규 검색</p>
                 </div>
                 <div class="action-card" onclick="showPage('comparison')">
-                    <div class="action-icon">⚖️</div>
-                    <h3>Compare Codes</h3>
-                    <p>Side-by-side comparison of different code versions</p>
-                </div>
-                <div class="action-card" onclick="showPage('images')">
-                    <div class="action-icon">🖼️</div>
-                    <h3>Image Library</h3>
-                    <p>Browse tables, figures, and technical diagrams</p>
+                    <div class="action-icon"><i data-lucide="git-compare"></i></div>
+                    <h3>코드비교</h3>
+                    <p>다양한 코드 버전의 나란히 비교</p>
                 </div>
             </div>
 
@@ -20389,9 +20406,10 @@
             });
             submenu.innerHTML = codesWithData.map(code => `
                 <li><a onclick="showCodeDetail('${code.ModelCodeID}')" class="${code.hasContent ? '' : 'disabled'}">
-                    ${code.ModelCodeName}
+                    <i data-lucide="file-text"></i> ${code.ModelCodeName}
                 </a></li>
             `).join('');
+            lucide.createIcons();
         }
 
         function showCodeDetail(modelCodeId) {
@@ -20407,12 +20425,10 @@
                     <div class="code-detail-title">${code.ModelCodeName}</div>
                     <div class="code-detail-subtitle">${code.Description || ''}</div>
                     <div class="code-meta" style="margin-top: 16px;">
-                        <span>📄 ${contents.length} Sections</span>
-                        <span>📅 ${versions.map(v => v.Year || 'N/A').join(', ')}</span>
-                        <span>📚 ${chapters.length} Chapters</span>
+                        <span><i data-lucide="file-text"></i> ${contents.length} Sections</span>
+                        <span><i data-lucide="calendar"></i> ${versions.map(v => v.Year || 'N/A').join(', ')}</span>
+                        <span><i data-lucide="book-open"></i> ${chapters.length} Chapters</span>
                     </div>
-                </div>
-                ${chapters.map(chapterNum => {
                     const chapterInfo = DATA.codeChapters.find(ch => 
                         ch.Chapter === chapterNum && 
                         DATA.modelCodeVersions.some(v => v.ModelCodeVersionID === ch.ModelCodeVersionID && v.ModelCodeID === modelCodeId)
@@ -20433,7 +20449,8 @@
                             `).join('')}
                             ${chapterContents.length > 5 ? `<div style="text-align: center; color: #6C757D; font-size: 14px;">... and ${chapterContents.length - 5} more sections</div>` : ''}
                         </div>
-                    `;
+            showPage('codeDetail');
+            lucide.createIcons();
                 }).join('')}
             `;
             showPage('codeDetail');
@@ -20443,11 +20460,6 @@
 
         function init() {
             populateLibrarySubmenu();
-            // Update stats
-            document.getElementById('statCodes').textContent = DATA.modelCodes.length;
-            document.getElementById('statChapters').textContent = DATA.codeChapters.length;
-            document.getElementById('statSections').textContent = DATA.codeContent.length.toLocaleString();
-            document.getElementById('statImages').textContent = DATA.codeAttachment.length;
 
             // Populate featured codes
             populateFeaturedCodes();
@@ -20457,6 +20469,11 @@
 
             // Initial image load
             filteredImages = DATA.codeAttachment;
+            displayImages();
+
+            // Initialize Lucide icons
+            lucide.createIcons();
+        }
             displayImages();
         }
 
@@ -20474,18 +20491,23 @@
             });
             container.innerHTML = codesWithInfo.map(code => `
                 <div class="code-card ${code.hasData ? '' : 'disabled'}" onclick="${code.hasData ? `showCodeDetail('${code.ModelCodeID}')` : ''}">
+            container.innerHTML = codesWithInfo.map(code => `
+                <div class="code-card ${code.hasData ? '' : 'disabled'}" onclick="${code.hasData ? `showCodeDetail('${code.ModelCodeID}')` : ''}">
                     <div class="code-card-header">
-                        <div class="code-badge">${code.ModelCodeName}</div>
+                        <div class="code-badge"><i data-lucide="book-open"></i> ${code.ModelCodeName}</div>
                     </div>
                     <h3>${code.Description || code.ModelCodeName}</h3>
                     <div class="code-meta">
                         ${code.hasData ? `
-                            <span>📄 ${code.sections} Sections</span>
-                            <span>📅 ${code.versions} Versions</span>
+                            <span><i data-lucide="file-text"></i> ${code.sections} Sections</span>
+                            <span><i data-lucide="calendar"></i> ${code.versions} Versions</span>
                         ` : `
-                            <span>No data available</span>
+                            <span><i data-lucide="alert-circle"></i> No data available</span>
                         `}
                     </div>
+                </div>
+            `).join('');
+            lucide.createIcons();
                 </div>
             `).join('');
         }
