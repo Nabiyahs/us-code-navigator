@@ -19549,6 +19549,7 @@
         .sidebar-menu a.active {
             background-color: #3498DB;
             color: #FFFFFF;
+        }
         .sidebar-menu a i {
             margin-right: 12px;
             width: 18px;
@@ -19588,6 +19589,7 @@
             width: 16px;
             height: 16px;
 
+        }
         .menu-toggle.open {
             transform: rotate(90deg);
         }
@@ -19623,7 +19625,6 @@
             position: relative;
             display: flex;
             align-items: center;
-            position: relative;
         }
 
         .search-bar input {
@@ -19668,9 +19669,7 @@
 
         /* Main Container */
         .main-container {
-            max-width: calc(1600px + 240px);
             margin-left: 240px;
-            margin: 0 auto;
             padding: 32px;
         }
 
@@ -19713,7 +19712,9 @@
             border: none;
             text-decoration: none;
             display: inline-block;
-            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .btn-primary {
@@ -19723,6 +19724,12 @@
 
         .btn-primary:hover {
             background-color: #2980B9;
+        .btn i {
+            width: 16px;
+            height: 16px;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
         }
 
         /* Stats Section */
@@ -19902,13 +19909,6 @@
             transform: none;
         }
 
-            display: flex;
-            justify-content: space-between;
-            padding-top: 16px;
-            border-top: 1px solid #DEE2E6;
-            font-size: 13px;
-            color: #6C757D;
-        }
 
         /* Comparison Page */
         .comparison-grid {
@@ -20200,7 +20200,7 @@
             <div class="hero">
                 <h1>US Code Navigator</h1>
                 <p>Comprehensive access to building codes, fire safety regulations, and technical standards</p>
-                <button class="btn btn-primary" onclick="showAdvancedSearch()">🔍 Advanced Search</button>
+                <button class="btn btn-primary" onclick="showAdvancedSearch()"><i data-lucide="search"></i> Advanced Search</button>
             </div>
 
 
@@ -20437,8 +20437,6 @@
 
             // Initialize Lucide icons
             lucide.createIcons();
-        }
-            displayImages();
         }
 
         function populateFeaturedCodes() {
