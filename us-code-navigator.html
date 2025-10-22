@@ -20376,8 +20376,8 @@
         }
 
         function showCodeDetail(modelCodeId) {
+            setActiveMenu(null);
             const code = DATA.modelCodes.find(c => c.ModelCodeID === modelCodeId);
-            setActiveMenu(null); // Remove active state from all menu items
             if (!code) return;
             const contents = DATA.codeContent.filter(c => c.ModelCodeID === modelCodeId);
             if (contents.length === 0) return;
@@ -20393,6 +20393,8 @@
                         <span><i data-lucide="calendar"></i> ${versions.map(v => v.Year || 'N/A').join(', ')}</span>
                         <span><i data-lucide="book-open"></i> ${chapters.length} Chapters</span>
                     </div>
+                </div>
+                ${chapters.map(chapterNum => {
                     const chapterInfo = DATA.codeChapters.find(ch => 
                         ch.Chapter === chapterNum && 
                         DATA.modelCodeVersions.some(v => v.ModelCodeVersionID === ch.ModelCodeVersionID && v.ModelCodeID === modelCodeId)
@@ -20413,13 +20415,13 @@
                             `).join('')}
                             ${chapterContents.length > 5 ? `<div style="text-align: center; color: #6C757D; font-size: 14px;">... and ${chapterContents.length - 5} more sections</div>` : ''}
                         </div>
-            showPage('codeDetail');
-            lucide.createIcons();
+                    `;
                 }).join('')}
             `;
             showPage('codeDetail');
-            document.querySelectorAll('.sidebar-menu a').forEach(a => a.classList.remove('active'));
+            lucide.createIcons();
         }
+
 
 
         function init() {
@@ -20438,7 +20440,6 @@
             // Initialize Lucide icons
             lucide.createIcons();
         }
-
         function populateFeaturedCodes() {
             const container = document.getElementById('featuredCodes');
             const codesWithInfo = DATA.modelCodes.map(code => {
@@ -20451,8 +20452,6 @@
                 if (!a.hasData && b.hasData) return 1;
                 return 0;
             });
-            container.innerHTML = codesWithInfo.map(code => `
-                <div class="code-card ${code.hasData ? '' : 'disabled'}" onclick="${code.hasData ? `showCodeDetail('${code.ModelCodeID}')` : ''}">
             container.innerHTML = codesWithInfo.map(code => `
                 <div class="code-card ${code.hasData ? '' : 'disabled'}" onclick="${code.hasData ? `showCodeDetail('${code.ModelCodeID}')` : ''}">
                     <div class="code-card-header">
@@ -20470,11 +20469,8 @@
                 </div>
             `).join('');
             lucide.createIcons();
-                </div>
-            `).join('');
         }
 
-        }
 
         function populateFilters() {
             // Code types
