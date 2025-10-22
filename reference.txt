@@ -1,0 +1,1913 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>US CODE NAVIGATOR</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+    
+    .sidebar-item {
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+    
+    .sidebar-item:hover {
+      background-color: #374785;
+      border-left: 4px solid #F76C6C;
+      padding-left: 1.25rem;
+    }
+    
+    .sidebar-item.active {
+      background-color: #374785;
+      border-left: 4px solid #F76C6C;
+    }
+    
+    .code-card {
+      transition: all 0.3s ease;
+    }
+    
+    .code-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 32px rgba(168, 208, 230, 0.25);
+      border-color: #A8D0E6;
+    }
+    
+    .search-input:focus {
+      outline: none;
+      border-color: #A8D0E6;
+      box-shadow: 0 0 0 3px rgba(168, 208, 230, 0.15);
+    }
+    
+    .feature-card {
+      transition: all 0.2s ease;
+    }
+    
+    .feature-card:hover {
+      background-color: rgba(168, 208, 230, 0.08);
+      border-color: #A8D0E6;
+    }
+    
+    .chapter-item {
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+    
+    .chapter-item:hover {
+      background-color: #A8D0E6;
+      transform: translateX(4px);
+    }
+    
+    .chapter-item.active {
+      background-color: #F8E9A1;
+      border-left: 3px solid #F76C6C;
+    }
+    
+    .content-section {
+      border-left: 3px solid #A8D0E6;
+      padding-left: 1rem;
+    }
+    
+    .result-item {
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+    
+    .result-item:hover {
+      background-color: #f9fafb;
+      border-left: 3px solid #A8D0E6;
+      padding-left: 1.25rem;
+    }
+    
+    .compare-panel {
+      border: 2px solid #e5e7eb;
+      transition: all 0.2s ease;
+    }
+    
+    .compare-panel:hover {
+      border-color: #A8D0E6;
+    }
+    
+    .diff-added {
+      background-color: #d1fae5;
+      border-left: 3px solid #10b981;
+    }
+    
+    .diff-removed {
+      background-color: #fee2e2;
+      border-left: 3px solid #ef4444;
+    }
+    
+    .diff-modified {
+      background-color: #fef3c7;
+      border-left: 3px solid #f59e0b;
+    }
+    
+    .section-content {
+      display: none;
+    }
+    
+    .section-content.active {
+      display: block;
+    }
+
+    /* Enhanced diff highlighting styles for better visual clarity */
+    .diff-added {
+      background: linear-gradient(to right, #d1fae5 0%, #ecfdf5 100%);
+      border-left: 4px solid #10b981;
+      padding: 12px;
+      margin: 8px 0;
+      border-radius: 6px;
+      box-shadow: 0 2px 4px rgba(16, 185, 129, 0.1);
+    }
+    
+    .diff-removed {
+      background: linear-gradient(to right, #fee2e2 0%, #fef2f2 100%);
+      border-left: 4px solid #ef4444;
+      padding: 12px;
+      margin: 8px 0;
+      border-radius: 6px;
+      box-shadow: 0 2px 4px rgba(239, 68, 68, 0.1);
+    }
+    
+    .diff-modified {
+      background: linear-gradient(to right, #fef3c7 0%, #fefce8 100%);
+      border-left: 4px solid #f59e0b;
+      padding: 12px;
+      margin: 8px 0;
+      border-radius: 6px;
+      box-shadow: 0 2px 4px rgba(245, 158, 11, 0.1);
+    }
+    
+    .diff-label {
+      display: inline-block;
+      font-size: 0.65rem;
+      font-weight: 500;
+      padding: 1px 6px;
+      border-radius: 3px;
+      margin-bottom: 4px;
+      opacity: 0.7;
+    }
+    
+    .diff-added .diff-label {
+      background-color: #d1fae5;
+      color: #065f46;
+    }
+    
+    .diff-removed .diff-label {
+      background-color: #fee2e2;
+      color: #991b1b;
+    }
+    
+    .diff-modified .diff-label {
+      background-color: #fef3c7;
+      color: #92400e;
+    }
+
+    /* Added collapsible section styles */
+    .collapsible-header {
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .collapsible-header:hover {
+      background-color: #f9fafb;
+    }
+    
+    .collapsible-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+    
+    .collapsible-content.expanded {
+      max-height: 2000px;
+    }
+    
+    .rotate-180 {
+      transform: rotate(180deg);
+    }
+    
+    /* Added modal styles for figures & tables popup */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.8);
+    }
+    
+    .modal.active {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .modal-content {
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      max-width: 90%;
+      max-height: 90%;
+      overflow: auto;
+    }
+    
+    /* Added highlight styles for actual text differences */
+    .text-highlight-added {
+      background-color: #86efac;
+      padding: 2px 4px;
+      border-radius: 3px;
+      font-weight: 600;
+    }
+    
+    .text-highlight-removed {
+      background-color: #fca5a5;
+      padding: 2px 4px;
+      border-radius: 3px;
+      font-weight: 600;
+      text-decoration: line-through;
+    }
+    
+    .text-highlight-modified {
+      background-color: #fde047;
+      padding: 2px 4px;
+      border-radius: 3px;
+      font-weight: 600;
+    }
+
+    /* Added search button hover effect with #F76C6C */
+    .search-button {
+      transition: all 0.2s ease;
+    }
+    
+    .search-button:hover {
+      background-color: #e55a5a;
+    }
+
+    /* Added horizontal scroll for figures & tables */
+    .figures-scroll {
+      display: flex;
+      overflow-x: auto;
+      gap: 0.5rem;
+      padding-bottom: 0.5rem;
+    }
+    
+    .figures-scroll::-webkit-scrollbar {
+      height: 6px;
+    }
+    
+    .figures-scroll::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 3px;
+    }
+    
+    .figures-scroll::-webkit-scrollbar-thumb {
+      background: #A8D0E6;
+      border-radius: 3px;
+    }
+    
+    .figures-scroll::-webkit-scrollbar-thumb:hover {
+      background: #8fc0d9;
+    }
+
+    /* Added clear button styles for section inputs */
+    .input-wrapper {
+      position: relative;
+    }
+    
+    .clear-button {
+      position: absolute;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: none;
+      cursor: pointer;
+      padding: 4px;
+      border-radius: 4px;
+      transition: all 0.2s ease;
+    }
+    
+    .clear-button:hover {
+      background-color: #f3f4f6;
+    }
+    
+    .input-wrapper input:not(:placeholder-shown) ~ .clear-button {
+      display: block;
+    }
+
+    /* Made diff labels more subtle */
+    .diff-label {
+      display: inline-block;
+      font-size: 0.65rem;
+      font-weight: 500;
+      padding: 1px 6px;
+      border-radius: 3px;
+      margin-bottom: 4px;
+      opacity: 0.7;
+    }
+    
+    .diff-added .diff-label {
+      background-color: #d1fae5;
+      color: #065f46;
+    }
+    
+    .diff-removed .diff-label {
+      background-color: #fee2e2;
+      color: #991b1b;
+    }
+    
+    .diff-modified .diff-label {
+      background-color: #fef3c7;
+      color: #92400e;
+    }
+
+    /* Added search highlight styles */
+    .search-highlight {
+      background-color: #fde047;
+      padding: 2px 4px;
+      border-radius: 2px;
+      font-weight: 600;
+    }
+    
+    /* Added clear button styles for search input */
+    .search-input-wrapper {
+      position: relative;
+    }
+    
+    .search-clear-button {
+      position: absolute;
+      right: 50px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: none;
+      cursor: pointer;
+      padding: 6px;
+      border-radius: 4px;
+      transition: all 0.2s ease;
+      background-color: #f3f4f6;
+    }
+    
+    .search-clear-button:hover {
+      background-color: #e5e7eb;
+    }
+    
+    .search-input-wrapper input:not(:placeholder-shown) ~ .search-clear-button {
+      display: block;
+    }
+
+    /* Added smaller radio button styles */
+    input[type="checkbox"] {
+      width: 14px;
+      height: 14px;
+    }
+    
+    /* Added collapsible result item styles */
+    .result-collapsible {
+      cursor: pointer;
+    }
+    
+    .result-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+    
+    .result-content.expanded {
+      max-height: 500px;
+    }
+
+    /* Added modal styles for section content popup */
+    .section-modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.8);
+      overflow-y: auto;
+    }
+    
+    .section-modal.active {
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 2rem;
+    }
+    
+    .section-modal-content {
+      background-color: white;
+      padding: 2rem;
+      border-radius: 12px;
+      max-width: 900px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      margin: auto;
+    }
+
+  </style>
+</head>
+<body class="bg-gray-50">
+  <!-- Sidebar -->
+  <aside class="fixed left-0 top-0 h-full w-64 bg-[#24305E] text-white shadow-lg z-10">
+    <!-- Adjusted padding to match main header height -->
+    <div class="p-6 py-4 border-b border-[#374785]">
+      <h1 class="text-xl font-bold text-[#F8E9A1]">US CODE NAVIGATOR</h1>
+    </div>
+    
+    <nav class="mt-6">
+      <div class="sidebar-item active flex items-center px-6 py-3 text-white" data-section="home">
+        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 0 001 1m-6 0h6"></path>
+        </svg>
+        홈
+      </div>
+      
+      <div class="sidebar-item flex items-center px-6 py-3 text-white" data-section="library">
+        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+        </svg>
+        라이브러리
+      </div>
+      
+      <div class="sidebar-item flex items-center px-6 py-3 text-white" data-section="search">
+        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+        </svg>
+        고급 검색
+      </div>
+      
+      <div class="sidebar-item flex items-center px-6 py-3 text-white" data-section="compare">
+        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+        </svg>
+        코드 비교
+      </div>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="ml-64 min-h-screen">
+    <!-- Top Search Bar -->
+    <!-- Header height now matches sidebar header -->
+    <header class="bg-white border-b border-gray-200 sticky top-0 z-5 shadow-sm">
+      <div class="px-8 py-4">
+        <div class="max-w-2xl mx-auto search-input-wrapper">
+          <input 
+            type="text" 
+            placeholder="Search codes, keywords, chapters..." 
+            class="search-input w-full px-4 py-3 pl-12 pr-24 border-2 border-gray-300 rounded-lg text-[#24305E] transition-all"
+            id="topSearchInput"
+          />
+          <svg class="w-5 h-5 absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+          </svg>
+          <button 
+            class="search-clear-button"
+            onclick="clearSearchInput()"
+            title="Clear search"
+          >
+            <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </button>
+          <button 
+            class="search-button absolute right-2 top-1/2 transform -translate-y-1/2 bg-[#F76C6C] text-white p-2 rounded-md hover:bg-[#e55a5a] transition-colors"
+            onclick="performTopSearch()"
+            title="Search"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Home Section -->
+    <div id="homeSection" class="section-content active">
+      <div class="p-8">
+        <div class="max-w-7xl mx-auto">
+          <!-- Section 1: Quick Actions -->
+          <section class="mb-12">
+            <h2 class="text-2xl font-bold text-[#24305E] mb-6">Quick Actions</h2>
+            <div class="grid grid-cols-2 gap-6">
+              <div class="feature-card bg-white p-6 rounded-lg border-2 border-gray-200 cursor-pointer" data-nav="search">
+                <div class="flex items-start gap-4">
+                  <!-- Using #F76C6C as accent color for feature cards -->
+                  <div class="w-12 h-12 bg-[#F76C6C] bg-opacity-10 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <svg class="w-6 h-6 text-[#F76C6C]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 class="text-lg font-bold text-[#24305E] mb-2">Advanced Search</h3>
+                    <p class="text-gray-600 text-sm leading-relaxed">Filter by code type, version, and chapter</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="feature-card bg-white p-6 rounded-lg border-2 border-gray-200 cursor-pointer" data-nav="compare">
+                <div class="flex items-start gap-4">
+                  <div class="w-12 h-12 bg-[#A8D0E6] rounded-lg flex items-center justify-center flex-shrink-0">
+                    <svg class="w-6 h-6 text-[#24305E]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 class="text-lg font-bold text-[#24305E] mb-2">Code Compare</h3>
+                    <p class="text-gray-600 text-sm leading-relaxed">Compare versions side by side</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Section 2: Libraries -->
+          <!-- Replaced icons with Lucide-style icons -->
+          <section>
+            <h2 class="text-2xl font-bold text-[#24305E] mb-6">Libraries</h2>
+            <div class="grid grid-cols-4 gap-4">
+              <!-- IBC 2024 -->
+              <div class="code-card bg-white p-4 rounded-lg border-2 border-gray-200 cursor-pointer relative" data-nav="library">
+                <span class="absolute top-3 right-3 text-xs font-medium text-[#A8D0E6] bg-[#A8D0E6] bg-opacity-20 px-2 py-1 rounded">건축·구조</span>
+                <div class="w-12 h-12 bg-[#F8E9A1] rounded-lg flex items-center justify-center mb-3">
+                  <!-- Lucide Building icon -->
+                  <svg class="w-6 h-6 text-[#24305E]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect>
+                    <path d="M9 22v-4h6v4"></path>
+                    <path d="M8 6h.01"></path>
+                    <path d="M16 6h.01"></path>
+                    <path d="M12 6h.01"></path>
+                    <path d="M12 10h.01"></path>
+                    <path d="M12 14h.01"></path>
+                    <path d="M16 10h.01"></path>
+                    <path d="M16 14h.01"></path>
+                    <path d="M8 10h.01"></path>
+                    <path d="M8 14h.01"></path>
+                  </svg>
+                </div>
+                <h3 class="text-lg font-bold text-[#24305E] mb-1">IBC 2024</h3>
+                <p class="text-gray-600 text-xs">International Building Code</p>
+              </div>
+
+              <!-- NFPA 13 -->
+              <div class="code-card bg-white p-4 rounded-lg border-2 border-gray-200 cursor-pointer relative" data-nav="library">
+                <span class="absolute top-3 right-3 text-xs font-medium text-[#F76C6C] bg-[#F76C6C] bg-opacity-20 px-2 py-1 rounded">소방</span>
+                <div class="w-12 h-12 bg-[#F8E9A1] rounded-lg flex items-center justify-center mb-3">
+                  <!-- Lucide Droplets icon for sprinkler -->
+                  <svg class="w-6 h-6 text-[#24305E]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path d="M7 16.3c2.2 0 4-1.83 4-4.05 0-1.16-.57-2.26-1.71-3.19S7.29 6.75 7 5.3c-.29 1.45-1.14 2.84-2.29 3.76S3 11.1 3 12.25c0 2.22 1.8 4.05 4 4.05z"></path>
+                    <path d="M12.56 6.6A10.97 10.97 0 0 0 14 3.02c.5 2.5 2 4.9 4 6.5s3 3.5 3 5.5a6.98 6.98 0 0 1-11.91 4.97"></path>
+                  </svg>
+                </div>
+                <h3 class="text-lg font-bold text-[#24305E] mb-1">NFPA 13</h3>
+                <p class="text-gray-600 text-xs">Sprinkler Systems</p>
+              </div>
+
+              <!-- NFPA 14 -->
+              <div class="code-card bg-white p-4 rounded-lg border-2 border-gray-200 cursor-pointer relative" data-nav="library">
+                <span class="absolute top-3 right-3 text-xs font-medium text-[#F76C6C] bg-[#F76C6C] bg-opacity-20 px-2 py-1 rounded">소방</span>
+                <div class="w-12 h-12 bg-[#F8E9A1] rounded-lg flex items-center justify-center mb-3">
+                  <!-- Lucide Pipette icon for standpipe -->
+                  <svg class="w-6 h-6 text-[#24305E]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path d="m2 22 1-1h3l9-9"></path>
+                    <path d="M3 21v-3l9-9"></path>
+                    <path d="m15 6 3.4-3.4a2.1 2.1 0 1 1 3 3L18 9l.4.4a2.1 2.1 0 1 1-3 3l-3.8-3.8a2.1 2.1 0 1 1 3-3l.4.4Z"></path>
+                  </svg>
+                </div>
+                <h3 class="text-lg font-bold text-[#24305E] mb-1">NFPA 14</h3>
+                <p class="text-gray-600 text-xs">Standpipe Systems</p>
+              </div>
+
+              <!-- NFPA 20 -->
+              <div class="code-card bg-white p-4 rounded-lg border-2 border-gray-200 cursor-pointer relative" data-nav="library">
+                <span class="absolute top-3 right-3 text-xs font-medium text-[#F76C6C] bg-[#F76C6C] bg-opacity-20 px-2 py-1 rounded">소방</span>
+                <div class="w-12 h-12 bg-[#F8E9A1] rounded-lg flex items-center justify-center mb-3">
+                  <!-- Lucide Gauge icon for pump -->
+                  <svg class="w-6 h-6 text-[#24305E]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path d="m12 14 4-4"></path>
+                    <path d="M3.34 19a10 10 0 1 1 17.32 0"></path>
+                  </svg>
+                </div>
+                <h3 class="text-lg font-bold text-[#24305E] mb-1">NFPA 20</h3>
+                <p class="text-gray-600 text-xs">Fire Pumps</p>
+              </div>
+
+              <!-- NFPA 72 -->
+              <div class="code-card bg-white p-4 rounded-lg border-2 border-gray-200 cursor-pointer relative" data-nav="library">
+                <span class="absolute top-3 right-3 text-xs font-medium text-[#F76C6C] bg-[#F76C6C] bg-opacity-20 px-2 py-1 rounded">소방</span>
+                <div class="w-12 h-12 bg-[#F8E9A1] rounded-lg flex items-center justify-center mb-3">
+                  <!-- Lucide Bell icon for alarm -->
+                  <svg class="w-6 h-6 text-[#24305E]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path d="M6 8a6 6 0 0112 0c0 7 3 9 3 9H3s3-2 3-9"></path>
+                    <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path>
+                  </svg>
+                </div>
+                <h3 class="text-lg font-bold text-[#24305E] mb-1">NFPA 72</h3>
+                <p class="text-gray-600 text-xs">Fire Alarm Systems</p>
+              </div>
+
+              <!-- ADA 2021 -->
+              <div class="code-card bg-white p-4 rounded-lg border-2 border-gray-200 cursor-not-allowed relative opacity-50">
+                <span class="absolute top-3 right-3 text-xs font-medium text-[#A8D0E6] bg-[#A8D0E6] bg-opacity-20 px-2 py-1 rounded">건축·구조</span>
+                <div class="w-12 h-12 bg-[#F8E9A1] rounded-lg flex items-center justify-center mb-3">
+                  <!-- Lucide Accessibility icon -->
+                  <svg class="w-6 h-6 text-[#24305E]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <circle cx="16" cy="4" r="1"></circle>
+                    <path d="m18 19 1-7-6 1"></path>
+                    <path d="M5 8 3-3 5.5 3-2.36 3.5"></path>
+                    <path d="M4.24 14.5a5 5 0 0 0 6.88 6"></path>
+                    <path d="M13.76 17.5a5 5 0 0 0-6.88-6"></path>
+                  </svg>
+                </div>
+                <h3 class="text-lg font-bold text-[#24305E] mb-1">ADA 2021</h3>
+                <p class="text-gray-600 text-xs">Accessibility Guidelines</p>
+              </div>
+
+              <!-- IMC 2021 -->
+              <div class="code-card bg-white p-4 rounded-lg border-2 border-gray-200 cursor-not-allowed relative opacity-50">
+                <span class="absolute top-3 right-3 text-xs font-medium text-[#A8D0E6] bg-[#A8D0E6] bg-opacity-20 px-2 py-1 rounded">건축·구조</span>
+                <div class="w-12 h-12 bg-[#F8E9A1] rounded-lg flex items-center justify-center mb-3">
+                  <!-- Lucide Wind icon for mechanical -->
+                  <svg class="w-6 h-6 text-[#24305E]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path d="M17.7 7.7a2.5 2.5 0 1 1 1.8 4.3H2"></path>
+                    <path d="M9.6 4.6A2 2 0 1 1 11 8H2"></path>
+                    <path d="M12.6 19.4A2 2 0 1 0 14 16H2"></path>
+                  </svg>
+                </div>
+                <h3 class="text-lg font-bold text-[#24305E] mb-1">IMC 2021</h3>
+                <p class="text-gray-600 text-xs">Mechanical Code</p>
+              </div>
+
+              <!-- IPC 2021 -->
+              <div class="code-card bg-white p-4 rounded-lg border-2 border-gray-200 cursor-not-allowed relative opacity-50">
+                <span class="absolute top-3 right-3 text-xs font-medium text-[#A8D0E6] bg-[#A8D0E6] bg-opacity-20 px-2 py-1 rounded">건축·구조</span>
+                <div class="w-12 h-12 bg-[#F8E9A1] rounded-lg flex items-center justify-center mb-3">
+                  <!-- Lucide Droplet icon for plumbing -->
+                  <svg class="w-6 h-6 text-[#24305E]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path>
+                  </svg>
+                </div>
+                <h3 class="text-lg font-bold text-[#24305E] mb-1">IPC 2021</h3>
+                <p class="text-gray-600 text-xs">Plumbing Code</p>
+              </div>
+
+              <!-- NEC 2021 -->
+              <div class="code-card bg-white p-4 rounded-lg border-2 border-gray-200 cursor-not-allowed relative opacity-50">
+                <span class="absolute top-3 right-3 text-xs font-medium text-[#A8D0E6] bg-[#A8D0E6] bg-opacity-20 px-2 py-1 rounded">건축·구조</span>
+                <div class="w-12 h-12 bg-[#F8E9A1] rounded-lg flex items-center justify-center mb-3">
+                  <!-- Lucide Zap icon for electrical -->
+                  <svg class="w-6 h-6 text-[#24305E]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                  </svg>
+                </div>
+                <h3 class="text-lg font-bold text-[#24305E] mb-1">NEC 2021</h3>
+                <p class="text-gray-600 text-xs">Electrical Code</p>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+
+    <!-- Library Section -->
+    <!-- Removed PDF download button, made notes read-only, added hierarchical keywords -->
+    <div id="librarySection" class="section-content">
+      <header class="bg-white border-b border-gray-200 shadow-sm">
+        <div class="px-8 py-4 flex items-center justify-between">
+          <div>
+            <h1 class="text-2xl font-bold text-[#24305E]" id="codeTitle">IBC 2024</h1>
+            <p class="text-sm text-gray-600" id="codeSubtitle">International Building Code</p>
+          </div>
+          <div class="flex gap-3">
+            <select id="versionSelect" class="px-4 py-2 border-2 border-gray-300 rounded-lg text-sm font-medium text-gray-700 focus:outline-none focus:border-[#A8D0E6]">
+              <option value="2024">2024 Edition</option>
+              <option value="2021">2021 Edition</option>
+              <option value="2018">2018 Edition</option>
+            </select>
+          </div>
+        </div>
+      </header>
+
+      <div class="flex">
+        <aside class="w-80 bg-white border-r border-gray-200 h-[calc(100vh-145px)] overflow-y-auto">
+          <div class="p-4">
+            <h3 class="text-sm font-semibold text-gray-500 uppercase mb-3">Chapters</h3>
+            <div id="chapterList" class="space-y-1">
+              <div class="chapter-item active px-4 py-3 rounded-lg bg-[#F8E9A1]" data-chapter="1">
+                <div class="font-semibold text-[#24305E] text-sm">Chapter 1</div>
+                <div class="text-xs text-gray-600 mt-1">Scope and Administration</div>
+              </div>
+              <div class="chapter-item px-4 py-3 rounded-lg hover:bg-[#A8D0E6]" data-chapter="2">
+                <div class="font-semibold text-[#24305E] text-sm">Chapter 2</div>
+                <div class="text-xs text-gray-600 mt-1">Definitions</div>
+              </div>
+              <div class="chapter-item px-4 py-3 rounded-lg hover:bg-[#A8D0E6]" data-chapter="3">
+                <div class="font-semibold text-[#24305E] text-sm">Chapter 3</div>
+                <div class="text-xs text-gray-600 mt-1">Use and Occupancy Classification</div>
+              </div>
+              <div class="chapter-item px-4 py-3 rounded-lg hover:bg-[#A8D0E6]" data-chapter="4">
+                <div class="font-semibold text-[#24305E] text-sm">Chapter 4</div>
+                <div class="text-xs text-gray-600 mt-1">Special Detailed Requirements</div>
+              </div>
+              <div class="chapter-item px-4 py-3 rounded-lg hover:bg-[#A8D0E6]" data-chapter="5">
+                <div class="font-semibold text-[#24305E] text-sm">Chapter 5</div>
+                <div class="text-xs text-gray-600 mt-1">General Building Heights and Areas</div>
+              </div>
+            </div>
+          </div>
+        </aside>
+
+        <div class="flex-1 p-8">
+          <div id="contentArea">
+            <div class="bg-white rounded-lg shadow-sm p-8 mb-6">
+              <div class="mb-6">
+                <h2 class="text-2xl font-bold text-[#24305E] mb-2">Chapter 1: Scope and Administration</h2>
+                <p class="text-sm text-gray-600">제1장: 적용 범위 및 관리</p>
+              </div>
+
+              <div class="content-section mb-8">
+                <h3 class="text-xl font-semibold text-[#374785] mb-3">Section 101 - General</h3>
+                <p class="text-sm text-gray-500 mb-4">섹션 101 - 일반사항</p>
+                
+                <div class="space-y-4">
+                  <div class="bg-gray-50 p-4 rounded-lg relative">
+                    <!-- Restored copy/link icons to gray color -->
+                    <div class="absolute top-3 right-3 flex items-center gap-1">
+                      <button class="p-1.5 hover:bg-gray-200 rounded transition-colors" title="Copy link" onclick="copyLink('101.1')">
+                        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path>
+                        </svg>
+                      </button>
+                      <button class="p-1.5 hover:bg-gray-200 rounded transition-colors" title="Copy content" onclick="copyContent('101.1')">
+                        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                        </svg>
+                      </button>
+                    </div>
+                    <!-- Applied light blue to hierarchical keyword -->
+                    <div class="flex items-center gap-2 mb-3 flex-wrap">
+                      <span class="text-xs bg-[#A8D0E6] text-[#24305E] font-semibold px-2 py-0.5 rounded">IBC Chapter 1: Section 101</span>
+                      <span class="text-xs bg-[#F8E9A1] text-[#24305E] px-2 py-0.5 rounded">기준</span>
+                      <span class="text-xs bg-[#F8E9A1] text-[#24305E] px-2 py-0.5 rounded">관리</span>
+                    </div>
+                    <div class="flex items-center gap-2 mb-2">
+                      <h4 class="font-semibold text-[#24305E]">101.1 Title</h4>
+                    </div>
+                    <p class="text-gray-700 leading-relaxed mb-2">
+                      These regulations shall be known as the International Building Code of [NAME OF JURISDICTION], 
+                      hereinafter referred to as "this code."
+                    </p>
+                    <p class="text-gray-600 text-sm leading-relaxed mb-3">
+                      이 규정은 [관할 구역 이름]의 국제 건축 코드로 알려져야 하며, 이하 "본 코드"라고 한다.
+                    </p>
+                    <!-- Applied light pink background to Note section -->
+                    <div class="mt-3 pt-3 border-t border-gray-200 bg-[#FEE9EC] bg-opacity-30 p-3 rounded-lg">
+                      <label class="text-xs font-semibold text-[#F76C6C] mb-1 block">Note</label>
+                      <div class="w-full text-sm p-2 bg-white border border-[#F76C6C] border-opacity-20 rounded text-gray-700">
+                        This section establishes the official title of the code for the jurisdiction.
+                      </div>
+                    </div>
+                    <!-- Removed "Figures & Tables" text and added horizontal scroll -->
+                    <div class="mt-3 pt-3 border-t border-gray-200">
+                      <div class="figures-scroll">
+                        <div class="border border-gray-300 rounded p-2 hover:border-[#A8D0E6] transition-colors cursor-pointer flex-shrink-0" style="min-width: 120px;" onclick="openModal('table-101-1')">
+                          <div class="bg-gray-100 h-16 rounded flex items-center justify-center mb-1">
+                            <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                            </svg>
+                          </div>
+                          <p class="text-xs font-medium text-gray-700 text-center">Table 101.1</p>
+                        </div>
+                        <div class="border border-gray-300 rounded p-2 hover:border-[#A8D0E6] transition-colors cursor-pointer flex-shrink-0" style="min-width: 120px;" onclick="openModal('figure-101-1')">
+                          <div class="bg-gray-100 h-16 rounded flex items-center justify-center mb-1">
+                            <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            </svg>
+                          </div>
+                          <p class="text-xs font-medium text-gray-700 text-center">Figure 101.1</p>
+                        </div>
+                        <div class="border border-gray-300 rounded p-2 hover:border-[#A8D0E6] transition-colors cursor-pointer flex-shrink-0" style="min-width: 120px;" onclick="openModal('table-101-2')">
+                          <div class="bg-gray-100 h-16 rounded flex items-center justify-center mb-1">
+                            <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                            </svg>
+                          </div>
+                          <p class="text-xs font-medium text-gray-700 text-center">Table 101.2</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="bg-gray-50 p-4 rounded-lg relative">
+                    <div class="absolute top-3 right-3 flex items-center gap-1">
+                      <button class="p-1.5 hover:bg-gray-200 rounded transition-colors" title="Copy link" onclick="copyLink('101.2')">
+                        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path>
+                        </svg>
+                      </button>
+                      <button class="p-1.5 hover:bg-gray-200 rounded transition-colors" title="Copy content" onclick="copyContent('101.2')">
+                        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                        </svg>
+                      </button>
+                    </div>
+                    <div class="flex items-center gap-2 mb-3 flex-wrap">
+                      <span class="text-xs bg-[#A8D0E6] text-[#24305E] font-semibold px-2 py-0.5 rounded">IBC Chapter 1: Section 101</span>
+                      <span class="text-xs bg-[#F8E9A1] text-[#24305E] px-2 py-0.5 rounded">용도</span>
+                      <span class="text-xs bg-[#F8E9A1] text-[#24305E] px-2 py-0.5 rounded">구조</span>
+                    </div>
+                    <div class="flex items-center gap-2 mb-2">
+                      <h4 class="font-semibold text-[#24305E]">101.2 Scope</h4>
+                    </div>
+                    <p class="text-gray-700 leading-relaxed mb-2">
+                      The provisions of this code shall apply to the construction, alteration, relocation, enlargement, 
+                      replacement, repair, equipment, use and occupancy, location, maintenance, removal and demolition 
+                      of every building or structure or any appurtenances connected or attached to such buildings or structures.
+                    </p>
+                    <p class="text-gray-600 text-sm leading-relaxed mb-3">
+                      본 코드의 규정은 모든 건물 또는 구조물의 건설, 변경, 이전, 확장, 교체, 수리, 설비, 사용 및 점유, 
+                      위치, 유지보수, 제거 및 철거에 적용되어야 한다.
+                    </p>
+                    <!-- Applied light pink background to Note section -->
+                    <div class="mt-3 pt-3 border-t border-gray-200 bg-[#FEE9EC] bg-opacity-30 p-3 rounded-lg">
+                      <label class="text-xs font-semibold text-[#F76C6C] mb-1 block">Note</label>
+                      <div class="w-full text-sm p-2 bg-white border border-[#F76C6C] border-opacity-20 rounded text-gray-700">
+                        Defines the broad applicability of the code to all aspects of building construction and use.
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="bg-gray-50 p-4 rounded-lg relative">
+                    <div class="absolute top-3 right-3 flex items-center gap-1">
+                      <button class="p-1.5 hover:bg-gray-200 rounded transition-colors" title="Copy link" onclick="copyLink('101.3')">
+                        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path>
+                        </svg>
+                      </button>
+                      <button class="p-1.5 hover:bg-gray-200 rounded transition-colors" title="Copy content" onclick="copyContent('101.3')">
+                        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                        </svg>
+                      </button>
+                    </div>
+                    <div class="flex items-center gap-2 mb-3 flex-wrap">
+                      <span class="text-xs bg-[#A8D0E6] text-[#24305E] font-semibold px-2 py-0.5 rounded">IBC Chapter 1: Section 101</span>
+                      <span class="text-xs bg-[#F8E9A1] text-[#24305E] px-2 py-0.5 rounded">피난</span>
+                      <span class="text-xs bg-[#F8E9A1] text-[#24305E] px-2 py-0.5 rounded">방화</span>
+                    </div>
+                    <div class="flex items-center gap-2 mb-2">
+                      <h4 class="font-semibold text-[#24305E]">101.3 Intent</h4>
+                    </div>
+                    <p class="text-gray-700 leading-relaxed mb-2">
+                      The purpose of this code is to establish the minimum requirements to provide a reasonable level 
+                      of safety, public health and general welfare through structural strength, means of egress facilities, 
+                      stability, sanitation, adequate light and ventilation, energy conservation and safety to life and 
+                      property from fire and other hazards.
+                    </p>
+                    <p class="text-gray-600 text-sm leading-relaxed mb-3">
+                      본 코드의 목적은 구조적 강도, 피난 시설, 안정성, 위생, 적절한 조명 및 환기, 에너지 절약 및 
+                      화재 및 기타 위험으로부터의 생명과 재산의 안전을 통해 합리적인 수준의 안전, 공중 보건 및 
+                      일반 복지를 제공하기 위한 최소 요구 사항을 설정하는 것이다.
+                    </p>
+                    <!-- Applied light pink background to Note section -->
+                    <div class="mt-3 pt-3 border-t border-gray-200 bg-[#FEE9EC] bg-opacity-30 p-3 rounded-lg">
+                      <label class="text-xs font-semibold text-[#F76C6C] mb-1 block">Note</label>
+                      <div class="w-full text-sm p-2 bg-white border border-[#F76C6C] border-opacity-20 rounded text-gray-700">
+                        Establishes the fundamental purpose and goals of the building code.
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Advanced Search Section -->
+    <div id="searchSection" class="section-content">
+      <header class="bg-white border-b border-gray-200 shadow-sm">
+        <div class="px-8 py-6">
+          <h1 class="text-3xl font-bold text-[#24305E]">고급 검색</h1>
+          <p class="text-gray-600 mt-1">모든 코드 라이브러리에서 필터링 및 검색</p>
+        </div>
+      </header>
+
+      <div class="p-8">
+        <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+          <div class="mb-6">
+            <label class="block text-sm font-semibold text-[#24305E] mb-2">키워드 검색</label>
+            <input 
+              type="text" 
+              id="keywordInput"
+              placeholder="키워드, 섹션 번호 또는 문구를 입력하세요..."
+              class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-[#A8D0E6] transition-colors"
+            >
+          </div>
+
+          <div class="border-t border-gray-200 pt-4">
+            <div class="collapsible-header flex items-center justify-between p-3 rounded-lg" onclick="toggleCollapsible('filterSection')">
+              <svg id="filterSectionIcon" class="w-5 h-5 text-gray-600 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+              </svg>
+            </div>
+            
+            <div id="filterSection" class="collapsible-content expanded">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+                <div>
+                  <!-- Removed "전체 선택" text, kept only checkbox -->
+                  <div class="flex items-center gap-3 mb-3 pb-2 border-b-2 border-[#A8D0E6]">
+                    <label class="flex items-center cursor-pointer">
+                      <input type="checkbox" id="selectAllArch" class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" onchange="toggleSelectAll('arch')">
+                    </label>
+                    <h3 class="text-base font-bold text-[#24305E]">건축·구조</h3>
+                  </div>
+                  <div class="grid grid-cols-2 gap-x-4 gap-y-1">
+                    <label class="flex items-center cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
+                      <input type="checkbox" name="archCategory" value="usage" class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded">
+                      <span class="ml-2 text-sm text-gray-700">용도</span>
+                    </label>
+                    <label class="flex items-center cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
+                      <input type="checkbox" name="archCategory" value="height" class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded">
+                      <span class="ml-2 text-sm text-gray-700">높이</span>
+                    </label>
+                    <label class="flex items-center cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
+                      <input type="checkbox" name="archCategory" value="area" class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded">
+                      <span class="ml-2 text-sm text-gray-700">면적</span>
+                    </label>
+                    <label class="flex items-center cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
+                      <input type="checkbox" name="archCategory" value="standards" class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded">
+                      <span class="ml-2 text-sm text-gray-700">기준</span>
+                    </label>
+                    <label class="flex items-center cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
+                      <input type="checkbox" name="archCategory" value="building-type" class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded">
+                      <span class="ml-2 text-sm text-gray-700">건물 유형</span>
+                    </label>
+                    <label class="flex items-center cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
+                      <input type="checkbox" name="archCategory" value="layout" class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded">
+                      <span class="ml-2 text-sm text-gray-700">배치</span>
+                    </label>
+                    <label class="flex items-center cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
+                      <input type="checkbox" name="archCategory" value="finish" class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded">
+                      <span class="ml-2 text-sm text-gray-700">마감</span>
+                    </label>
+                    <label class="flex items-center cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
+                      <input type="checkbox" name="archCategory" value="vehicle" class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded">
+                      <span class="ml-2 text-sm text-gray-700">차량</span>
+                    </label>
+                    <label class="flex items-center cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
+                      <input type="checkbox" name="archCategory" value="rooftop" class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded">
+                      <span class="ml-2 text-sm text-gray-700">옥탑</span>
+                    </label>
+                    <label class="flex items-center cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
+                      <input type="checkbox" name="archCategory" value="exterior" class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded">
+                      <span class="ml-2 text-sm text-gray-700">외장재</span>
+                    </label>
+                    <label class="flex items-center cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
+                      <input type="checkbox" name="archCategory" value="roof" class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded">
+                      <span class="ml-2 text-sm text-gray-700">지붕</span>
+                    </label>
+                  </div>
+                </div>
+
+                <div>
+                  <div class="flex items-center gap-3 mb-3 pb-2 border-b-2 border-[#F76C6C]">
+                    <label class="flex items-center cursor-pointer">
+                      <input type="checkbox" id="selectAllFire" class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" onchange="toggleSelectAll('fire')">
+                    </label>
+                    <h3 class="text-base font-bold text-[#24305E]">소방</h3>
+                  </div>
+                  <div class="grid grid-cols-2 gap-x-4 gap-y-1">
+                    <label class="flex items-center cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
+                      <input type="checkbox" name="fireCategory" value="egress" class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded">
+                      <span class="ml-2 text-sm text-gray-700">피난</span>
+                    </label>
+                    <label class="flex items-center cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
+                      <input type="checkbox" name="fireCategory" value="fire-protection" class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded">
+                      <span class="ml-2 text-sm text-gray-700">방화</span>
+                    </label>
+                    <label class="flex items-center cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
+                      <input type="checkbox" name="fireCategory" value="fire-suppression" class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded">
+                      <span class="ml-2 text-sm text-gray-700">소화</span>
+                    </label>
+                    <label class="flex items-center cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
+                      <input type="checkbox" name="fireCategory" value="accessibility" class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded">
+                      <span class="ml-2 text-sm text-gray-700">접근성</span>
+                    </label>
+                    <label class="flex items-center cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
+                      <input type="checkbox" name="fireCategory" value="sprinkler" class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded">
+                      <span class="ml-2 text-sm text-gray-700">스프링클러</span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex gap-3 mt-6">
+            <button id="searchBtn" class="flex-1 bg-[#F76C6C] text-white py-3 rounded-lg font-semibold hover:bg-[#e55a5a] transition-colors">
+              검색
+            </button>
+            <button id="resetBtn" class="px-4 bg-gray-200 text-gray-700 py-3 rounded-lg hover:bg-gray-300 transition-colors" title="초기화">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div id="resultsSection" class="bg-white rounded-lg shadow-md p-6">
+          <div class="flex items-center justify-between mb-4">
+            <h2 class="text-xl font-bold text-[#24305E]">검색 결과</h2>
+            <div class="flex items-center gap-3">
+              <span id="resultCount" class="text-sm text-gray-600">0개 결과</span>
+              <button class="p-2 hover:bg-gray-100 rounded-lg transition-colors" title="Copy link">
+                <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path>
+                </svg>
+              </button>
+              <button class="p-2 hover:bg-gray-100 rounded-lg transition-colors" title="Copy results">
+                <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <div id="resultsList" class="space-y-3">
+            <!-- Added fold/unfold and eye icon to search results -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Search Results Section -->
+    <div id="searchResultsSection" class="section-content">
+      <header class="bg-white border-b border-gray-200 shadow-sm">
+        <div class="px-8 py-6 flex items-center gap-4">
+          <button onclick="showSection('home')" class="p-2 hover:bg-gray-100 rounded-lg transition-colors" title="Back to home">
+            <svg class="w-6 h-6 text-[#24305E]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+            </svg>
+          </button>
+          <div>
+            <h1 class="text-3xl font-bold text-[#24305E]">검색 결과</h1>
+            <p class="text-gray-600 mt-1" id="searchResultsSubtitle">검색어: ""</p>
+          </div>
+        </div>
+      </header>
+
+      <div class="p-8">
+        <div class="bg-white rounded-lg shadow-md p-6">
+          <div class="flex items-center justify-between mb-4">
+            <h2 class="text-xl font-bold text-[#24305E]">결과</h2>
+            <span id="searchResultsCount" class="text-sm text-gray-600">0개 결과</span>
+          </div>
+
+          <div id="searchResultsList" class="space-y-4">
+            <!-- Search results will be populated here -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Code Compare Section -->
+    <div id="compareSection" class="section-content">
+      <header class="bg-white border-b border-gray-200 shadow-sm">
+        <div class="px-8 py-6">
+          <h1 class="text-3xl font-bold text-[#24305E]">코드 비교</h1>
+          <p class="text-gray-600 mt-1">다양한 코드 버전을 나란히 비교</p>
+        </div>
+      </header>
+
+      <div class="p-8">
+        <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+          <div class="collapsible-header flex items-center justify-between p-3 rounded-lg" onclick="toggleCollapsible('codeSelectSection')">
+            <svg id="codeSelectSectionIcon" class="w-5 h-5 text-gray-600 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </div>
+          
+          <div id="codeSelectSection" class="collapsible-content expanded">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+              <div>
+                <label class="block text-sm font-semibold text-[#24305E] mb-2">Code A</label>
+                <select id="codeAType" class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg mb-3 focus:outline-none focus:border-[#A8D0E6]">
+                  <option value="IBC">IBC - International Building Code</option>
+                  <option value="NFPA13">NFPA 13 - Sprinkler Systems</option>
+                  <option value="NFPA14">NFPA 14 - Standpipe Systems</option>
+                </select>
+                <select id="codeAVersion" class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg mb-3 focus:outline-none focus:border-[#A8D0E6]">
+                  <option value="2024">2024 Edition</option>
+                  <option value="2021">2021 Edition</option>
+                  <option value="2018">2018 Edition</option>
+                </select>
+                <!-- Added clear button to section input -->
+                <div class="input-wrapper">
+                  <input 
+                    type="text" 
+                    id="codeASection"
+                    list="sectionListA"
+                    placeholder="Section number (e.g., 101.2)"
+                    class="w-full px-4 py-3 pr-10 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-[#A8D0E6]"
+                  />
+                  <button class="clear-button" onclick="clearInput('codeASection')" title="Clear">
+                    <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                  </button>
+                </div>
+                <datalist id="sectionListA">
+                  <option value="101.1">101.1 - Title</option>
+                  <option value="101.2">101.2 - Scope</option>
+                  <option value="101.3">101.3 - Intent</option>
+                  <option value="101.4">101.4 - Severability</option>
+                  <option value="102.1">102.1 - General</option>
+                  <option value="102.2">102.2 - Building</option>
+                  <option value="103.1">103.1 - Creation of enforcement agency</option>
+                  <option value="104.1">104.1 - General</option>
+                  <option value="105.1">105.1 - Required</option>
+                  <option value="106.1">106.1 - Submittal documents</option>
+                </datalist>
+              </div>
+
+              <div>
+                <label class="block text-sm font-semibold text-[#24305E] mb-2">Code B</label>
+                <select id="codeBType" class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg mb-3 focus:outline-none focus:border-[#A8D0E6]">
+                  <option value="IBC">IBC - International Building Code</option>
+                  <option value="NFPA13">NFPA 13 - Sprinkler Systems</option>
+                  <option value="NFPA14">NFPA 14 - Standpipe Systems</option>
+                </select>
+                <select id="codeBVersion" class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg mb-3 focus:outline-none focus:border-[#A8D0E6]">
+                  <option value="2021" selected>2021 Edition</option>
+                  <option value="2024">2024 Edition</option>
+                  <option value="2018">2018 Edition</option>
+                </select>
+                <!-- Added clear button to section input -->
+                <div class="input-wrapper">
+                  <input 
+                    type="text" 
+                    id="codeBSection"
+                    list="sectionListB"
+                    placeholder="Section number (e.g., 101.2)"
+                    class="w-full px-4 py-3 pr-10 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-[#A8D0E6]"
+                  />
+                  <button class="clear-button" onclick="clearInput('codeBSection')" title="Clear">
+                    <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                  </button>
+                </div>
+                <datalist id="sectionListB">
+                  <option value="101.1">101.1 - Title</option>
+                  <option value="101.2">101.2 - Scope</option>
+                  <option value="101.3">101.3 - Intent</option>
+                  <option value="101.4">101.4 - Severability</option>
+                  <option value="102.1">102.1 - General</option>
+                  <option value="102.2">102.2 - Building</option>
+                  <option value="103.1">103.1 - Creation of enforcement agency</option>
+                  <option value="104.1">104.1 - General</option>
+                  <option value="105.1">105.1 - Required</option>
+                  <option value="106.1">106.1 - Submittal documents</option>
+                </datalist>
+              </div>
+            </div>
+
+            <button id="compareBtn" class="w-full mt-6 bg-[#F76C6C] text-white py-3 rounded-lg font-semibold hover:bg-[#e55a5a] transition-colors">
+              Compare Codes
+            </button>
+          </div>
+        </div>
+
+        <div id="comparisonResults" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="compare-panel bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="bg-[#374785] text-white p-4 flex items-center justify-between">
+              <div>
+                <h3 class="font-semibold">IBC 2024 - Section 101.2</h3>
+                <p class="text-sm text-gray-200 mt-1">International Building Code</p>
+              </div>
+              <div class="flex items-center gap-2">
+                <button class="p-2 hover:bg-[#24305E] rounded-lg transition-colors" title="Copy link">
+                  <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path>
+                  </svg>
+                </button>
+                <button class="p-2 hover:bg-[#24305E] rounded-lg transition-colors" title="Copy content">
+                  <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div class="p-6 space-y-4">
+              <div class="bg-gray-50 p-4 rounded-lg">
+                <h4 class="font-semibold text-[#24305E] mb-2">101.2 Scope</h4>
+                <p class="text-gray-700 leading-relaxed text-sm mb-3">
+                  The provisions of this code shall apply to the construction, alteration, relocation, enlargement, 
+                  replacement, repair, equipment, use and occupancy, location, maintenance, removal and demolition 
+                  of every building or structure or any appurtenances connected or attached to such buildings or structures.
+                </p>
+                <div class="diff-added">
+                  <div class="flex items-center gap-2 mb-2">
+                    <svg class="w-4 h-4 text-green-700" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                    </svg>
+                  </div>
+                  <p class="text-sm text-gray-800">
+                    This includes <span class="text-highlight-added">temporary structures and equipment used during construction</span>.
+                  </p>
+                  <p class="text-xs text-gray-600 mt-1">
+                    <span class="text-highlight-added">건설 중 사용되는 임시 구조물 및 장비</span>를 포함합니다.
+                  </p>
+                </div>
+              </div>
+
+              <div class="bg-gray-50 p-4 rounded-lg">
+                <h4 class="font-semibold text-[#24305E] mb-2">Exceptions</h4>
+                <ol class="list-decimal list-inside space-y-2 text-sm text-gray-700">
+                  <li>Detached one- and two-family dwellings and townhouses not more than three stories</li>
+                  <li>Agricultural buildings</li>
+                </ol>
+                <div class="diff-modified mt-3">
+                  <div class="flex items-center gap-2 mb-2">
+                    <svg class="w-4 h-4 text-yellow-700" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                    </svg>
+                  </div>
+                  <p class="text-sm text-gray-800">
+                    Temporary structures <span class="text-highlight-modified">as defined in Section 3103</span>
+                  </p>
+                  <p class="text-xs text-gray-600 mt-1">
+                    <span class="text-highlight-modified">섹션 3103에 정의된</span> 임시 구조물
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="compare-panel bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="bg-[#24305E] text-white p-4 flex items-center justify-between">
+              <div>
+                <h3 class="font-semibold">IBC 2021 - Section 101.2</h3>
+                <p class="text-sm text-gray-200 mt-1">International Building Code</p>
+              </div>
+              <div class="flex items-center gap-2">
+                <button class="p-2 hover:bg-[#374785] rounded-lg transition-colors" title="Copy link">
+                  <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path>
+                  </svg>
+                </button>
+                <button class="p-2 hover:bg-[#374785] rounded-lg transition-colors" title="Copy content">
+                  <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div class="p-6 space-y-4">
+              <div class="bg-gray-50 p-4 rounded-lg">
+                <h4 class="font-semibold text-[#24305E] mb-2">101.2 Scope</h4>
+                <p class="text-gray-700 leading-relaxed text-sm mb-3">
+                  The provisions of this code shall apply to the construction, alteration, relocation, enlargement, 
+                  replacement, repair, equipment, use and occupancy, location, maintenance, removal and demolition 
+                  of every building or structure or any appurtenances connected or attached to such buildings or structures.
+                </p>
+                <div class="diff-removed">
+                  <div class="flex items-center gap-2 mb-2">
+                    <svg class="w-4 h-4 text-red-700" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 001.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
+                    </svg>
+                  </div>
+                  <p class="text-sm text-gray-800">
+                    Previous language about <span class="text-highlight-removed">temporary structures was less specific</span>.
+                  </p>
+                  <p class="text-xs text-gray-600 mt-1">
+                    임시 구조물에 대한 <span class="text-highlight-removed">이전 언어는 덜 구체적이었습니다</span>.
+                  </p>
+                </div>
+              </div>
+
+              <div class="bg-gray-50 p-4 rounded-lg">
+                <h4 class="font-semibold text-[#24305E] mb-2">Exceptions</h4>
+                <ol class="list-decimal list-inside space-y-2 text-sm text-gray-700">
+                  <li>Detached one- and two-family dwellings and townhouses not more than three stories</li>
+                  <li>Agricultural buildings</li>
+                  <li class="text-gray-500"><span class="text-highlight-removed">Temporary structures</span></li>
+                </ol>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-6 bg-white rounded-lg shadow-md p-6">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-lg font-semibold text-[#24305E]">비교 요약</h3>
+            <div class="flex items-center gap-2">
+              <button class="p-2 hover:bg-gray-100 rounded-lg transition-colors" title="Copy link">
+                <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path>
+                </svg>
+              </button>
+              <button class="p-2 hover:bg-gray-100 rounded-lg transition-colors" title="Copy summary">
+                <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="bg-gradient-to-br from-green-50 to-emerald-50 border-l-4 border-green-500 p-5 rounded-lg shadow-sm">
+              <div class="flex items-center gap-3 mb-2">
+                <div class="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center">
+                  <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                  </svg>
+                </div>
+                <span class="font-bold text-xl text-green-800">1</span>
+              </div>
+              <p class="font-semibold text-green-800 mb-1">추가</p>
+              <p class="text-sm text-green-700">New clarification on temporary structures</p>
+            </div>
+
+            <div class="bg-gradient-to-br from-yellow-50 to-amber-50 border-l-4 border-yellow-500 p-5 rounded-lg shadow-sm">
+              <div class="flex items-center gap-3 mb-2">
+                <div class="w-10 h-10 bg-yellow-500 rounded-full flex items-center justify-center">
+                  <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                  </svg>
+                </div>
+                <span class="font-bold text-xl text-yellow-800">1</span>
+              </div>
+              <p class="font-semibold text-yellow-800 mb-1">수정</p>
+              <p class="text-sm text-yellow-700">Updated exception language</p>
+            </div>
+
+            <div class="bg-gradient-to-br from-red-50 to-rose-50 border-l-4 border-red-500 p-5 rounded-lg shadow-sm">
+              <div class="flex items-center gap-3 mb-2">
+                <div class="w-10 h-10 bg-red-500 rounded-full flex items-center justify-center">
+                  <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 001.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
+                  </svg>
+                </div>
+                <span class="font-bold text-xl text-red-800">0</span>
+              </div>
+              <p class="font-semibold text-red-800 mb-1">삭제</p>
+              <p class="text-sm text-red-700">No content removed</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Added section content modal -->
+  <div id="sectionModal" class="section-modal">
+    <div class="section-modal-content">
+      <div class="flex items-center justify-between mb-6 pb-4 border-b">
+        <div>
+          <h2 class="text-2xl font-bold text-[#24305E]" id="sectionModalTitle">Section Title</h2>
+          <p class="text-sm text-gray-600 mt-1" id="sectionModalSubtitle">Code Name</p>
+        </div>
+        <button onclick="closeSectionModal()" class="p-2 hover:bg-gray-100 rounded-lg transition-colors">
+          <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+      <div id="sectionModalContent" class="space-y-4">
+        <!-- Section content will be populated here -->
+      </div>
+    </div>
+  </div>
+
+  <div id="imageModal" class="modal">
+    <div class="modal-content">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-xl font-bold text-[#24305E]" id="modalTitle">Table 101.1</h3>
+        <button onclick="closeModal()" class="p-2 hover:bg-gray-100 rounded-lg transition-colors">
+          <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+      <div class="bg-gray-100 rounded-lg p-8 flex items-center justify-center" style="min-height: 400px;">
+        <p class="text-gray-500">Table content would be displayed here</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const sections = {
+      home: document.getElementById('homeSection'),
+      library: document.getElementById('librarySection'),
+      search: document.getElementById('searchSection'),
+      compare: document.getElementById('compareSection'),
+      searchResults: document.getElementById('searchResultsSection')
+    };
+
+    const sidebarItems = document.querySelectorAll('.sidebar-item');
+    
+    function showSection(sectionName) {
+      Object.values(sections).forEach(section => {
+        section.classList.remove('active');
+      });
+      
+      if (sections[sectionName]) {
+        sections[sectionName].classList.add('active');
+      }
+      
+      sidebarItems.forEach(item => {
+        item.classList.remove('active');
+        if (item.dataset.section === sectionName) {
+          item.classList.add('active');
+        }
+      });
+    }
+
+    sidebarItems.forEach(item => {
+      item.addEventListener('click', function() {
+        const section = this.dataset.section;
+        showSection(section);
+      });
+    });
+
+    document.querySelectorAll('[data-nav]').forEach(card => {
+      card.addEventListener('click', function() {
+        const section = this.dataset.nav;
+        showSection(section);
+      });
+    });
+
+    document.querySelectorAll('.chapter-item').forEach(item => {
+      item.addEventListener('click', function() {
+        document.querySelectorAll('.chapter-item').forEach(i => {
+          i.classList.remove('active', 'bg-[#F8E9A1]');
+        });
+        this.classList.add('active', 'bg-[#F8E9A1]');
+        
+        const chapter = this.dataset.chapter;
+        console.log('[v0] Loading chapter:', chapter);
+      });
+    });
+
+    document.getElementById('versionSelect')?.addEventListener('change', function() {
+      console.log('[v0] Version changed to:', this.value);
+    });
+
+    function clearSearchInput() {
+      document.getElementById('topSearchInput').value = '';
+      document.getElementById('topSearchInput').focus();
+    }
+
+    function performTopSearch() {
+      const searchValue = document.getElementById('topSearchInput').value;
+      if (searchValue.trim()) {
+        showSection('searchResults');
+        document.getElementById('searchResultsSubtitle').textContent = `검색어: "${searchValue}"`;
+        
+        const searchResultsList = document.getElementById('searchResultsList');
+        const highlightedText = (text, query) => {
+          if (!query) return text;
+          const regex = new RegExp(`(${query})`, 'gi');
+          return text.replace(regex, '<span class="search-highlight">$1</span>');
+        };
+        
+        // Updated search results with fold/unfold and eye icon
+        searchResultsList.innerHTML = `
+          <div class="border rounded-lg bg-white overflow-hidden">
+            <div class="result-collapsible p-4 hover:bg-gray-50 transition-colors" onclick="toggleResultItem('result1')">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3 flex-1">
+                  <svg id="result1Icon" class="w-5 h-5 text-gray-600 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                  </svg>
+                  <div class="flex-1">
+                    <div class="flex items-center gap-2 mb-1">
+                      <span class="bg-[#F76C6C] text-white text-xs font-semibold px-2 py-1 rounded">IBC 2024</span>
+                      <span class="text-sm text-gray-500">Chapter 1, Section 101.1</span>
+                    </div>
+                    <h3 class="font-semibold text-[#24305E]">${highlightedText('Title', searchValue)}</h3>
+                  </div>
+                </div>
+                <!-- Updated eye icon to open popup instead of navigating -->
+                <button class="ml-4 p-2 bg-[#A8D0E6] text-[#24305E] rounded-lg hover:bg-[#8fc0d9] transition-colors" onclick="event.stopPropagation(); openSectionModal('101.1', 'IBC 2024', 'Title');" title="View section">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div id="result1" class="result-content">
+              <div class="px-4 pb-4 text-sm text-gray-600 leading-relaxed space-y-1 border-t pt-3">
+                <p>${highlightedText('These regulations shall be known as the International Building Code', searchValue)}</p>
+                <p>${highlightedText('of [NAME OF JURISDICTION], hereinafter referred to as "this code."', searchValue)}</p>
+                <p class="text-gray-500 italic">${highlightedText('이 규정은 [관할 구역 이름]의 국제 건축 코드로 알려져야 하며...', searchValue)}</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="border rounded-lg bg-white overflow-hidden">
+            <div class="result-collapsible p-4 hover:bg-gray-50 transition-colors" onclick="toggleResultItem('result2')">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3 flex-1">
+                  <svg id="result2Icon" class="w-5 h-5 text-gray-600 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                  </svg>
+                  <div class="flex-1">
+                    <div class="flex items-center gap-2 mb-1">
+                      <span class="bg-[#F76C6C] text-white text-xs font-semibold px-2 py-1 rounded">IBC 2024</span>
+                      <span class="text-sm text-gray-500">Chapter 1, Section 101.2</span>
+                    </div>
+                    <h3 class="font-semibold text-[#24305E]">${highlightedText('Scope', searchValue)}</h3>
+                  </div>
+                </div>
+                <button class="ml-4 p-2 bg-[#A8D0E6] text-[#24305E] rounded-lg hover:bg-[#8fc0d9] transition-colors" onclick="event.stopPropagation(); openSectionModal('101.2', 'IBC 2024', 'Scope');" title="View section">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div id="result2" class="result-content">
+              <div class="px-4 pb-4 text-sm text-gray-600 leading-relaxed space-y-1 border-t pt-3">
+                <p>${highlightedText('The provisions of this code shall apply to the construction, alteration,', searchValue)}</p>
+                <p>${highlightedText('relocation, enlargement, replacement, repair, equipment, use and occupancy,', searchValue)}</p>
+                <p>${highlightedText('location, maintenance, removal and demolition of every building or structure...', searchValue)}</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="border rounded-lg bg-white overflow-hidden">
+            <div class="result-collapsible p-4 hover:bg-gray-50 transition-colors" onclick="toggleResultItem('result3')">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3 flex-1">
+                  <svg id="result3Icon" class="w-5 h-5 text-gray-600 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                  </svg>
+                  <div class="flex-1">
+                    <div class="flex items-center gap-2 mb-1">
+                      <span class="bg-[#A8D0E6] text-[#24305E] text-xs font-semibold px-2 py-1 rounded">NFPA 13 2024</span>
+                      <span class="text-sm text-gray-500">Chapter 8, Section 8.3</span>
+                    </div>
+                    <h3 class="font-semibold text-[#24305E]">${highlightedText('System Components', searchValue)}</h3>
+                  </div>
+                </div>
+                <button class="ml-4 p-2 bg-[#A8D0E6] text-[#24305E] rounded-lg hover:bg-[#8fc0d9] transition-colors" onclick="event.stopPropagation(); openSectionModal('8.3', 'NFPA 13 2024', 'System Components');" title="View section">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div id="result3" class="result-content">
+              <div class="px-4 pb-4 text-sm text-gray-600 leading-relaxed space-y-1 border-t pt-3">
+                <p>${highlightedText('Sprinkler system components shall be listed for their intended use', searchValue)}</p>
+                <p>${highlightedText('and installed in accordance with manufacturer\'s specifications', searchValue)}</p>
+                <p>${highlightedText('and this standard. All components must meet applicable standards...', searchValue)}</p>
+              </div>
+            </div>
+          </div>
+        `;
+        
+        document.getElementById('searchResultsCount').textContent = '3개 결과';
+      }
+    }
+
+    document.getElementById('topSearchInput')?.addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        performTopSearch();
+      }
+    });
+
+    const searchBtn = document.getElementById('searchBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const resultCount = document.getElementById('resultCount');
+
+    searchBtn?.addEventListener('click', function() {
+      const keyword = document.getElementById('keywordInput').value;
+      const selectedArchCategories = Array.from(document.querySelectorAll('input[name="archCategory"]:checked')).map(cb => cb.value);
+      const selectedFireCategories = Array.from(document.querySelectorAll('input[name="fireCategory"]:checked')).map(cb => cb.value);
+      
+      console.log('[v0] Search parameters:', { 
+        keyword, 
+        archCategories: selectedArchCategories,
+        fireCategories: selectedFireCategories
+      });
+      
+      const resultsList = document.getElementById('resultsList');
+      // Updated advanced search results with fold/unfold and eye icon
+      resultsList.innerHTML = `
+        <div class="border rounded-lg bg-white overflow-hidden">
+          <div class="result-collapsible p-4 hover:bg-gray-50 transition-colors" onclick="toggleResultItem('advResult1')">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-3 flex-1">
+                <svg id="advResult1Icon" class="w-5 h-5 text-gray-600 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+                <div class="flex-1">
+                  <div class="flex items-center gap-2 mb-1">
+                    <span class="bg-[#F76C6C] text-white text-xs font-semibold px-2 py-1 rounded">IBC 2024</span>
+                    <span class="text-sm text-gray-500">Chapter 5, Section 503</span>
+                  </div>
+                  <h3 class="font-semibold text-[#24305E]">General Building Heights and Areas</h3>
+                </div>
+              </div>
+              <!-- Updated eye icon to open popup -->
+              <button class="ml-4 p-2 bg-[#A8D0E6] text-[#24305E] rounded-lg hover:bg-[#8fc0d9] transition-colors" onclick="event.stopPropagation(); openSectionModal('503', 'IBC 2024', 'General Building Heights and Areas');" title="View section">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+          <div id="advResult1" class="result-content">
+            <div class="px-4 pb-4 text-sm text-gray-600 leading-relaxed border-t pt-3">
+              The height and area of buildings shall be limited based on the occupancy classification, 
+              type of construction, and the presence of automatic sprinkler systems...
+            </div>
+          </div>
+        </div>
+
+        <div class="border rounded-lg bg-white overflow-hidden">
+          <div class="result-collapsible p-4 hover:bg-gray-50 transition-colors" onclick="toggleResultItem('advResult2')">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-3 flex-1">
+                <svg id="advResult2Icon" class="w-5 h-5 text-gray-600 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+                <div class="flex-1">
+                  <div class="flex items-center gap-2 mb-1">
+                    <span class="bg-[#A8D0E6] text-[#24305E] text-xs font-semibold px-2 py-1 rounded">NFPA 13 2024</span>
+                    <span class="text-sm text-gray-500">Chapter 8, Section 8.3</span>
+                  </div>
+                  <h3 class="font-semibold text-[#24305E]">System Components and Hardware</h3>
+                </div>
+              </div>
+              <button class="ml-4 p-2 bg-[#A8D0E6] text-[#24305E] rounded-lg hover:bg-[#8fc0d9] transition-colors" onclick="event.stopPropagation(); openSectionModal('8.3', 'NFPA 13 2024', 'System Components and Hardware');" title="View section">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+          <div id="advResult2" class="result-content">
+            <div class="px-4 pb-4 text-sm text-gray-600 leading-relaxed border-t pt-3">
+              Sprinkler system components shall be listed for their intended use and installed in accordance 
+              with manufacturer's specifications and this standard...
+            </div>
+          </div>
+        </div>
+
+        <div class="border rounded-lg bg-white overflow-hidden">
+          <div class="result-collapsible p-4 hover:bg-gray-50 transition-colors" onclick="toggleResultItem('advResult3')">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-3 flex-1">
+                <svg id="advResult3Icon" class="w-5 h-5 text-gray-600 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+                <div class="flex-1">
+                  <div class="flex items-center gap-2 mb-1">
+                    <span class="bg-[#A8D0E6] text-[#24305E] text-xs font-semibold px-2 py-1 rounded">NFPA 72 2024</span>
+                    <span class="text-sm text-gray-500">Chapter 10, Section 10.4</span>
+                  </div>
+                  <h3 class="font-semibold text-[#24305E]">Fire Alarm System Design</h3>
+                </div>
+              </div>
+              <button class="ml-4 p-2 bg-[#A8D0E6] text-[#24305E] rounded-lg hover:bg-[#8fc0d9] transition-colors" onclick="event.stopPropagation(); openSectionModal('10.4', 'NFPA 72 2024', 'Fire Alarm System Design');" title="View section">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+          <div id="advResult3" class="result-content">
+            <div class="px-4 pb-4 text-sm text-gray-600 leading-relaxed border-t pt-3">
+              Fire alarm systems shall be designed to provide early warning of fire conditions and shall be 
+              installed in accordance with the requirements of this chapter...
+            </div>
+          </div>
+        </div>
+      `;
+      resultCount.textContent = '3개 결과';
+    });
+
+    resetBtn?.addEventListener('click', function() {
+      document.getElementById('keywordInput').value = '';
+      document.querySelectorAll('input[name="archCategory"]:checked').forEach(cb => {
+        cb.checked = false;
+      });
+      document.querySelectorAll('input[name="fireCategory"]:checked').forEach(cb => {
+        cb.checked = false;
+      });
+      document.getElementById('selectAllArch').checked = false;
+      document.getElementById('selectAllFire').checked = false;
+      document.getElementById('resultsList').innerHTML = '';
+      resultCount.textContent = '0개 결과';
+    });
+
+    const compareBtn = document.getElementById('compareBtn');
+
+    compareBtn?.addEventListener('click', function() {
+      const codeAType = document.getElementById('codeAType').value;
+      const codeAVersion = document.getElementById('codeAVersion').value;
+      const codeASection = document.getElementById('codeASection').value;
+      
+      const codeBType = document.getElementById('codeBType').value;
+      const codeBVersion = document.getElementById('codeBVersion').value;
+      const codeBSection = document.getElementById('codeBSection').value;
+
+      console.log('[v0] Comparing codes:', {
+        codeA: { type: codeAType, version: codeAVersion, section: codeASection },
+        codeB: { type: codeBType, version: codeBVersion, section: codeBSection }
+      });
+    });
+
+    function copyLink(sectionId) {
+      const url = `${window.location.origin}${window.location.pathname}#section-${sectionId}`;
+      navigator.clipboard.writeText(url).then(() => {
+        console.log('[v0] Link copied:', url);
+        alert('링크가 복사되었습니다!');
+      });
+    }
+
+    function copyContent(sectionId) {
+      // Updated copy function to structure content with hierarchy
+      const sectionElement = document.querySelector(`[onclick*="copyContent('${sectionId}')"]`)?.closest('.bg-gray-50');
+      if (sectionElement) {
+        const hierarchyKeyword = sectionElement.querySelector('.bg-\\[\\#A8D0E6\\]')?.textContent || '';
+        const keywords = Array.from(sectionElement.querySelectorAll('.bg-\\[\\#F8E9A1\\]')).map(el => el.textContent).join(', ');
+        const title = sectionElement.querySelector('h4')?.textContent || '';
+        const englishText = sectionElement.querySelectorAll('p')[0]?.textContent || '';
+        const koreanText = sectionElement.querySelectorAll('p')[1]?.textContent || '';
+        const noteElement = sectionElement.querySelector('.bg-white');
+        const note = noteElement ? noteElement.textContent.trim() : '';
+        
+        const structuredContent = `
+${hierarchyKeyword}
+Keywords: ${keywords}
+
+${title}
+
+English:
+${englishText}
+
+Korean:
+${koreanText}
+
+Note:
+${note}
+        `.trim();
+        
+        navigator.clipboard.writeText(structuredContent).then(() => {
+          console.log('[v0] Structured content copied for section:', sectionId);
+          alert('내용이 복사되었습니다!');
+        });
+      } else {
+        alert('내용을 복사할 수 없습니다.');
+      }
+    }
+
+    function toggleCollapsible(sectionId) {
+      const section = document.getElementById(sectionId);
+      const icon = document.getElementById(sectionId + 'Icon');
+      
+      if (section.classList.contains('expanded')) {
+        section.classList.remove('expanded');
+        icon.classList.remove('rotate-180');
+      } else {
+        section.classList.add('expanded');
+        icon.classList.add('rotate-180');
+      }
+    }
+
+    function openModal(imageId) {
+      const modal = document.getElementById('imageModal');
+      const modalTitle = document.getElementById('modalTitle');
+      modalTitle.textContent = imageId.replace('-', ' ').toUpperCase();
+      modal.classList.add('active');
+    }
+
+    function closeModal() {
+      const modal = document.getElementById('imageModal');
+      modal.classList.remove('active');
+    }
+    
+    function openSectionModal(sectionId, codeName, sectionTitle) {
+      const modal = document.getElementById('sectionModal');
+      const modalTitle = document.getElementById('sectionModalTitle');
+      const modalSubtitle = document.getElementById('sectionModalSubtitle');
+      const modalContent = document.getElementById('sectionModalContent');
+      
+      modalTitle.textContent = `Section ${sectionId}: ${sectionTitle}`;
+      modalSubtitle.textContent = codeName;
+      
+      // Sample content - in a real application, this would be fetched from a database
+      modalContent.innerHTML = `
+        <div class="bg-gray-50 p-6 rounded-lg">
+          <div class="flex items-center gap-2 mb-4 flex-wrap">
+            <span class="text-xs bg-[#A8D0E6] text-[#24305E] font-semibold px-2 py-0.5 rounded">${codeName}: Section ${sectionId}</span>
+            <span class="text-xs bg-[#F8E9A1] text-[#24305E] px-2 py-0.5 rounded">기준</span>
+            <span class="text-xs bg-[#F8E9A1] text-[#24305E] px-2 py-0.5 rounded">관리</span>
+          </div>
+          
+          <h3 class="text-xl font-semibold text-[#24305E] mb-4">${sectionTitle}</h3>
+          
+          <div class="space-y-4">
+            <div>
+              <h4 class="font-semibold text-[#374785] mb-2">English</h4>
+              <p class="text-gray-700 leading-relaxed">
+                These regulations shall apply to the construction, alteration, relocation, enlargement, 
+                replacement, repair, equipment, use and occupancy, location, maintenance, removal and demolition 
+                of every building or structure or any appurtenances connected or attached to such buildings or structures.
+              </p>
+            </div>
+            
+            <div>
+              <h4 class="font-semibold text-[#374785] mb-2">Korean</h4>
+              <p class="text-gray-600 leading-relaxed">
+                이 규정은 모든 건물 또는 구조물의 건설, 변경, 이전, 확장, 교체, 수리, 설비, 사용 및 점유, 
+                위치, 유지보수, 제거 및 철거에 적용되어야 한다.
+              </p>
+            </div>
+            
+            <div class="mt-4 pt-4 border-t border-gray-200 bg-[#FEE9EC] bg-opacity-30 p-4 rounded-lg">
+              <label class="text-xs font-semibold text-[#F76C6C] mb-2 block">Note</label>
+              <div class="text-sm text-gray-700 leading-relaxed">
+                This section establishes the fundamental scope and applicability of the code to all aspects 
+                of building construction, maintenance, and demolition.
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+      
+      modal.classList.add('active');
+    }
+    
+    function closeSectionModal() {
+      const modal = document.getElementById('sectionModal');
+      modal.classList.remove('active');
+    }
+    
+    // Close modal when clicking outside
+    window.onclick = function(event) {
+      const imageModal = document.getElementById('imageModal');
+      const sectionModal = document.getElementById('sectionModal');
+      
+      if (event.target === imageModal) {
+        closeModal();
+      }
+      if (event.target === sectionModal) {
+        closeSectionModal();
+      }
+    }
+
+    function clearInput(inputId) {
+      document.getElementById(inputId).value = '';
+      document.getElementById(inputId).focus();
+    }
+
+    function toggleSelectAll(category) {
+      const selectAllCheckbox = document.getElementById(category === 'arch' ? 'selectAllArch' : 'selectAllFire');
+      const checkboxes = document.querySelectorAll(`input[name="${category}Category"]`);
+      
+      checkboxes.forEach(checkbox => {
+        checkbox.checked = selectAllCheckbox.checked;
+      });
+    }
+    
+    // Added toggle function for result items
+    function toggleResultItem(resultId) {
+      const resultContent = document.getElementById(resultId);
+      const icon = document.getElementById(resultId + 'Icon');
+      
+      if (resultContent.classList.contains('expanded')) {
+        resultContent.classList.remove('expanded');
+        icon.classList.remove('rotate-180');
+      } else {
+        resultContent.classList.add('expanded');
+        icon.classList.add('rotate-180');
+      }
+    }
+  </script>
+</body>
+</html>
