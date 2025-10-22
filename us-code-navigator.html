@@ -1,11 +1,12 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>US Code Navigator</title>
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <script>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>US Code Navigator - Legal Search Wiki</title>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
         // Embedded JSON Data
         const DATA = {
             modelCodes: [
@@ -19486,7 +19487,7 @@
 ]
         };
     </script>
-    <style>
+<style>
         * {
             margin: 0;
             padding: 0;
@@ -19494,10 +19495,10 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             background-color: #F8F9FA;
             color: #2C3E50;
-            line-height: 1.6;
+            line-height: 1.7;
         }
 
         /* Sidebar */
@@ -19544,10 +19545,11 @@
 
         .sidebar-menu a:hover {
             background-color: #F8F9FA;
+            border-left: 3px solid #BED3ED;
         }
 
         .sidebar-menu a.active {
-            background-color: #3498DB;
+            background-color: #007DFE;
             color: #FFFFFF;
         }
         .sidebar-menu a i {
@@ -19663,8 +19665,8 @@
         }
 
         .tab-btn.active {
-            color: #3498DB;
-            border-bottom-color: #3498DB;
+            color: #007DFE;
+            border-bottom-color: #007DFE;
         }
 
         /* Main Container */
@@ -19683,7 +19685,7 @@
 
         /* Hero Section */
         .hero {
-            background-color: #34495E;
+            background-color: #094190;
             color: #FFFFFF;
             padding: 64px 32px;
             text-align: center;
@@ -19718,12 +19720,12 @@
         }
 
         .btn-primary {
-            background-color: #3498DB;
+            background-color: #007DFE;
             color: #FFFFFF;
         }
 
         .btn-primary:hover {
-            background-color: #2980B9;
+            background-color: #094190;
         .btn i {
             width: 16px;
             height: 16px;
@@ -19741,7 +19743,7 @@
         }
 
         .stat-card {
-            background-color: #2C3E50;
+            background-color: #094190;
             color: #FFFFFF;
             padding: 32px;
             border-radius: 8px;
@@ -19763,14 +19765,14 @@
         .section-title {
             font-size: 28px;
             font-weight: 600;
-            margin-bottom: 24px;
+            margin-bottom: 32px;
             color: #2C3E50;
         }
 
         .quick-actions-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 24px;
+            gap: 32px;
             margin-bottom: 48px;
         }
 
@@ -19778,7 +19780,7 @@
             background-color: #FFFFFF;
             border: 1px solid #DEE2E6;
             border-radius: 8px;
-            padding: 32px;
+            padding: 28px;
             cursor: pointer;
             transition: all 0.3s;
         }
@@ -19786,7 +19788,8 @@
         .action-card:hover {
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             transform: translateY(-2px);
-        }
+        
+            border-color: #BED3ED;}
 
         .action-icon {
             width: 48px;
@@ -19803,7 +19806,7 @@
         .action-icon i {
             width: 28px;
             height: 28px;
-            color: #3498DB;
+            color: #007DFE;
         }
         .action-card h3 {
             font-size: 18px;
@@ -19876,7 +19879,7 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            background-color: #3498DB;
+            background-color: #007DFE;
             color: #FFFFFF;
             padding: 6px 12px;
             border-radius: 4px;
@@ -20164,187 +20167,218 @@
             color: #6C757D;
             line-height: 1.7;
         }
-    </style>
+    
+        .search-bar input:focus {
+            outline: none;
+            border-color: #007DFE;
+            box-shadow: 0 0 0 3px rgba(190, 211, 237, 0.3);
+        }
+        
+        /* Enhanced card structure for minimal design */
+        .action-card, .code-card {
+            border: 1px solid #E8ECF0;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .action-card:hover, .code-card:hover {
+            border-color: #BED3ED;
+            box-shadow: 0 8px 16px rgba(9, 65, 144, 0.08);
+        }
+
+        /* Improved typography hierarchy */
+        .section-title {
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            color: #094190;
+        }
+
+        .action-card h3, .code-card h3 {
+            font-weight: 600;
+            letter-spacing: -0.01em;
+        }
+
+        /* Refined search bar */
+        .search-bar input {
+            transition: all 0.2s ease;
+            font-size: 15px;
+            line-height: 1.5;
+        }
+
+        /* Better visual rhythm in content */
+        .main-container {
+            max-width: 1400px;
+            margin-left: auto;
+            margin-right: auto;
+            padding-left: 48px;
+            padding-right: 48px;
+        }
+        </style>
 </head>
 <body>
-    <!-- Sidebar -->
-    <div class="sidebar">
-        <div class="sidebar-logo" onclick="document.querySelector('.sidebar-menu a').click()">US Code Navigator</div>
-        <div class="sidebar-section">
-            <ul class="sidebar-menu">
-                <li><a class="active" onclick="setActiveMenu(this); showPage('home')"><i data-lucide="home"></i> Home</a></li>
-                <li>
-                    <a onclick="toggleSubmenu(this)">
-                        <i data-lucide="library"></i> 라이브러리
-                        <i data-lucide="chevron-right" class="menu-toggle"></i>
-                    </a>
-                    <ul class="submenu" id="librarySubmenu"></ul>
-                </li>
-                <li><a onclick="showAdvancedSearch()"><i data-lucide="search"></i> 고급검색</a></li>
-                <li><a onclick="setActiveMenu(this); showPage('comparison')"><i data-lucide="git-compare"></i> 코드비교</a></li>
-            </ul>
-        </div>
-    </div>
-    <div class="header">
-        <div class="header-content">
-            <div class="search-bar">
-                <i data-lucide="search" class="search-icon"></i>
-                <input type="text" id="globalSearch" placeholder="Search US codes, titles, sections..." oninput="performGlobalSearch()">
-            </div>
-        </div>
-    </div>
-    <!-- Main Container -->
-    <div class="main-container">
-        <!-- Home Page -->
-        <div id="homePage" class="page active">
-            <div class="hero">
-                <h1>US Code Navigator</h1>
-                <p>Comprehensive access to building codes, fire safety regulations, and technical standards</p>
-                <button class="btn btn-primary" onclick="showAdvancedSearch()"><i data-lucide="search"></i> Advanced Search</button>
-            </div>
-
-
-            <h2 class="section-title">Quick Actions</h2>
-            <div class="quick-actions-grid">
-                <div class="action-card" onclick="showAdvancedSearch()">
-                    <div class="action-icon"><i data-lucide="search"></i></div>
-                    <h3>고급검색</h3>
-                    <p>고급 필터를 사용하여 모든 미국 법규 검색</p>
-                </div>
-                <div class="action-card" onclick="showPage('comparison')">
-                    <div class="action-icon"><i data-lucide="git-compare"></i></div>
-                    <h3>코드비교</h3>
-                    <p>다양한 코드 버전의 나란히 비교</p>
-                </div>
-            </div>
-
-            <h2 class="section-title">Featured Codes</h2>
-            <div class="codes-grid" id="featuredCodes"></div>
-        </div>
-
-        <!-- Comparison Page -->
-        <!-- Code Detail Page -->
-        <div id="codeDetailPage" class="page">
-            <div id="codeDetailContent"></div>
-        </div>
-
-        <div id="comparisonPage" class="page">
-            <h1 class="section-title">Code Comparison Tool</h1>
-            <p style="color: #6C757D; margin-bottom: 32px;">Compare different code versions, sections, and jurisdictions side by side</p>
-
-            <div class="comparison-grid">
-                <div class="document-selector">
-                    <h3 style="margin-bottom: 16px;">Document A</h3>
-                    <div class="form-group">
-                        <label>Code Type</label>
-                        <select id="codeTypeA" onchange="updateVersionsA()">
-                            <option value="">Select Code</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Version</label>
-                        <select id="versionA" onchange="updateChaptersA()">
-                            <option value="">Select Version</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Chapter</label>
-                        <select id="chapterA">
-                            <option value="">Select Chapter</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="vs-divider">VS</div>
-
-                <div class="document-selector">
-                    <h3 style="margin-bottom: 16px;">Document B</h3>
-                    <div class="form-group">
-                        <label>Code Type</label>
-                        <select id="codeTypeB" onchange="updateVersionsB()">
-                            <option value="">Select Code</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Version</label>
-                        <select id="versionB" onchange="updateChaptersB()">
-                            <option value="">Select Version</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Chapter</label>
-                        <select id="chapterB">
-                            <option value="">Select Chapter</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-
-            <div style="text-align: center; margin-bottom: 32px;">
-                <button class="btn btn-primary" onclick="performComparison()">🔍 Start Comparison</button>
-            </div>
-
-            <div id="comparisonResults"></div>
-        </div>
-
-    </div>
-
-    <!-- Advanced Search Modal -->
-    <div id="searchModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title">Advanced Search</h2>
-                <button class="close-btn" onclick="closeSearchModal()">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label>Search Query</label>
-                    <input type="text" id="searchQuery" placeholder="Enter keywords...">
-                </div>
-                <div class="filters-grid" style="margin-bottom: 24px;">
-                    <div class="form-group">
-                        <label>Code Type</label>
-                        <select id="searchCodeType">
-                            <option value="">All Codes</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Chapter</label>
-                        <input type="text" id="searchChapter" placeholder="e.g., 3">
-                    </div>
-                    <div class="form-group">
-                        <label>Section</label>
-                        <input type="text" id="searchSection" placeholder="e.g., 301">
-                    </div>
-                    <div style="display: flex; align-items: flex-end;">
-                        <button class="btn btn-primary" onclick="performSearch()" style="width: 100%;">Search</button>
-                    </div>
-                </div>
-                <div id="searchResults"></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Image Modal -->
-    <div id="imageModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title" id="imageModalTitle"></h2>
-                <button class="close-btn" onclick="closeImageModal()">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div style="background: #F8F9FA; padding: 48px; border-radius: 8px; text-align: center; margin-bottom: 24px;">
-                    <div id="imageModalPlaceholder" style="font-size: 72px;"></div>
-                    <div style="background: #FFF3CD; border: 1px solid #FFE69C; padding: 12px; border-radius: 6px; margin-top: 16px; font-size: 13px;">
+<!-- Sidebar -->
+<div class="sidebar">
+<div class="sidebar-logo" onclick="document.querySelector('.sidebar-menu a').click()">US Code Navigator</div>
+<div class="sidebar-section">
+<ul class="sidebar-menu">
+<li><a class="active" onclick="setActiveMenu(this); showPage('home')"><i data-lucide="home"></i> Home</a></li>
+<li>
+<a onclick="toggleSubmenu(this)">
+<i data-lucide="library"></i> 라이브러리
+                        <i class="menu-toggle" data-lucide="chevron-right"></i>
+</a>
+<ul class="submenu" id="librarySubmenu"></ul>
+</li>
+<li><a onclick="showAdvancedSearch()"><i data-lucide="search"></i> 고급검색</a></li>
+<li><a onclick="setActiveMenu(this); showPage('comparison')"><i data-lucide="git-compare"></i> 코드비교</a></li>
+</ul>
+</div>
+</div>
+<div class="header">
+<div class="header-content">
+<div class="search-bar">
+<i class="search-icon" data-lucide="search"></i>
+<input id="globalSearch" oninput="performGlobalSearch()" placeholder="Search US codes, titles, sections..." type="text"/>
+</div>
+</div>
+</div>
+<!-- Main Container -->
+<div class="main-container">
+<!-- Home Page -->
+<div class="page active" id="homePage">
+<div class="hero">
+<h1>US Code Navigator</h1>
+<p>Comprehensive legal search and comparison tool for US building codes and standards</p>
+<button class="btn btn-primary" onclick="showAdvancedSearch()"><i data-lucide="search"></i> Advanced Search</button>
+</div>
+<h2 class="section-title">Quick Actions</h2>
+<div class="quick-actions-grid">
+<div class="action-card" onclick="showAdvancedSearch()">
+<div class="action-icon"><i data-lucide="search"></i></div>
+<h3>고급검색</h3>
+<p>고급 필터를 사용하여 모든 미국 법규 검색</p>
+</div>
+<div class="action-card" onclick="showPage('comparison')">
+<div class="action-icon"><i data-lucide="git-compare"></i></div>
+<h3>코드비교</h3>
+<p>다양한 코드 버전의 나란히 비교</p>
+</div>
+</div>
+<h2 class="section-title">Featured Codes</h2>
+<div class="codes-grid" id="featuredCodes"></div>
+</div>
+<!-- Comparison Page -->
+<!-- Code Detail Page -->
+<div class="page" id="codeDetailPage">
+<div id="codeDetailContent"></div>
+</div>
+<div class="page" id="comparisonPage">
+<h1 class="section-title">Code Comparison Tool</h1>
+<p style="color: #6C757D; margin-bottom: 32px;">Compare different code versions, sections, and jurisdictions side by side</p>
+<div class="comparison-grid">
+<div class="document-selector">
+<h3 style="margin-bottom: 16px;">Document A</h3>
+<div class="form-group">
+<label>Code Type</label>
+<select id="codeTypeA" onchange="updateVersionsA()">
+<option value="">Select Code</option>
+</select>
+</div>
+<div class="form-group">
+<label>Version</label>
+<select id="versionA" onchange="updateChaptersA()">
+<option value="">Select Version</option>
+</select>
+</div>
+<div class="form-group">
+<label>Chapter</label>
+<select id="chapterA">
+<option value="">Select Chapter</option>
+</select>
+</div>
+</div>
+<div class="vs-divider">VS</div>
+<div class="document-selector">
+<h3 style="margin-bottom: 16px;">Document B</h3>
+<div class="form-group">
+<label>Code Type</label>
+<select id="codeTypeB" onchange="updateVersionsB()">
+<option value="">Select Code</option>
+</select>
+</div>
+<div class="form-group">
+<label>Version</label>
+<select id="versionB" onchange="updateChaptersB()">
+<option value="">Select Version</option>
+</select>
+</div>
+<div class="form-group">
+<label>Chapter</label>
+<select id="chapterB">
+<option value="">Select Chapter</option>
+</select>
+</div>
+</div>
+</div>
+<div style="text-align: center; margin-bottom: 32px;">
+<button class="btn btn-primary" onclick="performComparison()">🔍 Start Comparison</button>
+</div>
+<div id="comparisonResults"></div>
+</div>
+</div>
+<!-- Advanced Search Modal -->
+<div class="modal" id="searchModal">
+<div class="modal-content">
+<div class="modal-header">
+<h2 class="modal-title">Advanced Search</h2>
+<button class="close-btn" onclick="closeSearchModal()">×</button>
+</div>
+<div class="modal-body">
+<div class="form-group">
+<label>Search Query</label>
+<input id="searchQuery" placeholder="Enter keywords..." type="text"/>
+</div>
+<div class="filters-grid" style="margin-bottom: 24px;">
+<div class="form-group">
+<label>Code Type</label>
+<select id="searchCodeType">
+<option value="">All Codes</option>
+</select>
+</div>
+<div class="form-group">
+<label>Chapter</label>
+<input id="searchChapter" placeholder="e.g., 3" type="text"/>
+</div>
+<div class="form-group">
+<label>Section</label>
+<input id="searchSection" placeholder="e.g., 301" type="text"/>
+</div>
+<div style="display: flex; align-items: flex-end;">
+<button class="btn btn-primary" onclick="performSearch()" style="width: 100%;">Search</button>
+</div>
+</div>
+<div id="searchResults"></div>
+</div>
+</div>
+</div>
+<!-- Image Modal -->
+<div class="modal" id="imageModal">
+<div class="modal-content">
+<div class="modal-header">
+<h2 class="modal-title" id="imageModalTitle"></h2>
+<button class="close-btn" onclick="closeImageModal()">×</button>
+</div>
+<div class="modal-body">
+<div style="background: #F8F9FA; padding: 48px; border-radius: 8px; text-align: center; margin-bottom: 24px;">
+<div id="imageModalPlaceholder" style="font-size: 72px;"></div>
+<div style="background: #FFF3CD; border: 1px solid #FFE69C; padding: 12px; border-radius: 6px; margin-top: 16px; font-size: 13px;">
                         💡 <strong>Note:</strong> Upload actual images to your wiki and reference them here
                     </div>
-                </div>
-                <div id="imageModalDetails" style="background: #F8F9FA; padding: 20px; border-radius: 8px;"></div>
-            </div>
-        </div>
-    </div>
-
-    <script>
+</div>
+<div id="imageModalDetails" style="background: #F8F9FA; padding: 20px; border-radius: 8px;"></div>
+</div>
+</div>
+</div>
+<script>
         // Initialize
         let filteredImages = [];
         let searchResults = [];
