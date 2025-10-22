@@ -20169,10 +20169,10 @@
 <body>
     <!-- Sidebar -->
     <div class="sidebar">
-        <div class="sidebar-logo" onclick="showPage('home')">US Code Navigator</div>
+        <div class="sidebar-logo" onclick="document.querySelector('.sidebar-menu a').click()">US Code Navigator</div>
         <div class="sidebar-section">
             <ul class="sidebar-menu">
-                <li><a class="active" onclick="showPage('home')"><i data-lucide="home"></i> Home</a></li>
+                <li><a class="active" onclick="setActiveMenu(this); showPage('home')"><i data-lucide="home"></i> Home</a></li>
                 <li>
                     <a onclick="toggleSubmenu(this)">
                         <i data-lucide="library"></i> 라이브러리
@@ -20181,7 +20181,7 @@
                     <ul class="submenu" id="librarySubmenu"></ul>
                 </li>
                 <li><a onclick="showAdvancedSearch()"><i data-lucide="search"></i> 고급검색</a></li>
-                <li><a onclick="showPage('comparison')"><i data-lucide="git-compare"></i> 코드비교</a></li>
+                <li><a onclick="setActiveMenu(this); showPage('comparison')"><i data-lucide="git-compare"></i> 코드비교</a></li>
             </ul>
         </div>
     </div>
@@ -20287,43 +20287,6 @@
             <div id="comparisonResults"></div>
         </div>
 
-        <!-- Images Page -->
-        <div id="imagesPage" class="page">
-            <h1 class="section-title">Image Library</h1>
-            <p style="color: #6C757D; margin-bottom: 24px;">Browse technical diagrams, tables, and illustrations</p>
-
-            <div class="filters-section">
-                <h3 style="margin-bottom: 16px;">Filters</h3>
-                <div class="filters-grid">
-                    <div class="form-group">
-                        <label>Code Type</label>
-                        <select id="filterCodeType" onchange="filterImages()">
-                            <option value="">All Codes</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Chapter</label>
-                        <select id="filterChapter" onchange="filterImages()">
-                            <option value="">All Chapters</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Type</label>
-                        <select id="filterImageType" onchange="filterImages()">
-                            <option value="">All Types</option>
-                            <option value="T">Table</option>
-                            <option value="F">Figure</option>
-                        </select>
-                    </div>
-                    <div style="display: flex; align-items: flex-end;">
-                        <button class="btn btn-primary" onclick="resetImageFilters()" style="width: 100%;">Reset</button>
-                    </div>
-                </div>
-            </div>
-
-            <div style="margin-bottom: 16px; color: #6C757D;" id="imageCount"></div>
-            <div class="images-grid" id="imagesGrid"></div>
-        </div>
     </div>
 
     <!-- Advanced Search Modal -->
@@ -20414,6 +20377,7 @@
 
         function showCodeDetail(modelCodeId) {
             const code = DATA.modelCodes.find(c => c.ModelCodeID === modelCodeId);
+            setActiveMenu(null); // Remove active state from all menu items
             if (!code) return;
             const contents = DATA.codeContent.filter(c => c.ModelCodeID === modelCodeId);
             if (contents.length === 0) return;
@@ -20542,18 +20506,27 @@
         function showPage(pageName) {
             // Hide all pages
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+
+            // Update sidebar menu active state
+            document.querySelectorAll('.sidebar-menu a').forEach(a => a.classList.remove('active'));
 
             // Show selected page
             const pages = {
                 'home': 'homePage',
                 'comparison': 'comparisonPage',
-                'images': 'imagesPage',
                 'codeDetail': 'codeDetailPage'
             };
 
-            document.getElementById(pages[pageName]).classList.add('active');
-            event?.target.classList.add('active');
+            const pageId = pages[pageName];
+            if (pageId) {
+                document.getElementById(pageId).classList.add('active');
+            }
+        }
+        function setActiveMenu(element) {
+            document.querySelectorAll('.sidebar-menu > li > a').forEach(a => a.classList.remove('active'));
+            if (element) {
+                element.classList.add('active');
+            }
         }
 
         // Comparison functions
@@ -20671,6 +20644,7 @@
         // Search functions
         function showAdvancedSearch() {
             document.getElementById('searchModal').classList.add('active');
+            setActiveMenu(null); // Remove active state from menu items
         }
 
         function closeSearchModal() {
