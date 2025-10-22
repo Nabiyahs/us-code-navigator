@@ -306,24 +306,12 @@ def create_sidebar_library_submenu(hierarchy):
         else:
             display_name = code_name.split(':')[0].strip()
 
-        # Discipline 찾기 (배지 색상용)
-        badge_class = 'bg-[#A8D0E6]'
-        for mcd in hierarchy.data['ModelCodeDiscipline']:
-            if mcd['ModelCodeID'] == model_code_id:
-                discipline = hierarchy.get_related('ModelCodeDiscipline', mcd, 'Discipline')
-                if discipline and ('소방' in discipline['DisciplineNameKR'] or '안전' in discipline['DisciplineNameKR']):
-                    badge_class = 'bg-[#F76C6C]'
-                break
-
         submenu_html = f'''
         <div class="submenu-item pl-12 py-2 text-sm text-white hover:bg-[#374785] cursor-pointer transition-all rounded-r-lg"
              data-code-id="{model_code_id}"
              data-version-id="{latest_version['ModelCodeVersionID']}"
              onclick="loadCodeFromSidebar('{latest_version['ModelCodeVersionID']}', '{model_code_id}')">
-            <div class="flex items-center justify-between">
-                <span>{display_name}</span>
-                <span class="w-2 h-2 rounded-full {badge_class} opacity-70"></span>
-            </div>
+            <span>{display_name}</span>
         </div>'''
 
         submenu_items.append(submenu_html)
