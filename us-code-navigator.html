@@ -19672,7 +19672,9 @@
         /* Main Container */
         .main-container {
             margin-left: 240px;
-            padding: 32px;
+            padding: 32px 48px;
+            max-width: calc(100% - 240px);
+            min-height: 100vh;
         }
 
         .page {
@@ -19686,6 +19688,7 @@
         /* Hero Section */
         .hero {
             background-color: #094190;
+            background: linear-gradient(135deg, #094190 0%, #007DFE 100%);
             color: #FFFFFF;
             padding: 64px 32px;
             text-align: center;
@@ -20206,11 +20209,197 @@
 
         /* Better visual rhythm in content */
         .main-container {
-            max-width: 1400px;
+            margin-left: 240px;
+            padding: 32px 48px;
+            max-width: calc(100% - 240px);
+            min-height: 100vh;
+        }
+        
+        /* Active color palette usage */
+        .code-badge {
+            background: linear-gradient(135deg, #007DFE 0%, #094190 100%);
+            color: #FFFFFF;
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: inline-block;
+            margin-bottom: 12px;
+        }
+
+        .discipline-tag {
+            background-color: #BED3ED;
+            color: #094190;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            display: inline-block;
+            margin-left: 8px;
+        }
+
+        /* Card-based section display for code content */
+        .code-section-card {
+            background: #FFFFFF;
+            border: 1px solid #E8ECF0;
+            border-left: 4px solid #007DFE;
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 20px;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .code-section-card:hover {
+            border-left-color: #094190;
+            box-shadow: 0 8px 16px rgba(9, 65, 144, 0.08);
+            transform: translateX(4px);
+        }
+
+        .code-section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #F8F9FA;
+        }
+
+        .code-section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #094190;
+            letter-spacing: -0.01em;
+        }
+
+        .code-section-number {
+            background-color: #BED3ED;
+            color: #094190;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .code-section-content {
+            color: #2C3E50;
+            line-height: 1.8;
+            font-size: 15px;
+        }
+
+        .code-section-content-kr {
+            color: #6C757D;
+            line-height: 1.8;
+            font-size: 14px;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid #F8F9FA;
+        }
+
+        /* Enhanced stat cards with active colors */
+        .stat-card {
+            background: linear-gradient(135deg, #094190 0%, #007DFE 100%);
+            color: #FFFFFF;
+            padding: 28px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(9, 65, 144, 0.15);
+            transition: transform 0.25s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(9, 65, 144, 0.25);
+        }
+
+        /* Enhanced action cards */
+        .action-card {
+            background-color: #FFFFFF;
+            border: 1px solid #E8ECF0;
+            border-radius: 12px;
+            padding: 28px;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .action-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, #007DFE 0%, #094190 100%);
+            transform: scaleY(0);
+            transition: transform 0.25s ease;
+        }
+
+        .action-card:hover::before {
+            transform: scaleY(1);
+        }
+
+        .action-card:hover {
+            border-color: #BED3ED;
+            box-shadow: 0 8px 20px rgba(9, 65, 144, 0.1);
+            transform: translateY(-4px);
+        }
+
+        .action-icon {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, #BED3ED 0%, #E8F2FF 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .action-icon i {
+            width: 28px;
+            height: 28px;
+            color: #094190;
+        }
+
+        /* Code cards with active palette */
+        .code-card {
+            background-color: #FFFFFF;
+            border: 1px solid #E8ECF0;
+            border-radius: 12px;
+            padding: 24px;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .code-card:hover {
+            border-color: #007DFE;
+            box-shadow: 0 12px 24px rgba(0, 125, 254, 0.15);
+            transform: translateY(-6px);
+        }
+
+        .code-card .code-badge {
+            background: #094190;
+            box-shadow: 0 2px 8px rgba(9, 65, 144, 0.2);
+        }
+        
+        /* Sidebar code count badge */
+        .submenu li a {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .code-count {
+            background-color: #BED3ED;
+            color: #094190;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 10px;
             margin-left: auto;
-            margin-right: auto;
-            padding-left: 48px;
-            padding-right: 48px;
         }
         </style>
 </head>
@@ -20392,20 +20581,24 @@
 
         function populateLibrarySubmenu() {
             const submenu = document.getElementById('librarySubmenu');
+
+            // Filter codes that have actual content data
             const codesWithData = DATA.modelCodes.map(code => {
                 const hasContent = DATA.codeContent.some(c => c.ModelCodeID === code.ModelCodeID);
-                return { ...code, hasContent };
-            });
-            codesWithData.sort((a, b) => {
-                if (a.hasContent && !b.hasContent) return -1;
-                if (!a.hasContent && b.hasContent) return 1;
-                return a.ModelCodeName.localeCompare(b.ModelCodeName);
-            });
+                const contentCount = DATA.codeContent.filter(c => c.ModelCodeID === code.ModelCodeID).length;
+                return { ...code, hasContent, contentCount };
+            }).filter(code => code.hasContent); // ONLY show codes with data
+
+            // Sort by name
+            codesWithData.sort((a, b) => a.ModelCodeName.localeCompare(b.ModelCodeName));
+
             submenu.innerHTML = codesWithData.map(code => `
-                <li><a onclick="showCodeDetail('${code.ModelCodeID}')" class="${code.hasContent ? '' : 'disabled'}">
+                <li><a onclick="showCodeDetail('${code.ModelCodeID}')">
                     <i data-lucide="file-text"></i> ${code.ModelCodeName}
+                    <span class="code-count">${code.contentCount}</span>
                 </a></li>
             `).join('');
+
             lucide.createIcons();
         }
 
@@ -20413,45 +20606,87 @@
             setActiveMenu(null);
             const code = DATA.modelCodes.find(c => c.ModelCodeID === modelCodeId);
             if (!code) return;
+
             const contents = DATA.codeContent.filter(c => c.ModelCodeID === modelCodeId);
             if (contents.length === 0) return;
-            const versions = DATA.modelCodeVersions.filter(v => v.ModelCodeID === modelCodeId);
-            const chapters = [...new Set(contents.map(c => c.Chapter))].sort((a, b) => a - b);
+
+            // Get discipline info
+            const disciplineLink = DATA.modelCodeDiscipline.find(d => d.ModelCodeID === modelCodeId);
+            const discipline = disciplineLink ? DATA.disciplines.find(d => d.DisciplineID === disciplineLink.DisciplineID) : null;
+
+            // Group by chapter
+            const chapters = {};
+            contents.forEach(content => {
+                const chapterNum = content.Chapter || 'Other';
+                if (!chapters[chapterNum]) {
+                    chapters[chapterNum] = [];
+                }
+                chapters[chapterNum].push(content);
+            });
+
             const detailContent = document.getElementById('codeDetailContent');
             detailContent.innerHTML = `
-                <div class="code-detail-header">
-                    <div class="code-detail-title">${code.ModelCodeName}</div>
-                    <div class="code-detail-subtitle">${code.Description || ''}</div>
-                    <div class="code-meta" style="margin-top: 16px;">
-                        <span><i data-lucide="file-text"></i> ${contents.length} Sections</span>
-                        <span><i data-lucide="calendar"></i> ${versions.map(v => v.Year || 'N/A').join(', ')}</span>
-                        <span><i data-lucide="book-open"></i> ${chapters.length} Chapters</span>
+                <div style="margin-bottom: 32px;">
+                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+                        <span class="code-badge">${code.ModelCodeName}</span>
+                        ${discipline ? `<span class="discipline-tag">${discipline.DisciplineNameEN}</span>` : ''}
                     </div>
+                    <h1 class="section-title" style="margin-bottom: 8px;">${code.Description || code.ModelCodeName}</h1>
+                    <p style="color: #6C757D; font-size: 15px;">
+                        <i data-lucide="file-text" style="width: 16px; height: 16px; display: inline-block; vertical-align: middle;"></i>
+                        ${contents.length} Sections
+                    </p>
                 </div>
-                ${chapters.map(chapterNum => {
-                    const chapterInfo = DATA.codeChapters.find(ch => 
-                        ch.Chapter === chapterNum && 
-                        DATA.modelCodeVersions.some(v => v.ModelCodeVersionID === ch.ModelCodeVersionID && v.ModelCodeID === modelCodeId)
-                    );
-                    const chapterContents = contents.filter(c => c.Chapter === chapterNum);
+
+                ${Object.entries(chapters).sort((a, b) => {
+                    const aNum = parseInt(a[0]) || 999;
+                    const bNum = parseInt(b[0]) || 999;
+                    return aNum - bNum;
+                }).map(([chapterNum, items]) => {
+                    const chapterInfo = DATA.codeChapters.find(ch => ch.Chapter == chapterNum);
                     return `
-                        <div class="content-section">
-                            <span class="chapter-tag">Chapter ${chapterNum}</span>
-                            <div class="content-title">${chapterInfo ? chapterInfo.TitleEN : `Chapter ${chapterNum}`}</div>
-                            ${chapterInfo && chapterInfo.TitleKR ? `<div class="content-subtitle">${chapterInfo.TitleKR}</div>` : ''}
-                            ${chapterContents.slice(0, 5).map(content => `
-                                <div style="margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #F0F0F0;">
-                                    ${content.Section ? `<div style="font-size: 12px; color: #6C757D; margin-bottom: 4px;">Section ${content.Section}${content.Subsection ? '.' + content.Subsection : ''}</div>` : ''}
-                                    <div style="font-weight: 600; margin-bottom: 6px;">${content.TitleEN || 'Untitled'}</div>
-                                    ${content.TitleKR ? `<div style="font-size: 13px; color: #6C757D; margin-bottom: 8px;">${content.TitleKR}</div>` : ''}
-                                    <div class="content-text">${(content.ContentEN || '').substring(0, 300)}${content.ContentEN && content.ContentEN.length > 300 ? '...' : ''}</div>
+                        <div style="margin-bottom: 32px;">
+                            <h2 style="font-size: 22px; font-weight: 600; color: #094190; margin-bottom: 20px; display: flex; align-items: center; gap: 12px;">
+                                <span style="background: linear-gradient(135deg, #007DFE 0%, #094190 100%); color: white; padding: 6px 14px; border-radius: 8px; font-size: 14px;">
+                                    Chapter ${chapterNum}
+                                </span>
+                                ${chapterInfo ? chapterInfo.TitleEN : ''}
+                            </h2>
+                            ${chapterInfo && chapterInfo.ChapterComment ? `
+                                <div style="background: #F8F9FA; border-left: 4px solid #BED3ED; padding: 16px 20px; margin-bottom: 20px; border-radius: 6px;">
+                                    <p style="color: #2C3E50; line-height: 1.7; margin: 0; white-space: pre-line;">${chapterInfo.ChapterComment}</p>
+                                </div>
+                            ` : ''}
+                            ${items.map(content => `
+                                <div class="code-section-card">
+                                    <div class="code-section-header">
+                                        <div class="code-section-title">
+                                            ${content.TitleEN}
+                                            ${content.TitleKR ? `<span style="color: #6C757D; font-weight: 400; font-size: 15px; margin-left: 8px;">${content.TitleKR}</span>` : ''}
+                                        </div>
+                                        ${content.Section ? `<div class="code-section-number">§ ${content.Section}</div>` : ''}
+                                    </div>
+                                    <div class="code-section-content">
+                                        ${content.ContentEN || ''}
+                                    </div>
+                                    ${content.ContentKR ? `
+                                        <div class="code-section-content-kr">
+                                            ${content.ContentKR}
+                                        </div>
+                                    ` : ''}
+                                    ${content.Comment ? `
+                                        <div style="margin-top: 16px; padding: 12px 16px; background: #FFF9E6; border-left: 3px solid #FFC107; border-radius: 4px;">
+                                            <strong style="color: #F57C00; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px;">Note</strong>
+                                            <p style="margin: 8px 0 0 0; color: #5D4037; line-height: 1.6; font-size: 14px;">${content.Comment}</p>
+                                        </div>
+                                    ` : ''}
                                 </div>
                             `).join('')}
-                            ${chapterContents.length > 5 ? `<div style="text-align: center; color: #6C757D; font-size: 14px;">... and ${chapterContents.length - 5} more sections</div>` : ''}
                         </div>
                     `;
                 }).join('')}
             `;
+
             showPage('codeDetail');
             lucide.createIcons();
         }
