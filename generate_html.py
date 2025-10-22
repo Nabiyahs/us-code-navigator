@@ -298,6 +298,48 @@ def generate_html(hierarchy):
                     grid_div.replace_with(new_grid.find('div'))
                     print("✓ Library cards updated with hierarchical data!")
 
+    # 라이브러리 섹션의 하드코딩된 챕터 리스트와 콘텐츠를 실제 데이터로 교체
+    print("Replacing library section content with actual data...")
+    library_section = soup.find('div', id='librarySection')
+    if library_section:
+        # 챕터 리스트를 비우고 초기 메시지 추가
+        chapter_list = library_section.find('div', id='chapterList')
+        if chapter_list:
+            chapter_list.clear()
+            placeholder = soup.new_tag('p', **{'class': 'text-gray-500 text-sm p-4'})
+            placeholder.string = 'Select a code from the library to view chapters'
+            chapter_list.append(placeholder)
+            print("✓ Chapter list cleared, ready for dynamic loading")
+
+        # 콘텐츠 영역을 비우고 초기 메시지 추가
+        content_area = library_section.find('div', id='contentArea')
+        if content_area:
+            content_area.clear()
+            welcome_html = '''
+            <div class="bg-white rounded-lg shadow-sm p-8 text-center">
+                <div class="max-w-2xl mx-auto">
+                    <svg class="w-24 h-24 mx-auto mb-6 text-[#A8D0E6]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                    </svg>
+                    <h2 class="text-3xl font-bold text-[#24305E] mb-4">Welcome to US Code Navigator</h2>
+                    <p class="text-gray-600 text-lg mb-6">Select a code from the home page library to browse chapters and content</p>
+                    <div class="bg-blue-50 border-l-4 border-blue-400 p-4 rounded text-left">
+                        <p class="text-sm text-gray-700"><strong>Available Codes:</strong></p>
+                        <ul class="text-sm text-gray-700 mt-2 space-y-1">
+                            <li>• IBC 2024 - International Building Code</li>
+                            <li>• NFPA 13 2025 - Sprinkler Systems</li>
+                            <li>• NFPA 14 2024 - Standpipe Systems</li>
+                            <li>• NFPA 20 2025 - Fire Pumps</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            '''
+            welcome_soup = BeautifulSoup(welcome_html, 'lxml')
+            for child in welcome_soup.find('div').children:
+                content_area.append(child)
+            print("✓ Content area cleared and welcome message added")
+
     # JavaScript 데이터 및 기능 삽입
     print("Injecting JavaScript with schema-based data hierarchy...")
     script_tag = soup.new_tag('script')
@@ -610,6 +652,17 @@ document.addEventListener('DOMContentLoaded', function() {{
             document.querySelector(`.sidebar-item[data-section="${{section}}"]`).click();
         }});
     }});
+
+    // Auto-load first available code on page load (optional - only if on library section)
+    const currentSection = document.querySelector('.section-content.active');
+    if (currentSection && currentSection.id === 'librarySection') {{
+        const firstActiveCard = document.querySelector('.code-card[data-version-id]');
+        if (firstActiveCard) {{
+            const versionId = firstActiveCard.dataset.versionId;
+            const codeId = firstActiveCard.dataset.codeId;
+            loadChapters(versionId, codeId);
+        }}
+    }}
 }});
     '''
 
