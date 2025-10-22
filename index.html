@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>US Code Navigator - Main</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            background-color: #F8F9FA;
+            color: #2C3E50;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .header {
+            background-color: #FFFFFF;
+            border-bottom: 1px solid #DEE2E6;
+            padding: 16px 32px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: 600;
+            color: #2C3E50;
+        }
+
+        .search-bar {
+            flex: 1;
+            max-width: 600px;
+            margin: 0 32px;
+            position: relative;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 10px 16px 10px 40px;
+            border: 1px solid #DEE2E6;
+            border-radius: 4px;
+            font-size: 14px;
+            background-color: #F8F9FA;
+        }
+
+        .search-bar input:focus {
+            outline: none;
+            border-color: #3498DB;
+            background-color: #FFFFFF;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6C757D;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .header-btn {
+            padding: 8px 16px;
+            background-color: transparent;
+            border: 1px solid #DEE2E6;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            color: #2C3E50;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .header-btn:hover {
+            background-color: #F8F9FA;
+        }
+
+        /* Hero Section */
+        .hero {
+            background-color: #34495E;
+            color: #FFFFFF;
+            padding: 64px 32px;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .hero p {
+            font-size: 18px;
+            margin-bottom: 32px;
+            opacity: 0.9;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background-color: #3498DB;
+            color: #FFFFFF;
+        }
+
+        .btn-primary:hover {
+            background-color: #2980B9;
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: #FFFFFF;
+            border: 2px solid #FFFFFF;
+        }
+
+        .btn-secondary:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Stats Section */
+        .stats {
+            background-color: #2C3E50;
+            color: #FFFFFF;
+            padding: 32px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 32px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 48px 32px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 32px;
+            color: #2C3E50;
+        }
+
+        /* Quick Actions */
+        .quick-actions-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-bottom: 64px;
+        }
+
+        .action-card {
+            background-color: #FFFFFF;
+            border: 1px solid #DEE2E6;
+            border-radius: 8px;
+            padding: 32px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .action-card:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .action-icon {
+            width: 48px;
+            height: 48px;
+            background-color: #F8F9FA;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+            font-size: 24px;
+            color: #3498DB;
+        }
+
+        .action-card h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #2C3E50;
+        }
+
+        .action-card p {
+            font-size: 14px;
+            color: #6C757D;
+            margin-bottom: 16px;
+            line-height: 1.5;
+        }
+
+        .action-link {
+            color: #3498DB;
+            font-size: 14px;
+            font-weight: 500;
+            text-decoration: none;
+        }
+
+        .action-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Featured Codes */
+        .featured-codes {
+            margin-bottom: 64px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+
+        .view-all-link {
+            color: #3498DB;
+            font-size: 14px;
+            font-weight: 500;
+            text-decoration: none;
+        }
+
+        .view-all-link:hover {
+            text-decoration: underline;
+        }
+
+        .codes-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+
+        .code-card {
+            background-color: #FFFFFF;
+            border: 1px solid #DEE2E6;
+            border-radius: 8px;
+            padding: 24px;
+            transition: all 0.3s;
+        }
+
+        .code-card:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .code-header {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+
+        .code-icon {
+            width: 40px;
+            height: 40px;
+            background-color: #F8F9FA;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 16px;
+            font-size: 20px;
+        }
+
+        .code-info {
+            flex: 1;
+        }
+
+        .code-tag {
+            display: inline-block;
+            background-color: #F8F9FA;
+            color: #6C757D;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            margin-bottom: 8px;
+        }
+
+        .code-card h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #2C3E50;
+        }
+
+        .code-card p {
+            font-size: 14px;
+            color: #6C757D;
+            line-height: 1.5;
+            margin-bottom: 16px;
+        }
+
+        .code-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 16px;
+            border-top: 1px solid #DEE2E6;
+        }
+
+        .code-sections {
+            font-size: 13px;
+            color: #6C757D;
+        }
+
+        .code-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .icon-btn {
+            width: 32px;
+            height: 32px;
+            border: none;
+            background-color: transparent;
+            cursor: pointer;
+            color: #6C757D;
+            border-radius: 4px;
+        }
+
+        .icon-btn:hover {
+            background-color: #F8F9FA;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 72px;
+            width: 240px;
+            height: calc(100vh - 72px);
+            background-color: #FFFFFF;
+            border-right: 1px solid #DEE2E6;
+            padding: 24px 16px;
+            overflow-y: auto;
+        }
+
+        .sidebar-section {
+            margin-bottom: 32px;
+        }
+
+        .sidebar-section h3 {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: #6C757D;
+            margin-bottom: 12px;
+            letter-spacing: 0.5px;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 4px;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            padding: 8px 12px;
+            color: #2C3E50;
+            text-decoration: none;
+            font-size: 14px;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+
+        .sidebar-menu a:hover {
+            background-color: #F8F9FA;
+        }
+
+        .sidebar-menu a.active {
+            background-color: #3498DB;
+            color: #FFFFFF;
+        }
+
+        .sidebar-icon {
+            margin-right: 12px;
+            width: 16px;
+        }
+
+        .main-with-sidebar {
+            margin-left: 240px;
+        }
+
+        /* Advanced Search Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background-color: #FFFFFF;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 900px;
+            max-height: 90vh;
+            overflow-y: auto;
+            margin: 32px;
+        }
+
+        .modal-header {
+            padding: 24px 32px;
+            border-bottom: 1px solid #DEE2E6;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            font-size: 24px;
+            font-weight: 600;
+            color: #2C3E50;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #6C757D;
+            padding: 0;
+            width: 32px;
+            height: 32px;
+        }
+
+        .close-btn:hover {
+            color: #2C3E50;
+        }
+
+        .modal-body {
+            padding: 32px;
+        }
+
+        .search-filters {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+
+        .filter-group {
+            margin-bottom: 24px;
+        }
+
+        .filter-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: #2C3E50;
+            margin-bottom: 8px;
+        }
+
+        .filter-group input,
+        .filter-group select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #DEE2E6;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .filter-group input:focus,
+        .filter-group select:focus {
+            outline: none;
+            border-color: #3498DB;
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: auto;
+        }
+
+        .modal-footer {
+            padding: 24px 32px;
+            border-top: 1px solid #DEE2E6;
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        /* Search Results */
+        .search-results {
+            margin-top: 32px;
+        }
+
+        .result-item {
+            background-color: #FFFFFF;
+            border: 1px solid #DEE2E6;
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 16px;
+            transition: all 0.2s;
+        }
+
+        .result-item:hover {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .result-tags {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .result-tag {
+            background-color: #F8F9FA;
+            color: #6C757D;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+
+        .result-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2C3E50;
+            margin-bottom: 8px;
+        }
+
+        .result-content {
+            font-size: 14px;
+            color: #6C757D;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-section">
+            <h3>Browse Codes</h3>
+            <ul class="sidebar-menu">
+                <li><a href="index.html" class="active"><span class="sidebar-icon">🏠</span> Overview</a></li>
+                <li><a href="#"><span class="sidebar-icon">📋</span> IBC</a></li>
+                <li><a href="#"><span class="sidebar-icon">🔥</span> NFPA</a></li>
+                <li><a href="#"><span class="sidebar-icon">⚡</span> NEC</a></li>
+                <li><a href="#"><span class="sidebar-icon">🔧</span> IMC</a></li>
+                <li><a href="#"><span class="sidebar-icon">🚰</span> IPC</a></li>
+            </ul>
+        </div>
+
+        <div class="sidebar-section">
+            <h3>Quick Access</h3>
+            <ul class="sidebar-menu">
+                <li><a href="#"><span class="sidebar-icon">⭐</span> Favorites</a></li>
+                <li><a href="#"><span class="sidebar-icon">🕒</span> Recent</a></li>
+                <li><a href="#"><span class="sidebar-icon">📥</span> Downloads</a></li>
+            </ul>
+        </div>
+
+        <div class="sidebar-section">
+            <h3>Tools</h3>
+            <ul class="sidebar-menu">
+                <li><a href="code-comparison.html"><span class="sidebar-icon">⚖️</span> Compare Codes</a></li>
+                <li><a href="image-library.html"><span class="sidebar-icon">🖼️</span> Image Library</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-with-sidebar">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-content">
+                <div class="logo">US Code Navigator</div>
+                <div class="search-bar">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" id="mainSearch" placeholder="Search US codes, titles, sections...">
+                </div>
+                <div class="header-actions">
+                    <a href="#" class="header-btn">Bookmarks</a>
+                    <a href="#" class="header-btn">Projects</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hero Section -->
+        <div class="hero">
+            <div class="container">
+                <h1>US Code Database</h1>
+                <p>Comprehensive access to federal laws, regulations, and legal documents</p>
+                <div class="hero-actions">
+                    <button class="btn btn-primary" onclick="openAdvancedSearch()">🔍 Advanced Search</button>
+                    <a href="#quick-actions" class="btn btn-secondary">▶ Quick Tour</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-value">10</div>
+                    <div class="stat-label">Code Titles</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">18</div>
+                    <div class="stat-label">Chapters</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">2.5K+</div>
+                    <div class="stat-label">Code Sections</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">100%</div>
+                    <div class="stat-label">Up-to-date</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Quick Actions -->
+            <div id="quick-actions">
+                <h2 class="section-title">Quick Actions</h2>
+                <div class="quick-actions-grid">
+                    <div class="action-card" onclick="openAdvancedSearch()">
+                        <div class="action-icon">🔍</div>
+                        <h3>Advanced Search</h3>
+                        <p>Search across all US codes with advanced filters and boolean operators</p>
+                        <a href="#" class="action-link">Start Searching →</a>
+                    </div>
+
+                    <div class="action-card" onclick="location.href='code-comparison.html'">
+                        <div class="action-icon">⚖️</div>
+                        <h3>Compare Codes</h3>
+                        <p>Side-by-side comparison of different code sections and amendments</p>
+                        <a href="code-comparison.html" class="action-link">Compare Now →</a>
+                    </div>
+
+                    <div class="action-card" onclick="location.href='image-library.html'">
+                        <div class="action-icon">🖼️</div>
+                        <h3>Image Library</h3>
+                        <p>Browse technical diagrams, charts, and illustrations from US codes</p>
+                        <a href="image-library.html" class="action-link">Browse Images →</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Featured Code Titles -->
+            <div class="featured-codes">
+                <div class="section-header">
+                    <h2 class="section-title">Featured Code Titles</h2>
+                    <a href="#" class="view-all-link">View All Titles →</a>
+                </div>
+
+                <div class="codes-grid" id="featuredCodes">
+                    <!-- Codes will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Advanced Search Modal -->
+    <div id="advancedSearchModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Advanced Search</h2>
+                <button class="close-btn" onclick="closeAdvancedSearch()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="search-filters">
+                    <div style="grid-column: 1 / -1;">
+                        <div class="filter-group">
+                            <label>Search Query</label>
+                            <input type="text" id="advSearchQuery" placeholder="Enter keywords, code sections, or phrases">
+                        </div>
+                    </div>
+
+                    <div class="filter-group">
+                        <label>Code Type</label>
+                        <select id="codeType">
+                            <option value="">All Codes</option>
+                            <option value="MC001">IBC - International Building Code</option>
+                            <option value="MC002">ADA - Americans with Disabilities</option>
+                            <option value="MC003">IMC - International Mechanical Code</option>
+                            <option value="MC004">IPC - International Plumbing Code</option>
+                            <option value="MC005">ASHRAE</option>
+                            <option value="MC006">NEC - National Electrical Code</option>
+                            <option value="MC007">NFPA 13 - Sprinkler Systems</option>
+                            <option value="MC008">NFPA 14 - Standpipe Systems</option>
+                            <option value="MC009">NFPA 20 - Fire Pumps</option>
+                            <option value="MC010">NFPA 72 - Fire Alarm</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label>Version / Year</label>
+                        <select id="codeVersion">
+                            <option value="">Latest Version</option>
+                            <option value="2024">2024</option>
+                            <option value="2021">2021</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label>Chapter</label>
+                        <input type="text" id="chapter" placeholder="e.g., Chapter 3">
+                    </div>
+
+                    <div class="filter-group">
+                        <label>Section</label>
+                        <input type="text" id="section" placeholder="e.g., 301.1">
+                    </div>
+
+                    <div class="filter-group" style="grid-column: 1 / -1;">
+                        <label>Discipline</label>
+                        <div class="checkbox-group">
+                            <label class="checkbox-item">
+                                <input type="checkbox" value="D001"> Arch/Struct (건축/구조)
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" value="D002"> MEP (기계/배관)
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" value="D003"> Elec (전기)
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" value="D004"> Fire (소방/안전)
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" value="D005"> EHS (환경/보건)
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="search-results" id="searchResults">
+                    <!-- Search results will be populated here -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="resetSearch()">Reset Filters</button>
+                <button class="btn btn-primary" onclick="performSearch()">Search</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Load JSON data
+        let modelCodes = [];
+        let codeContent = [];
+        let codeChapters = [];
+        let disciplines = [];
+
+        // Load data from JSON files
+        async function loadData() {
+            try {
+                const [mcResponse, ccResponse, chResponse, dResponse] = await Promise.all([
+                    fetch('ModelCode.json'),
+                    fetch('CodeContent.json'),
+                    fetch('CodeChapter.json'),
+                    fetch('Discipline.json')
+                ]);
+
+                modelCodes = await mcResponse.json();
+                codeContent = await ccResponse.json();
+                codeChapters = await chResponse.json();
+                disciplines = await dResponse.json();
+
+                populateFeaturedCodes();
+            } catch (error) {
+                console.error('Error loading data:', error);
+            }
+        }
+
+        // Populate featured codes
+        function populateFeaturedCodes() {
+            const container = document.getElementById('featuredCodes');
+            const featured = modelCodes.slice(0, 4);
+
+            container.innerHTML = featured.map(code => {
+                const sections = codeContent.filter(c => c.ModelCodeID === code.ModelCodeID).length;
+
+                return `
+                    <div class="code-card">
+                        <div class="code-header">
+                            <div class="code-icon">📋</div>
+                            <div class="code-info">
+                                <span class="code-tag">${code.ModelCodeName}</span>
+                                <h3>${code.Description || code.ModelCodeName}</h3>
+                                <p>Federal regulations and standards for building construction and safety</p>
+                            </div>
+                        </div>
+                        <div class="code-meta">
+                            <span class="code-sections">📄 ${sections} Sections</span>
+                            <div class="code-actions">
+                                <button class="icon-btn" title="Bookmark">🔖</button>
+                                <button class="icon-btn" title="Share">↗️</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Advanced Search Modal
+        function openAdvancedSearch() {
+            document.getElementById('advancedSearchModal').classList.add('active');
+        }
+
+        function closeAdvancedSearch() {
+            document.getElementById('advancedSearchModal').classList.remove('active');
+        }
+
+        function resetSearch() {
+            document.getElementById('advSearchQuery').value = '';
+            document.getElementById('codeType').value = '';
+            document.getElementById('codeVersion').value = '';
+            document.getElementById('chapter').value = '';
+            document.getElementById('section').value = '';
+            document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+            document.getElementById('searchResults').innerHTML = '';
+        }
+
+        function performSearch() {
+            const query = document.getElementById('advSearchQuery').value.toLowerCase();
+            const codeType = document.getElementById('codeType').value;
+            const chapter = document.getElementById('chapter').value;
+            const section = document.getElementById('section').value;
+
+            let results = codeContent.filter(item => {
+                let matches = true;
+
+                if (query && item.TitleEN && item.ContentEN) {
+                    matches = matches && (
+                        item.TitleEN.toLowerCase().includes(query) ||
+                        item.ContentEN.toLowerCase().includes(query) ||
+                        (item.TitleKR && item.TitleKR.includes(query)) ||
+                        (item.ContentKR && item.ContentKR.includes(query))
+                    );
+                }
+
+                if (codeType) {
+                    matches = matches && item.ModelCodeID === codeType;
+                }
+
+                if (chapter) {
+                    matches = matches && item.Chapter.toString() === chapter.replace(/[^0-9]/g, '');
+                }
+
+                if (section) {
+                    matches = matches && item.Section && item.Section.toString().includes(section);
+                }
+
+                return matches;
+            });
+
+            displaySearchResults(results.slice(0, 20));
+        }
+
+        function displaySearchResults(results) {
+            const container = document.getElementById('searchResults');
+
+            if (results.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: #6C757D; padding: 32px;">No results found. Try adjusting your filters.</p>';
+                return;
+            }
+
+            container.innerHTML = `
+                <h3 style="margin-bottom: 16px; color: #2C3E50;">Search Results (${results.length})</h3>
+                ${results.map(result => {
+                    const code = modelCodes.find(m => m.ModelCodeID === result.ModelCodeID);
+                    return `
+                        <div class="result-item">
+                            <div class="result-header">
+                                <div>
+                                    <div class="result-tags">
+                                        <span class="result-tag">${code ? code.ModelCodeName : 'Unknown'}</span>
+                                        <span class="result-tag">Chapter ${result.Chapter}</span>
+                                        ${result.Section ? `<span class="result-tag">Section ${result.Section}</span>` : ''}
+                                    </div>
+                                    <div class="result-title">${result.TitleEN || 'Untitled'}</div>
+                                    ${result.TitleKR ? `<div style="font-size: 14px; color: #6C757D; margin-bottom: 8px;">${result.TitleKR}</div>` : ''}
+                                    <div class="result-content">${(result.ContentEN || '').substring(0, 200)}${result.ContentEN && result.ContentEN.length > 200 ? '...' : ''}</div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('')}
+            `;
+        }
+
+        // Close modal on outside click
+        window.onclick = function(event) {
+            const modal = document.getElementById('advancedSearchModal');
+            if (event.target === modal) {
+                closeAdvancedSearch();
+            }
+        }
+
+        // Initialize
+        loadData();
+    </script>
+</body>
+</html>
