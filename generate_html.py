@@ -401,8 +401,6 @@ def create_all_library_content(hierarchy):
                      onclick="toggleChapterSidebar('{chapter_id}')">
                   <div>
                     <div class="font-semibold text-[#24305E] text-sm">Chapter {chapter_num}</div>
-                    <div class="text-xs text-gray-600 mt-1">{ch['TitleEN'] or ''}</div>
-                    {f'<div class="text-sm text-gray-500 mt-0.5">{title_kr}</div>' if title_kr else ''}
                   </div>{chevron_html}
                 </div>{sections_div}
               </div>''')
@@ -482,8 +480,8 @@ def create_all_library_content(hierarchy):
                             return f'<a href="#chapter-{chapter_id}" class="text-[#F76C6C] hover:underline font-semibold" onclick="scrollToChapter(\'{chapter_id}\')">Chapter {chapter_ref}</a>'
                     return match.group(0)  # Return original if not found
 
-                # Replace Section references
-                text = re.sub(r'Section (\d+(?:\.\d+)?)', replace_section, text)
+                # Replace Section references - matches Section 304.1.3.4 etc
+                text = re.sub(r'Section (\d+(?:\.\d+)*)', replace_section, text)
                 # Replace Chapter references
                 text = re.sub(r'Chapter (\d+)', replace_chapter, text)
 
@@ -574,7 +572,12 @@ def create_all_library_content(hierarchy):
 
                     content_html.append(f'''
                     <div class="bg-gray-50 p-4 rounded-lg relative" id="section-{chapter_id}-{section_number.replace('.', '-')}">
-                        <div class="absolute top-3 right-3">
+                        <div class="absolute top-3 right-3 flex gap-2">
+                            <button class="back-btn hidden p-1.5 hover:bg-gray-200 rounded transition-colors" title="Go back" onclick="goBackToSection()" id="back-btn-{chapter_id}-{section_number.replace('.', '-')}">
+                                <svg class="w-4 h-4 text-[#F76C6C]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                                </svg>
+                            </button>
                             <button class="p-1.5 hover:bg-gray-200 rounded transition-colors" title="Copy content" onclick="copyCodeContent('{chapter_id}-{section_number}')">
                                 <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
@@ -1195,10 +1198,31 @@ function toggleChapterSidebar(chapterId) {{
     scrollToChapter(chapterId);
 }}
 
+// Navigation history stack
+let navigationHistory = [];
+
 // Scroll to section with header offset
-function scrollToSection(chapterId, sectionNum) {{
+function scrollToSection(chapterId, sectionNum, saveHistory = true) {{
     const sectionElement = document.getElementById('section-' + chapterId + '-' + sectionNum);
     if (sectionElement) {{
+        // Save current position to history if requested
+        if (saveHistory) {{
+            const currentSection = document.querySelector('.bg-gray-50.p-4.rounded-lg:target') ||
+                                 document.querySelector('.bg-gray-50.p-4.rounded-lg');
+            if (currentSection && currentSection.id) {{
+                navigationHistory.push({{
+                    sectionId: currentSection.id,
+                    scrollTop: document.querySelector('#librarySection .flex-1.overflow-y-auto')?.scrollTop || window.pageYOffset
+                }});
+            }}
+
+            // Show back button in target section
+            const backBtn = document.getElementById('back-btn-' + chapterId + '-' + sectionNum);
+            if (backBtn) {{
+                backBtn.classList.remove('hidden');
+            }}
+        }}
+
         // Get the scrollable content container
         const contentContainer = document.querySelector('#librarySection .flex-1.overflow-y-auto');
 
@@ -1221,6 +1245,33 @@ function scrollToSection(chapterId, sectionNum) {{
                 top: offsetPosition,
                 behavior: 'smooth'
             }});
+        }}
+    }}
+}}
+
+// Go back to previous section
+function goBackToSection() {{
+    if (navigationHistory.length > 0) {{
+        const previous = navigationHistory.pop();
+        const sectionElement = document.getElementById(previous.sectionId);
+
+        if (sectionElement) {{
+            // Hide all back buttons
+            document.querySelectorAll('.back-btn').forEach(btn => btn.classList.add('hidden'));
+
+            // Scroll to previous position
+            const contentContainer = document.querySelector('#librarySection .flex-1.overflow-y-auto');
+            if (contentContainer) {{
+                contentContainer.scrollTo({{
+                    top: previous.scrollTop,
+                    behavior: 'smooth'
+                }});
+            }} else {{
+                window.scrollTo({{
+                    top: previous.scrollTop,
+                    behavior: 'smooth'
+                }});
+            }}
         }}
     }}
 }}
@@ -1339,14 +1390,19 @@ function performTopSearch() {{
         const contentEN = (content.ContentEN || '').toLowerCase();
         const contentKR = (content.ContentKR || '').toLowerCase();
 
-        // Check if any field contains the keyword
+        // Get chapter info for chapter title search
+        const chapter = appData.CodeChapter.find(ch => ch.ChapterID === content.ChapterID);
+        const chapterTitleEN = chapter ? (chapter.TitleEN || '').toLowerCase() : '';
+        const chapterTitleKR = chapter ? (chapter.TitleKR || '').toLowerCase() : '';
+
+        // Check if any field contains the keyword (including chapter title)
         if (titleEN.includes(keyword) || titleKR.includes(keyword) ||
-            contentEN.includes(keyword) || contentKR.includes(keyword)) {{
+            contentEN.includes(keyword) || contentKR.includes(keyword) ||
+            chapterTitleEN.includes(keyword) || chapterTitleKR.includes(keyword)) {{
 
             // Get code info
             const modelCode = appData.ModelCode.find(mc => mc.ModelCodeID === content.ModelCodeID);
             const version = appData.ModelCodeVersion.find(v => v.ModelCodeVersionID === content.ModelCodeVersionID);
-            const chapter = appData.CodeChapter.find(ch => ch.ChapterID === content.ChapterID);
 
             if (modelCode && version && chapter) {{
                 const result = {{
@@ -1365,10 +1421,11 @@ function performTopSearch() {{
                     chapterId: content.ChapterID
                 }};
 
-                // Check for exact match
+                // Check for exact match (including chapter title)
                 const wordBoundaryRegex = new RegExp('\\\\b' + keyword.replace(/[.*+?^${{}}()|[\\]\\\\]/g, '\\\\$&') + '\\\\b', 'i');
                 const isExactMatch = wordBoundaryRegex.test(titleEN) || wordBoundaryRegex.test(titleKR) ||
-                                   wordBoundaryRegex.test(contentEN) || wordBoundaryRegex.test(contentKR);
+                                   wordBoundaryRegex.test(contentEN) || wordBoundaryRegex.test(contentKR) ||
+                                   wordBoundaryRegex.test(chapterTitleEN) || wordBoundaryRegex.test(chapterTitleKR);
 
                 if (isExactMatch) {{
                     exactMatches.push(result);
@@ -1544,15 +1601,19 @@ function performSearch() {{
                 const titleKR = (content.TitleKR || '').toLowerCase();
                 const contentEN = (content.ContentEN || '').toLowerCase();
                 const contentKR = (content.ContentKR || '').toLowerCase();
+                const chapterTitleEN = chapter ? (chapter.TitleEN || '').toLowerCase() : '';
+                const chapterTitleKR = chapter ? (chapter.TitleKR || '').toLowerCase() : '';
 
-                // Check if any field contains the keyword
+                // Check if any field contains the keyword (including chapter title)
                 if (titleEN.includes(keyword) || titleKR.includes(keyword) ||
-                    contentEN.includes(keyword) || contentKR.includes(keyword)) {{
+                    contentEN.includes(keyword) || contentKR.includes(keyword) ||
+                    chapterTitleEN.includes(keyword) || chapterTitleKR.includes(keyword)) {{
 
-                    // Check for exact match (keyword as whole word)
+                    // Check for exact match (keyword as whole word, including chapter title)
                     const wordBoundaryRegex = new RegExp('\\\\b' + keyword.replace(/[.*+?^${{}}()|[\\]\\\\]/g, '\\\\$&') + '\\\\b', 'i');
                     const isExactMatch = wordBoundaryRegex.test(titleEN) || wordBoundaryRegex.test(titleKR) ||
-                                       wordBoundaryRegex.test(contentEN) || wordBoundaryRegex.test(contentKR);
+                                       wordBoundaryRegex.test(contentEN) || wordBoundaryRegex.test(contentKR) ||
+                                       wordBoundaryRegex.test(chapterTitleEN) || wordBoundaryRegex.test(chapterTitleKR);
 
                     if (isExactMatch) {{
                         exactMatches.push(result);
