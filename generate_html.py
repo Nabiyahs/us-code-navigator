@@ -356,7 +356,7 @@ def create_all_library_content(hierarchy):
                   <div>
                     <div class="font-semibold text-[#24305E] text-sm">Chapter {chapter_num}</div>
                     <div class="text-xs text-gray-600 mt-1">{ch['TitleEN'] or ''}</div>
-                    {f'<div class="text-xs text-gray-500 mt-0.5">{title_kr}</div>' if title_kr else ''}
+                    {f'<div class="text-sm text-gray-500 mt-0.5">{title_kr}</div>' if title_kr else ''}
                   </div>
                   <svg class="w-4 h-4 text-[#24305E] transition-transform {icon_rotation}" id="chevron-{chapter_id}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
@@ -429,10 +429,14 @@ def create_all_library_content(hierarchy):
                 section_contents = sections[section_num]
                 first_content = section_contents[0]
 
+                # Display only "General" for General sections, not "Section General"
+                section_title = section_num if section_num == 'General' else f'Section {section_num}'
+                title_suffix = f' - {first_content["TitleEN"]}' if first_content.get('TitleEN') else ''
+
                 content_html.append(f'''
                 <div class="content-section mb-8" id="section-{chapter_id}-{section_num}">
-                    <h3 class="text-xl font-semibold text-[#374785] mb-3">Section {section_num}{' - ' + first_content['TitleEN'] if first_content.get('TitleEN') else ''}</h3>
-                    {f'<p class="text-base text-gray-600 mb-4">{first_content["TitleKR"]}</p>' if first_content.get('TitleKR') else ''}
+                    <h3 class="text-xl font-semibold text-[#374785] mb-3">{section_title}{title_suffix}</h3>
+                    {f'<p class="text-lg text-gray-600 mb-4">{first_content["TitleKR"]}</p>' if first_content.get('TitleKR') else ''}
                     <div class="space-y-4">''')
 
                 # 각 subsection
@@ -488,7 +492,7 @@ def create_all_library_content(hierarchy):
                         <div class="flex items-center gap-2 mb-2">
                             <h4 class="font-semibold text-[#24305E]">{section_number}{' ' + content['TitleEN'] if content.get('TitleEN') else ''}</h4>
                         </div>
-                        {f'<p class="text-sm text-gray-600 mb-2">{content["TitleKR"]}</p>' if content.get('TitleKR') else ''}
+                        {f'<p class="text-base text-gray-600 mb-2">{content["TitleKR"]}</p>' if content.get('TitleKR') else ''}
                         {f'<p class="text-gray-700 leading-relaxed mb-2">{content["ContentEN"]}</p>' if content.get('ContentEN') else ''}
                         {f'<p class="text-gray-600 text-base leading-relaxed mb-3">{content["ContentKR"]}</p>' if content.get('ContentKR') else ''}
                         {f'<div class="mt-3 pt-3 border-t border-gray-200 bg-[#FEE9EC] bg-opacity-30 p-3 rounded-lg"><label class="text-xs font-semibold text-[#F76C6C] mb-1 block">Note</label><div class="w-full text-base p-2 bg-white border border-[#F76C6C] border-opacity-20 rounded text-gray-700 whitespace-pre-line">{content["Comment"]}</div></div>' if content.get('Comment') else ''}
@@ -630,6 +634,19 @@ def generate_html(hierarchy):
                 # 라이브러리 항목 다음에 하위메뉴 삽입
                 library_item.insert_after(submenu_soup.find('div'))
                 print("✓ Sidebar library submenu added!")
+
+    # Make top search bar header sticky with proper z-index
+    print("Ensuring top search bar is sticky with proper z-index...")
+    main_header = soup.find('header', class_='bg-white')
+    if main_header and 'sticky' in main_header.get('class', []):
+        header_classes = main_header.get('class', [])
+        # Remove old z-index if present
+        header_classes = [c for c in header_classes if not c.startswith('z-')]
+        # Add z-20 to ensure it's above other sticky elements
+        if 'z-20' not in header_classes:
+            header_classes.append('z-20')
+        main_header['class'] = header_classes
+        print("✓ Top search bar header updated with z-20!")
 
     # Libraries 섹션의 코드 카드들을 교체
     print("Generating library cards from schema hierarchy...")
@@ -983,18 +1000,30 @@ function copyContent(sectionNumber) {{
 function scrollToChapter(chapterId) {{
     const chapterElement = document.getElementById('chapter-' + chapterId);
     if (chapterElement) {{
-        // Get header height to calculate offset
-        const header = document.querySelector('#librarySection header');
-        const headerHeight = header ? header.offsetHeight : 80;
+        // Get the scrollable content container
+        const contentContainer = document.querySelector('#librarySection .flex-1.overflow-y-auto');
 
-        // Scroll with offset to prevent header overlap
-        const elementPosition = chapterElement.getBoundingClientRect().top + window.pageYOffset;
-        const offsetPosition = elementPosition - headerHeight - 20; // 20px extra padding
+        if (contentContainer) {{
+            // Scroll within the content container
+            const containerTop = contentContainer.scrollTop;
+            const elementTop = chapterElement.offsetTop;
 
-        window.scrollTo({{
-            top: offsetPosition,
-            behavior: 'smooth'
-        }});
+            contentContainer.scrollTo({{
+                top: elementTop - 20, // 20px padding from top
+                behavior: 'smooth'
+            }});
+        }} else {{
+            // Fallback to window scroll if container not found
+            const header = document.querySelector('#librarySection header');
+            const headerHeight = header ? header.offsetHeight : 80;
+            const elementPosition = chapterElement.getBoundingClientRect().top + window.pageYOffset;
+            const offsetPosition = elementPosition - headerHeight - 20;
+
+            window.scrollTo({{
+                top: offsetPosition,
+                behavior: 'smooth'
+            }});
+        }}
 
         // Update active chapter in sidebar
         document.querySelectorAll('.chapter-item').forEach(item => {{
@@ -1032,18 +1061,29 @@ function toggleChapterSidebar(chapterId) {{
 function scrollToSection(chapterId, sectionNum) {{
     const sectionElement = document.getElementById('section-' + chapterId + '-' + sectionNum);
     if (sectionElement) {{
-        // Get header height to calculate offset
-        const header = document.querySelector('#librarySection header');
-        const headerHeight = header ? header.offsetHeight : 80;
+        // Get the scrollable content container
+        const contentContainer = document.querySelector('#librarySection .flex-1.overflow-y-auto');
 
-        // Scroll with offset to prevent header overlap
-        const elementPosition = sectionElement.getBoundingClientRect().top + window.pageYOffset;
-        const offsetPosition = elementPosition - headerHeight - 20; // 20px extra padding
+        if (contentContainer) {{
+            // Scroll within the content container
+            const elementTop = sectionElement.offsetTop;
 
-        window.scrollTo({{
-            top: offsetPosition,
-            behavior: 'smooth'
-        }});
+            contentContainer.scrollTo({{
+                top: elementTop - 20, // 20px padding from top
+                behavior: 'smooth'
+            }});
+        }} else {{
+            // Fallback to window scroll if container not found
+            const header = document.querySelector('#librarySection header');
+            const headerHeight = header ? header.offsetHeight : 80;
+            const elementPosition = sectionElement.getBoundingClientRect().top + window.pageYOffset;
+            const offsetPosition = elementPosition - headerHeight - 20;
+
+            window.scrollTo({{
+                top: offsetPosition,
+                behavior: 'smooth'
+            }});
+        }}
     }}
 }}
 
@@ -1147,6 +1187,9 @@ function performTopSearch() {{
     // Set search input and perform search
     document.getElementById('keywordInput').value = query;
     performSearch();
+
+    // Clear the top search input
+    document.getElementById('topSearchInput').value = '';
 }}
 
 function performSearch() {{
@@ -1227,6 +1270,21 @@ function performSearch() {{
     displaySearchResults(searchResults, keyword);
 }}
 
+// Helper function to highlight keyword in text
+function highlightKeyword(text, keyword) {{
+    if (!text || !keyword) return text;
+
+    // Escape special regex characters in keyword
+    const escapeRegex = (str) => str.replace(/[.*+?^${{}}()|[\\]\\\\]/g, '\\\\$&');
+    const escapedKeyword = escapeRegex(keyword);
+
+    // Create regex for case-insensitive matching
+    const regex = new RegExp(`(${{escapedKeyword}})`, 'gi');
+
+    // Replace matches with highlighted spans
+    return text.replace(regex, '<mark class="bg-yellow-200 font-semibold">$1</mark>');
+}}
+
 function displaySearchResults(results, keyword) {{
     const resultsList = document.getElementById('resultsList');
 
@@ -1238,6 +1296,12 @@ function displaySearchResults(results, keyword) {{
     let html = '<div class="space-y-4">';
     results.forEach((result, index) => {{
         const sectionNum = result.section + (result.subsection ? '.' + result.subsection : '');
+
+        // Highlight keyword in all text fields
+        const highlightedTitleEN = highlightKeyword(result.titleEN, keyword);
+        const highlightedTitleKR = highlightKeyword(result.titleKR, keyword);
+        const highlightedContentEN = highlightKeyword(result.contentEN, keyword);
+        const highlightedContentKR = highlightKeyword(result.contentKR, keyword);
 
         html += `
             <div class="bg-white rounded-lg border border-gray-200 p-4 hover:border-[#A8D0E6] transition-colors cursor-pointer"
@@ -1251,10 +1315,10 @@ function displaySearchResults(results, keyword) {{
                     </div>
                     <span class="text-sm font-semibold text-[#24305E]">Section ${{sectionNum}}</span>
                 </div>
-                <h4 class="font-semibold text-[#24305E] mb-1">${{result.titleEN}}</h4>
-                <p class="text-sm text-gray-600 mb-2">${{result.titleKR}}</p>
-                <p class="text-sm text-gray-700 line-clamp-2">${{result.contentEN}}</p>
-                <p class="text-xs text-gray-500 line-clamp-1 mt-1">${{result.contentKR}}</p>
+                <h4 class="font-semibold text-[#24305E] mb-1">${{highlightedTitleEN}}</h4>
+                <p class="text-sm text-gray-600 mb-2">${{highlightedTitleKR}}</p>
+                <p class="text-sm text-gray-700 line-clamp-2">${{highlightedContentEN}}</p>
+                <p class="text-xs text-gray-500 line-clamp-1 mt-1">${{highlightedContentKR}}</p>
             </div>
         `;
     }});
