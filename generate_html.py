@@ -628,6 +628,17 @@ def generate_html(hierarchy):
         aside = library_section.find('aside', class_='w-80')
         chapters_container = None
         if aside:
+            # Make aside sticky
+            aside['class'] = aside.get('class', [])
+            if 'sticky' not in aside['class']:
+                aside['class'].append('sticky')
+            if 'top-0' not in aside['class']:
+                aside['class'].append('top-0')
+            if 'self-start' not in aside['class']:
+                aside['class'].append('self-start')
+            # Set max height to viewport height minus header
+            aside['style'] = 'max-height: calc(100vh - 80px);'
+
             chapters_heading = aside.find('h2', string='Chapters')
             if chapters_heading:
                 chapters_container = chapters_heading.find_next('div', class_='space-y-2')
@@ -1002,6 +1013,8 @@ function loadCodeFromSidebar(versionId, codeId) {{
 }}
 
 function switchToLibraryCode(codeId, versionId) {{
+    console.log('Switching to code:', codeId, 'version:', versionId);
+
     // Switch to library section
     document.querySelectorAll('.section-content').forEach(s => s.classList.remove('active'));
     document.getElementById('librarySection').classList.add('active');
@@ -1032,8 +1045,20 @@ function switchToLibraryCode(codeId, versionId) {{
     const selectedChapters = document.getElementById('chapters-' + codeId);
     const selectedContent = document.getElementById('content-' + codeId);
 
-    if (selectedChapters) selectedChapters.style.display = '';
-    if (selectedContent) selectedContent.style.display = '';
+    console.log('Chapters element:', selectedChapters);
+    console.log('Content element:', selectedContent);
+
+    if (selectedChapters) {{
+        selectedChapters.style.display = 'block';
+    }} else {{
+        console.error('Chapters not found for codeId:', codeId);
+    }}
+
+    if (selectedContent) {{
+        selectedContent.style.display = 'block';
+    }} else {{
+        console.error('Content not found for codeId:', codeId);
+    }}
 
     // Update header with code info
     const modelCode = appData.ModelCode.find(mc => mc.ModelCodeID === codeId);
@@ -1063,11 +1088,133 @@ function performTopSearch() {{
     document.querySelectorAll('.sidebar-item').forEach(item => item.classList.remove('active'));
     document.querySelector('.sidebar-item[data-section="search"]').classList.add('active');
 
-    // Set search input
+    // Set search input and perform search
     document.getElementById('keywordInput').value = query;
+    performSearch();
+}}
 
-    // Perform search (to be implemented)
-    alert('Search functionality: ' + query);
+function performSearch() {{
+    const keyword = document.getElementById('keywordInput').value.trim().toLowerCase();
+    if (!keyword) {{
+        alert('Please enter a search keyword');
+        return;
+    }}
+
+    const selectedArchCategories = Array.from(document.querySelectorAll('input[name="archCategory"]:checked')).map(cb => cb.value);
+    const selectedFireCategories = Array.from(document.querySelectorAll('input[name="fireCategory"]:checked')).map(cb => cb.value);
+
+    console.log('Searching for:', keyword);
+    console.log('Arch categories:', selectedArchCategories);
+    console.log('Fire categories:', selectedFireCategories);
+
+    // Filter by selected codes
+    let searchResults = [];
+    let modelCodeIds = new Set();
+
+    // Add codes based on selected categories
+    if (selectedArchCategories.length > 0) {{
+        selectedArchCategories.forEach(cat => {{
+            if (cat === 'IBC') modelCodeIds.add('MC001');
+        }});
+    }}
+    if (selectedFireCategories.length > 0) {{
+        selectedFireCategories.forEach(cat => {{
+            if (cat === 'NFPA13') modelCodeIds.add('MC007');
+            if (cat === 'NFPA14') modelCodeIds.add('MC008');
+            if (cat === 'NFPA20') modelCodeIds.add('MC009');
+        }});
+    }}
+
+    // If no categories selected, search all
+    if (modelCodeIds.size === 0) {{
+        modelCodeIds = new Set(['MC001', 'MC007', 'MC008', 'MC009']);
+    }}
+
+    // Search in CodeContent
+    appData.CodeContent.forEach(content => {{
+        if (!modelCodeIds.has(content.ModelCodeID)) return;
+
+        const titleEN = (content.TitleEN || '').toLowerCase();
+        const titleKR = (content.TitleKR || '').toLowerCase();
+        const contentEN = (content.ContentEN || '').toLowerCase();
+        const contentKR = (content.ContentKR || '').toLowerCase();
+
+        if (titleEN.includes(keyword) || titleKR.includes(keyword) ||
+            contentEN.includes(keyword) || contentKR.includes(keyword)) {{
+
+            // Get code info
+            const modelCode = appData.ModelCode.find(mc => mc.ModelCodeID === content.ModelCodeID);
+            const version = appData.ModelCodeVersion.find(v => v.ModelCodeVersionID === content.ModelCodeVersionID);
+            const chapter = appData.CodeChapter.find(ch => ch.ChapterID === content.ChapterID);
+
+            if (modelCode && version && chapter) {{
+                searchResults.push({{
+                    code: modelCode.ModelCodeName.split(':')[0].trim(),
+                    year: version.Year ? Math.floor(version.Year) : '',
+                    chapter: chapter.Chapter,
+                    chapterTitle: chapter.TitleEN || '',
+                    section: content.Section || 'General',
+                    subsection: content.Subsection || '',
+                    titleEN: content.TitleEN || '',
+                    titleKR: content.TitleKR || '',
+                    contentEN: content.ContentEN || '',
+                    contentKR: content.ContentKR || '',
+                    codeId: content.ModelCodeID,
+                    versionId: content.ModelCodeVersionID,
+                    chapterId: content.ChapterID
+                }});
+            }}
+        }}
+    }});
+
+    // Display results
+    displaySearchResults(searchResults, keyword);
+}}
+
+function displaySearchResults(results, keyword) {{
+    const resultsList = document.getElementById('resultsList');
+
+    if (results.length === 0) {{
+        resultsList.innerHTML = '<p class="text-gray-500 text-center py-8">No results found for "' + keyword + '"</p>';
+        return;
+    }}
+
+    let html = '<div class="space-y-4">';
+    results.forEach((result, index) => {{
+        const sectionNum = result.section + (result.subsection ? '.' + result.subsection : '');
+
+        html += `
+            <div class="bg-white rounded-lg border border-gray-200 p-4 hover:border-[#A8D0E6] transition-colors cursor-pointer"
+                 onclick="openSearchResult('${{result.codeId}}', '${{result.versionId}}', '${{result.chapterId}}', '${{result.section}}')">
+                <div class="flex items-start justify-between mb-2">
+                    <div>
+                        <span class="text-xs font-medium text-[#A8D0E6] bg-[#A8D0E6] bg-opacity-20 px-2 py-1 rounded">
+                            ${{result.code}} ${{result.year}}
+                        </span>
+                        <span class="text-xs text-gray-500 ml-2">Chapter ${{result.chapter}}: ${{result.chapterTitle}}</span>
+                    </div>
+                    <span class="text-sm font-semibold text-[#24305E]">Section ${{sectionNum}}</span>
+                </div>
+                <h4 class="font-semibold text-[#24305E] mb-1">${{result.titleEN}}</h4>
+                <p class="text-sm text-gray-600 mb-2">${{result.titleKR}}</p>
+                <p class="text-sm text-gray-700 line-clamp-2">${{result.contentEN}}</p>
+                <p class="text-xs text-gray-500 line-clamp-1 mt-1">${{result.contentKR}}</p>
+            </div>
+        `;
+    }});
+    html += '</div>';
+
+    resultsList.innerHTML = html;
+}}
+
+function openSearchResult(codeId, versionId, chapterId, section) {{
+    // Switch to library and load the code
+    switchToLibraryCode(codeId, versionId);
+
+    // Scroll to the section after a short delay
+    setTimeout(() => {{
+        scrollToSection(chapterId, section);
+    }}, 500);
 }}
 
 function clearSearchInput() {{
@@ -1113,15 +1260,38 @@ document.addEventListener('DOMContentLoaded', function() {{
         }});
     }});
 
-    // Auto-load first available code on page load (optional - only if on library section)
-    const currentSection = document.querySelector('.section-content.active');
-    if (currentSection && currentSection.id === 'librarySection') {{
-        const firstActiveCard = document.querySelector('.code-card[data-version-id]');
-        if (firstActiveCard) {{
-            const versionId = firstActiveCard.dataset.versionId;
-            const codeId = firstActiveCard.dataset.codeId;
-            loadChapters(versionId, codeId);
-        }}
+    // Search button click handler
+    const searchBtn = document.getElementById('searchBtn');
+    if (searchBtn) {{
+        searchBtn.addEventListener('click', performSearch);
+    }}
+
+    // Reset button for advanced search
+    const resetBtn = document.getElementById('resetBtn');
+    if (resetBtn) {{
+        resetBtn.addEventListener('click', function() {{
+            document.getElementById('keywordInput').value = '';
+            document.querySelectorAll('input[name="archCategory"]:checked').forEach(cb => cb.checked = false);
+            document.querySelectorAll('input[name="fireCategory"]:checked').forEach(cb => cb.checked = false);
+            document.getElementById('selectAllArch').checked = false;
+            document.getElementById('selectAllFire').checked = false;
+            document.getElementById('resultsList').innerHTML = '';
+        }});
+    }}
+
+    // Enter key in search inputs
+    const keywordInput = document.getElementById('keywordInput');
+    if (keywordInput) {{
+        keywordInput.addEventListener('keypress', function(e) {{
+            if (e.key === 'Enter') performSearch();
+        }});
+    }}
+
+    const topSearchInput = document.getElementById('topSearchInput');
+    if (topSearchInput) {{
+        topSearchInput.addEventListener('keypress', function(e) {{
+            if (e.key === 'Enter') performTopSearch();
+        }});
     }}
 }});
     '''
