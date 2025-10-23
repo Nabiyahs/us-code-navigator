@@ -759,6 +759,29 @@ def generate_html(hierarchy):
 
             print(f"✓ Library populated with {len(all_content['codes'])} codes")
 
+    # Remove keyword search input from advanced search
+    print("Removing keyword search input from advanced search...")
+    search_section = soup.find('div', id='searchSection')
+    if search_section:
+        # Find and remove the keyword search div (containing input with id='keywordInput')
+        keyword_div = search_section.find('div', class_='mb-6')
+        if keyword_div and keyword_div.find('input', id='keywordInput'):
+            keyword_div.decompose()
+            print("✓ Removed keyword search input from advanced search")
+
+        # Remove link/copy icons from results header
+        results_section = search_section.find('div', id='resultsSection')
+        if results_section:
+            results_header = results_section.find('div', class_='flex items-center justify-between mb-4')
+            if results_header:
+                # Find the div with buttons and remove it
+                buttons_div = results_header.find('div', class_='flex items-center gap-3')
+                if buttons_div:
+                    # Keep only resultCount, remove buttons
+                    for button in buttons_div.find_all('button'):
+                        button.decompose()
+                    print("✓ Removed link/copy buttons from results header")
+
     # Update Quick Actions text to Korean
     print("Updating Quick Actions text to Korean...")
     quick_actions_h3s = soup.find_all('h3', class_='text-lg')
@@ -919,9 +942,12 @@ function loadChapterContent(chapterId, versionId) {{
         const sectionContents = sections[sectionNum];
         const firstContent = sectionContents[0];
 
+        // Display "General" for General sections, not "Section General"
+        const sectionTitle = sectionNum === 'General' ? 'General' : 'Section ' + sectionNum;
+
         html += `
             <div class="content-section mb-8">
-                <h3 class="text-xl font-semibold text-[#374785] mb-3">Section ${{sectionNum}}${{firstContent.TitleEN ? ' - ' + firstContent.TitleEN : ''}}</h3>
+                <h3 class="text-xl font-semibold text-[#374785] mb-3">${{sectionTitle}}${{firstContent.TitleEN ? ' - ' + firstContent.TitleEN : ''}}</h3>
                 ${{firstContent.TitleKR ? `<p class="text-sm text-gray-500 mb-4">${{firstContent.TitleKR}}</p>` : ''}}
                 <div class="space-y-4">
         `;
@@ -1196,13 +1222,12 @@ function performTopSearch() {{
     const query = document.getElementById('topSearchInput').value.trim();
     if (!query) return;
 
-    // Switch to search section
+    // Switch to search results section (not advanced search)
     document.querySelectorAll('.section-content').forEach(s => s.classList.remove('active'));
-    document.getElementById('searchSection').classList.add('active');
+    document.getElementById('searchResultsSection').classList.add('active');
 
     // Update sidebar
     document.querySelectorAll('.sidebar-item').forEach(item => item.classList.remove('active'));
-    document.querySelector('.sidebar-item[data-section="search"]').classList.add('active');
 
     // Perform search across all codes with the keyword
     const modelCodeIds = new Set(['MC001', 'MC007', 'MC008', 'MC009']);
@@ -1258,24 +1283,101 @@ function performTopSearch() {{
         }}
     }});
 
-    // Display results
-    displaySearchResults(exactMatches, partialMatches, [], keyword);
+    // Display results in search results section
+    displayTopSearchResults(exactMatches, partialMatches, keyword);
 
     // Clear the top search input
     document.getElementById('topSearchInput').value = '';
 }}
 
-function performSearch() {{
-    const keyword = document.getElementById('keywordInput').value.trim().toLowerCase();
-    if (!keyword) {{
-        alert('검색 키워드를 입력해주세요');
+// Display top search results with detailed preview (5 lines)
+function displayTopSearchResults(exactMatches, partialMatches, keyword) {{
+    const searchResultsSection = document.getElementById('searchResultsSection');
+    if (!searchResultsSection) return;
+
+    // Find or create results container
+    let resultsContainer = searchResultsSection.querySelector('.search-results-container');
+    if (!resultsContainer) {{
+        searchResultsSection.innerHTML = `
+            <header class="bg-white border-b border-gray-200 shadow-sm mb-6">
+                <div class="px-8 py-6">
+                    <h1 class="text-3xl font-bold text-[#24305E]">검색 결과</h1>
+                    <p class="text-gray-600 mt-1" id="topSearchKeyword"></p>
+                </div>
+            </header>
+            <div class="px-8 pb-8">
+                <div class="search-results-container"></div>
+            </div>
+        `;
+        resultsContainer = searchResultsSection.querySelector('.search-results-container');
+    }}
+
+    // Update keyword display
+    const keywordDisplay = searchResultsSection.querySelector('#topSearchKeyword');
+    if (keywordDisplay) {{
+        keywordDisplay.textContent = `"${{keyword}}" 검색 결과 ${{exactMatches.length + partialMatches.length}}개`;
+    }}
+
+    const allResults = [...exactMatches, ...partialMatches];
+
+    if (allResults.length === 0) {{
+        resultsContainer.innerHTML = '<p class="text-gray-500 text-center py-8">검색 결과가 없습니다</p>';
         return;
     }}
+
+    let html = '<div class="space-y-6">';
+
+    allResults.forEach((result, index) => {{
+        const sectionNum = result.section + (result.subsection ? '.' + result.subsection : '');
+        const isExactMatch = index < exactMatches.length;
+
+        // Highlight keyword
+        const highlightedTitleEN = highlightKeyword(result.titleEN, keyword, isExactMatch);
+        const highlightedTitleKR = highlightKeyword(result.titleKR, keyword, isExactMatch);
+        const highlightedContentEN = highlightKeyword(result.contentEN, keyword, isExactMatch);
+        const highlightedContentKR = highlightKeyword(result.contentKR, keyword, isExactMatch);
+
+        html += `
+            <div class="bg-white rounded-lg border border-gray-200 p-6 hover:border-[#A8D0E6] transition-colors cursor-pointer search-result-item"
+                 data-result='${{JSON.stringify(result).replace(/'/g, "\\'")}}'
+                 onmousedown="handleResultMouseDown(event)"
+                 onmouseup="handleResultMouseUp(event)">
+                <div class="flex items-start justify-between mb-3">
+                    <div>
+                        <span class="text-xs font-medium text-[#A8D0E6] bg-[#A8D0E6] bg-opacity-20 px-2 py-1 rounded">
+                            ${{result.code}} ${{result.year}}
+                        </span>
+                        <span class="text-xs text-gray-500 ml-2">Chapter ${{result.chapter}}: ${{result.chapterTitle}}</span>
+                    </div>
+                    <span class="text-sm font-semibold text-[#24305E]">Section ${{sectionNum}}</span>
+                </div>
+                <h4 class="text-lg font-semibold text-[#24305E] mb-2">${{highlightedTitleEN}}</h4>
+                <p class="text-base text-gray-600 mb-3">${{highlightedTitleKR}}</p>
+                <div class="text-sm text-gray-700 leading-relaxed mb-2" style="display: -webkit-box; -webkit-line-clamp: 5; -webkit-box-orient: vertical; overflow: hidden;">${{highlightedContentEN}}</div>
+                <div class="text-sm text-gray-600 leading-relaxed" style="display: -webkit-box; -webkit-line-clamp: 5; -webkit-box-orient: vertical; overflow: hidden;">${{highlightedContentKR}}</div>
+            </div>
+        `;
+    }});
+
+    html += '</div>';
+
+    resultsContainer.innerHTML = html;
+}}
+
+function performSearch() {{
+    // No keyword input in advanced search - filter only
+    const keyword = '';
 
     const selectedArchCategories = Array.from(document.querySelectorAll('input[name="archCategory"]:checked')).map(cb => cb.value);
     const selectedFireCategories = Array.from(document.querySelectorAll('input[name="fireCategory"]:checked')).map(cb => cb.value);
 
-    console.log('Searching for:', keyword);
+    // Check if at least one filter is selected
+    if (selectedArchCategories.length === 0 && selectedFireCategories.length === 0) {{
+        alert('최소 하나의 필터를 선택해주세요');
+        return;
+    }}
+
+    console.log('Searching with filters only');
     console.log('Arch categories:', selectedArchCategories);
     console.log('Fire categories:', selectedFireCategories);
 
@@ -1419,8 +1521,10 @@ function displaySearchResults(exactMatches, partialMatches, allFilteredResults, 
         }}
 
         html += `
-            <div class="bg-white rounded-lg border border-gray-200 p-4 hover:border-[#A8D0E6] transition-colors cursor-pointer"
-                 onclick="openSearchResultModal(${{JSON.stringify(result).replace(/"/g, '&quot;')}})">
+            <div class="bg-white rounded-lg border border-gray-200 p-4 hover:border-[#A8D0E6] transition-colors cursor-pointer search-result-item"
+                 data-result='${{JSON.stringify(result).replace(/'/g, "\\'")}}'
+                 onmousedown="handleResultMouseDown(event)"
+                 onmouseup="handleResultMouseUp(event)">
                 <div class="flex items-start justify-between mb-2">
                     <div>
                         <span class="text-xs font-medium text-[#A8D0E6] bg-[#A8D0E6] bg-opacity-20 px-2 py-1 rounded">
@@ -1431,9 +1535,9 @@ function displaySearchResults(exactMatches, partialMatches, allFilteredResults, 
                     <span class="text-sm font-semibold text-[#24305E]">Section ${{sectionNum}}</span>
                 </div>
                 <h4 class="font-semibold text-[#24305E] mb-1">${{displayTitleEN}}</h4>
-                <p class="text-sm text-gray-600 mb-2">${{displayTitleKR}}</p>
+                <p class="text-base text-gray-600 mb-2">${{displayTitleKR}}</p>
                 <p class="text-sm text-gray-700 line-clamp-2">${{displayContentEN}}</p>
-                <p class="text-xs text-gray-500 line-clamp-1 mt-1">${{displayContentKR}}</p>
+                <p class="text-sm text-gray-500 line-clamp-1 mt-1">${{displayContentKR}}</p>
             </div>
         `;
     }});
@@ -1441,6 +1545,39 @@ function displaySearchResults(exactMatches, partialMatches, allFilteredResults, 
     html += '</div>';
 
     resultsList.innerHTML = html;
+}}
+
+// Handle result card mouse events to distinguish click from drag
+let mouseDownPos = null;
+
+function handleResultMouseDown(event) {{
+    mouseDownPos = {{ x: event.clientX, y: event.clientY }};
+}}
+
+function handleResultMouseUp(event) {{
+    if (!mouseDownPos) return;
+
+    const mouseUpPos = {{ x: event.clientX, y: event.clientY }};
+    const distance = Math.sqrt(
+        Math.pow(mouseUpPos.x - mouseDownPos.x, 2) +
+        Math.pow(mouseUpPos.y - mouseDownPos.y, 2)
+    );
+
+    // If mouse moved less than 5 pixels, it's a click
+    if (distance < 5) {{
+        const resultItem = event.currentTarget;
+        const resultData = resultItem.getAttribute('data-result');
+        if (resultData) {{
+            try {{
+                const result = JSON.parse(resultData);
+                openSearchResultModal(result);
+            }} catch (e) {{
+                console.error('Failed to parse result data:', e);
+            }}
+        }}
+    }}
+
+    mouseDownPos = null;
 }}
 
 // Open search result in modal popup
@@ -1501,13 +1638,13 @@ function openSearchResultModal(result) {{
 
     let contentHTML = '';
     if (result.titleKR) {{
-        contentHTML += `<p class="text-lg text-gray-700 font-semibold mb-4">${{result.titleKR}}</p>`;
+        contentHTML += `<p class="text-xl text-gray-700 font-semibold mb-4">${{result.titleKR}}</p>`;
     }}
     if (result.contentEN) {{
-        contentHTML += `<div class="mb-4"><h3 class="text-sm font-semibold text-gray-500 uppercase mb-2">English</h3><p class="text-gray-800 leading-relaxed whitespace-pre-wrap">${{result.contentEN}}</p></div>`;
+        contentHTML += `<div class="mb-4"><h3 class="text-sm font-semibold text-gray-500 uppercase mb-2">English</h3><p class="text-base text-gray-800 leading-relaxed whitespace-pre-line">${{result.contentEN}}</p></div>`;
     }}
     if (result.contentKR) {{
-        contentHTML += `<div class="mb-4"><h3 class="text-sm font-semibold text-gray-500 uppercase mb-2">한국어</h3><p class="text-gray-700 leading-relaxed whitespace-pre-wrap">${{result.contentKR}}</p></div>`;
+        contentHTML += `<div class="mb-4"><h3 class="text-sm font-semibold text-gray-500 uppercase mb-2">한국어</h3><p class="text-base text-gray-700 leading-relaxed whitespace-pre-line">${{result.contentKR}}</p></div>`;
     }}
 
     document.getElementById('modalContent').innerHTML = contentHTML;
