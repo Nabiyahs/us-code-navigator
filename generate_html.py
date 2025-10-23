@@ -372,7 +372,7 @@ def create_all_library_content(hierarchy):
                 # Display "General" without "Section" prefix
                 display_name = section_num if section_num == 'General' else f'Section {section_num}'
                 sections_html.append(f'''
-                  <div class="section-item px-4 py-2 text-xs text-gray-600 hover:bg-gray-100 rounded cursor-pointer"
+                  <div class="section-item px-4 py-2 text-xs text-gray-600 rounded cursor-pointer"
                        onclick="scrollToSection('{chapter_id}', '{section_num}')">
                     {display_name}
                   </div>''')
@@ -466,9 +466,10 @@ def create_all_library_content(hierarchy):
                 # Find "Section [number]" or "Section [number].[number]"
                 def replace_section(match):
                     section_ref = match.group(1)
-                    # Check if this section exists in current chapter
-                    section_id = f"section-{current_chapter_id}-{section_ref}"
-                    return f'<a href="#section-{section_id.replace(".", "-")}" class="text-[#F76C6C] hover:underline font-semibold" onclick="scrollToSection(\'{current_chapter_id}\', \'{section_ref}\')">Section {section_ref}</a>'
+                    # Create proper section ID matching the actual ID format
+                    section_id = f"section-{current_chapter_id}-{section_ref.replace('.', '-')}"
+                    # Use event.preventDefault() and call function directly
+                    return f'<a href="#{section_id}" class="text-[#F76C6C] hover:underline font-semibold" onclick="event.preventDefault(); navigateToSection(\'{current_chapter_id}\', \'{section_ref}\'); return false;">Section {section_ref}</a>'
 
                 # Find "Chapter [number]"
                 def replace_chapter(match):
@@ -1201,23 +1202,30 @@ function toggleChapterSidebar(chapterId) {{
 // Navigation history stack
 let navigationHistory = [];
 
+// Navigate to section from hyperlink (with history)
+function navigateToSection(chapterId, sectionNum) {{
+    scrollToSection(chapterId, sectionNum, true);
+}}
+
 // Scroll to section with header offset
-function scrollToSection(chapterId, sectionNum, saveHistory = true) {{
-    const sectionElement = document.getElementById('section-' + chapterId + '-' + sectionNum);
+function scrollToSection(chapterId, sectionNum, saveHistory = false) {{
+    // Replace dots with dashes for ID matching
+    const sectionId = 'section-' + chapterId + '-' + sectionNum.toString().replace(/\./g, '-');
+    const sectionElement = document.getElementById(sectionId);
+
     if (sectionElement) {{
         // Save current position to history if requested
         if (saveHistory) {{
-            const currentSection = document.querySelector('.bg-gray-50.p-4.rounded-lg:target') ||
-                                 document.querySelector('.bg-gray-50.p-4.rounded-lg');
-            if (currentSection && currentSection.id) {{
-                navigationHistory.push({{
-                    sectionId: currentSection.id,
-                    scrollTop: document.querySelector('#librarySection .flex-1.overflow-y-auto')?.scrollTop || window.pageYOffset
-                }});
-            }}
+            const contentContainer = document.querySelector('#librarySection .flex-1.overflow-y-auto');
+            const currentScrollTop = contentContainer ? contentContainer.scrollTop : window.pageYOffset;
+
+            navigationHistory.push({{
+                scrollTop: currentScrollTop
+            }});
 
             // Show back button in target section
-            const backBtn = document.getElementById('back-btn-' + chapterId + '-' + sectionNum);
+            const backBtnId = 'back-btn-' + chapterId + '-' + sectionNum.toString().replace(/\./g, '-');
+            const backBtn = document.getElementById(backBtnId);
             if (backBtn) {{
                 backBtn.classList.remove('hidden');
             }}
@@ -1253,25 +1261,22 @@ function scrollToSection(chapterId, sectionNum, saveHistory = true) {{
 function goBackToSection() {{
     if (navigationHistory.length > 0) {{
         const previous = navigationHistory.pop();
-        const sectionElement = document.getElementById(previous.sectionId);
 
-        if (sectionElement) {{
-            // Hide all back buttons
-            document.querySelectorAll('.back-btn').forEach(btn => btn.classList.add('hidden'));
+        // Hide all back buttons
+        document.querySelectorAll('.back-btn').forEach(btn => btn.classList.add('hidden'));
 
-            // Scroll to previous position
-            const contentContainer = document.querySelector('#librarySection .flex-1.overflow-y-auto');
-            if (contentContainer) {{
-                contentContainer.scrollTo({{
-                    top: previous.scrollTop,
-                    behavior: 'smooth'
-                }});
-            }} else {{
-                window.scrollTo({{
-                    top: previous.scrollTop,
-                    behavior: 'smooth'
-                }});
-            }}
+        // Scroll to previous position
+        const contentContainer = document.querySelector('#librarySection .flex-1.overflow-y-auto');
+        if (contentContainer) {{
+            contentContainer.scrollTo({{
+                top: previous.scrollTop,
+                behavior: 'smooth'
+            }});
+        }} else {{
+            window.scrollTo({{
+                top: previous.scrollTop,
+                behavior: 'smooth'
+            }});
         }}
     }}
 }}
@@ -1453,9 +1458,23 @@ function displayTopSearchResults(exactMatches, partialMatches, keyword) {{
     if (!resultsContainer) {{
         searchResultsSection.innerHTML = `
             <header class="bg-white border-b border-gray-200 shadow-sm mb-6">
-                <div class="px-8 py-6">
-                    <h1 class="text-3xl font-bold text-[#24305E]">검색 결과</h1>
-                    <p class="text-gray-600 mt-1" id="topSearchKeyword"></p>
+                <div class="px-8 py-6 flex items-center justify-between">
+                    <div>
+                        <h1 class="text-3xl font-bold text-[#24305E]">검색 결과</h1>
+                        <p class="text-gray-600 mt-1" id="topSearchKeyword"></p>
+                    </div>
+                    <div class="flex gap-2">
+                        <button onclick="toggleAllSearchResults(true)" class="p-2 hover:bg-gray-100 rounded transition-colors" title="Expand all">
+                            <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                        <button onclick="toggleAllSearchResults(false)" class="p-2 hover:bg-gray-100 rounded transition-colors" title="Collapse all">
+                            <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path>
+                            </svg>
+                        </button>
+                    </div>
                 </div>
             </header>
             <div class="px-8 pb-8">
@@ -1491,31 +1510,46 @@ function displayTopSearchResults(exactMatches, partialMatches, keyword) {{
         const highlightedContentEN = highlightKeyword(result.contentEN, keyword, isExactMatch);
         const highlightedContentKR = highlightKeyword(result.contentKR, keyword, isExactMatch);
 
-        // Use reference.txt design with bg-gray-50 and location header
+        // Use reference.txt design with collapse/expand functionality
         html += `
-            <div class="bg-gray-50 p-4 rounded-lg relative search-result-item"
-                 data-result='${{JSON.stringify(result).replace(/'/g, "\\'")}}'
-                 onmousedown="handleResultMouseDown(event)"
-                 onmouseup="handleResultMouseUp(event)">
-                <!-- Copy button only -->
-                <div class="absolute top-3 right-3">
+            <div class="bg-gray-50 p-4 rounded-lg relative search-result-item" id="search-result-${{index}}">
+                <!-- Expand/Collapse Toggle -->
+                <button class="absolute top-3 left-3 p-1 hover:bg-gray-200 rounded transition-colors"
+                        onclick="toggleSearchResult(${{index}})"
+                        title="Expand/Collapse">
+                    <span class="result-toggle-icon">▼</span>
+                </button>
+
+                <!-- Copy and Navigate buttons -->
+                <div class="absolute top-3 right-3 flex gap-2">
+                    <button class="p-1.5 hover:bg-gray-200 rounded transition-colors"
+                            title="Go to section"
+                            onclick="openSearchResult('${{result.codeId}}', '${{result.versionId}}', '${{result.chapterId}}', '${{sectionNum}}')">
+                        <svg class="w-4 h-4 text-[#F76C6C]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                        </svg>
+                    </button>
                     <button class="p-1.5 hover:bg-gray-200 rounded transition-colors" title="Copy content" onclick="copySearchResultContent(event, this)">
                         <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
                         </svg>
                     </button>
                 </div>
-                <!-- Location and Index tags -->
-                <div class="flex items-center gap-2 mb-3 flex-wrap">
-                    <span class="text-xs bg-[#A8D0E6] text-[#24305E] font-semibold px-2 py-0.5 rounded">${{result.code}} ${{result.year}}: Chapter ${{result.chapter}} - ${{sectionNum}}</span>
-                    <span class="text-xs bg-[#F8E9A1] text-[#24305E] px-2 py-0.5 rounded">건축</span>
+
+                <!-- Summary (always visible) -->
+                <div class="ml-8 pr-20">
+                    <div class="flex items-center gap-2 mb-2 flex-wrap">
+                        <span class="text-xs bg-[#A8D0E6] text-[#24305E] font-semibold px-2 py-0.5 rounded">${{result.code}} ${{result.year}}: Ch.${{result.chapter}} - ${{sectionNum}}</span>
+                    </div>
+                    <h4 class="font-semibold text-[#24305E] text-sm cursor-pointer" onclick="toggleSearchResult(${{index}})">${{sectionNum}}${{result.titleEN ? ' ' + highlightedTitleEN : ''}}</h4>
                 </div>
-                <div class="flex items-center gap-2 mb-2">
-                    <h4 class="font-semibold text-[#24305E] text-sm">${{sectionNum}}${{result.titleEN ? ' ' + highlightedTitleEN : ''}}</h4>
+
+                <!-- Details (collapsible) -->
+                <div class="result-details hidden ml-8 pr-20 mt-2 border-t border-gray-200 pt-2">
+                    ${{result.titleKR ? `<p class="text-gray-600 text-sm leading-relaxed mb-2">${{highlightedTitleKR}}</p>` : ''}}
+                    ${{result.contentEN ? `<p class="text-gray-700 text-sm leading-relaxed mb-2">${{highlightedContentEN}}</p>` : ''}}
+                    ${{result.contentKR ? `<p class="text-gray-600 text-sm leading-relaxed">${{highlightedContentKR}}</p>` : ''}}
                 </div>
-                ${{result.titleKR ? `<p class="text-gray-600 text-sm leading-relaxed mb-1 line-clamp-1">${{highlightedTitleKR}}</p>` : ''}}
-                ${{result.contentEN ? `<p class="text-gray-700 text-xs leading-relaxed mb-1 line-clamp-2">${{highlightedContentEN}}</p>` : ''}}
-                ${{result.contentKR ? `<p class="text-gray-600 text-xs leading-relaxed mb-2 line-clamp-2">${{highlightedContentKR}}</p>` : ''}}
             </div>
         `;
     }});
@@ -1523,6 +1557,40 @@ function displayTopSearchResults(exactMatches, partialMatches, keyword) {{
     html += '</div>';
 
     resultsContainer.innerHTML = html;
+}}
+
+// Toggle individual search result
+function toggleSearchResult(index) {{
+    const resultElement = document.getElementById(`search-result-${{index}}`);
+    if (!resultElement) return;
+
+    const details = resultElement.querySelector('.result-details');
+    const toggleIcon = resultElement.querySelector('.result-toggle-icon');
+
+    if (details.classList.contains('hidden')) {{
+        details.classList.remove('hidden');
+        toggleIcon.textContent = '▲';
+    }} else {{
+        details.classList.add('hidden');
+        toggleIcon.textContent = '▼';
+    }}
+}}
+
+// Toggle all search results
+function toggleAllSearchResults(expand) {{
+    const allResults = document.querySelectorAll('.search-result-item');
+    allResults.forEach((resultElement, index) => {{
+        const details = resultElement.querySelector('.result-details');
+        const toggleIcon = resultElement.querySelector('.result-toggle-icon');
+
+        if (expand) {{
+            details.classList.remove('hidden');
+            toggleIcon.textContent = '▲';
+        }} else {{
+            details.classList.add('hidden');
+            toggleIcon.textContent = '▼';
+        }}
+    }});
 }}
 
 function performSearch() {{
