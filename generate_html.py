@@ -754,6 +754,41 @@ def generate_html(hierarchy):
 
             print(f"✓ Library populated with {len(all_content['codes'])} codes")
 
+    # Restructure Advanced Search section
+    print("Restructuring advanced search layout...")
+    search_section = soup.find('div', id='searchSection')
+    if search_section:
+        # Find the keyword search div and remove it
+        keyword_div = search_section.find('div', class_='mb-6')
+        if keyword_div and keyword_div.find('input', id='keywordInput'):
+            keyword_div.decompose()
+            print("✓ Removed initial keyword search input")
+
+        # Find the filter collapsible header and remove it, keep filterSection expanded
+        collapsible_header = search_section.find('div', class_='collapsible-header')
+        if collapsible_header:
+            collapsible_header.decompose()
+            print("✓ Removed collapsible filter header")
+
+        # Update filterSection to be always expanded without border-t
+        filter_section_parent = search_section.find('div', class_='border-t')
+        if filter_section_parent:
+            # Remove border-t and pt-4 classes
+            parent_classes = filter_section_parent.get('class', [])
+            parent_classes = [c for c in parent_classes if c not in ['border-t', 'pt-4']]
+            filter_section_parent['class'] = parent_classes
+
+        filter_section = search_section.find('div', id='filterSection')
+        if filter_section:
+            # Ensure it's always expanded
+            filter_classes = filter_section.get('class', [])
+            if 'expanded' not in filter_classes:
+                filter_classes.append('expanded')
+            filter_section['class'] = filter_classes
+            print("✓ Filter section set to always expanded")
+
+        print("✓ Advanced search layout restructured")
+
     # JavaScript 데이터 및 기능 삽입
     print("Injecting JavaScript with schema-based data hierarchy...")
     script_tag = soup.new_tag('script')
@@ -1167,11 +1202,15 @@ function switchToLibraryCode(codeId, versionId) {{
         document.getElementById('codeSubtitle').textContent = modelCode.Description || '';
     }}
 
-    // Scroll to top
+    // Reset scroll to top - both window and content container
     window.scrollTo({{ top: 0, behavior: 'smooth' }});
+    const contentContainer = document.querySelector('#librarySection .flex-1.overflow-y-auto');
+    if (contentContainer) {{
+        contentContainer.scrollTo({{ top: 0, behavior: 'smooth' }});
+    }}
 }}
 
-// Search function
+// Search function for top search bar
 function performTopSearch() {{
     const query = document.getElementById('topSearchInput').value.trim();
     if (!query) return;
@@ -1184,25 +1223,82 @@ function performTopSearch() {{
     document.querySelectorAll('.sidebar-item').forEach(item => item.classList.remove('active'));
     document.querySelector('.sidebar-item[data-section="search"]').classList.add('active');
 
-    // Set search input and perform search
-    document.getElementById('keywordInput').value = query;
-    performSearch();
+    // Perform search across all codes with the keyword
+    const modelCodeIds = new Set(['MC001', 'MC007', 'MC008', 'MC009']);
+    const exactMatches = [];
+    const partialMatches = [];
+    const keyword = query.toLowerCase();
+
+    appData.CodeContent.forEach(content => {{
+        if (!modelCodeIds.has(content.ModelCodeID)) return;
+
+        const titleEN = (content.TitleEN || '').toLowerCase();
+        const titleKR = (content.TitleKR || '').toLowerCase();
+        const contentEN = (content.ContentEN || '').toLowerCase();
+        const contentKR = (content.ContentKR || '').toLowerCase();
+
+        // Check if any field contains the keyword
+        if (titleEN.includes(keyword) || titleKR.includes(keyword) ||
+            contentEN.includes(keyword) || contentKR.includes(keyword)) {{
+
+            // Get code info
+            const modelCode = appData.ModelCode.find(mc => mc.ModelCodeID === content.ModelCodeID);
+            const version = appData.ModelCodeVersion.find(v => v.ModelCodeVersionID === content.ModelCodeVersionID);
+            const chapter = appData.CodeChapter.find(ch => ch.ChapterID === content.ChapterID);
+
+            if (modelCode && version && chapter) {{
+                const result = {{
+                    code: modelCode.ModelCodeName.split(':')[0].trim(),
+                    year: version.Year ? Math.floor(version.Year) : '',
+                    chapter: chapter.Chapter,
+                    chapterTitle: chapter.TitleEN || '',
+                    section: content.Section || 'General',
+                    subsection: content.Subsection || '',
+                    titleEN: content.TitleEN || '',
+                    titleKR: content.TitleKR || '',
+                    contentEN: content.ContentEN || '',
+                    contentKR: content.ContentKR || '',
+                    codeId: content.ModelCodeID,
+                    versionId: content.ModelCodeVersionID,
+                    chapterId: content.ChapterID
+                }};
+
+                // Check for exact match
+                const wordBoundaryRegex = new RegExp('\\\\b' + keyword.replace(/[.*+?^${{}}()|[\\]\\\\]/g, '\\\\$&') + '\\\\b', 'i');
+                const isExactMatch = wordBoundaryRegex.test(titleEN) || wordBoundaryRegex.test(titleKR) ||
+                                   wordBoundaryRegex.test(contentEN) || wordBoundaryRegex.test(contentKR);
+
+                if (isExactMatch) {{
+                    exactMatches.push(result);
+                }} else {{
+                    partialMatches.push(result);
+                }}
+            }}
+        }}
+    }});
+
+    // Display results
+    displaySearchResults(exactMatches, partialMatches, [], keyword);
 
     // Clear the top search input
     document.getElementById('topSearchInput').value = '';
 }}
 
 function performSearch() {{
-    const keyword = document.getElementById('keywordInput').value.trim().toLowerCase();
-    if (!keyword) {{
-        alert('Please enter a search keyword');
-        return;
-    }}
+    // Get keyword from dynamic search input if it exists, otherwise use empty string
+    const keywordInput = document.getElementById('dynamicKeywordInput');
+    const keyword = keywordInput ? keywordInput.value.trim().toLowerCase() : '';
 
     const selectedArchCategories = Array.from(document.querySelectorAll('input[name="archCategory"]:checked')).map(cb => cb.value);
     const selectedFireCategories = Array.from(document.querySelectorAll('input[name="fireCategory"]:checked')).map(cb => cb.value);
 
-    console.log('Searching for:', keyword);
+    // Check if at least one filter is selected
+    if (selectedArchCategories.length === 0 && selectedFireCategories.length === 0) {{
+        alert('최소 하나의 필터를 선택해주세요');
+        return;
+    }}
+
+    console.log('Searching for:', keyword || '(no keyword)');
     console.log('Arch categories:', selectedArchCategories);
     console.log('Fire categories:', selectedFireCategories);
 
@@ -1229,49 +1325,71 @@ function performSearch() {{
         modelCodeIds = new Set(['MC001', 'MC007', 'MC008', 'MC009']);
     }}
 
-    // Search in CodeContent
+    // Search in CodeContent - separate exact and partial matches
+    const exactMatches = [];
+    const partialMatches = [];
+    const allFilteredResults = [];
+
     appData.CodeContent.forEach(content => {{
         if (!modelCodeIds.has(content.ModelCodeID)) return;
 
-        const titleEN = (content.TitleEN || '').toLowerCase();
-        const titleKR = (content.TitleKR || '').toLowerCase();
-        const contentEN = (content.ContentEN || '').toLowerCase();
-        const contentKR = (content.ContentKR || '').toLowerCase();
+        // Get code info first
+        const modelCode = appData.ModelCode.find(mc => mc.ModelCodeID === content.ModelCodeID);
+        const version = appData.ModelCodeVersion.find(v => v.ModelCodeVersionID === content.ModelCodeVersionID);
+        const chapter = appData.CodeChapter.find(ch => ch.ChapterID === content.ChapterID);
 
-        if (titleEN.includes(keyword) || titleKR.includes(keyword) ||
-            contentEN.includes(keyword) || contentKR.includes(keyword)) {{
+        if (modelCode && version && chapter) {{
+            const result = {{
+                code: modelCode.ModelCodeName.split(':')[0].trim(),
+                year: version.Year ? Math.floor(version.Year) : '',
+                chapter: chapter.Chapter,
+                chapterTitle: chapter.TitleEN || '',
+                section: content.Section || 'General',
+                subsection: content.Subsection || '',
+                titleEN: content.TitleEN || '',
+                titleKR: content.TitleKR || '',
+                contentEN: content.ContentEN || '',
+                contentKR: content.ContentKR || '',
+                codeId: content.ModelCodeID,
+                versionId: content.ModelCodeVersionID,
+                chapterId: content.ChapterID
+            }};
 
-            // Get code info
-            const modelCode = appData.ModelCode.find(mc => mc.ModelCodeID === content.ModelCodeID);
-            const version = appData.ModelCodeVersion.find(v => v.ModelCodeVersionID === content.ModelCodeVersionID);
-            const chapter = appData.CodeChapter.find(ch => ch.ChapterID === content.ChapterID);
+            // If keyword is provided, filter by keyword
+            if (keyword) {{
+                const titleEN = (content.TitleEN || '').toLowerCase();
+                const titleKR = (content.TitleKR || '').toLowerCase();
+                const contentEN = (content.ContentEN || '').toLowerCase();
+                const contentKR = (content.ContentKR || '').toLowerCase();
 
-            if (modelCode && version && chapter) {{
-                searchResults.push({{
-                    code: modelCode.ModelCodeName.split(':')[0].trim(),
-                    year: version.Year ? Math.floor(version.Year) : '',
-                    chapter: chapter.Chapter,
-                    chapterTitle: chapter.TitleEN || '',
-                    section: content.Section || 'General',
-                    subsection: content.Subsection || '',
-                    titleEN: content.TitleEN || '',
-                    titleKR: content.TitleKR || '',
-                    contentEN: content.ContentEN || '',
-                    contentKR: content.ContentKR || '',
-                    codeId: content.ModelCodeID,
-                    versionId: content.ModelCodeVersionID,
-                    chapterId: content.ChapterID
-                }});
+                // Check if any field contains the keyword
+                if (titleEN.includes(keyword) || titleKR.includes(keyword) ||
+                    contentEN.includes(keyword) || contentKR.includes(keyword)) {{
+
+                    // Check for exact match (keyword as whole word)
+                    const wordBoundaryRegex = new RegExp('\\\\b' + keyword.replace(/[.*+?^${{}}()|[\\]\\\\]/g, '\\\\$&') + '\\\\b', 'i');
+                    const isExactMatch = wordBoundaryRegex.test(titleEN) || wordBoundaryRegex.test(titleKR) ||
+                                       wordBoundaryRegex.test(contentEN) || wordBoundaryRegex.test(contentKR);
+
+                    if (isExactMatch) {{
+                        exactMatches.push(result);
+                    }} else {{
+                        partialMatches.push(result);
+                    }}
+                }}
+            }} else {{
+                // No keyword - just filter by category
+                allFilteredResults.push(result);
             }}
         }}
     }});
 
-    // Display results
-    displaySearchResults(searchResults, keyword);
+    // Display results with exact matches first
+    displaySearchResults(exactMatches, partialMatches, allFilteredResults, keyword);
 }}
 
-// Helper function to highlight keyword in text
-function highlightKeyword(text, keyword) {{
+// Helper function to highlight keyword in text - with different colors for exact vs partial
+function highlightKeyword(text, keyword, isExactMatch) {{
     if (!text || !keyword) return text;
 
     // Escape special regex characters in keyword
@@ -1281,50 +1399,268 @@ function highlightKeyword(text, keyword) {{
     // Create regex for case-insensitive matching
     const regex = new RegExp(`(${{escapedKeyword}})`, 'gi');
 
+    // Different highlight colors: exact match = yellow, partial match = light blue
+    const highlightClass = isExactMatch ? 'bg-yellow-200 font-semibold' : 'bg-blue-200 font-medium';
+
     // Replace matches with highlighted spans
-    return text.replace(regex, '<mark class="bg-yellow-200 font-semibold">$1</mark>');
+    return text.replace(regex, `<mark class="${{highlightClass}}">$1</mark>`);
 }}
 
-function displaySearchResults(results, keyword) {{
+function displaySearchResults(exactMatches, partialMatches, allFilteredResults, keyword) {{
     const resultsList = document.getElementById('resultsList');
+    const resultsSection = document.getElementById('resultsSection');
 
-    if (results.length === 0) {{
-        resultsList.innerHTML = '<p class="text-gray-500 text-center py-8">No results found for "' + keyword + '"</p>';
+    const totalResults = exactMatches.length + partialMatches.length + allFilteredResults.length;
+
+    if (totalResults === 0) {{
+        resultsList.innerHTML = '<p class="text-gray-500 text-center py-8">검색 결과가 없습니다</p>';
+        // Hide keyword search input when no results
+        const existingKeywordSearch = document.getElementById('dynamicKeywordSearch');
+        if (existingKeywordSearch) existingKeywordSearch.style.display = 'none';
         return;
     }}
 
-    let html = '<div class="space-y-4">';
-    results.forEach((result, index) => {{
-        const sectionNum = result.section + (result.subsection ? '.' + result.subsection : '');
-
-        // Highlight keyword in all text fields
-        const highlightedTitleEN = highlightKeyword(result.titleEN, keyword);
-        const highlightedTitleKR = highlightKeyword(result.titleKR, keyword);
-        const highlightedContentEN = highlightKeyword(result.contentEN, keyword);
-        const highlightedContentKR = highlightKeyword(result.contentKR, keyword);
-
-        html += `
-            <div class="bg-white rounded-lg border border-gray-200 p-4 hover:border-[#A8D0E6] transition-colors cursor-pointer"
-                 onclick="openSearchResult('${{result.codeId}}', '${{result.versionId}}', '${{result.chapterId}}', '${{result.section}}')">
-                <div class="flex items-start justify-between mb-2">
-                    <div>
-                        <span class="text-xs font-medium text-[#A8D0E6] bg-[#A8D0E6] bg-opacity-20 px-2 py-1 rounded">
-                            ${{result.code}} ${{result.year}}
-                        </span>
-                        <span class="text-xs text-gray-500 ml-2">Chapter ${{result.chapter}}: ${{result.chapterTitle}}</span>
-                    </div>
-                    <span class="text-sm font-semibold text-[#24305E]">Section ${{sectionNum}}</span>
-                </div>
-                <h4 class="font-semibold text-[#24305E] mb-1">${{highlightedTitleEN}}</h4>
-                <p class="text-sm text-gray-600 mb-2">${{highlightedTitleKR}}</p>
-                <p class="text-sm text-gray-700 line-clamp-2">${{highlightedContentEN}}</p>
-                <p class="text-xs text-gray-500 line-clamp-1 mt-1">${{highlightedContentKR}}</p>
+    // Add dynamic keyword search input if results exist
+    let keywordSearchHTML = document.getElementById('dynamicKeywordSearch');
+    if (!keywordSearchHTML) {{
+        // Create the keyword search input section
+        keywordSearchHTML = document.createElement('div');
+        keywordSearchHTML.id = 'dynamicKeywordSearch';
+        keywordSearchHTML.className = 'mb-4 p-4 bg-gray-50 rounded-lg';
+        keywordSearchHTML.innerHTML = `
+            <label class="block text-sm font-semibold text-[#24305E] mb-2">결과 내 키워드 검색</label>
+            <div class="relative max-w-xl">
+                <input
+                    type="text"
+                    id="dynamicKeywordInput"
+                    placeholder="검색 결과 중에서 키워드 검색..."
+                    class="w-full px-4 py-3 pr-20 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-[#A8D0E6] transition-colors"
+                >
+                <button
+                    class="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 bg-[#F76C6C] hover:bg-[#e55a5a] rounded transition-colors"
+                    onclick="performSearch()"
+                >
+                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                    </svg>
+                </button>
             </div>
         `;
-    }});
+        // Insert before resultsList
+        resultsList.parentNode.insertBefore(keywordSearchHTML, resultsList);
+
+        // Add enter key support for dynamic keyword input
+        setTimeout(() => {{
+            const input = document.getElementById('dynamicKeywordInput');
+            if (input) {{
+                input.addEventListener('keypress', function(e) {{
+                    if (e.key === 'Enter') performSearch();
+                }});
+            }}
+        }}, 100);
+    }} else {{
+        keywordSearchHTML.style.display = 'block';
+    }}
+
+    let html = '<div class="space-y-4">';
+
+    // Display exact matches first
+    if (exactMatches.length > 0) {{
+        html += '<div class="mb-6"><h3 class="text-lg font-semibold text-[#24305E] mb-3 flex items-center"><svg class="w-5 h-5 mr-2 text-green-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>정확히 일치하는 결과 (${{exactMatches.length}})</h3>';
+
+        exactMatches.forEach((result, index) => {{
+            const sectionNum = result.section + (result.subsection ? '.' + result.subsection : '');
+
+            // Highlight keyword in all text fields - exact match color
+            const highlightedTitleEN = highlightKeyword(result.titleEN, keyword, true);
+            const highlightedTitleKR = highlightKeyword(result.titleKR, keyword, true);
+            const highlightedContentEN = highlightKeyword(result.contentEN, keyword, true);
+            const highlightedContentKR = highlightKeyword(result.contentKR, keyword, true);
+
+            html += `
+                <div class="bg-white rounded-lg border-2 border-green-200 p-4 hover:border-[#A8D0E6] transition-colors cursor-pointer"
+                     onclick="openSearchResultModal(${{JSON.stringify(result).replace(/"/g, '&quot;')}})">
+                    <div class="flex items-start justify-between mb-2">
+                        <div>
+                            <span class="text-xs font-medium text-[#A8D0E6] bg-[#A8D0E6] bg-opacity-20 px-2 py-1 rounded">
+                                ${{result.code}} ${{result.year}}
+                            </span>
+                            <span class="text-xs text-gray-500 ml-2">Chapter ${{result.chapter}}: ${{result.chapterTitle}}</span>
+                        </div>
+                        <span class="text-sm font-semibold text-[#24305E]">Section ${{sectionNum}}</span>
+                    </div>
+                    <h4 class="font-semibold text-[#24305E] mb-1">${{highlightedTitleEN}}</h4>
+                    <p class="text-sm text-gray-600 mb-2">${{highlightedTitleKR}}</p>
+                    <p class="text-sm text-gray-700 line-clamp-2">${{highlightedContentEN}}</p>
+                    <p class="text-xs text-gray-500 line-clamp-1 mt-1">${{highlightedContentKR}}</p>
+                </div>
+            `;
+        }});
+        html += '</div>';
+    }}
+
+    // Display partial matches
+    if (partialMatches.length > 0) {{
+        html += '<div class="mb-6"><h3 class="text-lg font-semibold text-[#24305E] mb-3 flex items-center"><svg class="w-5 h-5 mr-2 text-blue-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg>관련 검색 결과 (${{partialMatches.length}})</h3>';
+
+        partialMatches.forEach((result, index) => {{
+            const sectionNum = result.section + (result.subsection ? '.' + result.subsection : '');
+
+            // Highlight keyword in all text fields - partial match color
+            const highlightedTitleEN = highlightKeyword(result.titleEN, keyword, false);
+            const highlightedTitleKR = highlightKeyword(result.titleKR, keyword, false);
+            const highlightedContentEN = highlightKeyword(result.contentEN, keyword, false);
+            const highlightedContentKR = highlightKeyword(result.contentKR, keyword, false);
+
+            html += `
+                <div class="bg-white rounded-lg border border-gray-200 p-4 hover:border-[#A8D0E6] transition-colors cursor-pointer"
+                     onclick="openSearchResultModal(${{JSON.stringify(result).replace(/"/g, '&quot;')}})">
+                    <div class="flex items-start justify-between mb-2">
+                        <div>
+                            <span class="text-xs font-medium text-[#A8D0E6] bg-[#A8D0E6] bg-opacity-20 px-2 py-1 rounded">
+                                ${{result.code}} ${{result.year}}
+                            </span>
+                            <span class="text-xs text-gray-500 ml-2">Chapter ${{result.chapter}}: ${{result.chapterTitle}}</span>
+                        </div>
+                        <span class="text-sm font-semibold text-[#24305E]">Section ${{sectionNum}}</span>
+                    </div>
+                    <h4 class="font-semibold text-[#24305E] mb-1">${{highlightedTitleEN}}</h4>
+                    <p class="text-sm text-gray-600 mb-2">${{highlightedTitleKR}}</p>
+                    <p class="text-sm text-gray-700 line-clamp-2">${{highlightedContentEN}}</p>
+                    <p class="text-xs text-gray-500 line-clamp-1 mt-1">${{highlightedContentKR}}</p>
+                </div>
+            `;
+        }});
+        html += '</div>';
+    }}
+
+    // Display filtered results (no keyword)
+    if (allFilteredResults.length > 0) {{
+        html += '<div class="mb-6"><h3 class="text-lg font-semibold text-[#24305E] mb-3 flex items-center"><svg class="w-5 h-5 mr-2 text-gray-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z" clip-rule="evenodd"></path></svg>필터 검색 결과 (${{allFilteredResults.length}})</h3>';
+
+        allFilteredResults.forEach((result, index) => {{
+            const sectionNum = result.section + (result.subsection ? '.' + result.subsection : '');
+
+            html += `
+                <div class="bg-white rounded-lg border border-gray-200 p-4 hover:border-[#A8D0E6] transition-colors cursor-pointer"
+                     onclick="openSearchResultModal(${{JSON.stringify(result).replace(/"/g, '&quot;')}})">
+                    <div class="flex items-start justify-between mb-2">
+                        <div>
+                            <span class="text-xs font-medium text-[#A8D0E6] bg-[#A8D0E6] bg-opacity-20 px-2 py-1 rounded">
+                                ${{result.code}} ${{result.year}}
+                            </span>
+                            <span class="text-xs text-gray-500 ml-2">Chapter ${{result.chapter}}: ${{result.chapterTitle}}</span>
+                        </div>
+                        <span class="text-sm font-semibold text-[#24305E]">Section ${{sectionNum}}</span>
+                    </div>
+                    <h4 class="font-semibold text-[#24305E] mb-1">${{result.titleEN}}</h4>
+                    <p class="text-sm text-gray-600 mb-2">${{result.titleKR}}</p>
+                    <p class="text-sm text-gray-700 line-clamp-2">${{result.contentEN}}</p>
+                    <p class="text-xs text-gray-500 line-clamp-1 mt-1">${{result.contentKR}}</p>
+                </div>
+            `;
+        }});
+        html += '</div>';
+    }}
+
     html += '</div>';
 
     resultsList.innerHTML = html;
+}}
+
+// Open search result in modal popup
+function openSearchResultModal(result) {{
+    // Create modal if it doesn't exist
+    let modal = document.getElementById('searchResultModal');
+    if (!modal) {{
+        modal = document.createElement('div');
+        modal.id = 'searchResultModal';
+        modal.className = 'fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center hidden';
+        modal.innerHTML = `
+            <div class="bg-white rounded-lg shadow-2xl max-w-4xl w-full mx-4 max-h-[90vh] overflow-hidden">
+                <div class="flex items-center justify-between p-6 border-b border-gray-200">
+                    <div class="flex-1">
+                        <h2 id="modalTitle" class="text-2xl font-bold text-[#24305E]"></h2>
+                        <p id="modalLocation" class="text-sm text-gray-500 mt-1"></p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button
+                            onclick="navigateToLibraryFromModal()"
+                            class="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                            title="라이브러리에서 보기"
+                        >
+                            <svg class="w-6 h-6 text-[#F76C6C]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                            </svg>
+                        </button>
+                        <button
+                            onclick="closeSearchResultModal()"
+                            class="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                        >
+                            <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <div id="modalContent" class="p-6 overflow-y-auto max-h-[calc(90vh-100px)]"></div>
+            </div>
+        `;
+        document.body.appendChild(modal);
+
+        // Close modal when clicking outside
+        modal.addEventListener('click', function(e) {{
+            if (e.target === modal) {{
+                closeSearchResultModal();
+            }}
+        }});
+    }}
+
+    // Store current result for navigation
+    window.currentModalResult = result;
+
+    // Populate modal with result data
+    const sectionNum = result.section + (result.subsection ? '.' + result.subsection : '');
+    document.getElementById('modalTitle').textContent = sectionNum + (result.titleEN ? ' ' + result.titleEN : '');
+    document.getElementById('modalLocation').textContent = `${{result.code}} ${{result.year}} - Chapter ${{result.chapter}}: ${{result.chapterTitle}}`;
+
+    let contentHTML = '';
+    if (result.titleKR) {{
+        contentHTML += `<p class="text-lg text-gray-700 font-semibold mb-4">${{result.titleKR}}</p>`;
+    }}
+    if (result.contentEN) {{
+        contentHTML += `<div class="mb-4"><h3 class="text-sm font-semibold text-gray-500 uppercase mb-2">English</h3><p class="text-gray-800 leading-relaxed whitespace-pre-wrap">${{result.contentEN}}</p></div>`;
+    }}
+    if (result.contentKR) {{
+        contentHTML += `<div class="mb-4"><h3 class="text-sm font-semibold text-gray-500 uppercase mb-2">한국어</h3><p class="text-gray-700 leading-relaxed whitespace-pre-wrap">${{result.contentKR}}</p></div>`;
+    }}
+
+    document.getElementById('modalContent').innerHTML = contentHTML;
+
+    // Show modal
+    modal.classList.remove('hidden');
+}}
+
+function closeSearchResultModal() {{
+    const modal = document.getElementById('searchResultModal');
+    if (modal) {{
+        modal.classList.add('hidden');
+    }}
+}}
+
+function navigateToLibraryFromModal() {{
+    if (window.currentModalResult) {{
+        const result = window.currentModalResult;
+        closeSearchResultModal();
+
+        // Switch to library and load the code
+        switchToLibraryCode(result.codeId, result.versionId);
+
+        // Scroll to the section after a short delay
+        setTimeout(() => {{
+            scrollToSection(result.chapterId, result.section);
+        }}, 500);
+    }}
 }}
 
 function openSearchResult(codeId, versionId, chapterId, section) {{
