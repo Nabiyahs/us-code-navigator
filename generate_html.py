@@ -560,38 +560,57 @@ def generate_html(hierarchy):
     print("Adding collapsible submenu to sidebar library...")
     sidebar = soup.find('aside', class_='fixed')
     if sidebar:
-        # 라이브러리 메뉴 항목 찾기
-        library_item = None
-        for item in sidebar.find_all('div', class_='sidebar-item'):
-            if item.get('data-section') == 'library':
-                library_item = item
-                break
+        # 기존 librarySubmenu를 찾아서 내용 교체
+        library_submenu = sidebar.find('div', id='librarySubmenu')
+        if library_submenu:
+            # 기존 내용 제거
+            library_submenu.clear()
 
-        if library_item:
-            # 기존 라이브러리 항목에 chevron 아이콘 추가
-            library_item['onclick'] = 'toggleLibrarySubmenu(event)'
-            library_item['class'] = library_item.get('class', []) + ['relative']
+            # 새로운 submenu 항목들 추가
+            submenu_items_html = create_sidebar_library_submenu(hierarchy)
+            submenu_soup = BeautifulSoup(submenu_items_html, 'lxml')
 
-            # SVG 아이콘 뒤에 chevron 추가
-            chevron_html = '''
-            <svg class="w-4 h-4 ml-auto transition-transform" id="libraryChevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-            </svg>
-            '''
-            chevron_soup = BeautifulSoup(chevron_html, 'lxml')
-            library_item.append(chevron_soup.find('svg'))
+            # body 안의 모든 요소들을 librarySubmenu에 추가
+            body = submenu_soup.find('body')
+            if body:
+                for element in body.children:
+                    if element.name:  # 텍스트 노드가 아닌 경우만
+                        library_submenu.append(element)
 
-            # 하위메뉴 생성
-            submenu_html = f'''
-            <div class="library-submenu overflow-hidden transition-all duration-300" style="max-height: 0;" id="librarySubmenu">
-                {create_sidebar_library_submenu(hierarchy)}
-            </div>
-            '''
-            submenu_soup = BeautifulSoup(submenu_html, 'lxml')
+            print("✓ Sidebar library submenu updated with database!")
+        else:
+            # librarySubmenu가 없으면 생성 (기존 로직)
+            library_item = None
+            for item in sidebar.find_all('div', class_='sidebar-item'):
+                if item.get('data-section') == 'library':
+                    library_item = item
+                    break
 
-            # 라이브러리 항목 다음에 하위메뉴 삽입
-            library_item.insert_after(submenu_soup.find('div'))
-            print("✓ Sidebar library submenu added!")
+            if library_item:
+                # 기존 라이브러리 항목에 chevron 아이콘 추가
+                library_item['onclick'] = 'toggleLibrarySubmenu(event)'
+                library_item['class'] = library_item.get('class', []) + ['relative']
+
+                # SVG 아이콘 뒤에 chevron 추가
+                chevron_html = '''
+                <svg class="w-4 h-4 ml-auto transition-transform" id="libraryChevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+                '''
+                chevron_soup = BeautifulSoup(chevron_html, 'lxml')
+                library_item.append(chevron_soup.find('svg'))
+
+                # 하위메뉴 생성
+                submenu_html = f'''
+                <div class="library-submenu overflow-hidden transition-all duration-300" style="max-height: 0;" id="librarySubmenu">
+                    {create_sidebar_library_submenu(hierarchy)}
+                </div>
+                '''
+                submenu_soup = BeautifulSoup(submenu_html, 'lxml')
+
+                # 라이브러리 항목 다음에 하위메뉴 삽입
+                library_item.insert_after(submenu_soup.find('div'))
+                print("✓ Sidebar library submenu added!")
 
     # Libraries 섹션의 코드 카드들을 교체
     print("Generating library cards from schema hierarchy...")
@@ -624,24 +643,41 @@ def generate_html(hierarchy):
         if code_subtitle:
             code_subtitle.string = first_code['code_subtitle']
 
+        # 라이브러리 헤더를 sticky로 만들기
+        library_header = library_section.find('header')
+        if library_header:
+            header_classes = library_header.get('class', [])
+            if 'sticky' not in header_classes:
+                header_classes.extend(['sticky', 'top-0', 'z-10'])
+                library_header['class'] = header_classes
+
         # 챕터 리스트 컨테이너 찾기
         aside = library_section.find('aside', class_='w-80')
         chapters_container = None
         if aside:
-            # Make aside sticky
+            # Make aside sticky with correct top offset (header height)
             aside['class'] = aside.get('class', [])
             if 'sticky' not in aside['class']:
                 aside['class'].append('sticky')
-            if 'top-0' not in aside['class']:
-                aside['class'].append('top-0')
-            if 'self-start' not in aside['class']:
-                aside['class'].append('self-start')
-            # Set max height to viewport height minus header
-            aside['style'] = 'max-height: calc(100vh - 80px);'
+            # aside should stick below the header
+            aside['style'] = 'top: 88px; max-height: calc(100vh - 88px);'
 
             chapters_heading = aside.find('h2', string='Chapters')
             if chapters_heading:
                 chapters_container = chapters_heading.find_next('div', class_='space-y-2')
+
+        # flex container에 높이 제한 추가 (header의 바로 다음 형제 요소)
+        if library_header:
+            flex_container = library_header.find_next_sibling('div', class_='flex')
+            if flex_container:
+                flex_container['style'] = 'height: calc(100vh - 88px); overflow: hidden;'
+
+                # content area의 부모 div에 overflow 추가
+                content_parent = flex_container.find('div', class_='flex-1')
+                if content_parent:
+                    content_parent['class'] = content_parent.get('class', [])
+                    if 'overflow-y-auto' not in content_parent['class']:
+                        content_parent['class'].append('overflow-y-auto')
 
         # 콘텐츠 영역 찾기
         content_area = library_section.find('div', id='contentArea')
