@@ -427,29 +427,66 @@
 <nav class="mt-6">
 <div class="sidebar-item active flex items-center px-6 py-3 text-white" data-section="home">
 <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-<path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 0 001 1m-6 0h6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+<path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
 </svg>
         홈
       </div>
-<div class="sidebar-item flex items-center px-6 py-3 text-white relative" data-section="library" onclick="toggleLibrarySubmenu(event)">
+<!-- Added collapsible library menu with submenu items -->
+<div>
+<div class="sidebar-item flex items-center justify-between px-6 py-3 text-white" onclick="toggleLibraryMenu()">
+<div class="flex items-center">
 <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewbox="0 0 24 24">
 <path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
 </svg>
-        라이브러리
-      <svg class="w-4 h-4 ml-auto transition-transform" fill="none" id="libraryChevron" stroke="currentColor" viewbox="0 0 24 24">
+            라이브러리
+          </div>
+<svg class="w-4 h-4 transition-transform" fill="none" id="libraryMenuIcon" stroke="currentColor" viewbox="0 0 24 24">
 <path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-</svg></div><div class="library-submenu overflow-hidden transition-all duration-300" id="librarySubmenu" style="max-height: 0;">
-<div class="submenu-item pl-12 py-2 text-sm text-white hover:bg-[#374785] cursor-pointer transition-all rounded-r-lg" data-code-id="MC001" data-version-id="MCV002" onclick="loadCodeFromSidebar('MCV002', 'MC001')">
-<span>IBC 2024</span>
+</svg>
 </div>
-<div class="submenu-item pl-12 py-2 text-sm text-white hover:bg-[#374785] cursor-pointer transition-all rounded-r-lg" data-code-id="MC007" data-version-id="MCV003" onclick="loadCodeFromSidebar('MCV003', 'MC007')">
-<span>NFPA 13 2025</span>
+<!-- Submenu items -->
+<div class="overflow-hidden transition-all duration-300" id="librarySubmenu" style="max-height: 0;">
+<div class="pl-12 pr-6 py-2 space-y-1">
+<div class="submenu-item flex items-center px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-[#374785] rounded cursor-pointer transition-colors" data-code="IBC" data-section="library">
+<svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<rect height="20" rx="2" ry="2" width="16" x="4" y="2"></rect>
+<path d="M9 22v-4h6v4"></path>
+<path d="M8 6h.01"></path>
+<path d="M16 6h.01"></path>
+<path d="M12 6h.01"></path>
+</svg>
+              IBC 2024
+            </div>
+<div class="submenu-item flex items-center px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-[#374785] rounded cursor-pointer transition-colors" data-code="NFPA13" data-section="library">
+<svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M7 16.3c2.2 0 4-1.83 4-4.05 0-1.16-.57-2.26-1.71-3.19S7.29 6.75 7 5.3c-.29 1.45-1.14 2.84-2.29 3.76S3 11.1 3 12.25c0 2.22 1.8 4.05 4 4.05z"></path>
+<path d="M12.56 6.6A10.97 10.97 0 0 0 14 3.02c.5 2.5 2 4.9 4 6.5s3 3.5 3 5.5a6.98 6.98 0 0 1-11.91 4.97"></path>
+</svg>
+              NFPA 13
+            </div>
+<div class="submenu-item flex items-center px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-[#374785] rounded cursor-pointer transition-colors" data-code="NFPA14" data-section="library">
+<svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="m2 22 1-1h3l9-9"></path>
+<path d="M3 21v-3l9-9"></path>
+<path d="m15 6 3.4-3.4a2.1 2.1 0 1 1 3 3L18 9l.4.4a2.1 2.1 0 1 1-3 3l-3.8-3.8a2.1 2.1 0 1 1 3-3l.4.4Z"></path>
+</svg>
+              NFPA 14
+            </div>
+<div class="submenu-item flex items-center px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-[#374785] rounded cursor-pointer transition-colors" data-code="NFPA20" data-section="library">
+<svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="m12 14 4-4"></path>
+<path d="M3.34 19a10 10 0 1 1 17.32 0"></path>
+</svg>
+              NFPA 20
+            </div>
+<div class="submenu-item flex items-center px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-[#374785] rounded cursor-pointer transition-colors" data-code="NFPA72" data-section="library">
+<svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M6 8a6 6 0 0112 0c0 7 3 9 3 9H3s3-2 3-9"></path>
+<path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path>
+</svg>
+              NFPA 72
+            </div>
 </div>
-<div class="submenu-item pl-12 py-2 text-sm text-white hover:bg-[#374785] cursor-pointer transition-all rounded-r-lg" data-code-id="MC008" data-version-id="MCV004" onclick="loadCodeFromSidebar('MCV004', 'MC008')">
-<span>NFPA 14 2024</span>
-</div>
-<div class="submenu-item pl-12 py-2 text-sm text-white hover:bg-[#374785] cursor-pointer transition-all rounded-r-lg" data-code-id="MC009" data-version-id="MCV005" onclick="loadCodeFromSidebar('MCV005', 'MC009')">
-<span>NFPA 20 2025</span>
 </div>
 </div>
 <div class="sidebar-item flex items-center px-6 py-3 text-white" data-section="search">
@@ -666,20 +703,109 @@
 <h1 class="text-2xl font-bold text-[#24305E]" id="codeTitle">IBC 2024</h1>
 <p class="text-sm text-gray-600" id="codeSubtitle">International Building Code</p>
 </div>
-<div class="flex gap-3">
-<select class="px-4 py-2 border-2 border-gray-300 rounded-lg text-sm font-medium text-gray-700 focus:outline-none focus:border-[#A8D0E6]" id="versionSelect">
-<option value="2024">2024 Edition</option>
-<option value="2021">2021 Edition</option>
-<option value="2018">2018 Edition</option>
-</select>
-</div>
+<!-- REMOVED -->
+<!-- <select id="versionSelect" class="px-4 py-2 border-2 border-gray-300 rounded-lg text-sm font-medium text-gray-700 focus:outline-none focus:border-[#A8D0E6]">
+              <option value="2024">2024 Edition</option>
+              <option value="2021">2021 Edition</option>
+              <option value="2018">2018 Edition</option>
+            </select> -->
 </div>
 </header>
 <div class="flex">
-<aside class="w-80 bg-white border-r border-gray-200 h-[calc(100vh-145px)] overflow-y-auto">
-<div class="p-4">
-<h3 class="text-sm font-semibold text-gray-500 uppercase mb-3">Chapters</h3>
-<div class="space-y-1" id="chapterList"><p class="text-gray-500 text-sm p-4">Select a code from the library to view chapters</p></div>
+<!-- Changed default state to show all sections expanded -->
+<aside class="w-80 bg-white border-r border-gray-200 overflow-y-auto">
+<div class="p-6">
+<h2 class="text-lg font-bold text-[#24305E] mb-4">Chapters</h2>
+<div class="space-y-2">
+<div class="chapter-group">
+<div class="chapter-item px-4 py-3 rounded-lg hover:bg-[#A8D0E6] cursor-pointer flex items-center justify-between" data-chapter="1" onclick="toggleChapterSections(1)">
+<div>
+<div class="font-semibold text-[#24305E] text-sm">Chapter 1</div>
+<!-- Increased Korean text size from text-xs to text-sm -->
+<div class="text-sm text-gray-600 mt-1">Scope and Administration</div>
+</div>
+<svg class="w-4 h-4 text-[#24305E] transition-transform rotate-180" fill="none" id="chapterIcon1" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+<div class="pl-6 mt-1 space-y-1" id="chapterSections1">
+<div class="section-item px-3 py-2 text-sm text-gray-700 hover:bg-[#A8D0E6] rounded cursor-pointer" data-section="101">Section 101</div>
+<div class="section-item px-3 py-2 text-sm text-gray-700 hover:bg-[#A8D0E6] rounded cursor-pointer" data-section="102">Section 102</div>
+<div class="section-item px-3 py-2 text-sm text-gray-700 hover:bg-[#A8D0E6] rounded cursor-pointer" data-section="103">Section 103</div>
+<div class="section-item px-3 py-2 text-sm text-gray-700 hover:bg-[#A8D0E6] rounded cursor-pointer" data-section="104">Section 104</div>
+<div class="section-item px-3 py-2 text-sm text-gray-700 hover:bg-[#A8D0E6] rounded cursor-pointer" data-section="105">Section 105</div>
+<div class="section-item px-3 py-2 text-sm text-gray-700 hover:bg-[#A8D0E6] rounded cursor-pointer" data-section="106">Section 106</div>
+</div>
+</div>
+<div class="chapter-group">
+<div class="chapter-item px-4 py-3 rounded-lg hover:bg-[#A8D0E6] cursor-pointer flex items-center justify-between" data-chapter="2" onclick="toggleChapterSections(2)">
+<div>
+<div class="font-semibold text-[#24305E] text-sm">Chapter 2</div>
+<!-- Increased Korean text size from text-xs to text-sm -->
+<div class="text-sm text-gray-600 mt-1">Definitions</div>
+</div>
+<svg class="w-4 h-4 text-[#24305E] transition-transform rotate-180" fill="none" id="chapterIcon2" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+<div class="pl-6 mt-1 space-y-1" id="chapterSections2">
+<div class="section-item px-3 py-2 text-sm text-gray-700 hover:bg-[#A8D0E6] rounded cursor-pointer" data-section="201">Section 201</div>
+<div class="section-item px-3 py-2 text-sm text-gray-700 hover:bg-[#A8D0E6] rounded cursor-pointer" data-section="202">Section 202</div>
+</div>
+</div>
+<div class="chapter-group">
+<div class="chapter-item px-4 py-3 rounded-lg hover:bg-[#A8D0E6] cursor-pointer flex items-center justify-between" data-chapter="3" onclick="toggleChapterSections(3)">
+<div>
+<div class="font-semibold text-[#24305E] text-sm">Chapter 3</div>
+<!-- Increased Korean text size from text-xs to text-sm -->
+<div class="text-sm text-gray-600 mt-1">Use and Occupancy Classification</div>
+</div>
+<svg class="w-4 h-4 text-[#24305E] transition-transform rotate-180" fill="none" id="chapterIcon3" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+<div class="pl-6 mt-1 space-y-1" id="chapterSections3">
+<div class="section-item px-3 py-2 text-sm text-gray-700 hover:bg-[#A8D0E6] rounded cursor-pointer" data-section="301">Section 301</div>
+<div class="section-item px-3 py-2 text-sm text-gray-700 hover:bg-[#A8D0E6] rounded cursor-pointer" data-section="302">Section 302</div>
+<div class="section-item px-3 py-2 text-sm text-gray-700 hover:bg-[#A8D0E6] rounded cursor-pointer" data-section="303">Section 303</div>
+<div class="section-item px-3 py-2 text-sm text-gray-700 hover:bg-[#A8D0E6] rounded cursor-pointer" data-section="304">Section 304</div>
+</div>
+</div>
+<div class="chapter-group">
+<div class="chapter-item px-4 py-3 rounded-lg hover:bg-[#A8D0E6] cursor-pointer flex items-center justify-between" data-chapter="4" onclick="toggleChapterSections(4)">
+<div>
+<div class="font-semibold text-[#24305E] text-sm">Chapter 4</div>
+<!-- Increased Korean text size from text-xs to text-sm -->
+<div class="text-sm text-gray-600 mt-1">Special Detailed Requirements</div>
+</div>
+<svg class="w-4 h-4 text-[#24305E] transition-transform rotate-180" fill="none" id="chapterIcon4" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+<div class="pl-6 mt-1 space-y-1" id="chapterSections4">
+<div class="section-item px-3 py-2 text-sm text-gray-700 hover:bg-[#A8D0E6] rounded cursor-pointer" data-section="401">Section 401</div>
+<div class="section-item px-3 py-2 text-sm text-gray-700 hover:bg-[#A8D0E6] rounded cursor-pointer" data-section="402">Section 402</div>
+<div class="section-item px-3 py-2 text-sm text-gray-700 hover:bg-[#A8D0E6] rounded cursor-pointer" data-section="403">Section 403</div>
+</div>
+</div>
+<div class="chapter-group">
+<div class="chapter-item px-4 py-3 rounded-lg hover:bg-[#A8D0E6] cursor-pointer flex items-center justify-between" data-chapter="5" onclick="toggleChapterSections(5)">
+<div>
+<div class="font-semibold text-[#24305E] text-sm">Chapter 5</div>
+<!-- Increased Korean text size from text-xs to text-sm -->
+<div class="text-sm text-gray-600 mt-1">General Building Heights and Areas</div>
+</div>
+<svg class="w-4 h-4 text-[#24305E] transition-transform rotate-180" fill="none" id="chapterIcon5" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+<div class="pl-6 mt-1 space-y-1" id="chapterSections5">
+<div class="section-item px-3 py-2 text-sm text-gray-700 hover:bg-[#A8D0E6] rounded cursor-pointer" data-section="501">Section 501</div>
+<div class="section-item px-3 py-2 text-sm text-gray-700 hover:bg-[#A8D0E6] rounded cursor-pointer" data-section="502">Section 502</div>
+<div class="section-item px-3 py-2 text-sm text-gray-700 hover:bg-[#A8D0E6] rounded cursor-pointer" data-section="503">Section 503</div>
+</div>
+</div>
+</div>
 </div>
 </aside>
 <div class="flex-1 p-8">
@@ -699,9 +825,22 @@
 </header>
 <div class="p-8">
 <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+<!-- Reduced keyword search input width to half and moved enter icon inside -->
 <div class="mb-6">
 <label class="block text-sm font-semibold text-[#24305E] mb-2">키워드 검색</label>
-<input class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-[#A8D0E6] transition-colors" id="keywordInput" placeholder="키워드, 섹션 번호 또는 문구를 입력하세요..." type="text"/>
+<div class="max-w-xl relative">
+<input class="w-full px-4 py-3 pr-20 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-[#A8D0E6] transition-colors" id="keywordInput" placeholder="키워드, 섹션 번호 또는 문구를 입력하세요..." type="text"/>
+<button class="absolute right-12 top-1/2 -translate-y-1/2 p-1.5 hover:bg-gray-100 rounded transition-colors" id="advancedSearchClearBtn" onclick="clearAdvancedSearchInput()" style="display: none;">
+<svg class="w-4 h-4 text-gray-400 hover:text-gray-600" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+<button class="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 bg-[#F76C6C] hover:bg-[#e55a5a] rounded transition-colors" onclick="performAdvancedSearch()">
+<svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M13 7l5 5m0 0l-5 5m5-5H6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+</div>
 </div>
 <div class="border-t border-gray-200 pt-4">
 <div class="collapsible-header flex items-center justify-between p-3 rounded-lg" onclick="toggleCollapsible('filterSection')">
@@ -828,7 +967,7 @@
 </div>
 </div>
 <div class="space-y-3" id="resultsList">
-<!-- Added fold/unfold and eye icon to search results -->
+<!-- Search results will be populated here -->
 </div>
 </div>
 </div>
@@ -889,27 +1028,35 @@
 <option value="2021">2021 Edition</option>
 <option value="2018">2018 Edition</option>
 </select>
-<!-- Added clear button to section input -->
-<div class="input-wrapper">
-<input class="w-full px-4 py-3 pr-10 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-[#A8D0E6]" id="codeASection" list="sectionListA" placeholder="Section number (e.g., 101.2)" type="text"/>
-<button class="clear-button" onclick="clearInput('codeASection')" title="Clear">
-<svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<!-- Split section input into Section and Subsection fields -->
+<div class="grid grid-cols-2 gap-3">
+<div class="relative">
+<label class="block text-xs font-medium text-gray-600 mb-1">Section</label>
+<input class="w-full px-3 py-2 pr-8 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-[#A8D0E6]" id="codeASection" list="sectionListA" placeholder="예: 101" type="text"/>
+<button class="absolute right-2 top-8 p-1 hover:bg-gray-100 rounded transition-colors" onclick="clearInput('codeASection')" title="Clear">
+<svg class="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+<datalist id="sectionListA">
+<option value="101">101 - General</option>
+<option value="102">102 - Applicability</option>
+<option value="103">103 - Department of Building Safety</option>
+<option value="104">104 - Duties and Powers</option>
+<option value="105">105 - Permits</option>
+<option value="106">106 - Floor and Roof Design</option>
+</datalist>
+</div>
+<div class="relative">
+<label class="block text-xs font-medium text-gray-600 mb-1">Subsection</label>
+<input class="w-full px-3 py-2 pr-8 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-[#A8D0E6]" id="codeASubsection" placeholder="예: 3.4" type="text"/>
+<button class="absolute right-2 top-8 p-1 hover:bg-gray-100 rounded transition-colors" onclick="clearInput('codeASubsection')" title="Clear">
+<svg class="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
 <path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
 </svg>
 </button>
 </div>
-<datalist id="sectionListA">
-<option value="101.1">101.1 - Title</option>
-<option value="101.2">101.2 - Scope</option>
-<option value="101.3">101.3 - Intent</option>
-<option value="101.4">101.4 - Severability</option>
-<option value="102.1">102.1 - General</option>
-<option value="102.2">102.2 - Building</option>
-<option value="103.1">103.1 - Creation of enforcement agency</option>
-<option value="104.1">104.1 - General</option>
-<option value="105.1">105.1 - Required</option>
-<option value="106.1">106.1 - Submittal documents</option>
-</datalist>
+</div>
 </div>
 <div>
 <label class="block text-sm font-semibold text-[#24305E] mb-2">Code B</label>
@@ -923,202 +1070,153 @@
 <option value="2024">2024 Edition</option>
 <option value="2018">2018 Edition</option>
 </select>
-<!-- Added clear button to section input -->
-<div class="input-wrapper">
-<input class="w-full px-4 py-3 pr-10 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-[#A8D0E6]" id="codeBSection" list="sectionListB" placeholder="Section number (e.g., 101.2)" type="text"/>
-<button class="clear-button" onclick="clearInput('codeBSection')" title="Clear">
-<svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<!-- Split section input into Section and Subsection fields -->
+<div class="grid grid-cols-2 gap-3">
+<div class="relative">
+<label class="block text-xs font-medium text-gray-600 mb-1">Section</label>
+<input class="w-full px-3 py-2 pr-8 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-[#A8D0E6]" id="codeBSection" list="sectionListB" placeholder="예: 101" type="text"/>
+<button class="absolute right-2 top-8 p-1 hover:bg-gray-100 rounded transition-colors" onclick="clearInput('codeBSection')" title="Clear">
+<svg class="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+<datalist id="sectionListB">
+<option value="101">101 - General</option>
+<option value="102">102 - Applicability</option>
+<option value="103">103 - Department of Building Safety</option>
+<option value="104">104 - Duties and Powers</option>
+<option value="105">105 - Permits</option>
+<option value="106">106 - Floor and Roof Design</option>
+</datalist>
+</div>
+<div class="relative">
+<label class="block text-xs font-medium text-gray-600 mb-1">Subsection</label>
+<input class="w-full px-3 py-2 pr-8 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-[#A8D0E6]" id="codeBSubsection" placeholder="예: 3.4" type="text"/>
+<button class="absolute right-2 top-8 p-1 hover:bg-gray-100 rounded transition-colors" onclick="clearInput('codeBSubsection')" title="Clear">
+<svg class="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
 <path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
 </svg>
 </button>
 </div>
-<datalist id="sectionListB">
-<option value="101.1">101.1 - Title</option>
-<option value="101.2">101.2 - Scope</option>
-<option value="101.3">101.3 - Intent</option>
-<option value="101.4">101.4 - Severability</option>
-<option value="102.1">102.1 - General</option>
-<option value="102.2">102.2 - Building</option>
-<option value="103.1">103.1 - Creation of enforcement agency</option>
-<option value="104.1">104.1 - General</option>
-<option value="105.1">105.1 - Required</option>
-<option value="106.1">106.1 - Submittal documents</option>
-</datalist>
+</div>
 </div>
 </div>
 <button class="w-full mt-6 bg-[#F76C6C] text-white py-3 rounded-lg font-semibold hover:bg-[#e55a5a] transition-colors" id="compareBtn">
-              Compare Codes
+              비교
             </button>
 </div>
 </div>
+<!-- Simplified comparison summary - removed text, kept only icons and counts, reduced height -->
+<div class="bg-white rounded-lg shadow-md p-6 mb-6">
+<h3 class="text-lg font-semibold text-[#24305E] mb-4">비교 요약</h3>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+<div class="bg-gradient-to-br from-green-50 to-emerald-50 border-l-4 border-green-500 p-3 rounded-lg shadow-sm">
+<div class="flex items-center justify-center gap-2">
+<div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
+<span class="text-white font-bold text-lg">+</span>
+</div>
+<span class="font-bold text-2xl text-green-800">1</span>
+</div>
+</div>
+<div class="bg-gradient-to-br from-yellow-50 to-amber-50 border-l-4 border-yellow-500 p-3 rounded-lg shadow-sm">
+<div class="flex items-center justify-center gap-2">
+<div class="w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center">
+<svg class="w-5 h-5 text-white" fill="currentColor" viewbox="0 0 20 20">
+<path clip-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" fill-rule="evenodd"></path>
+</svg>
+</div>
+<span class="font-bold text-2xl text-yellow-800">1</span>
+</div>
+</div>
+<div class="bg-gradient-to-br from-red-50 to-rose-50 border-l-4 border-red-500 p-3 rounded-lg shadow-sm">
+<div class="flex items-center justify-center gap-2">
+<div class="w-8 h-8 bg-red-500 rounded-full flex items-center justify-center">
+<svg class="w-5 h-5 text-white" fill="currentColor" viewbox="0 0 20 20">
+<path clip-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 001.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" fill-rule="evenodd"></path>
+</svg>
+</div>
+<span class="font-bold text-2xl text-red-800">0</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Updated comparison results with dummy data showing actual differences highlighted -->
 <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="comparisonResults">
+<!-- Removed copy/link icons from comparison results -->
 <div class="compare-panel bg-white rounded-lg shadow-md overflow-hidden">
-<div class="bg-[#374785] text-white p-4 flex items-center justify-between">
-<div>
+<div class="bg-[#374785] text-white p-4">
 <h3 class="font-semibold">IBC 2024 - Section 101.2</h3>
 <p class="text-sm text-gray-200 mt-1">International Building Code</p>
 </div>
-<div class="flex items-center gap-2">
-<button class="p-2 hover:bg-[#24305E] rounded-lg transition-colors" title="Copy link">
-<svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-<path d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-</svg>
-</button>
-<button class="p-2 hover:bg-[#24305E] rounded-lg transition-colors" title="Copy content">
-<svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-<path d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-</svg>
-</button>
-</div>
-</div>
 <div class="p-6 space-y-4">
-<div class="bg-gray-50 p-4 rounded-lg">
-<h4 class="font-semibold text-[#24305E] mb-2">101.2 Scope</h4>
-<p class="text-gray-700 leading-relaxed text-sm mb-3">
-                  The provisions of this code shall apply to the construction, alteration, relocation, enlargement, 
-                  replacement, repair, equipment, use and occupancy, location, maintenance, removal and demolition 
-                  of every building or structure or any appurtenances connected or attached to such buildings or structures.
+<div class="diff-section">
+<div class="flex items-center gap-2 mb-2">
+<div class="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
+<span class="text-white font-bold text-sm">+</span>
+</div>
+<span class="text-sm font-semibold text-green-700">추가</span>
+</div>
+<p class="text-gray-700 leading-relaxed">
+                  Buildings and structures, and parts thereof, shall be constructed to <span class="bg-green-200 px-1 rounded">safely support all loads, including dead loads, live loads, roof loads, flood loads, snow loads, wind loads and seismic loads</span> as prescribed by this code.
                 </p>
-<div class="diff-added">
+<p class="text-gray-600 text-lg mt-2 leading-relaxed">
+                  건물과 구조물 및 그 일부는 <span class="bg-green-200 px-1 rounded">사하중, 활하중, 지붕하중, 홍수하중, 적설하중, 풍하중 및 지진하중을 포함한 모든 하중</span>을 본 규정에 따라 안전하게 지지하도록 건설되어야 한다.
+                </p>
+</div>
+<div class="diff-section">
 <div class="flex items-center gap-2 mb-2">
-<svg class="w-4 h-4 text-green-700" fill="currentColor" viewbox="0 0 20 20">
-<path clip-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" fill-rule="evenodd"></path>
-</svg>
-</div>
-<p class="text-sm text-gray-800">
-                    This includes <span class="text-highlight-added">temporary structures and equipment used during construction</span>.
-                  </p>
-<p class="text-xs text-gray-600 mt-1">
-<span class="text-highlight-added">건설 중 사용되는 임시 구조물 및 장비</span>를 포함합니다.
-                  </p>
-</div>
-</div>
-<div class="bg-gray-50 p-4 rounded-lg">
-<h4 class="font-semibold text-[#24305E] mb-2">Exceptions</h4>
-<ol class="list-decimal list-inside space-y-2 text-sm text-gray-700">
-<li>Detached one- and two-family dwellings and townhouses not more than three stories</li>
-<li>Agricultural buildings</li>
-</ol>
-<div class="diff-modified mt-3">
-<div class="flex items-center gap-2 mb-2">
-<svg class="w-4 h-4 text-yellow-700" fill="currentColor" viewbox="0 0 20 20">
+<div class="w-6 h-6 bg-yellow-500 rounded-full flex items-center justify-center">
+<svg class="w-4 h-4 text-white" fill="currentColor" viewbox="0 0 20 20">
 <path clip-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" fill-rule="evenodd"></path>
 </svg>
 </div>
-<p class="text-sm text-gray-800">
-                    Temporary structures <span class="text-highlight-modified">as defined in Section 3103</span>
-</p>
-<p class="text-xs text-gray-600 mt-1">
-<span class="text-highlight-modified">섹션 3103에 정의된</span> 임시 구조물
-                  </p>
+<span class="text-sm font-semibold text-yellow-700">수정</span>
 </div>
+<p class="text-gray-700 leading-relaxed">
+                  Exception: <span class="bg-yellow-200 px-1 rounded">Temporary structures and facilities</span> used in construction operations are exempt from the requirements of this section.
+                </p>
+<p class="text-gray-600 text-lg mt-2 leading-relaxed">
+                  예외: <span class="bg-yellow-200 px-1 rounded">건설 작업에 사용되는 임시 구조물 및 시설</span>은 본 조항의 요구사항에서 면제된다.
+                </p>
 </div>
 </div>
 </div>
 <div class="compare-panel bg-white rounded-lg shadow-md overflow-hidden">
-<div class="bg-[#24305E] text-white p-4 flex items-center justify-between">
-<div>
+<div class="bg-[#24305E] text-white p-4">
 <h3 class="font-semibold">IBC 2021 - Section 101.2</h3>
 <p class="text-sm text-gray-200 mt-1">International Building Code</p>
 </div>
-<div class="flex items-center gap-2">
-<button class="p-2 hover:bg-[#374785] rounded-lg transition-colors" title="Copy link">
-<svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-<path d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-</svg>
-</button>
-<button class="p-2 hover:bg-[#374785] rounded-lg transition-colors" title="Copy content">
-<svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-<path d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-</svg>
-</button>
-</div>
-</div>
 <div class="p-6 space-y-4">
-<div class="bg-gray-50 p-4 rounded-lg">
-<h4 class="font-semibold text-[#24305E] mb-2">101.2 Scope</h4>
-<p class="text-gray-700 leading-relaxed text-sm mb-3">
-                  The provisions of this code shall apply to the construction, alteration, relocation, enlargement, 
-                  replacement, repair, equipment, use and occupancy, location, maintenance, removal and demolition 
-                  of every building or structure or any appurtenances connected or attached to such buildings or structures.
-                </p>
-<div class="diff-removed">
+<div class="diff-section">
 <div class="flex items-center gap-2 mb-2">
-<svg class="w-4 h-4 text-red-700" fill="currentColor" viewbox="0 0 20 20">
-<path clip-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 001.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" fill-rule="evenodd"></path>
-</svg>
+<div class="w-6 h-6 bg-gray-400 rounded-full flex items-center justify-center">
+<span class="text-white font-bold text-sm">=</span>
 </div>
-<p class="text-sm text-gray-800">
-                    Previous language about <span class="text-highlight-removed">temporary structures was less specific</span>.
-                  </p>
-<p class="text-xs text-gray-600 mt-1">
-                    임시 구조물에 대한 <span class="text-highlight-removed">이전 언어는 덜 구체적이었습니다</span>.
-                  </p>
+<span class="text-sm font-semibold text-gray-600">기존</span>
 </div>
+<p class="text-gray-700 leading-relaxed">
+                  Buildings and structures, and parts thereof, shall be constructed to safely support all loads as prescribed by this code.
+                </p>
+<p class="text-gray-600 text-lg mt-2 leading-relaxed">
+                  건물과 구조물 및 그 일부는 본 규정에 따라 모든 하중을 안전하게 지지하도록 건설되어야 한다.
+                </p>
 </div>
-<div class="bg-gray-50 p-4 rounded-lg">
-<h4 class="font-semibold text-[#24305E] mb-2">Exceptions</h4>
-<ol class="list-decimal list-inside space-y-2 text-sm text-gray-700">
-<li>Detached one- and two-family dwellings and townhouses not more than three stories</li>
-<li>Agricultural buildings</li>
-<li class="text-gray-500"><span class="text-highlight-removed">Temporary structures</span></li>
-</ol>
-</div>
-</div>
-</div>
-</div>
-<div class="mt-6 bg-white rounded-lg shadow-md p-6">
-<div class="flex items-center justify-between mb-4">
-<h3 class="text-lg font-semibold text-[#24305E]">비교 요약</h3>
-<div class="flex items-center gap-2">
-<button class="p-2 hover:bg-gray-100 rounded-lg transition-colors" title="Copy link">
-<svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-<path d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-</svg>
-</button>
-<button class="p-2 hover:bg-gray-100 rounded-lg transition-colors" title="Copy summary">
-<svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-<path d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-</svg>
-</button>
-</div>
-</div>
-<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-<div class="bg-gradient-to-br from-green-50 to-emerald-50 border-l-4 border-green-500 p-5 rounded-lg shadow-sm">
-<div class="flex items-center gap-3 mb-2">
-<div class="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center">
-<svg class="w-6 h-6 text-white" fill="currentColor" viewbox="0 0 20 20">
-<path clip-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" fill-rule="evenodd"></path>
-</svg>
-</div>
-<span class="font-bold text-xl text-green-800">1</span>
-</div>
-<p class="font-semibold text-green-800 mb-1">추가</p>
-<p class="text-sm text-green-700">New clarification on temporary structures</p>
-</div>
-<div class="bg-gradient-to-br from-yellow-50 to-amber-50 border-l-4 border-yellow-500 p-5 rounded-lg shadow-sm">
-<div class="flex items-center gap-3 mb-2">
-<div class="w-10 h-10 bg-yellow-500 rounded-full flex items-center justify-center">
-<svg class="w-6 h-6 text-white" fill="currentColor" viewbox="0 0 20 20">
+<div class="diff-section">
+<div class="flex items-center gap-2 mb-2">
+<div class="w-6 h-6 bg-yellow-500 rounded-full flex items-center justify-center">
+<svg class="w-4 h-4 text-white" fill="currentColor" viewbox="0 0 20 20">
 <path clip-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" fill-rule="evenodd"></path>
 </svg>
 </div>
-<span class="font-bold text-xl text-yellow-800">1</span>
+<span class="text-sm font-semibold text-yellow-700">수정</span>
 </div>
-<p class="font-semibold text-yellow-800 mb-1">수정</p>
-<p class="text-sm text-yellow-700">Updated exception language</p>
+<p class="text-gray-700 leading-relaxed">
+                  Exception: <span class="bg-yellow-200 px-1 rounded">Temporary construction facilities</span> are exempt from the requirements of this section.
+                </p>
+<p class="text-gray-600 text-lg mt-2 leading-relaxed">
+                  예외: <span class="bg-yellow-200 px-1 rounded">임시 건설 시설</span>은 본 조항의 요구사항에서 면제된다.
+                </p>
 </div>
-<div class="bg-gradient-to-br from-red-50 to-rose-50 border-l-4 border-red-500 p-5 rounded-lg shadow-sm">
-<div class="flex items-center gap-3 mb-2">
-<div class="w-10 h-10 bg-red-500 rounded-full flex items-center justify-center">
-<svg class="w-6 h-6 text-white" fill="currentColor" viewbox="0 0 20 20">
-<path clip-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 001.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" fill-rule="evenodd"></path>
-</svg>
-</div>
-<span class="font-bold text-xl text-red-800">0</span>
-</div>
-<p class="font-semibold text-red-800 mb-1">삭제</p>
-<p class="text-sm text-red-700">No content removed</p>
 </div>
 </div>
 </div>
@@ -1194,6 +1292,48 @@
       });
     });
 
+    function toggleLibraryMenu() {
+      const submenu = document.getElementById('librarySubmenu');
+      const icon = document.getElementById('libraryMenuIcon');
+      
+      if (submenu.style.maxHeight === '0px' || submenu.style.maxHeight === '') {
+        submenu.style.maxHeight = submenu.scrollHeight + 'px';
+        icon.classList.add('rotate-180');
+      } else {
+        submenu.style.maxHeight = '0px';
+        icon.classList.remove('rotate-180');
+      }
+    }
+
+    document.querySelectorAll('.submenu-item').forEach(item => {
+      item.addEventListener('click', function(e) {
+        e.stopPropagation();
+        const section = this.dataset.section;
+        const code = this.dataset.code;
+        
+        showSection(section);
+        
+        // Update library page title based on selected code
+        const codeTitle = document.getElementById('codeTitle');
+        const codeSubtitle = document.getElementById('codeSubtitle');
+        
+        const codeInfo = {
+          'IBC': { title: 'IBC 2024', subtitle: 'International Building Code' },
+          'NFPA13': { title: 'NFPA 13', subtitle: 'Sprinkler Systems' },
+          'NFPA14': { title: 'NFPA 14', subtitle: 'Standpipe Systems' },
+          'NFPA20': { title: 'NFPA 20', subtitle: 'Fire Pumps' },
+          'NFPA72': { title: 'NFPA 72', subtitle: 'Fire Alarm Systems' }
+        };
+        
+        if (codeInfo[code]) {
+          codeTitle.textContent = codeInfo[code].title;
+          codeSubtitle.textContent = codeInfo[code].subtitle;
+        }
+        
+        console.log('[v0] Selected code:', code);
+      });
+    });
+
     document.querySelectorAll('[data-nav]').forEach(card => {
       card.addEventListener('click', function() {
         const section = this.dataset.nav;
@@ -1201,15 +1341,43 @@
       });
     });
 
-    document.querySelectorAll('.chapter-item').forEach(item => {
-      item.addEventListener('click', function() {
-        document.querySelectorAll('.chapter-item').forEach(i => {
-          i.classList.remove('active', 'bg-[#F8E9A1]');
+    document.querySelectorAll('.chapter-group').forEach(group => {
+      const chapterItem = group.querySelector('.chapter-item');
+      const chapterNum = chapterItem.dataset.chapter;
+      
+      chapterItem.addEventListener('click', function(e) {
+        // Toggle sections visibility
+        toggleChapterSections(chapterNum);
+        
+        const chapterElement = document.getElementById(`chapter-${chapterNum}`);
+        if (chapterElement) {
+          chapterElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+        
+        // Update active state
+        document.querySelectorAll('.chapter-item').forEach(item => {
+          item.classList.remove('active', 'bg-[#F8E9A1]');
         });
         this.classList.add('active', 'bg-[#F8E9A1]');
+      });
+    });
+
+    document.querySelectorAll('.section-item').forEach(item => {
+      item.addEventListener('click', function(e) {
+        e.stopPropagation(); // Prevent triggering chapter click
+        const section = this.dataset.section;
+        const chapterNum = this.dataset.chapter;
         
-        const chapter = this.dataset.chapter;
-        console.log('[v0] Loading chapter:', chapter);
+        const sectionElement = document.getElementById(`section-${section}`);
+        if (sectionElement) {
+          sectionElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+        
+        // Update active state
+        document.querySelectorAll('.section-item').forEach(si => {
+          si.classList.remove('bg-[#A8D0E6]', 'text-white');
+        });
+        this.classList.add('bg-[#A8D0E6]', 'text-white');
       });
     });
 
@@ -1480,25 +1648,63 @@
       const codeAType = document.getElementById('codeAType').value;
       const codeAVersion = document.getElementById('codeAVersion').value;
       const codeASection = document.getElementById('codeASection').value;
+      const codeASubsection = document.getElementById('codeASubsection').value;
       
       const codeBType = document.getElementById('codeBType').value;
       const codeBVersion = document.getElementById('codeBVersion').value;
       const codeBSection = document.getElementById('codeBSection').value;
+      const codeBSubsection = document.getElementById('codeBSubsection').value;
 
       console.log('[v0] Comparing codes:', {
-        codeA: { type: codeAType, version: codeAVersion, section: codeASection },
-        codeB: { type: codeBType, version: codeBVersion, section: codeBSection }
+        codeA: { type: codeAType, version: codeAVersion, section: `${codeASection}${codeASubsection ? '.' + codeASubsection : ''}` },
+        codeB: { type: codeBType, version: codeBVersion, section: `${codeBSection}${codeBSubsection ? '.' + codeBSubsection : ''}` }
       });
     });
 
-    function copyLink(sectionId) {
-      const url = `${window.location.origin}${window.location.pathname}#section-${sectionId}`;
-      navigator.clipboard.writeText(url).then(() => {
-        console.log('[v0] Link copied:', url);
-        alert('링크가 복사되었습니다!');
-      });
+    function copySection(sectionId) {
+      const sectionElement = document.getElementById(`section-${sectionId}`);
+      if (sectionElement) {
+        const hierarchySpan = sectionElement.querySelector('.bg-\\[\\#A8D0E6\\]');
+        const keywordsSpans = sectionElement.querySelectorAll('.bg-\\[\\#F8E9A1\\]');
+        const titleElement = sectionElement.querySelector('h3');
+        const englishParagraphs = Array.from(sectionElement.querySelectorAll('p')).filter(p => p.classList.contains('text-gray-700'));
+        const koreanParagraphs = Array.from(sectionElement.querySelectorAll('p')).filter(p => p.classList.contains('text-lg'));
+        const noteTextarea = sectionElement.querySelector('textarea');
+
+        let contentToCopy = '';
+        if (hierarchySpan) contentToCopy += `${hierarchySpan.textContent}\n`;
+        if (keywordsSpans.length > 0) {
+          contentToCopy += `Keywords: ${Array.from(keywordsSpans).map(span => span.textContent).join(', ')}\n`;
+        }
+        if (titleElement) contentToCopy += `\n${titleElement.textContent}\n`;
+        if (englishParagraphs.length > 0) {
+          contentToCopy += `\nEnglish:\n${englishParagraphs.map(p => p.textContent).join('\n')}`;
+        }
+        if (koreanParagraphs.length > 0) {
+          contentToCopy += `\n\nKorean:\n${koreanParagraphs.map(p => p.textContent).join('\n')}`;
+        }
+        if (noteTextarea) contentToCopy += `\n\nNote:\n${noteTextarea.value}`;
+
+        navigator.clipboard.writeText(contentToCopy.trim()).then(() => {
+          console.log('[v0] Section content copied for:', sectionId);
+          alert('섹션 내용이 복사되었습니다!');
+        }).catch(err => {
+          console.error('[v0] Failed to copy section content:', err);
+          alert('섹션 내용을 복사하지 못했습니다.');
+        });
+      } else {
+        alert('섹션을 찾을 수 없습니다.');
+      }
     }
 
+    function shareSection(sectionId) {
+      const url = `${window.location.origin}${window.location.pathname}#section-${sectionId}`;
+      navigator.clipboard.writeText(url).then(() => {
+        console.log('[v0] Section link copied:', url);
+        alert('섹션 링크가 복사되었습니다!');
+      });
+    }
+    
     function copyContent(sectionId) {
       // Updated copy function to structure content with hierarchy
       const sectionElement = document.querySelector(`[onclick*="copyContent('${sectionId}')"]`)?.closest('.bg-gray-50');
@@ -1587,13 +1793,13 @@ ${note}
               <p class="text-gray-700 leading-relaxed">
                 These regulations shall apply to the construction, alteration, relocation, enlargement, 
                 replacement, repair, equipment, use and occupancy, location, maintenance, removal and demolition 
-                of every building or structure or any appurtenances connected or attached to such buildings or structures.
+                of every building or structure.
               </p>
             </div>
             
             <div>
               <h4 class="font-semibold text-[#374785] mb-2">Korean</h4>
-              <p class="text-gray-600 leading-relaxed">
+              <p class="text-gray-600 text-base leading-relaxed">
                 이 규정은 모든 건물 또는 구조물의 건설, 변경, 이전, 확장, 교체, 수리, 설비, 사용 및 점유, 
                 위치, 유지보수, 제거 및 철거에 적용되어야 한다.
               </p>
@@ -1658,6 +1864,52 @@ ${note}
         icon.classList.add('rotate-180');
       }
     }
+
+    function toggleChapterSections(chapterNum) {
+      const sectionsDiv = document.getElementById(`chapterSections${chapterNum}`);
+      const icon = document.getElementById(`chapterIcon${chapterNum}`);
+      
+      if (sectionsDiv.classList.contains('hidden')) {
+        sectionsDiv.classList.remove('hidden');
+        icon.classList.add('rotate-180');
+      } else {
+        sectionsDiv.classList.add('hidden');
+        icon.classList.remove('rotate-180');
+      }
+    }
+
+    function clearAdvancedSearchInput() {
+      const input = document.getElementById('keywordInput');
+      input.value = '';
+      const clearBtn = document.getElementById('advancedSearchClearBtn');
+      if (clearBtn) clearBtn.style.display = 'none';
+    }
+
+    function performAdvancedSearch() {
+      const keyword = document.getElementById('keywordInput').value.trim();
+      if (keyword) {
+        // Perform search logic here
+        console.log('[v0] Advanced search for:', keyword);
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      const keywordInput = document.getElementById('keywordInput');
+      if (keywordInput) {
+        keywordInput.addEventListener('input', function() {
+          const clearBtn = document.getElementById('advancedSearchClearBtn');
+          if (clearBtn) {
+            clearBtn.style.display = this.value ? 'block' : 'none';
+          }
+        });
+        
+        keywordInput.addEventListener('keypress', function(e) {
+          if (e.key === 'Enter') {
+            performAdvancedSearch();
+          }
+        });
+      }
+    });
   </script>
 <script>
 // === Data Layer ===
