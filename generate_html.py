@@ -482,6 +482,20 @@ def create_all_library_content(hierarchy):
                     year = int(latest_version['Year']) if latest_version.get('Year') else ''
                     location_text = f"{code_base} {year}: Chapter {chapter_num} - {section_number}"
 
+                    # Index tags 생성 (semicolon으로 분리된 키워드)
+                    index_tags_html = ''
+                    if content.get('Index'):
+                        index_keywords = [k.strip() for k in str(content['Index']).split(';') if k.strip()]
+                        index_tags = '\n                            '.join([
+                            f'<span class="text-xs bg-[#F8E9A1] text-[#24305E] px-2 py-0.5 rounded">{keyword}</span>'
+                            for keyword in index_keywords
+                        ])
+                        if index_tags:
+                            index_tags_html = '\n                            ' + index_tags
+                    # Assume "건축" for IBC if no Index data
+                    elif code_base == 'IBC':
+                        index_tags_html = '\n                            <span class="text-xs bg-[#F8E9A1] text-[#24305E] px-2 py-0.5 rounded">건축</span>'
+
                     content_html.append(f'''
                     <div class="bg-gray-50 p-4 rounded-lg relative" id="section-{section_number.replace('.', '-')}">
                         <div class="absolute top-3 right-3 flex items-center gap-1">
@@ -492,7 +506,7 @@ def create_all_library_content(hierarchy):
                             </button>
                         </div>
                         <div class="flex items-center gap-2 mb-3 flex-wrap">
-                            <span class="text-xs bg-[#A8D0E6] text-[#24305E] font-semibold px-2 py-0.5 rounded">{location_text}</span>
+                            <span class="text-xs bg-[#A8D0E6] text-[#24305E] font-semibold px-2 py-0.5 rounded">{location_text}</span>{index_tags_html}
                         </div>
                         <div class="flex items-center gap-2 mb-2">
                             <h4 class="font-semibold text-[#24305E]">{section_number}{' ' + content['TitleEN'] if content.get('TitleEN') else ''}</h4>
@@ -759,15 +773,19 @@ def generate_html(hierarchy):
 
             print(f"✓ Library populated with {len(all_content['codes'])} codes")
 
-    # Remove keyword search input from advanced search
+    # Remove ONLY keyword search input from advanced search, keep filters
     print("Removing keyword search input from advanced search...")
     search_section = soup.find('div', id='searchSection')
     if search_section:
-        # Find and remove the keyword search div (containing input with id='keywordInput')
-        keyword_div = search_section.find('div', class_='mb-6')
-        if keyword_div and keyword_div.find('input', id='keywordInput'):
-            keyword_div.decompose()
-            print("✓ Removed keyword search input from advanced search")
+        # Find the specific keyword input div (contains label "키워드 검색" and input with id='keywordInput')
+        all_divs = search_section.find_all('div', class_='mb-6')
+        for div in all_divs:
+            label = div.find('label')
+            if label and '키워드 검색' in label.get_text():
+                # This is the keyword search div - remove it
+                div.decompose()
+                print("✓ Removed keyword search input (keeping filters)")
+                break
 
         # Remove link/copy icons from results header
         results_section = search_section.find('div', id='resultsSection')
@@ -1328,7 +1346,8 @@ function displayTopSearchResults(exactMatches, partialMatches, keyword) {{
     let html = '<div class="space-y-6">';
 
     allResults.forEach((result, index) => {{
-        const sectionNum = result.section + (result.subsection ? '.' + result.subsection : '');
+        // Fix "Section General" to just "General"
+        const sectionNum = result.section === 'General' ? 'General' : result.section + (result.subsection ? '.' + result.subsection : '');
         const isExactMatch = index < exactMatches.length;
 
         // Highlight keyword
@@ -1337,24 +1356,36 @@ function displayTopSearchResults(exactMatches, partialMatches, keyword) {{
         const highlightedContentEN = highlightKeyword(result.contentEN, keyword, isExactMatch);
         const highlightedContentKR = highlightKeyword(result.contentKR, keyword, isExactMatch);
 
+        // Use reference.txt design with bg-gray-50 and location header
         html += `
-            <div class="bg-white rounded-lg border border-gray-200 p-6 hover:border-[#A8D0E6] transition-colors cursor-pointer search-result-item"
+            <div class="bg-gray-50 p-4 rounded-lg relative search-result-item"
                  data-result='${{JSON.stringify(result).replace(/'/g, "\\'")}}'
                  onmousedown="handleResultMouseDown(event)"
                  onmouseup="handleResultMouseUp(event)">
-                <div class="flex items-start justify-between mb-3">
-                    <div>
-                        <span class="text-xs font-medium text-[#A8D0E6] bg-[#A8D0E6] bg-opacity-20 px-2 py-1 rounded">
-                            ${{result.code}} ${{result.year}}
-                        </span>
-                        <span class="text-xs text-gray-500 ml-2">Chapter ${{result.chapter}}: ${{result.chapterTitle}}</span>
-                    </div>
-                    <span class="text-sm font-semibold text-[#24305E]">Section ${{sectionNum}}</span>
+                <!-- Copy/Link buttons -->
+                <div class="absolute top-3 right-3 flex items-center gap-1">
+                    <button class="p-1.5 hover:bg-gray-200 rounded transition-colors" title="Copy link">
+                        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path>
+                        </svg>
+                    </button>
+                    <button class="p-1.5 hover:bg-gray-200 rounded transition-colors" title="Copy content">
+                        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                        </svg>
+                    </button>
                 </div>
-                <h4 class="text-lg font-semibold text-[#24305E] mb-2">${{highlightedTitleEN}}</h4>
-                <p class="text-base text-gray-600 mb-3">${{highlightedTitleKR}}</p>
-                <div class="text-sm text-gray-700 leading-relaxed mb-2" style="display: -webkit-box; -webkit-line-clamp: 5; -webkit-box-orient: vertical; overflow: hidden;">${{highlightedContentEN}}</div>
-                <div class="text-sm text-gray-600 leading-relaxed" style="display: -webkit-box; -webkit-line-clamp: 5; -webkit-box-orient: vertical; overflow: hidden;">${{highlightedContentKR}}</div>
+                <!-- Location and Index tags -->
+                <div class="flex items-center gap-2 mb-3 flex-wrap">
+                    <span class="text-xs bg-[#A8D0E6] text-[#24305E] font-semibold px-2 py-0.5 rounded">${{result.code}} ${{result.year}}: Chapter ${{result.chapter}} - ${{sectionNum}}</span>
+                    <span class="text-xs bg-[#F8E9A1] text-[#24305E] px-2 py-0.5 rounded">건축</span>
+                </div>
+                <div class="flex items-center gap-2 mb-2">
+                    <h4 class="font-semibold text-[#24305E]">${{sectionNum}}${{result.titleEN ? ' ' + highlightedTitleEN : ''}}</h4>
+                </div>
+                ${{result.titleKR ? `<p class="text-gray-600 text-lg leading-relaxed mb-2">${{highlightedTitleKR}}</p>` : ''}}
+                ${{result.contentEN ? `<p class="text-gray-700 leading-relaxed mb-2">${{highlightedContentEN}}</p>` : ''}}
+                ${{result.contentKR ? `<p class="text-gray-600 text-lg leading-relaxed mb-3">${{highlightedContentKR}}</p>` : ''}}
             </div>
         `;
     }});
@@ -1521,23 +1552,34 @@ function displaySearchResults(exactMatches, partialMatches, allFilteredResults, 
         }}
 
         html += `
-            <div class="bg-white rounded-lg border border-gray-200 p-4 hover:border-[#A8D0E6] transition-colors cursor-pointer search-result-item"
+            <div class="bg-gray-50 p-4 rounded-lg relative search-result-item"
                  data-result='${{JSON.stringify(result).replace(/'/g, "\\'")}}'
                  onmousedown="handleResultMouseDown(event)"
                  onmouseup="handleResultMouseUp(event)">
-                <div class="flex items-start justify-between mb-2">
-                    <div>
-                        <span class="text-xs font-medium text-[#A8D0E6] bg-[#A8D0E6] bg-opacity-20 px-2 py-1 rounded">
-                            ${{result.code}} ${{result.year}}
-                        </span>
-                        <span class="text-xs text-gray-500 ml-2">Chapter ${{result.chapter}}: ${{result.chapterTitle}}</span>
-                    </div>
-                    <span class="text-sm font-semibold text-[#24305E]">Section ${{sectionNum}}</span>
+                <!-- Copy/Link buttons -->
+                <div class="absolute top-3 right-3 flex items-center gap-1">
+                    <button class="p-1.5 hover:bg-gray-200 rounded transition-colors" title="Copy link">
+                        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path>
+                        </svg>
+                    </button>
+                    <button class="p-1.5 hover:bg-gray-200 rounded transition-colors" title="Copy content">
+                        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                        </svg>
+                    </button>
                 </div>
-                <h4 class="font-semibold text-[#24305E] mb-1">${{displayTitleEN}}</h4>
-                <p class="text-base text-gray-600 mb-2">${{displayTitleKR}}</p>
-                <p class="text-sm text-gray-700 line-clamp-2">${{displayContentEN}}</p>
-                <p class="text-sm text-gray-500 line-clamp-1 mt-1">${{displayContentKR}}</p>
+                <!-- Location and Index tags -->
+                <div class="flex items-center gap-2 mb-3 flex-wrap">
+                    <span class="text-xs bg-[#A8D0E6] text-[#24305E] font-semibold px-2 py-0.5 rounded">${{result.code}} ${{result.year}}: Chapter ${{result.chapter}} - ${{sectionNum}}</span>
+                    <span class="text-xs bg-[#F8E9A1] text-[#24305E] px-2 py-0.5 rounded">건축</span>
+                </div>
+                <div class="flex items-center gap-2 mb-2">
+                    <h4 class="font-semibold text-[#24305E]">${{sectionNum}}${{result.titleEN ? ' ' + result.titleEN : ''}}</h4>
+                </div>
+                ${{displayTitleKR ? `<p class="text-gray-600 text-lg leading-relaxed mb-2">${{displayTitleKR}}</p>` : ''}}
+                ${{displayContentEN ? `<p class="text-gray-700 leading-relaxed mb-2">${{displayContentEN}}</p>` : ''}}
+                ${{displayContentKR ? `<p class="text-gray-600 text-lg leading-relaxed mb-3">${{displayContentKR}}</p>` : ''}}
             </div>
         `;
     }});
@@ -1631,22 +1673,58 @@ function openSearchResultModal(result) {{
     // Store current result for navigation
     window.currentModalResult = result;
 
-    // Populate modal with result data
-    const sectionNum = result.section + (result.subsection ? '.' + result.subsection : '');
+    // Populate modal with result data - using reference.txt design
+    const sectionNum = result.section === 'General' ? 'General' : result.section + (result.subsection ? '.' + result.subsection : '');
+
+    // Create content with reference.txt card design
+    let contentHTML = `
+        <div class="bg-gray-50 p-4 rounded-lg relative">
+            <!-- Copy/Link buttons -->
+            <div class="absolute top-3 right-3 flex items-center gap-1">
+                <button class="p-1.5 hover:bg-gray-200 rounded transition-colors" title="Copy link">
+                    <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path>
+                    </svg>
+                </button>
+                <button class="p-1.5 hover:bg-gray-200 rounded transition-colors" title="Copy content">
+                    <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Location and Index tags -->
+            <div class="flex items-center gap-2 mb-3 flex-wrap">
+                <span class="text-xs bg-[#A8D0E6] text-[#24305E] font-semibold px-2 py-0.5 rounded">${{result.code}} ${{result.year}}: Chapter ${{result.chapter}} - ${{sectionNum}}</span>
+                <span class="text-xs bg-[#F8E9A1] text-[#24305E] px-2 py-0.5 rounded">건축</span>
+            </div>
+
+            <!-- Section title -->
+            <div class="flex items-center gap-2 mb-2">
+                <h4 class="font-semibold text-[#24305E]">${{sectionNum}}${{result.titleEN ? ' ' + result.titleEN : ''}}</h4>
+            </div>
+    `;
+
+    // Add title in Korean if exists
+    if (result.titleKR) {{
+        contentHTML += `<p class="text-gray-600 text-lg leading-relaxed mb-2">${{result.titleKR}}</p>`;
+    }}
+
+    // Add content in English if exists
+    if (result.contentEN) {{
+        contentHTML += `<p class="text-gray-700 leading-relaxed mb-2">${{result.contentEN}}</p>`;
+    }}
+
+    // Add content in Korean if exists
+    if (result.contentKR) {{
+        contentHTML += `<p class="text-gray-600 text-lg leading-relaxed mb-3">${{result.contentKR}}</p>`;
+    }}
+
+    contentHTML += `</div>`;
+
+    // Update modal title and location
     document.getElementById('modalTitle').textContent = sectionNum + (result.titleEN ? ' ' + result.titleEN : '');
     document.getElementById('modalLocation').textContent = `${{result.code}} ${{result.year}} - Chapter ${{result.chapter}}: ${{result.chapterTitle}}`;
-
-    let contentHTML = '';
-    if (result.titleKR) {{
-        contentHTML += `<p class="text-xl text-gray-700 font-semibold mb-4">${{result.titleKR}}</p>`;
-    }}
-    if (result.contentEN) {{
-        contentHTML += `<div class="mb-4"><h3 class="text-sm font-semibold text-gray-500 uppercase mb-2">English</h3><p class="text-base text-gray-800 leading-relaxed whitespace-pre-line">${{result.contentEN}}</p></div>`;
-    }}
-    if (result.contentKR) {{
-        contentHTML += `<div class="mb-4"><h3 class="text-sm font-semibold text-gray-500 uppercase mb-2">한국어</h3><p class="text-base text-gray-700 leading-relaxed whitespace-pre-line">${{result.contentKR}}</p></div>`;
-    }}
-
     document.getElementById('modalContent').innerHTML = contentHTML;
 
     // Show modal
