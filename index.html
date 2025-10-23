@@ -15577,7 +15577,116 @@ Pelev = Pressure due to elevation difference(표고차로 인한 압력)
 </div>
 </header>
 <div class="p-8">
+<div class="bg-white rounded-lg shadow-md p-6 mb-6">
+<!-- Reduced keyword search input width to half and moved enter icon inside -->
 
+<div class="border-t border-gray-200 pt-4">
+<div class="collapsible-header flex items-center justify-between p-3 rounded-lg" onclick="toggleCollapsible('filterSection')">
+<svg class="w-5 h-5 text-gray-600 transition-transform" fill="none" id="filterSectionIcon" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+<div class="collapsible-content expanded" id="filterSection">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+<div>
+<!-- Removed "전체 선택" text, kept only checkbox -->
+<div class="flex items-center gap-3 mb-3 pb-2 border-b-2 border-[#A8D0E6]">
+<label class="flex items-center cursor-pointer">
+<input class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" id="selectAllArch" onchange="toggleSelectAll('arch')" type="checkbox"/>
+</label>
+<h3 class="text-base font-bold text-[#24305E]">건축·구조</h3>
+</div>
+<div class="grid grid-cols-2 gap-x-4 gap-y-1">
+<label class="flex items-center cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
+<input class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="archCategory" type="checkbox" value="usage"/>
+<span class="ml-2 text-sm text-gray-700">용도</span>
+</label>
+<label class="flex items-center cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
+<input class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="archCategory" type="checkbox" value="height"/>
+<span class="ml-2 text-sm text-gray-700">높이</span>
+</label>
+<label class="flex items-center cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
+<input class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="archCategory" type="checkbox" value="area"/>
+<span class="ml-2 text-sm text-gray-700">면적</span>
+</label>
+<label class="flex items-center cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
+<input class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="archCategory" type="checkbox" value="standards"/>
+<span class="ml-2 text-sm text-gray-700">기준</span>
+</label>
+<label class="flex items-center cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
+<input class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="archCategory" type="checkbox" value="building-type"/>
+<span class="ml-2 text-sm text-gray-700">건물 유형</span>
+</label>
+<label class="flex items-center cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
+<input class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="archCategory" type="checkbox" value="layout"/>
+<span class="ml-2 text-sm text-gray-700">배치</span>
+</label>
+<label class="flex items-center cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
+<input class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="archCategory" type="checkbox" value="finish"/>
+<span class="ml-2 text-sm text-gray-700">마감</span>
+</label>
+<label class="flex items-center cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
+<input class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="archCategory" type="checkbox" value="vehicle"/>
+<span class="ml-2 text-sm text-gray-700">차량</span>
+</label>
+<label class="flex items-center cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
+<input class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="archCategory" type="checkbox" value="rooftop"/>
+<span class="ml-2 text-sm text-gray-700">옥탑</span>
+</label>
+<label class="flex items-center cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
+<input class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="archCategory" type="checkbox" value="exterior"/>
+<span class="ml-2 text-sm text-gray-700">외장재</span>
+</label>
+<label class="flex items-center cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
+<input class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="archCategory" type="checkbox" value="roof"/>
+<span class="ml-2 text-sm text-gray-700">지붕</span>
+</label>
+</div>
+</div>
+<div>
+<div class="flex items-center gap-3 mb-3 pb-2 border-b-2 border-[#F76C6C]">
+<label class="flex items-center cursor-pointer">
+<input class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" id="selectAllFire" onchange="toggleSelectAll('fire')" type="checkbox"/>
+</label>
+<h3 class="text-base font-bold text-[#24305E]">소방</h3>
+</div>
+<div class="grid grid-cols-2 gap-x-4 gap-y-1">
+<label class="flex items-center cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
+<input class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="fireCategory" type="checkbox" value="egress"/>
+<span class="ml-2 text-sm text-gray-700">피난</span>
+</label>
+<label class="flex items-center cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
+<input class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="fireCategory" type="checkbox" value="fire-protection"/>
+<span class="ml-2 text-sm text-gray-700">방화</span>
+</label>
+<label class="flex items-center cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
+<input class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="fireCategory" type="checkbox" value="fire-suppression"/>
+<span class="ml-2 text-sm text-gray-700">소화</span>
+</label>
+<label class="flex items-center cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
+<input class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="fireCategory" type="checkbox" value="accessibility"/>
+<span class="ml-2 text-sm text-gray-700">접근성</span>
+</label>
+<label class="flex items-center cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
+<input class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="fireCategory" type="checkbox" value="sprinkler"/>
+<span class="ml-2 text-sm text-gray-700">스프링클러</span>
+</label>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="flex gap-3 mt-6">
+<button class="flex-1 bg-[#F76C6C] text-white py-3 rounded-lg font-semibold hover:bg-[#e55a5a] transition-colors" id="searchBtn">
+              검색
+            </button>
+<button class="px-4 bg-gray-200 text-gray-700 py-3 rounded-lg hover:bg-gray-300 transition-colors" id="resetBtn" title="초기화">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+</div>
+</div>
 <div class="bg-white rounded-lg shadow-md p-6" id="resultsSection">
 <div class="flex items-center justify-between mb-4">
 <h2 class="text-xl font-bold text-[#24305E]">검색 결과</h2>

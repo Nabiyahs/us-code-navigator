@@ -777,15 +777,17 @@ def generate_html(hierarchy):
     print("Removing keyword search input from advanced search...")
     search_section = soup.find('div', id='searchSection')
     if search_section:
-        # Find the specific keyword input div (contains label "키워드 검색" and input with id='keywordInput')
-        all_divs = search_section.find_all('div', class_='mb-6')
-        for div in all_divs:
-            label = div.find('label')
-            if label and '키워드 검색' in label.get_text():
-                # This is the keyword search div - remove it
-                div.decompose()
-                print("✓ Removed keyword search input (keeping filters)")
-                break
+        # Find the search form container
+        search_form = search_section.find('div', class_='bg-white rounded-lg shadow-md p-6 mb-6')
+        if search_form:
+            # Find ONLY the direct child div with class mb-6 that contains keyword search label
+            for div in search_form.find_all('div', class_='mb-6', recursive=False):
+                label = div.find('label', class_='block text-sm font-semibold text-[#24305E] mb-2')
+                if label and '키워드 검색' in label.get_text():
+                    # This is the keyword search div - remove it
+                    div.decompose()
+                    print("✓ Removed keyword search input (keeping filters)")
+                    break
 
         # Remove link/copy icons from results header
         results_section = search_section.find('div', id='resultsSection')
