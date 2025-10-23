@@ -369,16 +369,31 @@ def create_all_library_content(hierarchy):
 
             for section_num in sorted(sections.keys(), key=section_sort_key):
                 section_title = sections[section_num]
+                # Display "General" without "Section" prefix
+                display_name = section_num if section_num == 'General' else f'Section {section_num}'
                 sections_html.append(f'''
                   <div class="section-item px-4 py-2 text-xs text-gray-600 hover:bg-gray-100 rounded cursor-pointer"
                        onclick="scrollToSection('{chapter_id}', '{section_num}')">
-                    Section {section_num}
+                    {display_name}
                   </div>''')
 
             # 챕터 그룹 (챕터 + 섹션)
             expanded_class = 'max-h-96' if i == 0 else 'max-h-0'
             icon_rotation = 'rotate-180' if i == 0 else ''
             title_kr = ch.get('TitleKR', '')
+
+            # Only show chevron if there are sections
+            has_sections = len(sections_html) > 0
+            chevron_html = f'''
+                  <svg class="w-4 h-4 text-[#24305E] transition-transform {icon_rotation}" id="chevron-{chapter_id}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                  </svg>''' if has_sections else ''
+
+            sections_div = f'''
+                <div class="sections-list overflow-hidden transition-all duration-300 {expanded_class}" id="sections-{chapter_id}">
+                  {''.join(sections_html)}
+                </div>''' if has_sections else ''
+
             chapters_html.append(f'''
               <div class="chapter-group">
                 <div class="chapter-item {active_class} px-4 py-3 rounded-lg cursor-pointer flex items-center justify-between"
@@ -388,14 +403,8 @@ def create_all_library_content(hierarchy):
                     <div class="font-semibold text-[#24305E] text-sm">Chapter {chapter_num}</div>
                     <div class="text-xs text-gray-600 mt-1">{ch['TitleEN'] or ''}</div>
                     {f'<div class="text-sm text-gray-500 mt-0.5">{title_kr}</div>' if title_kr else ''}
-                  </div>
-                  <svg class="w-4 h-4 text-[#24305E] transition-transform {icon_rotation}" id="chevron-{chapter_id}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                  </svg>
-                </div>
-                <div class="sections-list overflow-hidden transition-all duration-300 {expanded_class}" id="sections-{chapter_id}">
-                  {''.join(sections_html)}
-                </div>
+                  </div>{chevron_html}
+                </div>{sections_div}
               </div>''')
 
         # 모든 챕터의 콘텐츠 생성
@@ -506,9 +515,15 @@ def create_all_library_content(hierarchy):
                     <div class="space-y-4">''')
 
                 # 각 subsection
-                for content in section_contents:
+                for idx, content in enumerate(section_contents):
                     subsection = f".{content['Subsection']}" if content.get('Subsection') else ''
-                    section_number = f"{section_num}{subsection}"
+                    # If section is General and no subsection, use OrderKey or index for uniqueness
+                    if section_num == 'General' and not subsection:
+                        # Use OrderKey if available, otherwise use index
+                        unique_id = content.get('OrderKey', f'{idx:04d}')
+                        section_number = f"General-{unique_id}"
+                    else:
+                        section_number = f"{section_num}{subsection}"
 
                     # Attachments
                     attachments = [att for att in hierarchy.data['CodeAttachment']
