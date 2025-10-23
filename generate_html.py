@@ -287,9 +287,11 @@ def escape_js_string(s):
         return ''
     return s.replace('\\', '\\\\').replace("'", "\\'").replace('"', '\\"').replace('\n', '\\n').replace('\r', '\\r')
 
-def create_initial_library_content(hierarchy):
-    """라이브러리 섹션의 초기 콘텐츠를 생성합니다 (첫 번째 활성 코드)."""
-    # 첫 번째 활성 코드 찾기 (IBC 2024)
+def create_all_library_content(hierarchy):
+    """라이브러리 섹션의 모든 코드 콘텐츠를 생성합니다."""
+    all_codes_content = []
+    first_code_id = None
+
     for model_code in hierarchy.data['ModelCode']:
         model_code_id = model_code['ModelCodeID']
 
@@ -308,14 +310,59 @@ def create_initial_library_content(hierarchy):
         # 첫 번째 활성 코드 찾음!
         chapter_list = sorted(chapters['CodeChapter'], key=lambda x: x['Chapter'])
 
-        # 챕터 리스트 HTML 생성
+        # 챕터 리스트 HTML 생성 (섹션 포함)
         chapters_html = []
         for i, ch in enumerate(chapter_list):
             active_class = 'active bg-[#F8E9A1]' if i == 0 else ''
+            chapter_id = ch['ChapterID']
+            chapter_num = ch['Chapter']
+
+            # 이 챕터의 섹션 목록 가져오기
+            chapter_contents = [c for c in hierarchy.data['CodeContent'] if c.get('ChapterID') == chapter_id]
+            sections = {}
+            for content in chapter_contents:
+                section = content.get('Section') or 'General'
+                if section not in sections:
+                    sections[section] = content.get('TitleEN', '')
+
+            # 섹션 HTML 생성
+            sections_html = []
+            def section_sort_key(x):
+                import re
+                if x == 'General':
+                    return (0, 'General')
+                match = re.search(r'\d+', str(x))
+                if match:
+                    return (int(match.group()), str(x))
+                return (999999, str(x))
+
+            for section_num in sorted(sections.keys(), key=section_sort_key):
+                section_title = sections[section_num]
+                sections_html.append(f'''
+                  <div class="section-item px-4 py-2 text-xs text-gray-600 hover:bg-gray-100 rounded cursor-pointer"
+                       onclick="scrollToSection('{chapter_id}', '{section_num}')">
+                    Section {section_num}{': ' + section_title if section_title else ''}
+                  </div>''')
+
+            # 챕터 그룹 (챕터 + 섹션)
+            expanded_class = 'max-h-96' if i == 0 else 'max-h-0'
+            icon_rotation = 'rotate-180' if i == 0 else ''
             chapters_html.append(f'''
-              <div class="chapter-item {active_class} px-4 py-3 rounded-lg cursor-pointer" data-chapter-id="{ch['ChapterID']}" onclick="scrollToChapter('{ch['ChapterID']}')">
-                <div class="font-semibold text-[#24305E] text-sm">Chapter {ch['Chapter']}</div>
-                <div class="text-xs text-gray-600 mt-1">{ch['TitleEN'] or ''}</div>
+              <div class="chapter-group">
+                <div class="chapter-item {active_class} px-4 py-3 rounded-lg cursor-pointer flex items-center justify-between"
+                     data-chapter-id="{chapter_id}"
+                     onclick="toggleChapterSidebar('{chapter_id}')">
+                  <div>
+                    <div class="font-semibold text-[#24305E] text-sm">Chapter {chapter_num}</div>
+                    <div class="text-xs text-gray-600 mt-1">{ch['TitleEN'] or ''}</div>
+                  </div>
+                  <svg class="w-4 h-4 text-[#24305E] transition-transform {icon_rotation}" id="chevron-{chapter_id}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                  </svg>
+                </div>
+                <div class="sections-list overflow-hidden transition-all duration-300 {expanded_class}" id="sections-{chapter_id}">
+                  {''.join(sections_html)}
+                </div>
               </div>''')
 
         # 모든 챕터의 콘텐츠 생성
@@ -352,9 +399,9 @@ def create_initial_library_content(hierarchy):
             <div class="bg-white rounded-lg shadow-sm p-8 mb-6" id="chapter-{chapter_id}">
                 <div class="mb-6">
                     <h2 class="text-2xl font-bold text-[#24305E] mb-2">Chapter {chapter_num}: {chapter['TitleEN'] or ''}</h2>
-                    {f'<p class="text-sm text-gray-600">{chapter["TitleKR"]}</p>' if chapter.get('TitleKR') else ''}
+                    {f'<p class="text-base text-gray-600">{chapter["TitleKR"]}</p>' if chapter.get('TitleKR') else ''}
                 </div>
-                {f'<div class="mb-6 p-4 bg-blue-50 border-l-4 border-blue-400 rounded"><p class="text-sm text-gray-700 whitespace-pre-line">{chapter["ChapterComment"]}</p></div>' if chapter.get('ChapterComment') else ''}
+                {f'<div class="mb-6 p-4 bg-blue-50 border-l-4 border-blue-400 rounded"><p class="text-base text-gray-700 whitespace-pre-line">{chapter["ChapterComment"]}</p></div>' if chapter.get('ChapterComment') else ''}
             ''')
 
             # 섹션별로 그룹화
@@ -381,9 +428,9 @@ def create_initial_library_content(hierarchy):
                 first_content = section_contents[0]
 
                 content_html.append(f'''
-                <div class="content-section mb-8">
+                <div class="content-section mb-8" id="section-{chapter_id}-{section_num}">
                     <h3 class="text-xl font-semibold text-[#374785] mb-3">Section {section_num}{' - ' + first_content['TitleEN'] if first_content.get('TitleEN') else ''}</h3>
-                    {f'<p class="text-sm text-gray-500 mb-4">{first_content["TitleKR"]}</p>' if first_content.get('TitleKR') else ''}
+                    {f'<p class="text-base text-gray-600 mb-4">{first_content["TitleKR"]}</p>' if first_content.get('TitleKR') else ''}
                     <div class="space-y-4">''')
 
                 # 각 subsection
@@ -432,8 +479,8 @@ def create_initial_library_content(hierarchy):
                             <h4 class="font-semibold text-[#24305E]">{section_number}{' ' + content['TitleEN'] if content.get('TitleEN') else ''}</h4>
                         </div>
                         {f'<p class="text-gray-700 leading-relaxed mb-2">{content["ContentEN"]}</p>' if content.get('ContentEN') else ''}
-                        {f'<p class="text-gray-600 text-sm leading-relaxed mb-3">{content["ContentKR"]}</p>' if content.get('ContentKR') else ''}
-                        {f'<div class="mt-3 pt-3 border-t border-gray-200 bg-[#FEE9EC] bg-opacity-30 p-3 rounded-lg"><label class="text-xs font-semibold text-[#F76C6C] mb-1 block">Note</label><div class="w-full text-sm p-2 bg-white border border-[#F76C6C] border-opacity-20 rounded text-gray-700 whitespace-pre-line">{content["Comment"]}</div></div>' if content.get('Comment') else ''}
+                        {f'<p class="text-gray-600 text-base leading-relaxed mb-3">{content["ContentKR"]}</p>' if content.get('ContentKR') else ''}
+                        {f'<div class="mt-3 pt-3 border-t border-gray-200 bg-[#FEE9EC] bg-opacity-30 p-3 rounded-lg"><label class="text-xs font-semibold text-[#F76C6C] mb-1 block">Note</label><div class="w-full text-base p-2 bg-white border border-[#F76C6C] border-opacity-20 rounded text-gray-700 whitespace-pre-line">{content["Comment"]}</div></div>' if content.get('Comment') else ''}
                         {attachment_html}
                     </div>''')
 
@@ -441,8 +488,8 @@ def create_initial_library_content(hierarchy):
 
             content_html.append('</div>')
 
-        # 코드 정보와 함께 반환
-        return {
+        # 코드 정보 저장
+        code_data = {
             'code_id': model_code_id,
             'version_id': latest_version['ModelCodeVersionID'],
             'code_name': model_code['ModelCodeName'],
@@ -451,8 +498,17 @@ def create_initial_library_content(hierarchy):
             'chapters_html': '\n'.join(chapters_html),
             'content_html': '\n'.join(content_html)
         }
+        all_codes_content.append(code_data)
 
-    return None
+        # 첫 번째 코드 ID 저장
+        if first_code_id is None:
+            first_code_id = model_code_id
+
+    # 모든 코드 데이터와 첫 번째 코드 ID 반환
+    return {
+        'codes': all_codes_content,
+        'first_code_id': first_code_id
+    }
 
 def create_sidebar_library_submenu(hierarchy):
     """사이드바 라이브러리 하위메뉴를 생성합니다."""
@@ -553,47 +609,66 @@ def generate_html(hierarchy):
 
     # 라이브러리 섹션에 실제 데이터 삽입
     print("Generating initial library content with actual database...")
-    initial_content = create_initial_library_content(hierarchy)
+    all_content = create_all_library_content(hierarchy)
 
     library_section = soup.find('div', id='librarySection')
-    if library_section and initial_content:
+    if library_section and all_content and all_content['codes']:
+        # 첫 번째 코드로 초기화
+        first_code = all_content['codes'][0]
+
         # 헤더 업데이트
         code_title = library_section.find('h1', id='codeTitle')
         code_subtitle = library_section.find('p', id='codeSubtitle')
         if code_title:
-            code_title.string = initial_content['code_title']
+            code_title.string = first_code['code_title']
         if code_subtitle:
-            code_subtitle.string = initial_content['code_subtitle']
+            code_subtitle.string = first_code['code_subtitle']
 
-        # 챕터 리스트 업데이트 - Find the div containing chapter items in library section
-        # Look for the aside with Chapters heading, then find the space-y-2 div
+        # 챕터 리스트 컨테이너 찾기
         aside = library_section.find('aside', class_='w-80')
+        chapters_container = None
         if aside:
             chapters_heading = aside.find('h2', string='Chapters')
             if chapters_heading:
-                space_div = chapters_heading.find_next('div', class_='space-y-2')
-                if space_div:
-                    # Clear existing chapters and add new ones
-                    space_div.clear()
-                    chapters_soup = BeautifulSoup(initial_content['chapters_html'], 'lxml')
-                    # Find elements in body, as lxml wraps content in html>body
-                    body = chapters_soup.find('body')
-                    if body:
-                        for element in body.find_all('div', class_='chapter-item', recursive=False):
-                            space_div.append(element)
-                    print(f"✓ Chapter list populated with {len(space_div.find_all('div', class_='chapter-item', recursive=False))} chapters")
+                chapters_container = chapters_heading.find_next('div', class_='space-y-2')
 
-        # 콘텐츠 영역 업데이트
+        # 콘텐츠 영역 찾기
         content_area = library_section.find('div', id='contentArea')
-        if content_area:
+
+        # 모든 코드의 챕터 리스트와 콘텐츠 생성
+        if chapters_container and content_area:
+            chapters_container.clear()
             content_area.clear()
-            content_soup = BeautifulSoup(initial_content['content_html'], 'lxml')
-            # Find elements in body, as lxml wraps content in html>body
-            body = content_soup.find('body')
-            if body:
-                for element in body.find_all('div', class_='bg-white', recursive=False):
-                    content_area.append(element)
-            print(f"✓ Content area populated with {len(content_area.find_all('div', class_='bg-white', recursive=False))} chapter sections")
+
+            for i, code_data in enumerate(all_content['codes']):
+                is_first = (i == 0)
+                display_style = '' if is_first else 'display: none;'
+
+                # 챕터 리스트 추가
+                chapter_wrapper = soup.new_tag('div',
+                                               id=f"chapters-{code_data['code_id']}",
+                                               style=display_style,
+                                               **{'class': 'code-chapters'})
+                chapters_soup = BeautifulSoup(code_data['chapters_html'], 'lxml')
+                body = chapters_soup.find('body')
+                if body:
+                    for element in body.find_all('div', class_='chapter-group', recursive=False):
+                        chapter_wrapper.append(element)
+                chapters_container.append(chapter_wrapper)
+
+                # 콘텐츠 추가
+                content_wrapper = soup.new_tag('div',
+                                               id=f"content-{code_data['code_id']}",
+                                               style=display_style,
+                                               **{'class': 'code-content'})
+                content_soup = BeautifulSoup(code_data['content_html'], 'lxml')
+                body = content_soup.find('body')
+                if body:
+                    for element in body.find_all('div', class_='bg-white', recursive=False):
+                        content_wrapper.append(element)
+                content_area.append(content_wrapper)
+
+            print(f"✓ Library populated with {len(all_content['codes'])} codes")
 
     # JavaScript 데이터 및 기능 삽입
     print("Injecting JavaScript with schema-based data hierarchy...")
@@ -837,12 +912,22 @@ function copyContent(sectionNumber) {{
     }}
 }}
 
-// Scroll to chapter function for pre-rendered content
+// Scroll to chapter function for pre-rendered content with header offset
 function scrollToChapter(chapterId) {{
     const chapterElement = document.getElementById('chapter-' + chapterId);
     if (chapterElement) {{
-        // Scroll to chapter with smooth animation
-        chapterElement.scrollIntoView({{ behavior: 'smooth', block: 'start' }});
+        // Get header height to calculate offset
+        const header = document.querySelector('#librarySection header');
+        const headerHeight = header ? header.offsetHeight : 80;
+
+        // Scroll with offset to prevent header overlap
+        const elementPosition = chapterElement.getBoundingClientRect().top + window.pageYOffset;
+        const offsetPosition = elementPosition - headerHeight - 20; // 20px extra padding
+
+        window.scrollTo({{
+            top: offsetPosition,
+            behavior: 'smooth'
+        }});
 
         // Update active chapter in sidebar
         document.querySelectorAll('.chapter-item').forEach(item => {{
@@ -852,6 +937,46 @@ function scrollToChapter(chapterId) {{
         if (activeItem) {{
             activeItem.classList.add('active', 'bg-[#F8E9A1]');
         }}
+    }}
+}}
+
+// Toggle chapter sidebar sections
+function toggleChapterSidebar(chapterId) {{
+    const sectionsDiv = document.getElementById('sections-' + chapterId);
+    const chevron = document.getElementById('chevron-' + chapterId);
+
+    if (sectionsDiv && chevron) {{
+        if (sectionsDiv.classList.contains('max-h-0')) {{
+            sectionsDiv.classList.remove('max-h-0');
+            sectionsDiv.classList.add('max-h-96');
+            chevron.classList.add('rotate-180');
+        }} else {{
+            sectionsDiv.classList.remove('max-h-96');
+            sectionsDiv.classList.add('max-h-0');
+            chevron.classList.remove('rotate-180');
+        }}
+    }}
+
+    // Also scroll to chapter
+    scrollToChapter(chapterId);
+}}
+
+// Scroll to section with header offset
+function scrollToSection(chapterId, sectionNum) {{
+    const sectionElement = document.getElementById('section-' + chapterId + '-' + sectionNum);
+    if (sectionElement) {{
+        // Get header height to calculate offset
+        const header = document.querySelector('#librarySection header');
+        const headerHeight = header ? header.offsetHeight : 80;
+
+        // Scroll with offset to prevent header overlap
+        const elementPosition = sectionElement.getBoundingClientRect().top + window.pageYOffset;
+        const offsetPosition = elementPosition - headerHeight - 20; // 20px extra padding
+
+        window.scrollTo({{
+            top: offsetPosition,
+            behavior: 'smooth'
+        }});
     }}
 }}
 
@@ -873,6 +998,10 @@ function toggleLibrarySubmenu(event) {{
 }}
 
 function loadCodeFromSidebar(versionId, codeId) {{
+    switchToLibraryCode(codeId, versionId);
+}}
+
+function switchToLibraryCode(codeId, versionId) {{
     // Switch to library section
     document.querySelectorAll('.section-content').forEach(s => s.classList.remove('active'));
     document.getElementById('librarySection').classList.add('active');
@@ -895,8 +1024,30 @@ function loadCodeFromSidebar(versionId, codeId) {{
         }}
     }});
 
-    // Load chapters
-    loadChapters(versionId, codeId);
+    // Hide all code chapters and content
+    document.querySelectorAll('.code-chapters').forEach(el => el.style.display = 'none');
+    document.querySelectorAll('.code-content').forEach(el => el.style.display = 'none');
+
+    // Show selected code chapters and content
+    const selectedChapters = document.getElementById('chapters-' + codeId);
+    const selectedContent = document.getElementById('content-' + codeId);
+
+    if (selectedChapters) selectedChapters.style.display = '';
+    if (selectedContent) selectedContent.style.display = '';
+
+    // Update header with code info
+    const modelCode = appData.ModelCode.find(mc => mc.ModelCodeID === codeId);
+    const version = appData.ModelCodeVersion.find(v => v.ModelCodeVersionID === versionId);
+
+    if (modelCode && version) {{
+        const codeName = modelCode.ModelCodeName.split(':')[0].trim();
+        const year = version.Year ? ' ' + Math.floor(version.Year) : '';
+        document.getElementById('codeTitle').textContent = codeName + year;
+        document.getElementById('codeSubtitle').textContent = modelCode.Description || '';
+    }}
+
+    // Scroll to top
+    window.scrollTo({{ top: 0, behavior: 'smooth' }});
 }}
 
 // Search function
@@ -934,16 +1085,8 @@ document.addEventListener('DOMContentLoaded', function() {{
             const versionId = this.dataset.versionId;
             const codeId = this.dataset.codeId;
 
-            // Switch to library section
-            document.querySelectorAll('.section-content').forEach(s => s.classList.remove('active'));
-            document.getElementById('librarySection').classList.add('active');
-
-            // Update sidebar
-            document.querySelectorAll('.sidebar-item').forEach(item => item.classList.remove('active'));
-            document.querySelector('.sidebar-item[data-section="library"]').classList.add('active');
-
-            // Load chapters
-            loadChapters(versionId, codeId);
+            // Switch to library code
+            switchToLibraryCode(codeId, versionId);
         }});
     }});
 
