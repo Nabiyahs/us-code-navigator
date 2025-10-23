@@ -347,6 +347,7 @@ def create_all_library_content(hierarchy):
             # 챕터 그룹 (챕터 + 섹션)
             expanded_class = 'max-h-96' if i == 0 else 'max-h-0'
             icon_rotation = 'rotate-180' if i == 0 else ''
+            title_kr = ch.get('TitleKR', '')
             chapters_html.append(f'''
               <div class="chapter-group">
                 <div class="chapter-item {active_class} px-4 py-3 rounded-lg cursor-pointer flex items-center justify-between"
@@ -355,6 +356,7 @@ def create_all_library_content(hierarchy):
                   <div>
                     <div class="font-semibold text-[#24305E] text-sm">Chapter {chapter_num}</div>
                     <div class="text-xs text-gray-600 mt-1">{ch['TitleEN'] or ''}</div>
+                    {f'<div class="text-xs text-gray-500 mt-0.5">{title_kr}</div>' if title_kr else ''}
                   </div>
                   <svg class="w-4 h-4 text-[#24305E] transition-transform {icon_rotation}" id="chevron-{chapter_id}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
@@ -466,6 +468,11 @@ def create_all_library_content(hierarchy):
                             </div>
                         </div>'''
 
+                    # 코드 정보와 위치 생성
+                    code_base = model_code['ModelCodeName'].split(':')[0].strip()
+                    year = int(latest_version['Year']) if latest_version.get('Year') else ''
+                    location_text = f"{code_base} {year}: Chapter {chapter_num} - {section_number}"
+
                     content_html.append(f'''
                     <div class="bg-gray-50 p-4 rounded-lg relative" id="section-{section_number.replace('.', '-')}">
                         <div class="absolute top-3 right-3 flex items-center gap-1">
@@ -475,9 +482,13 @@ def create_all_library_content(hierarchy):
                                 </svg>
                             </button>
                         </div>
+                        <div class="flex items-center gap-2 mb-3 flex-wrap">
+                            <span class="text-xs bg-[#A8D0E6] text-[#24305E] font-semibold px-2 py-0.5 rounded">{location_text}</span>
+                        </div>
                         <div class="flex items-center gap-2 mb-2">
                             <h4 class="font-semibold text-[#24305E]">{section_number}{' ' + content['TitleEN'] if content.get('TitleEN') else ''}</h4>
                         </div>
+                        {f'<p class="text-sm text-gray-600 mb-2">{content["TitleKR"]}</p>' if content.get('TitleKR') else ''}
                         {f'<p class="text-gray-700 leading-relaxed mb-2">{content["ContentEN"]}</p>' if content.get('ContentEN') else ''}
                         {f'<p class="text-gray-600 text-base leading-relaxed mb-3">{content["ContentKR"]}</p>' if content.get('ContentKR') else ''}
                         {f'<div class="mt-3 pt-3 border-t border-gray-200 bg-[#FEE9EC] bg-opacity-30 p-3 rounded-lg"><label class="text-xs font-semibold text-[#F76C6C] mb-1 block">Note</label><div class="w-full text-base p-2 bg-white border border-[#F76C6C] border-opacity-20 rounded text-gray-700 whitespace-pre-line">{content["Comment"]}</div></div>' if content.get('Comment') else ''}
@@ -545,7 +556,7 @@ def create_sidebar_library_submenu(hierarchy):
         icon_svg = icon_svg_full.replace('w-6 h-6', 'w-4 h-4 mr-2').replace('text-[#24305E]', '')
 
         submenu_html = f'''
-        <div class="submenu-item flex items-center px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-[#374785] rounded cursor-pointer transition-colors"
+        <div class="submenu-item flex items-center pl-14 pr-6 py-2 text-sm text-gray-300 hover:text-white hover:bg-[#374785] rounded cursor-pointer transition-colors"
              data-section="library"
              data-code-id="{model_code_id}"
              data-version-id="{latest_version['ModelCodeVersionID']}"
