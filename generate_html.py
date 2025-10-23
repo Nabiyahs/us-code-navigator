@@ -215,6 +215,10 @@ def create_library_cards(hierarchy):
     """스키마 기반으로 라이브러리 카드를 생성합니다."""
     cards_html = []
 
+    # 데이터가 있는 코드와 없는 코드를 분리
+    codes_with_data = []
+    codes_without_data = []
+
     # ModelCode와 관련 데이터를 조인
     for model_code in hierarchy.data['ModelCode']:
         model_code_id = model_code['ModelCodeID']
@@ -268,15 +272,187 @@ def create_library_cards(hierarchy):
                 <p class="text-gray-600 text-xs">{description}</p>
               </div>'''
 
-        cards_html.append(card_html)
+        # 데이터 유무에 따라 분류
+        if is_active:
+            codes_with_data.append(card_html)
+        else:
+            codes_without_data.append(card_html)
 
-    return '\n'.join(cards_html)
+    # 데이터가 있는 코드를 먼저, 그 다음 없는 코드 순서로 배치
+    return '\n'.join(codes_with_data + codes_without_data)
 
 def escape_js_string(s):
     """JavaScript 문자열을 이스케이프합니다."""
     if not s:
         return ''
     return s.replace('\\', '\\\\').replace("'", "\\'").replace('"', '\\"').replace('\n', '\\n').replace('\r', '\\r')
+
+def create_initial_library_content(hierarchy):
+    """라이브러리 섹션의 초기 콘텐츠를 생성합니다 (첫 번째 활성 코드)."""
+    # 첫 번째 활성 코드 찾기 (IBC 2024)
+    for model_code in hierarchy.data['ModelCode']:
+        model_code_id = model_code['ModelCodeID']
+
+        # 최신 버전 찾기
+        versions = [v for v in hierarchy.data['ModelCodeVersion'] if v['ModelCodeID'] == model_code_id]
+        latest_version = max(versions, key=lambda v: v.get('Year') or 0) if versions else None
+
+        if not latest_version:
+            continue
+
+        # 챕터가 있는지 확인
+        chapters = hierarchy.get_children('ModelCodeVersion', latest_version)
+        if 'CodeChapter' not in chapters or len(chapters['CodeChapter']) == 0:
+            continue
+
+        # 첫 번째 활성 코드 찾음!
+        chapter_list = sorted(chapters['CodeChapter'], key=lambda x: x['Chapter'])
+
+        # 챕터 리스트 HTML 생성
+        chapters_html = []
+        for i, ch in enumerate(chapter_list):
+            active_class = 'active bg-[#F8E9A1]' if i == 0 else ''
+            chapters_html.append(f'''
+              <div class="chapter-item {active_class} px-4 py-3 rounded-lg cursor-pointer" data-chapter-id="{ch['ChapterID']}" onclick="scrollToChapter('{ch['ChapterID']}')">
+                <div class="font-semibold text-[#24305E] text-sm">Chapter {ch['Chapter']}</div>
+                <div class="text-xs text-gray-600 mt-1">{ch['TitleEN'] or ''}</div>
+              </div>''')
+
+        # 모든 챕터의 콘텐츠 생성
+        content_html = []
+        for chapter in chapter_list:
+            chapter_id = chapter['ChapterID']
+            chapter_num = chapter['Chapter']
+
+            # 이 챕터의 콘텐츠 가져오기
+            contents = [c for c in hierarchy.data['CodeContent'] if c.get('ChapterID') == chapter_id]
+
+            # Helper function to parse section/subsection for sorting
+            def parse_section_key(value):
+                if not value:
+                    return (0,)
+                # Handle both "1,1" and "2.1.1" formats
+                value_str = str(value).replace(',', '.')
+                try:
+                    parts = [float(p) for p in value_str.split('.')]
+                    return tuple(parts)
+                except:
+                    return (0,)
+
+            contents.sort(key=lambda x: (
+                parse_section_key(x.get('Section')),
+                parse_section_key(x.get('Subsection'))
+            ))
+
+            if not contents:
+                continue
+
+            # 챕터 시작
+            content_html.append(f'''
+            <div class="bg-white rounded-lg shadow-sm p-8 mb-6" id="chapter-{chapter_id}">
+                <div class="mb-6">
+                    <h2 class="text-2xl font-bold text-[#24305E] mb-2">Chapter {chapter_num}: {chapter['TitleEN'] or ''}</h2>
+                    {f'<p class="text-sm text-gray-600">{chapter["TitleKR"]}</p>' if chapter.get('TitleKR') else ''}
+                </div>
+                {f'<div class="mb-6 p-4 bg-blue-50 border-l-4 border-blue-400 rounded"><p class="text-sm text-gray-700 whitespace-pre-line">{chapter["ChapterComment"]}</p></div>' if chapter.get('ChapterComment') else ''}
+            ''')
+
+            # 섹션별로 그룹화
+            sections = {}
+            for content in contents:
+                section = content.get('Section') or 'General'
+                if section not in sections:
+                    sections[section] = []
+                sections[section].append(content)
+
+            # 각 섹션 출력
+            def get_section_sort_key(section_str):
+                import re
+                if section_str == 'General':
+                    return (0, 'General')
+                # Extract numeric part from formats like "[F]414", "[BS]403", or plain "123"
+                match = re.search(r'\d+', str(section_str))
+                if match:
+                    return (int(match.group()), str(section_str))
+                return (999999, str(section_str))  # Put unparseable sections at the end
+
+            for section_num in sorted(sections.keys(), key=get_section_sort_key):
+                section_contents = sections[section_num]
+                first_content = section_contents[0]
+
+                content_html.append(f'''
+                <div class="content-section mb-8">
+                    <h3 class="text-xl font-semibold text-[#374785] mb-3">Section {section_num}{' - ' + first_content['TitleEN'] if first_content.get('TitleEN') else ''}</h3>
+                    {f'<p class="text-sm text-gray-500 mb-4">{first_content["TitleKR"]}</p>' if first_content.get('TitleKR') else ''}
+                    <div class="space-y-4">''')
+
+                # 각 subsection
+                for content in section_contents:
+                    subsection = f".{content['Subsection']}" if content.get('Subsection') else ''
+                    section_number = f"{section_num}{subsection}"
+
+                    # Attachments
+                    attachments = [att for att in hierarchy.data['CodeAttachment']
+                                   if att.get('ModelCodeVersionID') == latest_version['ModelCodeVersionID']
+                                   and att.get('Chapter') == str(chapter_num)
+                                   and att.get('Section') == str(section_num)
+                                   and att.get('Subsection') == content.get('Subsection')]
+
+                    attachment_html = ''
+                    if attachments:
+                        att_items = []
+                        for att in attachments:
+                            icon = 'M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z' if att['Type'].lower() == 'table' else 'M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z'
+                            att_items.append(f'''
+                            <div class="border border-gray-300 rounded p-2 hover:border-[#A8D0E6] transition-colors cursor-pointer flex-shrink-0" style="min-width: 120px;">
+                                <div class="bg-gray-100 h-16 rounded flex items-center justify-center mb-1">
+                                    <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{icon}"></path>
+                                    </svg>
+                                </div>
+                                <p class="text-xs font-medium text-gray-700 text-center">{att['Type']} {att.get('Number') or ''}</p>
+                            </div>''')
+                        attachment_html = f'''
+                        <div class="mt-3 pt-3 border-t border-gray-200">
+                            <div class="figures-scroll">
+                                {''.join(att_items)}
+                            </div>
+                        </div>'''
+
+                    content_html.append(f'''
+                    <div class="bg-gray-50 p-4 rounded-lg relative" id="section-{section_number.replace('.', '-')}">
+                        <div class="absolute top-3 right-3 flex items-center gap-1">
+                            <button class="p-1.5 hover:bg-gray-200 rounded transition-colors" title="Copy link" onclick="copyLink('{section_number}')">
+                                <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="flex items-center gap-2 mb-2">
+                            <h4 class="font-semibold text-[#24305E]">{section_number}{' ' + content['TitleEN'] if content.get('TitleEN') else ''}</h4>
+                        </div>
+                        {f'<p class="text-gray-700 leading-relaxed mb-2">{content["ContentEN"]}</p>' if content.get('ContentEN') else ''}
+                        {f'<p class="text-gray-600 text-sm leading-relaxed mb-3">{content["ContentKR"]}</p>' if content.get('ContentKR') else ''}
+                        {f'<div class="mt-3 pt-3 border-t border-gray-200 bg-[#FEE9EC] bg-opacity-30 p-3 rounded-lg"><label class="text-xs font-semibold text-[#F76C6C] mb-1 block">Note</label><div class="w-full text-sm p-2 bg-white border border-[#F76C6C] border-opacity-20 rounded text-gray-700 whitespace-pre-line">{content["Comment"]}</div></div>' if content.get('Comment') else ''}
+                        {attachment_html}
+                    </div>''')
+
+                content_html.append('</div></div>')
+
+            content_html.append('</div>')
+
+        # 코드 정보와 함께 반환
+        return {
+            'code_id': model_code_id,
+            'version_id': latest_version['ModelCodeVersionID'],
+            'code_name': model_code['ModelCodeName'],
+            'code_title': f"{model_code['ModelCodeName'].split(':')[0].strip()} {int(latest_version['Year'])}",
+            'code_subtitle': model_code['Description'],
+            'chapters_html': '\n'.join(chapters_html),
+            'content_html': '\n'.join(content_html)
+        }
+
+    return None
 
 def create_sidebar_library_submenu(hierarchy):
     """사이드바 라이브러리 하위메뉴를 생성합니다."""
@@ -375,47 +551,49 @@ def generate_html(hierarchy):
                     grid_div.replace_with(new_grid.find('div'))
                     print("✓ Library cards updated with hierarchical data!")
 
-    # 라이브러리 섹션의 하드코딩된 챕터 리스트와 콘텐츠를 실제 데이터로 교체
-    print("Replacing library section content with actual data...")
-    library_section = soup.find('div', id='librarySection')
-    if library_section:
-        # 챕터 리스트를 비우고 초기 메시지 추가
-        chapter_list = library_section.find('div', id='chapterList')
-        if chapter_list:
-            chapter_list.clear()
-            placeholder = soup.new_tag('p', **{'class': 'text-gray-500 text-sm p-4'})
-            placeholder.string = 'Select a code from the library to view chapters'
-            chapter_list.append(placeholder)
-            print("✓ Chapter list cleared, ready for dynamic loading")
+    # 라이브러리 섹션에 실제 데이터 삽입
+    print("Generating initial library content with actual database...")
+    initial_content = create_initial_library_content(hierarchy)
 
-        # 콘텐츠 영역을 비우고 초기 메시지 추가
+    library_section = soup.find('div', id='librarySection')
+    if library_section and initial_content:
+        # 헤더 업데이트
+        code_title = library_section.find('h1', id='codeTitle')
+        code_subtitle = library_section.find('p', id='codeSubtitle')
+        if code_title:
+            code_title.string = initial_content['code_title']
+        if code_subtitle:
+            code_subtitle.string = initial_content['code_subtitle']
+
+        # 챕터 리스트 업데이트 - Find the div containing chapter items in library section
+        # Look for the aside with Chapters heading, then find the space-y-2 div
+        aside = library_section.find('aside', class_='w-80')
+        if aside:
+            chapters_heading = aside.find('h2', string='Chapters')
+            if chapters_heading:
+                space_div = chapters_heading.find_next('div', class_='space-y-2')
+                if space_div:
+                    # Clear existing chapters and add new ones
+                    space_div.clear()
+                    chapters_soup = BeautifulSoup(initial_content['chapters_html'], 'lxml')
+                    # Find elements in body, as lxml wraps content in html>body
+                    body = chapters_soup.find('body')
+                    if body:
+                        for element in body.find_all('div', class_='chapter-item', recursive=False):
+                            space_div.append(element)
+                    print(f"✓ Chapter list populated with {len(space_div.find_all('div', class_='chapter-item', recursive=False))} chapters")
+
+        # 콘텐츠 영역 업데이트
         content_area = library_section.find('div', id='contentArea')
         if content_area:
             content_area.clear()
-            welcome_html = '''
-            <div class="bg-white rounded-lg shadow-sm p-8 text-center">
-                <div class="max-w-2xl mx-auto">
-                    <svg class="w-24 h-24 mx-auto mb-6 text-[#A8D0E6]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
-                    </svg>
-                    <h2 class="text-3xl font-bold text-[#24305E] mb-4">Welcome to US Code Navigator</h2>
-                    <p class="text-gray-600 text-lg mb-6">Select a code from the home page library to browse chapters and content</p>
-                    <div class="bg-blue-50 border-l-4 border-blue-400 p-4 rounded text-left">
-                        <p class="text-sm text-gray-700"><strong>Available Codes:</strong></p>
-                        <ul class="text-sm text-gray-700 mt-2 space-y-1">
-                            <li>• IBC 2024 - International Building Code</li>
-                            <li>• NFPA 13 2025 - Sprinkler Systems</li>
-                            <li>• NFPA 14 2024 - Standpipe Systems</li>
-                            <li>• NFPA 20 2025 - Fire Pumps</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            '''
-            welcome_soup = BeautifulSoup(welcome_html, 'lxml')
-            for child in welcome_soup.find('div').children:
-                content_area.append(child)
-            print("✓ Content area cleared and welcome message added")
+            content_soup = BeautifulSoup(initial_content['content_html'], 'lxml')
+            # Find elements in body, as lxml wraps content in html>body
+            body = content_soup.find('body')
+            if body:
+                for element in body.find_all('div', class_='bg-white', recursive=False):
+                    content_area.append(element)
+            print(f"✓ Content area populated with {len(content_area.find_all('div', class_='bg-white', recursive=False))} chapter sections")
 
     # JavaScript 데이터 및 기능 삽입
     print("Injecting JavaScript with schema-based data hierarchy...")
@@ -656,6 +834,24 @@ function copyContent(sectionNumber) {{
         navigator.clipboard.writeText(text).then(() => {{
             alert('Content copied to clipboard!');
         }});
+    }}
+}}
+
+// Scroll to chapter function for pre-rendered content
+function scrollToChapter(chapterId) {{
+    const chapterElement = document.getElementById('chapter-' + chapterId);
+    if (chapterElement) {{
+        // Scroll to chapter with smooth animation
+        chapterElement.scrollIntoView({{ behavior: 'smooth', block: 'start' }});
+
+        // Update active chapter in sidebar
+        document.querySelectorAll('.chapter-item').forEach(item => {{
+            item.classList.remove('active', 'bg-[#F8E9A1]');
+        }});
+        const activeItem = document.querySelector(`[data-chapter-id="${{chapterId}}"]`);
+        if (activeItem) {{
+            activeItem.classList.add('active', 'bg-[#F8E9A1]');
+        }}
     }}
 }}
 
