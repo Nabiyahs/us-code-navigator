@@ -419,6 +419,36 @@ def create_all_library_content(hierarchy):
                     sections[section] = []
                 sections[section].append(content)
 
+            # Helper function to add hyperlinks to Section/Chapter references in content
+            def add_section_chapter_links(text, current_chapter_id):
+                if not text:
+                    return text
+                import re
+
+                # Find "Section [number]" or "Section [number].[number]"
+                def replace_section(match):
+                    section_ref = match.group(1)
+                    # Check if this section exists in current chapter
+                    section_id = f"section-{current_chapter_id}-{section_ref}"
+                    return f'<a href="#section-{section_id.replace(".", "-")}" class="text-[#F76C6C] hover:underline font-semibold" onclick="scrollToSection(\'{current_chapter_id}\', \'{section_ref}\')">Section {section_ref}</a>'
+
+                # Find "Chapter [number]"
+                def replace_chapter(match):
+                    chapter_ref = match.group(1)
+                    # Find chapter by number
+                    for ch in hierarchy.data['CodeChapter']:
+                        if ch.get('Chapter') == int(chapter_ref) and ch.get('ModelCodeVersionID') == latest_version['ModelCodeVersionID']:
+                            chapter_id = ch['ChapterID']
+                            return f'<a href="#chapter-{chapter_id}" class="text-[#F76C6C] hover:underline font-semibold" onclick="scrollToChapter(\'{chapter_id}\')">Chapter {chapter_ref}</a>'
+                    return match.group(0)  # Return original if not found
+
+                # Replace Section references
+                text = re.sub(r'Section (\d+(?:\.\d+)?)', replace_section, text)
+                # Replace Chapter references
+                text = re.sub(r'Chapter (\d+)', replace_chapter, text)
+
+                return text
+
             # 각 섹션 출력
             def get_section_sort_key(section_str):
                 import re
@@ -498,10 +528,10 @@ def create_all_library_content(hierarchy):
 
                     content_html.append(f'''
                     <div class="bg-gray-50 p-4 rounded-lg relative" id="section-{section_number.replace('.', '-')}">
-                        <div class="absolute top-3 right-3 flex items-center gap-1">
-                            <button class="p-1.5 hover:bg-gray-200 rounded transition-colors" title="Copy link" onclick="copyLink('{section_number}')">
+                        <div class="absolute top-3 right-3">
+                            <button class="p-1.5 hover:bg-gray-200 rounded transition-colors" title="Copy content" onclick="copyCodeContent('{section_number}')">
                                 <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
                                 </svg>
                             </button>
                         </div>
@@ -512,8 +542,8 @@ def create_all_library_content(hierarchy):
                             <h4 class="font-semibold text-[#24305E]">{section_number}{' ' + content['TitleEN'] if content.get('TitleEN') else ''}</h4>
                         </div>
                         {f'<p class="text-base text-gray-600 mb-2">{content["TitleKR"]}</p>' if content.get('TitleKR') else ''}
-                        {f'<p class="text-gray-700 leading-relaxed mb-2">{content["ContentEN"]}</p>' if content.get('ContentEN') else ''}
-                        {f'<p class="text-gray-600 text-base leading-relaxed mb-3">{content["ContentKR"]}</p>' if content.get('ContentKR') else ''}
+                        {f'<p class="text-gray-700 leading-relaxed mb-2">{add_section_chapter_links(content["ContentEN"], chapter_id)}</p>' if content.get('ContentEN') else ''}
+                        {f'<p class="text-gray-600 text-base leading-relaxed mb-3">{add_section_chapter_links(content["ContentKR"], chapter_id)}</p>' if content.get('ContentKR') else ''}
                         {f'<div class="mt-3 pt-3 border-t border-gray-200 bg-[#FEE9EC] bg-opacity-30 p-3 rounded-lg"><label class="text-xs font-semibold text-[#F76C6C] mb-1 block">Note</label><div class="w-full text-base p-2 bg-white border border-[#F76C6C] border-opacity-20 rounded text-gray-700 whitespace-pre-line">{content["Comment"]}</div></div>' if content.get('Comment') else ''}
                         {attachment_html}
                     </div>''')
@@ -1364,14 +1394,9 @@ function displayTopSearchResults(exactMatches, partialMatches, keyword) {{
                  data-result='${{JSON.stringify(result).replace(/'/g, "\\'")}}'
                  onmousedown="handleResultMouseDown(event)"
                  onmouseup="handleResultMouseUp(event)">
-                <!-- Copy/Link buttons -->
-                <div class="absolute top-3 right-3 flex items-center gap-1">
-                    <button class="p-1.5 hover:bg-gray-200 rounded transition-colors" title="Copy link">
-                        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path>
-                        </svg>
-                    </button>
-                    <button class="p-1.5 hover:bg-gray-200 rounded transition-colors" title="Copy content">
+                <!-- Copy button only -->
+                <div class="absolute top-3 right-3">
+                    <button class="p-1.5 hover:bg-gray-200 rounded transition-colors" title="Copy content" onclick="copySearchResultContent(event, this)">
                         <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
                         </svg>
@@ -1383,11 +1408,11 @@ function displayTopSearchResults(exactMatches, partialMatches, keyword) {{
                     <span class="text-xs bg-[#F8E9A1] text-[#24305E] px-2 py-0.5 rounded">건축</span>
                 </div>
                 <div class="flex items-center gap-2 mb-2">
-                    <h4 class="font-semibold text-[#24305E]">${{sectionNum}}${{result.titleEN ? ' ' + highlightedTitleEN : ''}}</h4>
+                    <h4 class="font-semibold text-[#24305E] text-sm">${{sectionNum}}${{result.titleEN ? ' ' + highlightedTitleEN : ''}}</h4>
                 </div>
-                ${{result.titleKR ? `<p class="text-gray-600 text-lg leading-relaxed mb-2">${{highlightedTitleKR}}</p>` : ''}}
-                ${{result.contentEN ? `<p class="text-gray-700 leading-relaxed mb-2">${{highlightedContentEN}}</p>` : ''}}
-                ${{result.contentKR ? `<p class="text-gray-600 text-lg leading-relaxed mb-3">${{highlightedContentKR}}</p>` : ''}}
+                ${{result.titleKR ? `<p class="text-gray-600 text-sm leading-relaxed mb-1 line-clamp-1">${{highlightedTitleKR}}</p>` : ''}}
+                ${{result.contentEN ? `<p class="text-gray-700 text-xs leading-relaxed mb-1 line-clamp-2">${{highlightedContentEN}}</p>` : ''}}
+                ${{result.contentKR ? `<p class="text-gray-600 text-xs leading-relaxed mb-2 line-clamp-2">${{highlightedContentKR}}</p>` : ''}}
             </div>
         `;
     }});
@@ -1558,14 +1583,9 @@ function displaySearchResults(exactMatches, partialMatches, allFilteredResults, 
                  data-result='${{JSON.stringify(result).replace(/'/g, "\\'")}}'
                  onmousedown="handleResultMouseDown(event)"
                  onmouseup="handleResultMouseUp(event)">
-                <!-- Copy/Link buttons -->
-                <div class="absolute top-3 right-3 flex items-center gap-1">
-                    <button class="p-1.5 hover:bg-gray-200 rounded transition-colors" title="Copy link">
-                        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path>
-                        </svg>
-                    </button>
-                    <button class="p-1.5 hover:bg-gray-200 rounded transition-colors" title="Copy content">
+                <!-- Copy button only -->
+                <div class="absolute top-3 right-3">
+                    <button class="p-1.5 hover:bg-gray-200 rounded transition-colors" title="Copy content" onclick="copySearchResultContent(event, this)">
                         <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
                         </svg>
@@ -1577,11 +1597,11 @@ function displaySearchResults(exactMatches, partialMatches, allFilteredResults, 
                     <span class="text-xs bg-[#F8E9A1] text-[#24305E] px-2 py-0.5 rounded">건축</span>
                 </div>
                 <div class="flex items-center gap-2 mb-2">
-                    <h4 class="font-semibold text-[#24305E]">${{sectionNum}}${{result.titleEN ? ' ' + result.titleEN : ''}}</h4>
+                    <h4 class="font-semibold text-[#24305E] text-sm">${{sectionNum}}${{result.titleEN ? ' ' + result.titleEN : ''}}</h4>
                 </div>
-                ${{displayTitleKR ? `<p class="text-gray-600 text-lg leading-relaxed mb-2">${{displayTitleKR}}</p>` : ''}}
-                ${{displayContentEN ? `<p class="text-gray-700 leading-relaxed mb-2">${{displayContentEN}}</p>` : ''}}
-                ${{displayContentKR ? `<p class="text-gray-600 text-lg leading-relaxed mb-3">${{displayContentKR}}</p>` : ''}}
+                ${{displayTitleKR ? `<p class="text-gray-600 text-sm leading-relaxed mb-1 line-clamp-1">${{displayTitleKR}}</p>` : ''}}
+                ${{displayContentEN ? `<p class="text-gray-700 text-xs leading-relaxed mb-1 line-clamp-2">${{displayContentEN}}</p>` : ''}}
+                ${{displayContentKR ? `<p class="text-gray-600 text-xs leading-relaxed mb-2 line-clamp-2">${{displayContentKR}}</p>` : ''}}
             </div>
         `;
     }});
@@ -1680,15 +1700,10 @@ function openSearchResultModal(result) {{
 
     // Create content with reference.txt card design
     let contentHTML = `
-        <div class="bg-gray-50 p-4 rounded-lg relative">
-            <!-- Copy/Link buttons -->
-            <div class="absolute top-3 right-3 flex items-center gap-1">
-                <button class="p-1.5 hover:bg-gray-200 rounded transition-colors" title="Copy link">
-                    <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path>
-                    </svg>
-                </button>
-                <button class="p-1.5 hover:bg-gray-200 rounded transition-colors" title="Copy content">
+        <div class="bg-gray-50 p-4 rounded-lg relative" data-section="${{sectionNum}}" data-code="${{result.code}}" data-year="${{result.year}}" data-chapter="${{result.chapter}}">
+            <!-- Copy button only -->
+            <div class="absolute top-3 right-3">
+                <button class="p-1.5 hover:bg-gray-200 rounded transition-colors" title="Copy content" onclick="copyModalContent(this)">
                     <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
                     </svg>
@@ -1767,6 +1782,89 @@ function openSearchResult(codeId, versionId, chapterId, section) {{
 
 function clearSearchInput() {{
     document.getElementById('topSearchInput').value = '';
+}}
+
+// === Chapter/Section Navigation ===
+function scrollToChapter(chapterId) {{
+    const chapterElement = document.getElementById('chapter-' + chapterId);
+    if (chapterElement) {{
+        chapterElement.scrollIntoView({{ behavior: 'auto', block: 'start' }});
+    }}
+}}
+
+// === Copy Functions ===
+function copySearchResultContent(event, button) {{
+    event.stopPropagation(); // Prevent modal from opening
+    const resultCard = button.closest('.search-result-item');
+    const resultData = resultCard.getAttribute('data-result');
+
+    if (resultData) {{
+        try {{
+            const result = JSON.parse(resultData);
+            const copyText = `${{result.code}} ${{result.year}} - Chapter ${{result.chapter}}: Section ${{result.section}}${{result.subsection ? '.' + result.subsection : ''}}
+
+${{result.titleEN || ''}}
+${{result.titleKR || ''}}
+
+${{result.contentEN || ''}}
+${{result.contentKR || ''}}`;
+
+            navigator.clipboard.writeText(copyText).then(() => {{
+                // Visual feedback
+                button.innerHTML = '<svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>';
+                setTimeout(() => {{
+                    button.innerHTML = '<svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>';
+                }}, 1500);
+            }});
+        }} catch (e) {{
+            console.error('Failed to copy:', e);
+        }}
+    }}
+}}
+
+function copyModalContent(button) {{
+    const contentCard = button.closest('.bg-gray-50');
+    const titleElement = contentCard.querySelector('h4');
+    const textElements = contentCard.querySelectorAll('p');
+
+    let copyText = '';
+    if (titleElement) copyText += titleElement.textContent + '\\n\\n';
+    textElements.forEach(p => {{
+        copyText += p.textContent + '\\n';
+    }});
+
+    navigator.clipboard.writeText(copyText).then(() => {{
+        button.innerHTML = '<svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>';
+        setTimeout(() => {{
+            button.innerHTML = '<svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>';
+        }}, 1500);
+    }});
+}}
+
+function copyCodeContent(sectionNumber) {{
+    const sectionElement = document.getElementById('section-' + sectionNumber.replace('.', '-'));
+    if (!sectionElement) return;
+
+    const titleElement = sectionElement.querySelector('h4');
+    const textElements = sectionElement.querySelectorAll('p');
+
+    let copyText = '';
+    if (titleElement) copyText += titleElement.textContent + '\\n\\n';
+    textElements.forEach(p => {{
+        // Skip note labels
+        if (p.parentElement.querySelector('label')) return;
+        copyText += p.textContent + '\\n';
+    }});
+
+    navigator.clipboard.writeText(copyText).then(() => {{
+        const button = sectionElement.querySelector('button');
+        if (button) {{
+            button.innerHTML = '<svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>';
+            setTimeout(() => {{
+                button.innerHTML = '<svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>';
+            }}, 1500);
+        }}
+    }});
 }}
 
 // === Page Initialization ===
