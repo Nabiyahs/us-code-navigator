@@ -307,13 +307,39 @@ def create_all_library_content(hierarchy):
         if not latest_version:
             continue
 
-        # 챕터가 있는지 확인
-        chapters = hierarchy.get_children('ModelCodeVersion', latest_version)
-        if 'CodeChapter' not in chapters or len(chapters['CodeChapter']) == 0:
+        # 챕터 확인: CodeChapter에 정의된 것과 CodeContent에만 있는 것 모두 포함
+        chapters_from_schema = hierarchy.get_children('ModelCodeVersion', latest_version)
+        defined_chapters = chapters_from_schema.get('CodeChapter', [])
+
+        # CodeContent에서 이 버전의 모든 unique 챕터 번호 추출
+        version_contents = [c for c in hierarchy.data['CodeContent']
+                           if c.get('ModelCodeVersionID') == latest_version['ModelCodeVersionID']]
+
+        if not version_contents and len(defined_chapters) == 0:
             continue
 
+        # Unique 챕터 번호 추출
+        unique_chapters = set(c.get('Chapter') for c in version_contents if c.get('Chapter'))
+
+        # 챕터 리스트 구성: 정의된 챕터 + 정의되지 않은 챕터
+        chapter_dict = {ch['Chapter']: ch for ch in defined_chapters}
+
+        # 정의되지 않은 챕터는 동적으로 생성
+        for chapter_num in unique_chapters:
+            if chapter_num not in chapter_dict:
+                # 이 챕터의 첫 번째 content에서 타이틀 가져오기
+                first_content = next((c for c in version_contents if c.get('Chapter') == chapter_num), None)
+                chapter_dict[chapter_num] = {
+                    'ChapterID': f'CH-{latest_version["ModelCodeVersionID"]}-{chapter_num}',
+                    'Chapter': chapter_num,
+                    'ModelCodeVersionID': latest_version['ModelCodeVersionID'],
+                    'TitleEN': first_content.get('TitleEN', f'Chapter {chapter_num}') if first_content else f'Chapter {chapter_num}',
+                    'TitleKR': first_content.get('TitleKR', '') if first_content else '',
+                    'ChapterComment': None
+                }
+
         # 첫 번째 활성 코드 찾음!
-        chapter_list = sorted(chapters['CodeChapter'], key=lambda x: x['Chapter'])
+        chapter_list = sorted(chapter_dict.values(), key=lambda x: x['Chapter'])
 
         # 챕터 리스트 HTML 생성 (섹션 포함)
         chapters_html = []
@@ -379,7 +405,12 @@ def create_all_library_content(hierarchy):
             chapter_num = chapter['Chapter']
 
             # 이 챕터의 콘텐츠 가져오기
-            contents = [c for c in hierarchy.data['CodeContent'] if c.get('ChapterID') == chapter_id]
+            # ChapterID가 있으면 그걸로 매칭, 없으면 (ModelCodeVersionID, Chapter)로 매칭
+            contents = [c for c in hierarchy.data['CodeContent']
+                       if (c.get('ChapterID') == chapter_id) or
+                          (c.get('ModelCodeVersionID') == latest_version['ModelCodeVersionID'] and
+                           c.get('Chapter') == chapter_num and
+                           not c.get('ChapterID'))]
 
             # Helper function to parse section/subsection for sorting
             def parse_section_key(value):
@@ -527,9 +558,9 @@ def create_all_library_content(hierarchy):
                         index_tags_html = '\n                            <span class="text-xs bg-[#F8E9A1] text-[#24305E] px-2 py-0.5 rounded">건축</span>'
 
                     content_html.append(f'''
-                    <div class="bg-gray-50 p-4 rounded-lg relative" id="section-{section_number.replace('.', '-')}">
+                    <div class="bg-gray-50 p-4 rounded-lg relative" id="section-{chapter_id}-{section_number.replace('.', '-')}">
                         <div class="absolute top-3 right-3">
-                            <button class="p-1.5 hover:bg-gray-200 rounded transition-colors" title="Copy content" onclick="copyCodeContent('{section_number}')">
+                            <button class="p-1.5 hover:bg-gray-200 rounded transition-colors" title="Copy content" onclick="copyCodeContent('{chapter_id}-{section_number}')">
                                 <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
                                 </svg>
