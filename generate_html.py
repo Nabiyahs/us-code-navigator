@@ -466,10 +466,8 @@ def create_all_library_content(hierarchy):
                 # Find "Section [number]" or "Section [number].[number]"
                 def replace_section(match):
                     section_ref = match.group(1)
-                    # Create proper section ID matching the actual ID format
-                    section_id = f"section-{current_chapter_id}-{section_ref.replace('.', '-')}"
-                    # Use event.preventDefault() and call function directly
-                    return f'<a href="#{section_id}" class="text-[#F76C6C] hover:underline font-semibold" onclick="event.preventDefault(); navigateToSection(\'{current_chapter_id}\', \'{section_ref}\'); return false;">Section {section_ref}</a>'
+                    # Just add red underline, keep text same, make it clickable
+                    return f'<span class="section-link cursor-pointer" style="text-decoration: underline; text-decoration-color: #F76C6C; text-underline-offset: 2px;" onclick="navigateToSection(\'{current_chapter_id}\', \'{section_ref}\')">Section {section_ref}</span>'
 
                 # Find "Chapter [number]"
                 def replace_chapter(match):
@@ -573,12 +571,14 @@ def create_all_library_content(hierarchy):
 
                     content_html.append(f'''
                     <div class="bg-gray-50 p-4 rounded-lg relative" id="section-{chapter_id}-{section_number.replace('.', '-')}">
-                        <div class="absolute top-3 right-3 flex gap-2">
-                            <button class="back-btn hidden p-1.5 hover:bg-gray-200 rounded transition-colors" title="Go back" onclick="goBackToSection()" id="back-btn-{chapter_id}-{section_number.replace('.', '-')}">
-                                <svg class="w-4 h-4 text-[#F76C6C]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="absolute top-2 left-2 flex gap-2">
+                            <button class="back-btn hidden p-2 bg-white hover:bg-gray-200 rounded-full shadow transition-colors" title="Go back" onclick="goBackToSection()" id="back-btn-{chapter_id}-{section_number.replace('.', '-')}">
+                                <svg class="w-5 h-5 text-[#F76C6C]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
                                 </svg>
                             </button>
+                        </div>
+                        <div class="absolute top-3 right-3 flex gap-2">
                             <button class="p-1.5 hover:bg-gray-200 rounded transition-colors" title="Copy content" onclick="copyCodeContent('{chapter_id}-{section_number}')">
                                 <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
@@ -1195,6 +1195,15 @@ function toggleChapterSidebar(chapterId) {{
         }}
     }}
 
+    // Update active state
+    document.querySelectorAll('.chapter-item').forEach(item => {{
+        item.classList.remove('active', 'bg-[#F8E9A1]');
+    }});
+    const activeItem = document.querySelector(`[data-chapter-id="${{chapterId}}"]`);
+    if (activeItem) {{
+        activeItem.classList.add('active', 'bg-[#F8E9A1]');
+    }}
+
     // Also scroll to chapter
     scrollToChapter(chapterId);
 }}
@@ -1537,7 +1546,7 @@ function displayTopSearchResults(exactMatches, partialMatches, keyword) {{
                 </div>
 
                 <!-- Summary (always visible) -->
-                <div class="ml-8 pr-20">
+                <div class="ml-12 pr-20">
                     <div class="flex items-center gap-2 mb-2 flex-wrap">
                         <span class="text-xs bg-[#A8D0E6] text-[#24305E] font-semibold px-2 py-0.5 rounded">${{result.code}} ${{result.year}}: Ch.${{result.chapter}} - ${{sectionNum}}</span>
                     </div>
@@ -1545,10 +1554,10 @@ function displayTopSearchResults(exactMatches, partialMatches, keyword) {{
                 </div>
 
                 <!-- Details (collapsible) -->
-                <div class="result-details hidden ml-8 pr-20 mt-2 border-t border-gray-200 pt-2">
+                <div class="result-details hidden ml-12 pr-20 mt-2 border-t border-gray-200 pt-2">
                     ${{result.titleKR ? `<p class="text-gray-600 text-sm leading-relaxed mb-2">${{highlightedTitleKR}}</p>` : ''}}
-                    ${{result.contentEN ? `<p class="text-gray-700 text-sm leading-relaxed mb-2">${{highlightedContentEN}}</p>` : ''}}
-                    ${{result.contentKR ? `<p class="text-gray-600 text-sm leading-relaxed">${{highlightedContentKR}}</p>` : ''}}
+                    ${{result.contentEN ? `<p class="text-gray-700 text-sm leading-relaxed mb-2 line-clamp-3">${{highlightedContentEN}}</p>` : ''}}
+                    ${{result.contentKR ? `<p class="text-gray-600 text-sm leading-relaxed line-clamp-3">${{highlightedContentKR}}</p>` : ''}}
                 </div>
             </div>
         `;
@@ -1711,8 +1720,8 @@ function highlightKeyword(text, keyword, isExactMatch) {{
     // Create regex for case-insensitive matching
     const regex = new RegExp(`(${{escapedKeyword}})`, 'gi');
 
-    // Different highlight colors: exact match = yellow, partial match = light blue
-    const highlightClass = isExactMatch ? 'bg-yellow-200 font-semibold' : 'bg-blue-200 font-medium';
+    // Yellow highlight for all matches
+    const highlightClass = 'bg-yellow-200 font-medium';
 
     // Replace matches with highlighted spans
     return text.replace(regex, `<mark class="${{highlightClass}}">$1</mark>`);
