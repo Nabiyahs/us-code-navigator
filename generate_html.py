@@ -532,18 +532,26 @@ def create_sidebar_library_submenu(hierarchy):
             continue
 
         # 버전 텍스트
+        code_base = code_name.split(':')[0].strip()
         if latest_version.get('Year'):
             year = int(latest_version['Year'])
-            display_name = f"{code_name.split(':')[0].strip()} {year}"
+            display_name = f"{code_base} {year}"
         else:
-            display_name = code_name.split(':')[0].strip()
+            display_name = code_base
+
+        # Icon SVG 가져오기 (sidebar용으로 크기 조정)
+        icon_svg_full = get_icon_svg(code_base)
+        # w-6 h-6을 w-4 h-4로 변경하고, text-[#24305E]를 제거 (현재 색상 상속)
+        icon_svg = icon_svg_full.replace('w-6 h-6', 'w-4 h-4 mr-2').replace('text-[#24305E]', '')
 
         submenu_html = f'''
-        <div class="submenu-item pl-12 py-2 text-sm text-white hover:bg-[#374785] cursor-pointer transition-all rounded-r-lg"
+        <div class="submenu-item flex items-center px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-[#374785] rounded cursor-pointer transition-colors"
+             data-section="library"
              data-code-id="{model_code_id}"
              data-version-id="{latest_version['ModelCodeVersionID']}"
              onclick="loadCodeFromSidebar('{latest_version['ModelCodeVersionID']}', '{model_code_id}')">
-            <span>{display_name}</span>
+            {icon_svg}
+            {display_name}
         </div>'''
 
         submenu_items.append(submenu_html)
@@ -689,7 +697,8 @@ def generate_html(hierarchy):
 
             for i, code_data in enumerate(all_content['codes']):
                 is_first = (i == 0)
-                display_style = '' if is_first else 'display: none;'
+                # 첫 번째는 명시적으로 display: block, 나머지는 display: none
+                display_style = 'display: block;' if is_first else 'display: none;'
 
                 # 챕터 리스트 추가
                 chapter_wrapper = soup.new_tag('div',

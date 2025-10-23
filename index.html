@@ -445,15 +445,41 @@
 </svg>
 </div>
 <!-- Submenu items -->
-<div class="overflow-hidden transition-all duration-300" id="librarySubmenu" style="max-height: 0;"><div class="submenu-item pl-12 py-2 text-sm text-white hover:bg-[#374785] cursor-pointer transition-all rounded-r-lg" data-code-id="MC001" data-version-id="MCV002" onclick="loadCodeFromSidebar('MCV002', 'MC001')">
-<span>IBC 2024</span>
-</div><div class="submenu-item pl-12 py-2 text-sm text-white hover:bg-[#374785] cursor-pointer transition-all rounded-r-lg" data-code-id="MC007" data-version-id="MCV003" onclick="loadCodeFromSidebar('MCV003', 'MC007')">
-<span>NFPA 13 2025</span>
-</div><div class="submenu-item pl-12 py-2 text-sm text-white hover:bg-[#374785] cursor-pointer transition-all rounded-r-lg" data-code-id="MC008" data-version-id="MCV004" onclick="loadCodeFromSidebar('MCV004', 'MC008')">
-<span>NFPA 14 2024</span>
-</div><div class="submenu-item pl-12 py-2 text-sm text-white hover:bg-[#374785] cursor-pointer transition-all rounded-r-lg" data-code-id="MC009" data-version-id="MCV005" onclick="loadCodeFromSidebar('MCV005', 'MC009')">
-<span>NFPA 20 2025</span>
-</div></div>
+<div class="overflow-hidden transition-all duration-300" id="librarySubmenu" style="max-height: 0;"><div class="submenu-item flex items-center px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-[#374785] rounded cursor-pointer transition-colors" data-code-id="MC001" data-section="library" data-version-id="MCV002" onclick="loadCodeFromSidebar('MCV002', 'MC001')">
+<svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<rect height="20" rx="2" ry="2" width="16" x="4" y="2"></rect>
+<path d="M9 22v-4h6v4"></path>
+<path d="M8 6h.01"></path>
+<path d="M16 6h.01"></path>
+<path d="M12 6h.01"></path>
+<path d="M12 10h.01"></path>
+<path d="M12 14h.01"></path>
+<path d="M16 10h.01"></path>
+<path d="M16 14h.01"></path>
+<path d="M8 10h.01"></path>
+<path d="M8 14h.01"></path>
+</svg>
+            IBC 2024
+        </div><div class="submenu-item flex items-center px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-[#374785] rounded cursor-pointer transition-colors" data-code-id="MC007" data-section="library" data-version-id="MCV003" onclick="loadCodeFromSidebar('MCV003', 'MC007')">
+<svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M7 16.3c2.2 0 4-1.83 4-4.05 0-1.16-.57-2.26-1.71-3.19S7.29 6.75 7 5.3c-.29 1.45-1.14 2.84-2.29 3.76S3 11.1 3 12.25c0 2.22 1.8 4.05 4 4.05z"></path>
+<path d="M12.56 6.6A10.97 10.97 0 0 0 14 3.02c.5 2.5 2 4.9 4 6.5s3 3.5 3 5.5a6.98 6.98 0 0 1-11.91 4.97"></path>
+</svg>
+            NFPA 13 2025
+        </div><div class="submenu-item flex items-center px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-[#374785] rounded cursor-pointer transition-colors" data-code-id="MC008" data-section="library" data-version-id="MCV004" onclick="loadCodeFromSidebar('MCV004', 'MC008')">
+<svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="m2 22 1-1h3l9-9"></path>
+<path d="M3 21v-3l9-9"></path>
+<path d="m15 6 3.4-3.4a2.1 2.1 0 1 1 3 3L18 9l.4.4a2.1 2.1 0 1 1-3 3l-3.8-3.8a2.1 2.1 0 1 1 3-3l.4.4Z"></path>
+</svg>
+            NFPA 14 2024
+        </div><div class="submenu-item flex items-center px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-[#374785] rounded cursor-pointer transition-colors" data-code-id="MC009" data-section="library" data-version-id="MCV005" onclick="loadCodeFromSidebar('MCV005', 'MC009')">
+<svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="m12 14 4-4"></path>
+<path d="M3.34 19a10 10 0 1 1 17.32 0"></path>
+</svg>
+            NFPA 20 2025
+        </div></div>
 </div>
 <div class="sidebar-item flex items-center px-6 py-3 text-white" data-section="search">
 <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewbox="0 0 24 24">
@@ -682,7 +708,7 @@
 <aside class="w-80 bg-white border-r border-gray-200 overflow-y-auto sticky" style="top: 88px; max-height: calc(100vh - 88px);">
 <div class="p-6">
 <h2 class="text-lg font-bold text-[#24305E] mb-4">Chapters</h2>
-<div class="space-y-2"><div class="code-chapters" id="chapters-MC001" style=""><div class="chapter-group">
+<div class="space-y-2"><div class="code-chapters" id="chapters-MC001" style="display: block;"><div class="chapter-group">
 <div class="chapter-item active bg-[#F8E9A1] px-4 py-3 rounded-lg cursor-pointer flex items-center justify-between" data-chapter-id="CH001" onclick="toggleChapterSidebar('CH001')">
 <div>
 <div class="font-semibold text-[#24305E] text-sm">Chapter 1</div>
@@ -1256,7 +1282,7 @@
 </div>
 </aside>
 <div class="flex-1 p-8 overflow-y-auto">
-<div id="contentArea"><div class="code-content" id="content-MC001" style=""><div class="bg-white rounded-lg shadow-sm p-8 mb-6" id="chapter-CH002">
+<div id="contentArea"><div class="code-content" id="content-MC001" style="display: block;"><div class="bg-white rounded-lg shadow-sm p-8 mb-6" id="chapter-CH002">
 <div class="mb-6">
 <h2 class="text-2xl font-bold text-[#24305E] mb-2">Chapter 2: Definition</h2>
 <p class="text-base text-gray-600">정의</p>
