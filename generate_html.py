@@ -466,8 +466,9 @@ def create_all_library_content(hierarchy):
                 # Find "Section [number]" or "Section [number].[number]"
                 def replace_section(match):
                     section_ref = match.group(1)
-                    # Just add red underline, keep text same, make it clickable
-                    return f'<span class="section-link cursor-pointer" style="text-decoration: underline; text-decoration-color: #F76C6C; text-underline-offset: 2px;" onclick="navigateToSection(\'{current_chapter_id}\', \'{section_ref}\')">Section {section_ref}</span>'
+                    # Use anchor tag like Chapter links
+                    section_id = section_ref.replace('.', '-')
+                    return f'<a href="#section-{current_chapter_id}-{section_id}" class="text-[#F76C6C] hover:underline font-semibold" onclick="navigateToSection(\'{current_chapter_id}\', \'{section_ref}\'); return false;">Section {section_ref}</a>'
 
                 # Find "Chapter [number]"
                 def replace_chapter(match):
@@ -479,10 +480,25 @@ def create_all_library_content(hierarchy):
                             return f'<a href="#chapter-{chapter_id}" class="text-[#F76C6C] hover:underline font-semibold" onclick="scrollToChapter(\'{chapter_id}\')">Chapter {chapter_ref}</a>'
                     return match.group(0)  # Return original if not found
 
+                # Find "Figure [number]" or "Table [number]"
+                def replace_figure_table(match):
+                    type_word = match.group(1)  # "Figure" or "Table"
+                    number = match.group(2)
+                    # Find attachment
+                    for att in hierarchy.data['CodeAttachment']:
+                        att_type = 'Figure' if att['Type'] == 'F' else 'Table'
+                        if att_type == type_word and att.get('Number') == number:
+                            import json
+                            att_json = json.dumps(att).replace('"', '&quot;').replace("'", '&apos;')
+                            return f'<a href="#" class="text-[#F76C6C] hover:underline font-semibold" onclick="openImageModal({att_json}); return false;">{type_word} {number}</a>'
+                    return match.group(0)  # Return original if not found
+
                 # Replace Section references - matches Section 304.1.3.4 etc
                 text = re.sub(r'Section (\d+(?:\.\d+)*)', replace_section, text)
                 # Replace Chapter references
                 text = re.sub(r'Chapter (\d+)', replace_chapter, text)
+                # Replace Figure and Table references
+                text = re.sub(r'(Figure|Table)\s+(\d+(?:\.\d+)*(?:\([^)]+\))?)', replace_figure_table, text)
 
                 return text
 
@@ -2062,11 +2078,16 @@ function copyCodeContent(sectionNumber) {{
 }}
 
 // === Image Modal Functions ===
+let currentModalAttachment = null;
+
 function openImageModal(attachment) {{
     const modal = document.getElementById('imageModal');
     const modalTitle = document.getElementById('modalTitle');
     const modalImage = document.getElementById('modalImage');
     const modalContent = document.getElementById('modalContent');
+
+    // Store current attachment for navigation
+    currentModalAttachment = attachment;
 
     // Set title
     const typeLabel = attachment.Type === 'T' ? 'Table' : 'Figure';
@@ -2125,6 +2146,44 @@ function openImageModal(attachment) {{
 
     // Show modal
     modal.classList.add('active');
+}}
+
+function goToContentFromModal() {{
+    if (!currentModalAttachment) return;
+
+    const att = currentModalAttachment;
+
+    // Close modal
+    closeImageModal();
+
+    // Find the chapter ID for this attachment
+    const versionId = att.ModelCodeVersionID;
+    const chapterNum = att.Chapter;
+    const sectionNum = att.Section;
+    const subsectionNum = att.Subsection;
+
+    // Find chapter
+    const chapter = appData.CodeChapter.find(ch =>
+        ch.ModelCodeVersionID === versionId &&
+        ch.Chapter === parseInt(chapterNum)
+    );
+
+    if (!chapter) return;
+
+    // Load chapter content first
+    loadChapterContent(chapter.ChapterID, versionId);
+
+    // Wait a bit for content to load, then scroll to section
+    setTimeout(() => {{
+        // Build section ID
+        let sectionId = sectionNum;
+        if (subsectionNum) {{
+            sectionId += '.' + subsectionNum;
+        }}
+
+        // Navigate to section
+        navigateToSection(chapter.ChapterID, sectionId);
+    }}, 300);
 }}
 
 function closeImageModal() {{
@@ -2212,7 +2271,14 @@ document.addEventListener('DOMContentLoaded', function() {{
     <div id="imageModal" class="modal">
         <div class="modal-content">
             <div class="flex items-center justify-between mb-4">
-                <h3 class="text-xl font-bold text-[#24305E]" id="modalTitle"></h3>
+                <div class="flex items-center gap-3">
+                    <h3 class="text-xl font-bold text-[#24305E]" id="modalTitle"></h3>
+                    <button id="modalGoToContent" onclick="goToContentFromModal()" class="p-1.5 hover:bg-gray-100 rounded-lg transition-colors" title="Go to content">
+                        <svg class="w-5 h-5 text-[#F76C6C]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                        </svg>
+                    </button>
+                </div>
                 <button onclick="closeImageModal()" class="p-2 hover:bg-gray-100 rounded-lg transition-colors">
                     <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
