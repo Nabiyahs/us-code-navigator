@@ -463,26 +463,129 @@ def create_all_library_content(hierarchy):
                     return text
                 import re
 
-                # Find "Section [number]" or "Section [number].[number]"
-                def replace_section(match):
-                    section_ref = match.group(1)
-                    # Just add red underline, keep text same, make it clickable
-                    return f'<span class="section-link cursor-pointer" style="text-decoration: underline; text-decoration-color: #F76C6C; text-underline-offset: 2px;" onclick="navigateToSection(\'{current_chapter_id}\', \'{section_ref}\')">Section {section_ref}</span>'
+                # Get current code info for Google search
+                code_base = model_code['ModelCodeName'].split(':')[0].strip()
+                year = int(latest_version['Year']) if latest_version.get('Year') else ''
 
-                # Find "Chapter [number]"
+                # Find "Section [number]" or "[F]Section [number]" or "[BS]414" etc
+                def replace_section(match):
+                    prefix = match.group(1) if match.group(1) else ''  # [F], [BS], etc
+                    section_ref = match.group(2)
+                    # Parse section number to find in which chapter it belongs
+                    section_num_parts = section_ref.split('.')
+                    section_main = section_num_parts[0]
+
+                    # Find the content with this section number
+                    found_chapter_id = None
+                    for content in hierarchy.data['CodeContent']:
+                        # Handle both plain "414" and "[F]414" formats
+                        content_section = str(content.get('Section', ''))
+                        # Remove prefix like [F], [BS] from content section too
+                        content_section_clean = re.sub(r'^\[.*?\]', '', content_section)
+
+                        if content_section_clean == section_main or content_section == section_main:
+                            # Check if it belongs to current version
+                            if content.get('ChapterID'):
+                                # Verify this chapter belongs to current version
+                                for ch in hierarchy.data['CodeChapter']:
+                                    if ch['ChapterID'] == content['ChapterID'] and ch['ModelCodeVersionID'] == latest_version['ModelCodeVersionID']:
+                                        found_chapter_id = content['ChapterID']
+                                        break
+                                if found_chapter_id:
+                                    break
+
+                    section_id = section_ref.replace('.', '-')
+                    full_text = f'{prefix}Section {section_ref}' if prefix else f'Section {section_ref}'
+
+                    # Escape quotes for JavaScript
+                    search_query = f'{code_base} {year} Section {section_ref}'.replace("'", "\\'")
+
+                    if found_chapter_id:
+                        # Section exists - create normal hyperlink
+                        return f'<a href="#section-{found_chapter_id}-{section_id}" class="text-[#F76C6C] hover:underline font-semibold" onclick="return navigateToSectionOrSearch(\'{found_chapter_id}\', \'{section_ref}\', \'{search_query}\');">{full_text}</a>'
+                    else:
+                        # Section not found - create Google search link (no bold)
+                        return f'<a href="#" class="text-[#F76C6C] hover:underline" onclick="searchGoogle(\'{search_query}\'); return false;">{full_text}</a>'
+
+                # Find "Chapter [number]" or "[F]Chapter [number]"
                 def replace_chapter(match):
-                    chapter_ref = match.group(1)
+                    prefix = match.group(1) if match.group(1) else ''
+                    chapter_ref = match.group(2)
                     # Find chapter by number
+                    found_chapter = None
                     for ch in hierarchy.data['CodeChapter']:
                         if ch.get('Chapter') == int(chapter_ref) and ch.get('ModelCodeVersionID') == latest_version['ModelCodeVersionID']:
-                            chapter_id = ch['ChapterID']
-                            return f'<a href="#chapter-{chapter_id}" class="text-[#F76C6C] hover:underline font-semibold" onclick="scrollToChapter(\'{chapter_id}\')">Chapter {chapter_ref}</a>'
+                            found_chapter = ch
+                            break
+
+                    full_text = f'{prefix}Chapter {chapter_ref}' if prefix else f'Chapter {chapter_ref}'
+
+                    # Escape quotes for JavaScript
+                    search_query = f'{code_base} {year} Chapter {chapter_ref}'.replace("'", "\\'")
+
+                    if found_chapter:
+                        chapter_id = found_chapter['ChapterID']
+                        return f'<a href="#chapter-{chapter_id}" class="text-[#F76C6C] hover:underline font-semibold" onclick="return scrollToChapterOrSearch(\'{chapter_id}\', \'{search_query}\');">{full_text}</a>'
+                    else:
+                        # Chapter not found - create Google search link (no bold)
+                        return f'<a href="#" class="text-[#F76C6C] hover:underline" onclick="searchGoogle(\'{search_query}\'); return false;">{full_text}</a>'
+
+                # Find "Figure [number]" or "Table [number]"
+                def replace_figure_table(match):
+                    preceding_space = match.group(1)  # Space before Figure/Table
+                    type_word = match.group(2)  # "Figure" or "Table"
+                    number = match.group(3)
+                    # Find attachment
+                    for att in hierarchy.data['CodeAttachment']:
+                        att_type = 'Figure' if att['Type'] == 'F' else 'Table'
+                        if att_type == type_word and att.get('Number') == number:
+                            att_id = att['AttachmentID']
+                            return f'{preceding_space}<a href="#" class="text-[#F76C6C] hover:underline font-semibold" onclick="openImageModalById(\'{att_id}\'); return false;">{type_word} {number}</a>'
                     return match.group(0)  # Return original if not found
 
-                # Replace Section references - matches Section 304.1.3.4 etc
-                text = re.sub(r'Section (\d+(?:\.\d+)*)', replace_section, text)
-                # Replace Chapter references
-                text = re.sub(r'Chapter (\d+)', replace_chapter, text)
+                # Find "Table 307.1(1) 및 307.1(2)" or "Figure 1 and 2" patterns
+                def replace_figure_table_and(match):
+                    preceding_space = match.group(1)  # Space before Figure/Table
+                    type_word = match.group(2)  # "Figure" or "Table"
+                    first_number = match.group(3)
+                    separator_word = match.group(4)  # "및" or "and"
+                    second_number = match.group(5)
+
+                    # Process first number
+                    first_link = None
+                    for att in hierarchy.data['CodeAttachment']:
+                        att_type = 'Figure' if att['Type'] == 'F' else 'Table'
+                        if att_type == type_word and att.get('Number') == first_number:
+                            att_id = att['AttachmentID']
+                            first_link = f'<a href="#" class="text-[#F76C6C] hover:underline font-semibold" onclick="openImageModalById(\'{att_id}\'); return false;">{type_word} {first_number}</a>'
+                            break
+                    if not first_link:
+                        first_link = f'{type_word} {first_number}'
+
+                    # Process second number (assume same type)
+                    second_link = None
+                    for att in hierarchy.data['CodeAttachment']:
+                        att_type = 'Figure' if att['Type'] == 'F' else 'Table'
+                        if att_type == type_word and att.get('Number') == second_number:
+                            att_id = att['AttachmentID']
+                            second_link = f'<a href="#" class="text-[#F76C6C] hover:underline font-semibold" onclick="openImageModalById(\'{att_id}\'); return false;">{second_number}</a>'
+                            break
+                    if not second_link:
+                        second_link = second_number
+
+                    # Return with " 및 " or " and " in between
+                    separator = f' {separator_word} '
+                    return f'{preceding_space}{first_link}{separator}{second_link}'
+
+                # Replace patterns in order
+                # First handle "Table X 및 Y" or "Figure X and Y" patterns (with optional preceding space)
+                text = re.sub(r'(\s?)(Figure|Table)\s+(\d+(?:\.\d+)*(?:\([^)]+\))?)\s+(및|and)\s+(\d+(?:\.\d+)*(?:\([^)]+\))?)', replace_figure_table_and, text)
+                # Then handle single Figure/Table references (with optional preceding space)
+                text = re.sub(r'(\s?)(Figure|Table)\s+(\d+(?:\.\d+)*(?:\([^)]+\))?)', replace_figure_table, text)
+                # Section references with optional prefix like [F], [BS]
+                text = re.sub(r'(\[[A-Z]+\])?\s*Section\s+(\d+(?:\.\d+)*)', replace_section, text)
+                # Chapter references with optional prefix
+                text = re.sub(r'(\[[A-Z]+\])?\s*Chapter\s+(\d+)', replace_chapter, text)
 
                 return text
 
@@ -534,16 +637,21 @@ def create_all_library_content(hierarchy):
                         att_items = []
                         for att in attachments:
                             type_label = 'Table' if att['Type'] == 'T' else 'Figure'
-                            # Escape quotes in JSON data for onclick
-                            import json
-                            att_json = json.dumps(att).replace('"', '&quot;')
-                            # Confluence wiki URL
-                            base_url = 'https://wiki.samoo.com/download/attachments'
+                            att_id = att['AttachmentID']
+                            # Confluence wiki URL pattern
+                            # Page ID 62830860 is the "Code Image" page
+                            from urllib.parse import quote
+                            page_id = '62830860'
                             file_name = att['FileName']
-                            image_url = f"{base_url}/HTPEDIA/Code+Image/{file_name}"
+                            # Add .jpg extension (all images are jpg format)
+                            if not file_name.endswith('.jpg'):
+                                file_name = file_name + '.jpg'
+                            # URL encode the filename (handles special chars like parentheses)
+                            encoded_file_name = quote(file_name)
+                            image_url = f"https://wiki.samoo.com/download/attachments/{page_id}/{encoded_file_name}?api=v2"
 
                             att_items.append(f'''
-                            <div class="border border-gray-300 rounded p-3 hover:border-[#A8D0E6] transition-colors cursor-pointer flex-shrink-0" onclick='openImageModal({att_json})'>
+                            <div class="border border-gray-300 rounded p-3 hover:border-[#A8D0E6] transition-colors cursor-pointer flex-shrink-0" onclick="openImageModalById('{att_id}')">
                                 <img src="{image_url}" alt="{type_label} {att.get('Number') or ''}" class="w-full h-auto rounded mb-2" style="max-width: 400px;">
                                 <p class="text-xs font-medium text-gray-700 text-center">{type_label} {att.get('Number') or ''}</p>
                             </div>''')
@@ -575,11 +683,12 @@ def create_all_library_content(hierarchy):
 
                     content_html.append(f'''
                     <div class="bg-gray-50 p-4 rounded-lg relative" id="section-{chapter_id}-{section_number.replace('.', '-')}">
-                        <div class="absolute top-2 left-2 flex gap-2">
-                            <button class="back-btn hidden p-2 bg-white hover:bg-gray-200 rounded-full shadow transition-colors" title="Go back" onclick="goBackToSection()" id="back-btn-{chapter_id}-{section_number.replace('.', '-')}">
-                                <svg class="w-5 h-5 text-[#F76C6C]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                        <div class="absolute top-3 left-3 z-10 flex gap-2">
+                            <button class="back-btn hidden px-3 py-1.5 bg-[#F76C6C] text-white hover:bg-[#d85a5a] rounded-md shadow-md transition-colors flex items-center gap-1 text-sm font-medium" title="Go back" onclick="goBackToSection()" id="back-btn-{chapter_id}-{section_number.replace('.', '-')}">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"></path>
                                 </svg>
+                                <span>Back</span>
                             </button>
                         </div>
                         <div class="absolute top-3 right-3 flex gap-2">
@@ -597,7 +706,7 @@ def create_all_library_content(hierarchy):
                         </div>
                         {f'<p class="text-base text-gray-600 mb-2">{content["TitleKR"]}</p>' if content.get('TitleKR') else ''}
                         {f'<p class="text-gray-700 leading-relaxed mb-2">{add_section_chapter_links(content["ContentEN"], chapter_id)}</p>' if content.get('ContentEN') else ''}
-                        {f'<p class="text-gray-600 text-base leading-relaxed mb-3">{add_section_chapter_links(content["ContentKR"], chapter_id)}</p>' if content.get('ContentKR') else ''}
+                        {f'<p class="text-gray-600 text-base leading-relaxed mb-3">{content["ContentKR"]}</p>' if content.get('ContentKR') else ''}
                         {f'<div class="mt-3 pt-3 border-t border-gray-200 bg-[#FEE9EC] bg-opacity-30 p-3 rounded-lg"><label class="text-xs font-semibold text-[#F76C6C] mb-1 block">Note</label><div class="w-full text-base p-2 bg-white border border-[#F76C6C] border-opacity-20 rounded text-gray-700 whitespace-pre-line">{content["Comment"]}</div></div>' if content.get('Comment') else ''}
                         {attachment_html}
                     </div>''')
@@ -1142,7 +1251,7 @@ function copyContent(sectionNumber) {{
     }}
 }}
 
-// Scroll to chapter function for pre-rendered content with header offset
+// Scroll to chapter function for pre-rendered content with header offset (returns true if found, false otherwise)
 function scrollToChapter(chapterId) {{
     const chapterElement = document.getElementById('chapter-' + chapterId);
     if (chapterElement) {{
@@ -1179,7 +1288,9 @@ function scrollToChapter(chapterId) {{
         if (activeItem) {{
             activeItem.classList.add('active', 'bg-[#F8E9A1]');
         }}
+        return true; // Chapter found and scrolled
     }}
+    return false; // Chapter not found
 }}
 
 // Toggle chapter sidebar sections
@@ -1215,12 +1326,36 @@ function toggleChapterSidebar(chapterId) {{
 // Navigation history stack
 let navigationHistory = [];
 
+// Google search fallback
+function searchGoogle(query) {{
+    const googleUrl = `https://www.google.com/search?q=${{encodeURIComponent(query)}}`;
+    window.open(googleUrl, '_blank');
+}}
+
+// Navigate to section or search if not found
+function navigateToSectionOrSearch(chapterId, sectionNum, searchQuery) {{
+    const success = scrollToSection(chapterId, sectionNum, true);
+    if (!success) {{
+        searchGoogle(searchQuery);
+    }}
+    return false; // Prevent default link behavior
+}}
+
+// Scroll to chapter or search if not found
+function scrollToChapterOrSearch(chapterId, searchQuery) {{
+    const success = scrollToChapter(chapterId);
+    if (!success) {{
+        searchGoogle(searchQuery);
+    }}
+    return false; // Prevent default link behavior
+}}
+
 // Navigate to section from hyperlink (with history)
 function navigateToSection(chapterId, sectionNum) {{
     scrollToSection(chapterId, sectionNum, true);
 }}
 
-// Scroll to section with header offset
+// Scroll to section with header offset (returns true if found, false otherwise)
 function scrollToSection(chapterId, sectionNum, saveHistory = false) {{
     // Replace dots with dashes for ID matching
     const sectionId = 'section-' + chapterId + '-' + sectionNum.toString().replace(/\./g, '-');
@@ -1267,7 +1402,9 @@ function scrollToSection(chapterId, sectionNum, saveHistory = false) {{
                 behavior: 'smooth'
             }});
         }}
+        return true; // Section found and scrolled
     }}
+    return false; // Section not found
 }}
 
 // Go back to previous section
@@ -2056,11 +2193,24 @@ function copyCodeContent(sectionNumber) {{
 }}
 
 // === Image Modal Functions ===
+let currentModalAttachment = null;
+
+function openImageModalById(attachmentId) {{
+    // Find attachment in appData
+    const attachment = appData.CodeAttachment.find(att => att.AttachmentID === attachmentId);
+    if (attachment) {{
+        openImageModal(attachment);
+    }}
+}}
+
 function openImageModal(attachment) {{
     const modal = document.getElementById('imageModal');
     const modalTitle = document.getElementById('modalTitle');
     const modalImage = document.getElementById('modalImage');
     const modalContent = document.getElementById('modalContent');
+
+    // Store current attachment for navigation
+    currentModalAttachment = attachment;
 
     // Set title
     const typeLabel = attachment.Type === 'T' ? 'Table' : 'Figure';
@@ -2068,13 +2218,17 @@ function openImageModal(attachment) {{
     modalTitle.textContent = `${{typeLabel}}${{number}}`;
 
     // Construct Confluence image URL
-    // Base URL: https://wiki.samoo.com/download/attachments/
-    // The page "Code Image" needs to be accessed to get the actual attachment
-    const baseUrl = 'https://wiki.samoo.com/download/attachments';
-    const fileName = attachment.FileName;
+    // Page ID 62830860 is the "Code Image" page
+    const pageId = '62830860';
+    let fileName = attachment.FileName;
+    // Add .jpg extension (all images are jpg format)
+    if (!fileName.endsWith('.jpg')) {{
+        fileName = fileName + '.jpg';
+    }}
+    // URL encode the filename (handles special chars like parentheses)
+    const encodedFileName = encodeURIComponent(fileName);
+    const imageUrl = `https://wiki.samoo.com/download/attachments/${{pageId}}/${{encodedFileName}}?api=v2`;
 
-    // Try to load the image
-    const imageUrl = `${{baseUrl}}/HTPEDIA/Code+Image/${{fileName}}`;
     modalImage.src = imageUrl;
     modalImage.alt = `${{typeLabel}}${{number}}`;
     modalImage.style.display = 'block';
@@ -2115,6 +2269,44 @@ function openImageModal(attachment) {{
 
     // Show modal
     modal.classList.add('active');
+}}
+
+function goToContentFromModal() {{
+    if (!currentModalAttachment) return;
+
+    const att = currentModalAttachment;
+
+    // Close modal
+    closeImageModal();
+
+    // Find the chapter ID for this attachment
+    const versionId = att.ModelCodeVersionID;
+    const chapterNum = att.Chapter;
+    const sectionNum = att.Section;
+    const subsectionNum = att.Subsection;
+
+    // Find chapter
+    const chapter = appData.CodeChapter.find(ch =>
+        ch.ModelCodeVersionID === versionId &&
+        ch.Chapter === parseInt(chapterNum)
+    );
+
+    if (!chapter) return;
+
+    // Load chapter content first
+    loadChapterContent(chapter.ChapterID, versionId);
+
+    // Wait a bit for content to load, then scroll to section
+    setTimeout(() => {{
+        // Build section ID
+        let sectionId = sectionNum;
+        if (subsectionNum) {{
+            sectionId += '.' + subsectionNum;
+        }}
+
+        // Navigate to section
+        navigateToSection(chapter.ChapterID, sectionId);
+    }}, 300);
 }}
 
 function closeImageModal() {{
@@ -2202,7 +2394,14 @@ document.addEventListener('DOMContentLoaded', function() {{
     <div id="imageModal" class="modal">
         <div class="modal-content">
             <div class="flex items-center justify-between mb-4">
-                <h3 class="text-xl font-bold text-[#24305E]" id="modalTitle"></h3>
+                <div class="flex items-center gap-3">
+                    <h3 class="text-xl font-bold text-[#24305E]" id="modalTitle"></h3>
+                    <button id="modalGoToContent" onclick="goToContentFromModal()" class="p-1.5 hover:bg-gray-100 rounded-lg transition-colors" title="Go to content">
+                        <svg class="w-5 h-5 text-[#F76C6C]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                        </svg>
+                    </button>
+                </div>
                 <button onclick="closeImageModal()" class="p-2 hover:bg-gray-100 rounded-lg transition-colors">
                     <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
