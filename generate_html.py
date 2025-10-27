@@ -620,7 +620,7 @@ def create_all_library_content(hierarchy):
                 title_suffix = f' - {first_content["TitleEN"]}' if first_content.get('TitleEN') else ''
 
                 content_html.append(f'''
-                <div class="content-section mb-8" id="section-{chapter_id}-{section_num}">
+                <div class="content-section mb-8">
                     <h3 class="text-xl font-semibold text-[#374785] mb-3">{section_title}{title_suffix}</h3>
                     {f'<p class="text-lg text-gray-600 mb-4">{first_content["TitleKR"]}</p>' if first_content.get('TitleKR') else ''}
                     <div class="space-y-4">''')
@@ -628,11 +628,10 @@ def create_all_library_content(hierarchy):
                 # 각 subsection
                 for idx, content in enumerate(section_contents):
                     subsection = f".{content['Subsection']}" if content.get('Subsection') else ''
-                    # If section is General and no subsection, use OrderKey or index for uniqueness
+                    # If section is General and no subsection, use index for unique ID
                     if section_num == 'General' and not subsection:
-                        # Use OrderKey if available, otherwise use index
-                        unique_id = content.get('OrderKey', f'{idx:04d}')
-                        section_number = f"General-{unique_id}"
+                        # Always use index for uniqueness (OrderKey may not be unique)
+                        section_number = f"General-{idx:04d}"
                         # For display, don't show the section number for General definitions
                         display_section_number = ''
                     else:
@@ -1322,7 +1321,7 @@ function scrollToChapter(chapterId, saveHistory = false) {{
 
             contentContainer.scrollTo({{
                 top: scrollPosition,
-                behavior: 'smooth'
+                behavior: 'auto'
             }});
         }} else {{
             // Fallback to window scroll if container not found
@@ -1334,7 +1333,7 @@ function scrollToChapter(chapterId, saveHistory = false) {{
 
             window.scrollTo({{
                 top: Math.max(0, offsetPosition),
-                behavior: 'smooth'
+                behavior: 'auto'
             }});
         }}
 
@@ -1481,7 +1480,7 @@ function scrollToSection(chapterId, sectionNum, saveHistory = false) {{
 
             contentContainer.scrollTo({{
                 top: scrollPosition,
-                behavior: 'auto'
+                behavior: 'smooth'
             }});
         }} else {{
             // Fallback to window scroll if container not found
@@ -1493,7 +1492,7 @@ function scrollToSection(chapterId, sectionNum, saveHistory = false) {{
 
             window.scrollTo({{
                 top: Math.max(0, offsetPosition),
-                behavior: 'auto'
+                behavior: 'smooth'
             }});
         }}
 
@@ -1530,12 +1529,12 @@ function goBackToSection() {{
         if (contentContainer) {{
             contentContainer.scrollTo({{
                 top: previous.scrollTop,
-                behavior: 'auto'
+                behavior: 'smooth'
             }});
         }} else {{
             window.scrollTo({{
                 top: previous.scrollTop,
-                behavior: 'auto'
+                behavior: 'smooth'
             }});
         }}
     }}
