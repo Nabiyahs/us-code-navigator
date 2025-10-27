@@ -633,8 +633,12 @@ def create_all_library_content(hierarchy):
                         # Use OrderKey if available, otherwise use index
                         unique_id = content.get('OrderKey', f'{idx:04d}')
                         section_number = f"General-{unique_id}"
+                        # For display, don't show the section number for General definitions
+                        display_section_number = ''
                     else:
                         section_number = f"{section_num}{subsection}"
+                        # For regular sections, display the section number
+                        display_section_number = section_number
 
                     # Attachments
                     attachments = [att for att in hierarchy.data['CodeAttachment']
@@ -676,7 +680,9 @@ def create_all_library_content(hierarchy):
                     # 코드 정보와 위치 생성
                     code_base = model_code['ModelCodeName'].split(':')[0].strip()
                     year = int(latest_version['Year']) if latest_version.get('Year') else ''
-                    location_text = f"{code_base} {year}: Chapter {chapter_num} - {section_number}"
+                    # For General section, show "General" instead of "General-0002"
+                    location_display = section_num if section_num == 'General' else section_number
+                    location_text = f"{code_base} {year}: Chapter {chapter_num} - {location_display}"
 
                     # Index tags 생성 (semicolon으로 분리된 키워드)
                     index_tags_html = ''
@@ -713,7 +719,7 @@ def create_all_library_content(hierarchy):
                             <span class="text-xs bg-[#A8D0E6] text-[#24305E] font-semibold px-2 py-0.5 rounded">{location_text}</span>{index_tags_html}
                         </div>
                         <div class="flex items-center gap-2 mb-2">
-                            <h4 class="font-semibold text-[#24305E]">{section_number}{' ' + content['TitleEN'] if content.get('TitleEN') else ''}</h4>
+                            <h4 class="font-semibold text-[#24305E]">{display_section_number}{(' ' if display_section_number else '') + content['TitleEN'] if content.get('TitleEN') else ''}</h4>
                         </div>
                         {f'<p class="text-base text-gray-600 mb-2">{content["TitleKR"]}</p>' if content.get('TitleKR') else ''}
                         {f'<p class="text-gray-700 leading-relaxed mb-2">{add_section_chapter_links(content["ContentEN"], chapter_id)}</p>' if content.get('ContentEN') else ''}
@@ -1284,27 +1290,29 @@ function scrollToChapter(chapterId, saveHistory = false) {{
             console.log('Switched to code for chapter:', codeContent.id);
         }}
 
-        // Save current position to history if requested
-        if (saveHistory) {{
-            const contentContainer = document.querySelector('#librarySection .flex-1.overflow-y-auto');
-            const currentScrollTop = contentContainer ? contentContainer.scrollTop : window.pageYOffset;
+        // Wait for browser to recalculate layout
+        setTimeout(() => {{
+            // Save current position to history if requested
+            if (saveHistory) {{
+                const contentContainer = document.querySelector('#librarySection .flex-1.overflow-y-auto');
+                const currentScrollTop = contentContainer ? contentContainer.scrollTop : window.pageYOffset;
 
-            navigationHistory.push({{
-                scrollTop: currentScrollTop
-            }});
+                navigationHistory.push({{
+                    scrollTop: currentScrollTop
+                }});
 
-            // Show back button in chapter
-            const backBtnId = 'back-btn-chapter-' + chapterId;
-            const backBtn = document.getElementById(backBtnId);
-            if (backBtn) {{
-                backBtn.classList.remove('hidden');
-            }} else {{
-                console.log('Back button not found:', backBtnId);
+                // Show back button in chapter
+                const backBtnId = 'back-btn-chapter-' + chapterId;
+                const backBtn = document.getElementById(backBtnId);
+                if (backBtn) {{
+                    backBtn.classList.remove('hidden');
+                }} else {{
+                    console.log('Back button not found:', backBtnId);
+                }}
             }}
-        }}
 
-        // Get the scrollable content container
-        const contentContainer = document.querySelector('#librarySection .flex-1.overflow-y-auto');
+            // Get the scrollable content container
+            const contentContainer = document.querySelector('#librarySection .flex-1.overflow-y-auto');
 
         if (contentContainer) {{
             // Scroll within the content container
@@ -1330,14 +1338,16 @@ function scrollToChapter(chapterId, saveHistory = false) {{
             }});
         }}
 
-        // Update active chapter in sidebar
-        document.querySelectorAll('.chapter-item').forEach(item => {{
-            item.classList.remove('active', 'bg-[#F8E9A1]');
-        }});
-        const activeItem = document.querySelector(`[data-chapter-id="${{chapterId}}"]`);
-        if (activeItem) {{
-            activeItem.classList.add('active', 'bg-[#F8E9A1]');
-        }}
+            // Update active chapter in sidebar
+            document.querySelectorAll('.chapter-item').forEach(item => {{
+                item.classList.remove('active', 'bg-[#F8E9A1]');
+            }});
+            const activeItem = document.querySelector(`[data-chapter-id="${{chapterId}}"]`);
+            if (activeItem) {{
+                activeItem.classList.add('active', 'bg-[#F8E9A1]');
+            }}
+        }}, 100); // Wait 100ms for layout recalculation
+
         return true; // Chapter found and scrolled
     }}
     return false; // Chapter not found
@@ -1424,36 +1434,44 @@ function scrollToSection(chapterId, sectionNum, saveHistory = false) {{
     if (sectionElement) {{
         // CRITICAL: Find which code-content this section belongs to and show it
         const codeContent = sectionElement.closest('.code-content');
+        console.log('Code content found:', codeContent ? codeContent.id : 'NONE');
+
         if (codeContent) {{
             // Hide all code contents
             document.querySelectorAll('.code-content').forEach(content => {{
                 content.style.display = 'none';
+                console.log('Hiding:', content.id);
             }});
             // Show the correct code content
             codeContent.style.display = 'block';
             console.log('Switched to code:', codeContent.id);
+        }} else {{
+            console.error('ERROR: Could not find parent code-content for section:', sectionId);
         }}
-        // Save current position to history if requested
-        if (saveHistory) {{
-            const contentContainer = document.querySelector('#librarySection .flex-1.overflow-y-auto');
-            const currentScrollTop = contentContainer ? contentContainer.scrollTop : window.pageYOffset;
 
-            navigationHistory.push({{
-                scrollTop: currentScrollTop
-            }});
+        // Wait for browser to recalculate layout after display change
+        setTimeout(() => {{
+            // Save current position to history if requested
+            if (saveHistory) {{
+                const contentContainer = document.querySelector('#librarySection .flex-1.overflow-y-auto');
+                const currentScrollTop = contentContainer ? contentContainer.scrollTop : window.pageYOffset;
 
-            // Show back button in target section
-            const backBtnId = 'back-btn-' + chapterId + '-' + sectionNum.toString().replace(/\./g, '-');
-            const backBtn = document.querySelector('#' + CSS.escape(backBtnId));
-            if (backBtn) {{
-                backBtn.classList.remove('hidden');
-            }} else {{
-                console.log('Back button not found:', backBtnId);
+                navigationHistory.push({{
+                    scrollTop: currentScrollTop
+                }});
+
+                // Show back button in target section
+                const backBtnId = 'back-btn-' + chapterId + '-' + sectionNum.toString().replace(/\./g, '-');
+                const backBtn = document.querySelector('#' + CSS.escape(backBtnId));
+                if (backBtn) {{
+                    backBtn.classList.remove('hidden');
+                }} else {{
+                    console.log('Back button not found:', backBtnId);
+                }}
             }}
-        }}
 
-        // Get the scrollable content container
-        const contentContainer = document.querySelector('#librarySection .flex-1.overflow-y-auto');
+            // Get the scrollable content container
+            const contentContainer = document.querySelector('#librarySection .flex-1.overflow-y-auto');
 
         if (contentContainer) {{
             // Scroll within the content container
@@ -1479,19 +1497,20 @@ function scrollToSection(chapterId, sectionNum, saveHistory = false) {{
             }});
         }}
 
-        // Update active state for section items in sidebar
-        document.querySelectorAll('.section-item').forEach(item => {{
-            item.classList.remove('bg-[#A8D0E6]', 'text-white');
-        }});
-        // Find and highlight the clicked section item by matching onclick attribute
-        const sectionItems = document.querySelectorAll('.section-item');
-        const targetOnclick = `scrollToSection('${{chapterId}}', '${{sectionNum}}')`;
-        sectionItems.forEach(item => {{
-            if (item.getAttribute('onclick') && item.getAttribute('onclick').includes(targetOnclick)) {{
-                item.classList.add('bg-[#A8D0E6]', 'text-white');
-                console.log('Highlighted section item:', item.textContent.trim());
-            }}
-        }});
+            // Update active state for section items in sidebar
+            document.querySelectorAll('.section-item').forEach(item => {{
+                item.classList.remove('bg-[#A8D0E6]', 'text-white');
+            }});
+            // Find and highlight the clicked section item by matching onclick attribute
+            const sectionItems = document.querySelectorAll('.section-item');
+            const targetOnclick = `scrollToSection('${{chapterId}}', '${{sectionNum}}')`;
+            sectionItems.forEach(item => {{
+                if (item.getAttribute('onclick') && item.getAttribute('onclick').includes(targetOnclick)) {{
+                    item.classList.add('bg-[#A8D0E6]', 'text-white');
+                    console.log('Highlighted section item:', item.textContent.trim());
+                }}
+            }});
+        }}, 100); // Wait 100ms for layout recalculation
 
         return true; // Section found and scrolled
     }}
