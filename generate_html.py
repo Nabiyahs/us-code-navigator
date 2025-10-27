@@ -441,7 +441,15 @@ def create_all_library_content(hierarchy):
 
             # 챕터 시작
             content_html.append(f'''
-            <div class="bg-white rounded-lg shadow-sm p-8 mb-6" id="chapter-{chapter_id}">
+            <div class="bg-white rounded-lg shadow-sm p-8 mb-6 relative" id="chapter-{chapter_id}">
+                <div class="absolute top-3 left-3 z-10 flex gap-2">
+                    <button class="back-btn hidden px-3 py-1.5 bg-[#F76C6C] text-white hover:bg-[#d85a5a] rounded-md shadow-md transition-colors flex items-center gap-1 text-sm font-medium" title="Go back" onclick="goBackToSection()" id="back-btn-chapter-{chapter_id}">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"></path>
+                        </svg>
+                        <span>Back</span>
+                    </button>
+                </div>
                 <div class="mb-6">
                     <h2 class="text-2xl font-bold text-[#24305E] mb-2">Chapter {chapter_num}: {chapter['TitleEN'] or ''}</h2>
                     {f'<p class="text-base text-gray-600">{chapter["TitleKR"]}</p>' if chapter.get('TitleKR') else ''}
@@ -469,8 +477,9 @@ def create_all_library_content(hierarchy):
 
                 # Find "Section [number]" or "[F]Section [number]" or "[BS]414" etc
                 def replace_section(match):
-                    prefix = match.group(1) if match.group(1) else ''  # [F], [BS], etc
-                    section_ref = match.group(2)
+                    preceding_space = match.group(1) if match.group(1) else ''  # Space before Section
+                    prefix = match.group(2) if match.group(2) else ''  # [F], [BS], etc
+                    section_ref = match.group(3)
                     # Parse section number to find in which chapter it belongs
                     section_num_parts = section_ref.split('.')
                     section_main = section_num_parts[0]
@@ -501,16 +510,17 @@ def create_all_library_content(hierarchy):
                     search_query = f'{code_base} {year} Section {section_ref}'.replace("'", "\\'")
 
                     if found_chapter_id:
-                        # Section exists - create normal hyperlink
-                        return f'<a href="#section-{found_chapter_id}-{section_id}" class="text-[#F76C6C] hover:underline font-semibold" onclick="return navigateToSectionOrSearch(\'{found_chapter_id}\', \'{section_ref}\', \'{search_query}\');">{full_text}</a>'
+                        # Section exists - create hyperlink with bold
+                        return f'{preceding_space}<a href="#section-{found_chapter_id}-{section_id}" class="text-[#F76C6C] hover:underline font-semibold" onclick="return navigateToSectionOrSearch(\'{found_chapter_id}\', \'{section_ref}\', \'{search_query}\');">{full_text}</a>'
                     else:
                         # Section not found - create Google search link (no bold)
-                        return f'<a href="#" class="text-[#F76C6C] hover:underline" onclick="searchGoogle(\'{search_query}\'); return false;">{full_text}</a>'
+                        return f'{preceding_space}<a href="#" class="text-[#F76C6C] hover:underline" onclick="searchGoogle(\'{search_query}\'); return false;">{full_text}</a>'
 
                 # Find "Chapter [number]" or "[F]Chapter [number]"
                 def replace_chapter(match):
-                    prefix = match.group(1) if match.group(1) else ''
-                    chapter_ref = match.group(2)
+                    preceding_space = match.group(1) if match.group(1) else ''  # Space before Chapter
+                    prefix = match.group(2) if match.group(2) else ''  # [F], etc
+                    chapter_ref = match.group(3)
                     # Find chapter by number
                     found_chapter = None
                     for ch in hierarchy.data['CodeChapter']:
@@ -525,10 +535,10 @@ def create_all_library_content(hierarchy):
 
                     if found_chapter:
                         chapter_id = found_chapter['ChapterID']
-                        return f'<a href="#chapter-{chapter_id}" class="text-[#F76C6C] hover:underline font-semibold" onclick="return scrollToChapterOrSearch(\'{chapter_id}\', \'{search_query}\');">{full_text}</a>'
+                        return f'{preceding_space}<a href="#chapter-{chapter_id}" class="text-[#F76C6C] hover:underline font-semibold" onclick="return scrollToChapterOrSearch(\'{chapter_id}\', \'{search_query}\');">{full_text}</a>'
                     else:
                         # Chapter not found - create Google search link (no bold)
-                        return f'<a href="#" class="text-[#F76C6C] hover:underline" onclick="searchGoogle(\'{search_query}\'); return false;">{full_text}</a>'
+                        return f'{preceding_space}<a href="#" class="text-[#F76C6C] hover:underline" onclick="searchGoogle(\'{search_query}\'); return false;">{full_text}</a>'
 
                 # Find "Figure [number]" or "Table [number]"
                 def replace_figure_table(match):
@@ -582,10 +592,10 @@ def create_all_library_content(hierarchy):
                 text = re.sub(r'(\s?)(Figure|Table)\s+(\d+(?:\.\d+)*(?:\([^)]+\))?)\s+(및|and)\s+(\d+(?:\.\d+)*(?:\([^)]+\))?)', replace_figure_table_and, text)
                 # Then handle single Figure/Table references (with optional preceding space)
                 text = re.sub(r'(\s?)(Figure|Table)\s+(\d+(?:\.\d+)*(?:\([^)]+\))?)', replace_figure_table, text)
-                # Section references with optional prefix like [F], [BS]
-                text = re.sub(r'(\[[A-Z]+\])?\s*Section\s+(\d+(?:\.\d+)*)', replace_section, text)
-                # Chapter references with optional prefix
-                text = re.sub(r'(\[[A-Z]+\])?\s*Chapter\s+(\d+)', replace_chapter, text)
+                # Section references with optional prefix like [F], [BS] - capture preceding space
+                text = re.sub(r'(\s?)(\[[A-Z]+\])?\s*Section\s+(\d+(?:\.\d+)*)', replace_section, text)
+                # Chapter references with optional prefix - capture preceding space
+                text = re.sub(r'(\s?)(\[[A-Z]+\])?\s*Chapter\s+(\d+)', replace_chapter, text)
 
                 return text
 
@@ -1252,9 +1262,28 @@ function copyContent(sectionNumber) {{
 }}
 
 // Scroll to chapter function for pre-rendered content with header offset (returns true if found, false otherwise)
-function scrollToChapter(chapterId) {{
+function scrollToChapter(chapterId, saveHistory = false) {{
     const chapterElement = document.getElementById('chapter-' + chapterId);
     if (chapterElement) {{
+        // Save current position to history if requested
+        if (saveHistory) {{
+            const contentContainer = document.querySelector('#librarySection .flex-1.overflow-y-auto');
+            const currentScrollTop = contentContainer ? contentContainer.scrollTop : window.pageYOffset;
+
+            navigationHistory.push({{
+                scrollTop: currentScrollTop
+            }});
+
+            // Show back button in chapter
+            const backBtnId = 'back-btn-chapter-' + chapterId;
+            const backBtn = document.getElementById(backBtnId);
+            if (backBtn) {{
+                backBtn.classList.remove('hidden');
+            }} else {{
+                console.log('Back button not found:', backBtnId);
+            }}
+        }}
+
         // Get the scrollable content container
         const contentContainer = document.querySelector('#librarySection .flex-1.overflow-y-auto');
 
@@ -1345,7 +1374,7 @@ function navigateToSectionOrSearch(chapterId, sectionNum, searchQuery) {{
 
 // Scroll to chapter or search if not found
 function scrollToChapterOrSearch(chapterId, searchQuery) {{
-    const success = scrollToChapter(chapterId);
+    const success = scrollToChapter(chapterId, true);
     if (!success) {{
         searchGoogle(searchQuery);
     }}
@@ -1661,11 +1690,17 @@ function displayTopSearchResults(exactMatches, partialMatches, keyword) {{
         const sectionNum = result.section === 'General' ? 'General' : result.section + (result.subsection ? '.' + result.subsection : '');
         const isExactMatch = index < exactMatches.length;
 
-        // Highlight keyword
-        const highlightedTitleEN = highlightKeyword(result.titleEN, keyword, isExactMatch);
-        const highlightedTitleKR = highlightKeyword(result.titleKR, keyword, isExactMatch);
-        const highlightedContentEN = highlightKeyword(result.contentEN, keyword, isExactMatch);
-        const highlightedContentKR = highlightKeyword(result.contentKR, keyword, isExactMatch);
+        // Extract context around keyword first, then highlight
+        const contextTitleEN = extractContextAroundKeyword(result.titleEN, keyword, 150);
+        const contextTitleKR = extractContextAroundKeyword(result.titleKR, keyword, 150);
+        const contextContentEN = extractContextAroundKeyword(result.contentEN, keyword, 250);
+        const contextContentKR = extractContextAroundKeyword(result.contentKR, keyword, 250);
+
+        // Then apply highlighting
+        const highlightedTitleEN = highlightKeyword(contextTitleEN, keyword, isExactMatch);
+        const highlightedTitleKR = highlightKeyword(contextTitleKR, keyword, isExactMatch);
+        const highlightedContentEN = highlightKeyword(contextContentEN, keyword, isExactMatch);
+        const highlightedContentKR = highlightKeyword(contextContentKR, keyword, isExactMatch);
 
         // Use reference.txt design with collapse/expand functionality
         html += `
@@ -1704,8 +1739,8 @@ function displayTopSearchResults(exactMatches, partialMatches, keyword) {{
                 <!-- Details (collapsible) -->
                 <div class="result-details hidden ml-12 pr-20 mt-2 border-t border-gray-200 pt-2">
                     ${{result.titleKR ? `<p class="text-gray-600 text-sm leading-relaxed mb-2">${{highlightedTitleKR}}</p>` : ''}}
-                    ${{result.contentEN ? `<p class="text-gray-700 text-sm leading-relaxed mb-2 line-clamp-3">${{highlightedContentEN}}</p>` : ''}}
-                    ${{result.contentKR ? `<p class="text-gray-600 text-sm leading-relaxed line-clamp-3">${{highlightedContentKR}}</p>` : ''}}
+                    ${{result.contentEN ? `<p class="text-gray-700 text-sm leading-relaxed mb-2">${{highlightedContentEN}}</p>` : ''}}
+                    ${{result.contentKR ? `<p class="text-gray-600 text-sm leading-relaxed">${{highlightedContentKR}}</p>` : ''}}
                 </div>
             </div>
         `;
@@ -1873,6 +1908,38 @@ function highlightKeyword(text, keyword, isExactMatch) {{
 
     // Replace matches with highlighted spans
     return text.replace(regex, `<mark class="${{highlightClass}}">$1</mark>`);
+}}
+
+// Extract context around keyword for better search result display
+function extractContextAroundKeyword(text, keyword, contextLength = 200) {{
+    if (!text || !keyword) return text;
+
+    // If text is short enough, return as is
+    if (text.length <= contextLength * 2) return text;
+
+    // Find first occurrence of keyword (case-insensitive)
+    const lowerText = text.toLowerCase();
+    const lowerKeyword = keyword.toLowerCase();
+    const keywordIndex = lowerText.indexOf(lowerKeyword);
+
+    // If keyword not found, return beginning of text
+    if (keywordIndex === -1) {{
+        return text.substring(0, contextLength * 2) + '...';
+    }}
+
+    // Calculate start and end positions for context
+    const keywordLength = keyword.length;
+    const start = Math.max(0, keywordIndex - contextLength);
+    const end = Math.min(text.length, keywordIndex + keywordLength + contextLength);
+
+    // Extract context
+    let context = text.substring(start, end);
+
+    // Add ellipsis if truncated
+    if (start > 0) context = '...' + context;
+    if (end < text.length) context = context + '...';
+
+    return context;
 }}
 
 function displaySearchResults(exactMatches, partialMatches, allFilteredResults, keyword) {{
@@ -2106,9 +2173,9 @@ function openSearchResult(codeId, versionId, chapterId, section) {{
     // Switch to library and load the code
     switchToLibraryCode(codeId, versionId);
 
-    // Scroll to the section after a short delay
+    // Scroll to the section after a short delay with history save
     setTimeout(() => {{
-        scrollToSection(chapterId, section);
+        scrollToSection(chapterId, section, true);
     }}, 500);
 }}
 
