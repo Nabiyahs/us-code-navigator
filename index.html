@@ -48907,13 +48907,13 @@ function openImageModal(attachment) {
     modalTitle.textContent = `${typeLabel}${number}`;
 
     // Construct Confluence image URL
-    // Base URL: https://wiki.samoo.com/download/attachments/
-    // The page "Code Image" needs to be accessed to get the actual attachment
-    const baseUrl = 'https://wiki.samoo.com/download/attachments';
+    // Page ID 62830860 is the "Code Image" page
+    const pageId = '62830860';
     const fileName = attachment.FileName;
+    // URL encode the filename (handles special chars like parentheses)
+    const encodedFileName = encodeURIComponent(fileName);
+    const imageUrl = `https://wiki.samoo.com/download/attachments/${pageId}/${encodedFileName}?api=v2`;
 
-    // Try to load the image
-    const imageUrl = `${baseUrl}/HTPEDIA/Code+Image/${fileName}`;
     modalImage.src = imageUrl;
     modalImage.alt = `${typeLabel}${number}`;
     modalImage.style.display = 'block';

@@ -535,12 +535,15 @@ def create_all_library_content(hierarchy):
                         for att in attachments:
                             type_label = 'Table' if att['Type'] == 'T' else 'Figure'
                             # Escape quotes in JSON data for onclick
-                            import json
                             att_json = json.dumps(att).replace('"', '&quot;')
-                            # Confluence wiki URL
-                            base_url = 'https://wiki.samoo.com/download/attachments'
+                            # Confluence wiki URL pattern
+                            # Page ID 62830860 is the "Code Image" page
+                            from urllib.parse import quote
+                            page_id = '62830860'
                             file_name = att['FileName']
-                            image_url = f"{base_url}/HTPEDIA/Code+Image/{file_name}"
+                            # URL encode the filename (handles special chars like parentheses)
+                            encoded_file_name = quote(file_name)
+                            image_url = f"https://wiki.samoo.com/download/attachments/{page_id}/{encoded_file_name}?api=v2"
 
                             att_items.append(f'''
                             <div class="border border-gray-300 rounded p-3 hover:border-[#A8D0E6] transition-colors cursor-pointer flex-shrink-0" onclick='openImageModal({att_json})'>
@@ -2068,13 +2071,13 @@ function openImageModal(attachment) {{
     modalTitle.textContent = `${{typeLabel}}${{number}}`;
 
     // Construct Confluence image URL
-    // Base URL: https://wiki.samoo.com/download/attachments/
-    // The page "Code Image" needs to be accessed to get the actual attachment
-    const baseUrl = 'https://wiki.samoo.com/download/attachments';
+    // Page ID 62830860 is the "Code Image" page
+    const pageId = '62830860';
     const fileName = attachment.FileName;
+    // URL encode the filename (handles special chars like parentheses)
+    const encodedFileName = encodeURIComponent(fileName);
+    const imageUrl = `https://wiki.samoo.com/download/attachments/${{pageId}}/${{encodedFileName}}?api=v2`;
 
-    // Try to load the image
-    const imageUrl = `${{baseUrl}}/HTPEDIA/Code+Image/${{fileName}}`;
     modalImage.src = imageUrl;
     modalImage.alt = `${{typeLabel}}${{number}}`;
     modalImage.style.display = 'block';
