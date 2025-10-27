@@ -48909,7 +48909,11 @@ function openImageModal(attachment) {
     // Construct Confluence image URL
     // Page ID 62830860 is the "Code Image" page
     const pageId = '62830860';
-    const fileName = attachment.FileName;
+    let fileName = attachment.FileName;
+    // Add .jpg extension (all images are jpg format)
+    if (!fileName.endsWith('.jpg')) {
+        fileName = fileName + '.jpg';
+    }
     // URL encode the filename (handles special chars like parentheses)
     const encodedFileName = encodeURIComponent(fileName);
     const imageUrl = `https://wiki.samoo.com/download/attachments/${pageId}/${encodedFileName}?api=v2`;

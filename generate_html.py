@@ -541,6 +541,9 @@ def create_all_library_content(hierarchy):
                             from urllib.parse import quote
                             page_id = '62830860'
                             file_name = att['FileName']
+                            # Add .jpg extension (all images are jpg format)
+                            if not file_name.endswith('.jpg'):
+                                file_name = file_name + '.jpg'
                             # URL encode the filename (handles special chars like parentheses)
                             encoded_file_name = quote(file_name)
                             image_url = f"https://wiki.samoo.com/download/attachments/{page_id}/{encoded_file_name}?api=v2"
@@ -2073,7 +2076,11 @@ function openImageModal(attachment) {{
     // Construct Confluence image URL
     // Page ID 62830860 is the "Code Image" page
     const pageId = '62830860';
-    const fileName = attachment.FileName;
+    let fileName = attachment.FileName;
+    // Add .jpg extension (all images are jpg format)
+    if (!fileName.endsWith('.jpg')) {{
+        fileName = fileName + '.jpg';
+    }}
     // URL encode the filename (handles special chars like parentheses)
     const encodedFileName = encodeURIComponent(fileName);
     const imageUrl = `https://wiki.samoo.com/download/attachments/${{pageId}}/${{encodedFileName}}?api=v2`;
