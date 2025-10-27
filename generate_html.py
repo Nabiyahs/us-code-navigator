@@ -1481,7 +1481,7 @@ function scrollToSection(chapterId, sectionNum, saveHistory = false) {{
 
             contentContainer.scrollTo({{
                 top: scrollPosition,
-                behavior: 'smooth'
+                behavior: 'auto'
             }});
         }} else {{
             // Fallback to window scroll if container not found
@@ -1493,7 +1493,7 @@ function scrollToSection(chapterId, sectionNum, saveHistory = false) {{
 
             window.scrollTo({{
                 top: Math.max(0, offsetPosition),
-                behavior: 'smooth'
+                behavior: 'auto'
             }});
         }}
 
@@ -1530,12 +1530,12 @@ function goBackToSection() {{
         if (contentContainer) {{
             contentContainer.scrollTo({{
                 top: previous.scrollTop,
-                behavior: 'smooth'
+                behavior: 'auto'
             }});
         }} else {{
             window.scrollTo({{
                 top: previous.scrollTop,
-                behavior: 'smooth'
+                behavior: 'auto'
             }});
         }}
     }}
