@@ -504,8 +504,8 @@ def create_all_library_content(hierarchy):
                         # Section exists - create normal hyperlink
                         return f'<a href="#section-{found_chapter_id}-{section_id}" class="text-[#F76C6C] hover:underline font-semibold" onclick="return navigateToSectionOrSearch(\'{found_chapter_id}\', \'{section_ref}\', \'{search_query}\');">{full_text}</a>'
                     else:
-                        # Section not found - create Google search link
-                        return f'<a href="#" class="text-[#F76C6C] hover:underline font-semibold" onclick="searchGoogle(\'{search_query}\'); return false;">{full_text}</a>'
+                        # Section not found - create Google search link (no bold)
+                        return f'<a href="#" class="text-[#F76C6C] hover:underline" onclick="searchGoogle(\'{search_query}\'); return false;">{full_text}</a>'
 
                 # Find "Chapter [number]" or "[F]Chapter [number]"
                 def replace_chapter(match):
@@ -527,27 +527,29 @@ def create_all_library_content(hierarchy):
                         chapter_id = found_chapter['ChapterID']
                         return f'<a href="#chapter-{chapter_id}" class="text-[#F76C6C] hover:underline font-semibold" onclick="return scrollToChapterOrSearch(\'{chapter_id}\', \'{search_query}\');">{full_text}</a>'
                     else:
-                        # Chapter not found - create Google search link
-                        return f'<a href="#" class="text-[#F76C6C] hover:underline font-semibold" onclick="searchGoogle(\'{search_query}\'); return false;">{full_text}</a>'
+                        # Chapter not found - create Google search link (no bold)
+                        return f'<a href="#" class="text-[#F76C6C] hover:underline" onclick="searchGoogle(\'{search_query}\'); return false;">{full_text}</a>'
 
                 # Find "Figure [number]" or "Table [number]"
                 def replace_figure_table(match):
-                    type_word = match.group(1)  # "Figure" or "Table"
-                    number = match.group(2)
+                    preceding_space = match.group(1)  # Space before Figure/Table
+                    type_word = match.group(2)  # "Figure" or "Table"
+                    number = match.group(3)
                     # Find attachment
                     for att in hierarchy.data['CodeAttachment']:
                         att_type = 'Figure' if att['Type'] == 'F' else 'Table'
                         if att_type == type_word and att.get('Number') == number:
                             att_id = att['AttachmentID']
-                            return f'<a href="#" class="text-[#F76C6C] hover:underline font-semibold" onclick="openImageModalById(\'{att_id}\'); return false;">{type_word} {number}</a>'
+                            return f'{preceding_space}<a href="#" class="text-[#F76C6C] hover:underline font-semibold" onclick="openImageModalById(\'{att_id}\'); return false;">{type_word} {number}</a>'
                     return match.group(0)  # Return original if not found
 
                 # Find "Table 307.1(1) 및 307.1(2)" or "Figure 1 and 2" patterns
                 def replace_figure_table_and(match):
-                    type_word = match.group(1)  # "Figure" or "Table"
-                    first_number = match.group(2)
-                    separator_word = match.group(3)  # "및" or "and"
-                    second_number = match.group(4)
+                    preceding_space = match.group(1)  # Space before Figure/Table
+                    type_word = match.group(2)  # "Figure" or "Table"
+                    first_number = match.group(3)
+                    separator_word = match.group(4)  # "및" or "and"
+                    second_number = match.group(5)
 
                     # Process first number
                     first_link = None
@@ -573,13 +575,13 @@ def create_all_library_content(hierarchy):
 
                     # Return with " 및 " or " and " in between
                     separator = f' {separator_word} '
-                    return f'{first_link}{separator}{second_link}'
+                    return f'{preceding_space}{first_link}{separator}{second_link}'
 
                 # Replace patterns in order
-                # First handle "Table X 및 Y" or "Figure X and Y" patterns
-                text = re.sub(r'(Figure|Table)\s+(\d+(?:\.\d+)*(?:\([^)]+\))?)\s+(및|and)\s+(\d+(?:\.\d+)*(?:\([^)]+\))?)', replace_figure_table_and, text)
-                # Then handle single Figure/Table references
-                text = re.sub(r'(Figure|Table)\s+(\d+(?:\.\d+)*(?:\([^)]+\))?)', replace_figure_table, text)
+                # First handle "Table X 및 Y" or "Figure X and Y" patterns (with optional preceding space)
+                text = re.sub(r'(\s?)(Figure|Table)\s+(\d+(?:\.\d+)*(?:\([^)]+\))?)\s+(및|and)\s+(\d+(?:\.\d+)*(?:\([^)]+\))?)', replace_figure_table_and, text)
+                # Then handle single Figure/Table references (with optional preceding space)
+                text = re.sub(r'(\s?)(Figure|Table)\s+(\d+(?:\.\d+)*(?:\([^)]+\))?)', replace_figure_table, text)
                 # Section references with optional prefix like [F], [BS]
                 text = re.sub(r'(\[[A-Z]+\])?\s*Section\s+(\d+(?:\.\d+)*)', replace_section, text)
                 # Chapter references with optional prefix
@@ -681,11 +683,12 @@ def create_all_library_content(hierarchy):
 
                     content_html.append(f'''
                     <div class="bg-gray-50 p-4 rounded-lg relative" id="section-{chapter_id}-{section_number.replace('.', '-')}">
-                        <div class="absolute top-2 left-2 flex gap-2">
-                            <button class="back-btn hidden p-2 bg-white hover:bg-gray-200 rounded-full shadow transition-colors" title="Go back" onclick="goBackToSection()" id="back-btn-{chapter_id}-{section_number.replace('.', '-')}">
-                                <svg class="w-5 h-5 text-[#F76C6C]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                        <div class="absolute top-3 left-3 z-10 flex gap-2">
+                            <button class="back-btn hidden px-3 py-1.5 bg-[#F76C6C] text-white hover:bg-[#d85a5a] rounded-md shadow-md transition-colors flex items-center gap-1 text-sm font-medium" title="Go back" onclick="goBackToSection()" id="back-btn-{chapter_id}-{section_number.replace('.', '-')}">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"></path>
                                 </svg>
+                                <span>Back</span>
                             </button>
                         </div>
                         <div class="absolute top-3 right-3 flex gap-2">
