@@ -1272,6 +1272,18 @@ function scrollToChapter(chapterId, saveHistory = false) {{
 
     const chapterElement = document.getElementById('chapter-' + chapterId);
     if (chapterElement) {{
+        // CRITICAL: Find which code-content this chapter belongs to and show it
+        const codeContent = chapterElement.closest('.code-content');
+        if (codeContent) {{
+            // Hide all code contents
+            document.querySelectorAll('.code-content').forEach(content => {{
+                content.style.display = 'none';
+            }});
+            // Show the correct code content
+            codeContent.style.display = 'block';
+            console.log('Switched to code for chapter:', codeContent.id);
+        }}
+
         // Save current position to history if requested
         if (saveHistory) {{
             const contentContainer = document.querySelector('#librarySection .flex-1.overflow-y-auto');
@@ -1410,6 +1422,17 @@ function scrollToSection(chapterId, sectionNum, saveHistory = false) {{
     console.log('Found section element:', sectionElement ? 'YES' : 'NO');
 
     if (sectionElement) {{
+        // CRITICAL: Find which code-content this section belongs to and show it
+        const codeContent = sectionElement.closest('.code-content');
+        if (codeContent) {{
+            // Hide all code contents
+            document.querySelectorAll('.code-content').forEach(content => {{
+                content.style.display = 'none';
+            }});
+            // Show the correct code content
+            codeContent.style.display = 'block';
+            console.log('Switched to code:', codeContent.id);
+        }}
         // Save current position to history if requested
         if (saveHistory) {{
             const contentContainer = document.querySelector('#librarySection .flex-1.overflow-y-auto');
