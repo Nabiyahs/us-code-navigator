@@ -1260,11 +1260,12 @@ function scrollToChapter(chapterId) {{
 
         if (contentContainer) {{
             // Scroll within the content container
-            const containerTop = contentContainer.scrollTop;
+            // Show more context by scrolling to 150px before the target
             const elementTop = chapterElement.offsetTop;
+            const scrollPosition = Math.max(0, elementTop - 150);
 
             contentContainer.scrollTo({{
-                top: elementTop - 20, // 20px padding from top
+                top: scrollPosition,
                 behavior: 'smooth'
             }});
         }} else {{
@@ -1272,10 +1273,11 @@ function scrollToChapter(chapterId) {{
             const header = document.querySelector('#librarySection header');
             const headerHeight = header ? header.offsetHeight : 80;
             const elementPosition = chapterElement.getBoundingClientRect().top + window.pageYOffset;
-            const offsetPosition = elementPosition - headerHeight - 20;
+            // Show more context by adding 150px offset
+            const offsetPosition = elementPosition - headerHeight - 150;
 
             window.scrollTo({{
-                top: offsetPosition,
+                top: Math.max(0, offsetPosition),
                 behavior: 'smooth'
             }});
         }}
@@ -1376,6 +1378,8 @@ function scrollToSection(chapterId, sectionNum, saveHistory = false) {{
             const backBtn = document.getElementById(backBtnId);
             if (backBtn) {{
                 backBtn.classList.remove('hidden');
+            }} else {{
+                console.log('Back button not found:', backBtnId);
             }}
         }}
 
@@ -1384,10 +1388,12 @@ function scrollToSection(chapterId, sectionNum, saveHistory = false) {{
 
         if (contentContainer) {{
             // Scroll within the content container
+            // Show more context by scrolling to 150px before the target
             const elementTop = sectionElement.offsetTop;
+            const scrollPosition = Math.max(0, elementTop - 150);
 
             contentContainer.scrollTo({{
-                top: elementTop - 20, // 20px padding from top
+                top: scrollPosition,
                 behavior: 'smooth'
             }});
         }} else {{
@@ -1395,10 +1401,11 @@ function scrollToSection(chapterId, sectionNum, saveHistory = false) {{
             const header = document.querySelector('#librarySection header');
             const headerHeight = header ? header.offsetHeight : 80;
             const elementPosition = sectionElement.getBoundingClientRect().top + window.pageYOffset;
-            const offsetPosition = elementPosition - headerHeight - 20;
+            // Show more context by adding 150px offset
+            const offsetPosition = elementPosition - headerHeight - 150;
 
             window.scrollTo({{
-                top: offsetPosition,
+                top: Math.max(0, offsetPosition),
                 behavior: 'smooth'
             }});
         }}
