@@ -538,9 +538,8 @@ def create_all_library_content(hierarchy):
                     for att in hierarchy.data['CodeAttachment']:
                         att_type = 'Figure' if att['Type'] == 'F' else 'Table'
                         if att_type == type_word and att.get('Number') == number:
-                            import json
-                            att_json = json.dumps(att).replace('"', '&quot;').replace("'", '&apos;')
-                            return f'<a href="#" class="text-[#F76C6C] hover:underline font-semibold" onclick="openImageModal({att_json}); return false;">{type_word} {number}</a>'
+                            att_id = att['AttachmentID']
+                            return f'<a href="#" class="text-[#F76C6C] hover:underline font-semibold" onclick="openImageModalById(\'{att_id}\'); return false;">{type_word} {number}</a>'
                     return match.group(0)  # Return original if not found
 
                 # Find "Table 307.1(1) 및 307.1(2)" or "Figure 1 and 2" patterns
@@ -555,9 +554,8 @@ def create_all_library_content(hierarchy):
                     for att in hierarchy.data['CodeAttachment']:
                         att_type = 'Figure' if att['Type'] == 'F' else 'Table'
                         if att_type == type_word and att.get('Number') == first_number:
-                            import json
-                            att_json = json.dumps(att).replace('"', '&quot;').replace("'", '&apos;')
-                            first_link = f'<a href="#" class="text-[#F76C6C] hover:underline font-semibold" onclick="openImageModal({att_json}); return false;">{type_word} {first_number}</a>'
+                            att_id = att['AttachmentID']
+                            first_link = f'<a href="#" class="text-[#F76C6C] hover:underline font-semibold" onclick="openImageModalById(\'{att_id}\'); return false;">{type_word} {first_number}</a>'
                             break
                     if not first_link:
                         first_link = f'{type_word} {first_number}'
@@ -567,9 +565,8 @@ def create_all_library_content(hierarchy):
                     for att in hierarchy.data['CodeAttachment']:
                         att_type = 'Figure' if att['Type'] == 'F' else 'Table'
                         if att_type == type_word and att.get('Number') == second_number:
-                            import json
-                            att_json = json.dumps(att).replace('"', '&quot;').replace("'", '&apos;')
-                            second_link = f'<a href="#" class="text-[#F76C6C] hover:underline font-semibold" onclick="openImageModal({att_json}); return false;">{second_number}</a>'
+                            att_id = att['AttachmentID']
+                            second_link = f'<a href="#" class="text-[#F76C6C] hover:underline font-semibold" onclick="openImageModalById(\'{att_id}\'); return false;">{second_number}</a>'
                             break
                     if not second_link:
                         second_link = second_number
@@ -638,8 +635,7 @@ def create_all_library_content(hierarchy):
                         att_items = []
                         for att in attachments:
                             type_label = 'Table' if att['Type'] == 'T' else 'Figure'
-                            # Escape quotes in JSON data for onclick
-                            att_json = json.dumps(att).replace('"', '&quot;')
+                            att_id = att['AttachmentID']
                             # Confluence wiki URL pattern
                             # Page ID 62830860 is the "Code Image" page
                             from urllib.parse import quote
@@ -653,7 +649,7 @@ def create_all_library_content(hierarchy):
                             image_url = f"https://wiki.samoo.com/download/attachments/{page_id}/{encoded_file_name}?api=v2"
 
                             att_items.append(f'''
-                            <div class="border border-gray-300 rounded p-3 hover:border-[#A8D0E6] transition-colors cursor-pointer flex-shrink-0" onclick='openImageModal({att_json})'>
+                            <div class="border border-gray-300 rounded p-3 hover:border-[#A8D0E6] transition-colors cursor-pointer flex-shrink-0" onclick="openImageModalById('{att_id}')">
                                 <img src="{image_url}" alt="{type_label} {att.get('Number') or ''}" class="w-full h-auto rounded mb-2" style="max-width: 400px;">
                                 <p class="text-xs font-medium text-gray-700 text-center">{type_label} {att.get('Number') or ''}</p>
                             </div>''')
@@ -2195,6 +2191,14 @@ function copyCodeContent(sectionNumber) {{
 
 // === Image Modal Functions ===
 let currentModalAttachment = null;
+
+function openImageModalById(attachmentId) {{
+    // Find attachment in appData
+    const attachment = appData.CodeAttachment.find(att => att.AttachmentID === attachmentId);
+    if (attachment) {{
+        openImageModal(attachment);
+    }}
+}}
 
 function openImageModal(attachment) {{
     const modal = document.getElementById('imageModal');
