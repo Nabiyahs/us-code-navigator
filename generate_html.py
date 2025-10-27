@@ -533,15 +533,20 @@ def create_all_library_content(hierarchy):
                     if attachments:
                         att_items = []
                         for att in attachments:
-                            icon = 'M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z' if att['Type'].lower() == 'table' else 'M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z'
+                            icon = 'M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z' if att['Type'] == 'T' else 'M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z'
+                            type_label = 'Table' if att['Type'] == 'T' else 'Figure'
+                            att_id = att['AttachmentID']
+                            # Escape quotes in JSON data for onclick
+                            import json
+                            att_json = json.dumps(att).replace('"', '&quot;')
                             att_items.append(f'''
-                            <div class="border border-gray-300 rounded p-2 hover:border-[#A8D0E6] transition-colors cursor-pointer flex-shrink-0" style="min-width: 120px;">
+                            <div class="border border-gray-300 rounded p-2 hover:border-[#A8D0E6] transition-colors cursor-pointer flex-shrink-0" style="min-width: 120px;" onclick='openImageModal({att_json})'>
                                 <div class="bg-gray-100 h-16 rounded flex items-center justify-center mb-1">
                                     <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{icon}"></path>
                                     </svg>
                                 </div>
-                                <p class="text-xs font-medium text-gray-700 text-center">{att['Type']} {att.get('Number') or ''}</p>
+                                <p class="text-xs font-medium text-gray-700 text-center">{type_label} {att.get('Number') or ''}</p>
                             </div>''')
                         attachment_html = f'''
                         <div class="mt-3 pt-3 border-t border-gray-200">
@@ -2051,6 +2056,73 @@ function copyCodeContent(sectionNumber) {{
     }});
 }}
 
+// === Image Modal Functions ===
+function openImageModal(attachment) {{
+    const modal = document.getElementById('imageModal');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalImage = document.getElementById('modalImage');
+    const modalContent = document.getElementById('modalContent');
+
+    // Set title
+    const typeLabel = attachment.Type === 'T' ? 'Table' : 'Figure';
+    const number = attachment.Number ? ` ${{attachment.Number}}` : '';
+    modalTitle.textContent = `${{typeLabel}}${{number}}`;
+
+    // Construct Confluence image URL
+    // Base URL: https://wiki.samoo.com/download/attachments/
+    // The page "Code Image" needs to be accessed to get the actual attachment
+    const baseUrl = 'https://wiki.samoo.com/download/attachments';
+    const fileName = attachment.FileName;
+
+    // Try to load the image
+    const imageUrl = `${{baseUrl}}/HTPEDIA/Code+Image/${{fileName}}`;
+    modalImage.src = imageUrl;
+    modalImage.alt = `${{typeLabel}}${{number}}`;
+    modalImage.style.display = 'block';
+
+    // Set content
+    let contentHtml = '';
+
+    if (attachment.AttachTitleEN || attachment.AttachTitleKR) {{
+        contentHtml += '<div class="mb-4">';
+        if (attachment.AttachTitleEN) {{
+            contentHtml += `<h4 class="font-semibold text-[#24305E] mb-1">${{attachment.AttachTitleEN}}</h4>`;
+        }}
+        if (attachment.AttachTitleKR) {{
+            contentHtml += `<p class="text-gray-600 text-sm">${{attachment.AttachTitleKR}}</p>`;
+        }}
+        contentHtml += '</div>';
+    }}
+
+    if (attachment.AttachContentEN || attachment.AttachContentKR) {{
+        contentHtml += '<div class="mb-4 p-3 bg-gray-50 rounded">';
+        if (attachment.AttachContentEN) {{
+            contentHtml += `<p class="text-gray-700 text-sm leading-relaxed mb-2 whitespace-pre-line">${{attachment.AttachContentEN}}</p>`;
+        }}
+        if (attachment.AttachContentKR) {{
+            contentHtml += `<p class="text-gray-600 text-sm leading-relaxed whitespace-pre-line">${{attachment.AttachContentKR}}</p>`;
+        }}
+        contentHtml += '</div>';
+    }}
+
+    if (attachment.AttachComment) {{
+        contentHtml += '<div class="p-3 bg-[#FEE9EC] bg-opacity-30 rounded-lg">';
+        contentHtml += '<label class="text-xs font-semibold text-[#F76C6C] mb-1 block">Comment</label>';
+        contentHtml += `<p class="text-gray-700 text-sm leading-relaxed whitespace-pre-line">${{attachment.AttachComment}}</p>`;
+        contentHtml += '</div>';
+    }}
+
+    modalContent.innerHTML = contentHtml;
+
+    // Show modal
+    modal.classList.add('active');
+}}
+
+function closeImageModal() {{
+    const modal = document.getElementById('imageModal');
+    modal.classList.remove('active');
+}}
+
 // === Page Initialization ===
 document.addEventListener('DOMContentLoaded', function() {{
     console.log('US Code Navigator initialized with schema-based hierarchy');
@@ -2126,9 +2198,35 @@ document.addEventListener('DOMContentLoaded', function() {{
 }});
     '''
 
+    # 이미지 모달 HTML 추가
+    modal_html = '''
+    <div id="imageModal" class="modal">
+        <div class="modal-content">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-xl font-bold text-[#24305E]" id="modalTitle"></h3>
+                <button onclick="closeImageModal()" class="p-2 hover:bg-gray-100 rounded-lg transition-colors">
+                    <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            <div class="bg-white rounded-lg overflow-auto" style="max-height: 70vh;">
+                <img id="modalImage" src="" alt="" class="w-full h-auto" style="display: none;">
+                <div id="modalContent" class="p-4"></div>
+            </div>
+        </div>
+    </div>
+    '''
+    modal_soup = BeautifulSoup(modal_html, 'lxml')
+
     # script를 body 끝에 추가
     body_tag = soup.find('body')
     if body_tag:
+        # 모달 추가
+        modal_div = modal_soup.find('div', id='imageModal')
+        if modal_div:
+            body_tag.append(modal_div)
+        # script 추가
         body_tag.append(script_tag)
 
     return str(soup)

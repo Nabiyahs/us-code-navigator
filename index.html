@@ -28251,7 +28251,22 @@ ${note}
       }
     });
   </script>
-<script>
+<div class="modal" id="imageModal">
+<div class="modal-content">
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-xl font-bold text-[#24305E]" id="modalTitle"></h3>
+<button class="p-2 hover:bg-gray-100 rounded-lg transition-colors" onclick="closeImageModal()">
+<svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+</div>
+<div class="bg-white rounded-lg overflow-auto" style="max-height: 70vh;">
+<img alt="" class="w-full h-auto" id="modalImage" src="" style="display: none;"/>
+<div class="p-4" id="modalContent"></div>
+</div>
+</div>
+</div><script>
 // === Data Layer ===
 const appData = {
   "CodeType": [
@@ -48877,6 +48892,73 @@ function copyCodeContent(sectionNumber) {
             }, 1500);
         }
     });
+}
+
+// === Image Modal Functions ===
+function openImageModal(attachment) {
+    const modal = document.getElementById('imageModal');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalImage = document.getElementById('modalImage');
+    const modalContent = document.getElementById('modalContent');
+
+    // Set title
+    const typeLabel = attachment.Type === 'T' ? 'Table' : 'Figure';
+    const number = attachment.Number ? ` ${attachment.Number}` : '';
+    modalTitle.textContent = `${typeLabel}${number}`;
+
+    // Construct Confluence image URL
+    // Base URL: https://wiki.samoo.com/download/attachments/
+    // The page "Code Image" needs to be accessed to get the actual attachment
+    const baseUrl = 'https://wiki.samoo.com/download/attachments';
+    const fileName = attachment.FileName;
+
+    // Try to load the image
+    const imageUrl = `${baseUrl}/HTPEDIA/Code+Image/${fileName}`;
+    modalImage.src = imageUrl;
+    modalImage.alt = `${typeLabel}${number}`;
+    modalImage.style.display = 'block';
+
+    // Set content
+    let contentHtml = '';
+
+    if (attachment.AttachTitleEN || attachment.AttachTitleKR) {
+        contentHtml += '<div class="mb-4">';
+        if (attachment.AttachTitleEN) {
+            contentHtml += `<h4 class="font-semibold text-[#24305E] mb-1">${attachment.AttachTitleEN}</h4>`;
+        }
+        if (attachment.AttachTitleKR) {
+            contentHtml += `<p class="text-gray-600 text-sm">${attachment.AttachTitleKR}</p>`;
+        }
+        contentHtml += '</div>';
+    }
+
+    if (attachment.AttachContentEN || attachment.AttachContentKR) {
+        contentHtml += '<div class="mb-4 p-3 bg-gray-50 rounded">';
+        if (attachment.AttachContentEN) {
+            contentHtml += `<p class="text-gray-700 text-sm leading-relaxed mb-2 whitespace-pre-line">${attachment.AttachContentEN}</p>`;
+        }
+        if (attachment.AttachContentKR) {
+            contentHtml += `<p class="text-gray-600 text-sm leading-relaxed whitespace-pre-line">${attachment.AttachContentKR}</p>`;
+        }
+        contentHtml += '</div>';
+    }
+
+    if (attachment.AttachComment) {
+        contentHtml += '<div class="p-3 bg-[#FEE9EC] bg-opacity-30 rounded-lg">';
+        contentHtml += '<label class="text-xs font-semibold text-[#F76C6C] mb-1 block">Comment</label>';
+        contentHtml += `<p class="text-gray-700 text-sm leading-relaxed whitespace-pre-line">${attachment.AttachComment}</p>`;
+        contentHtml += '</div>';
+    }
+
+    modalContent.innerHTML = contentHtml;
+
+    // Show modal
+    modal.classList.add('active');
+}
+
+function closeImageModal() {
+    const modal = document.getElementById('imageModal');
+    modal.classList.remove('active');
 }
 
 // === Page Initialization ===
