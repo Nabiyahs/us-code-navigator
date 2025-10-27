@@ -533,19 +533,18 @@ def create_all_library_content(hierarchy):
                     if attachments:
                         att_items = []
                         for att in attachments:
-                            icon = 'M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z' if att['Type'] == 'T' else 'M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z'
                             type_label = 'Table' if att['Type'] == 'T' else 'Figure'
-                            att_id = att['AttachmentID']
                             # Escape quotes in JSON data for onclick
                             import json
                             att_json = json.dumps(att).replace('"', '&quot;')
+                            # Confluence wiki URL
+                            base_url = 'https://wiki.samoo.com/download/attachments'
+                            file_name = att['FileName']
+                            image_url = f"{base_url}/HTPEDIA/Code+Image/{file_name}"
+
                             att_items.append(f'''
-                            <div class="border border-gray-300 rounded p-2 hover:border-[#A8D0E6] transition-colors cursor-pointer flex-shrink-0" style="min-width: 120px;" onclick='openImageModal({att_json})'>
-                                <div class="bg-gray-100 h-16 rounded flex items-center justify-center mb-1">
-                                    <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{icon}"></path>
-                                    </svg>
-                                </div>
+                            <div class="border border-gray-300 rounded p-3 hover:border-[#A8D0E6] transition-colors cursor-pointer flex-shrink-0" onclick='openImageModal({att_json})'>
+                                <img src="{image_url}" alt="{type_label} {att.get('Number') or ''}" class="w-full h-auto rounded mb-2" style="max-width: 400px;">
                                 <p class="text-xs font-medium text-gray-700 text-center">{type_label} {att.get('Number') or ''}</p>
                             </div>''')
                         attachment_html = f'''
