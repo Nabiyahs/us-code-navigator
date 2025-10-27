@@ -503,15 +503,16 @@ def create_all_library_content(hierarchy):
                                 if found_chapter_id:
                                     break
 
-                    section_id = section_ref.replace('.', '-')
+                    # Create safe ID by removing special characters
+                    section_id_safe = section_ref.replace('[', '').replace(']', '').replace('.', '-')
                     full_text = f'{prefix}Section {section_ref}' if prefix else f'Section {section_ref}'
 
                     # Escape quotes for JavaScript
                     search_query = f'{code_base} {year} Section {section_ref}'.replace("'", "\\'")
 
                     if found_chapter_id:
-                        # Section exists - create hyperlink with bold
-                        return f'{preceding_space}<a href="#section-{found_chapter_id}-{section_id}" class="text-[#F76C6C] hover:underline font-semibold" onclick="return navigateToSectionOrSearch(\'{found_chapter_id}\', \'{section_ref}\', \'{search_query}\');">{full_text}</a>'
+                        # Section exists - create hyperlink with bold (using <b> tag)
+                        return f'{preceding_space}<b><a href="#section-{found_chapter_id}-{section_id_safe}" class="text-[#F76C6C] hover:underline" onclick="return navigateToSectionOrSearch(\'{found_chapter_id}\', \'{section_ref}\', \'{search_query}\');">{full_text}</a></b>'
                     else:
                         # Section not found - create Google search link (no bold)
                         return f'{preceding_space}<a href="#" class="text-[#F76C6C] hover:underline" onclick="searchGoogle(\'{search_query}\'); return false;">{full_text}</a>'
@@ -535,7 +536,8 @@ def create_all_library_content(hierarchy):
 
                     if found_chapter:
                         chapter_id = found_chapter['ChapterID']
-                        return f'{preceding_space}<a href="#chapter-{chapter_id}" class="text-[#F76C6C] hover:underline font-semibold" onclick="return scrollToChapterOrSearch(\'{chapter_id}\', \'{search_query}\');">{full_text}</a>'
+                        # Internal link - bold using <b> tag
+                        return f'{preceding_space}<b><a href="#chapter-{chapter_id}" class="text-[#F76C6C] hover:underline" onclick="return scrollToChapterOrSearch(\'{chapter_id}\', \'{search_query}\');">{full_text}</a></b>'
                     else:
                         # Chapter not found - create Google search link (no bold)
                         return f'{preceding_space}<a href="#" class="text-[#F76C6C] hover:underline" onclick="searchGoogle(\'{search_query}\'); return false;">{full_text}</a>'
@@ -550,7 +552,7 @@ def create_all_library_content(hierarchy):
                         att_type = 'Figure' if att['Type'] == 'F' else 'Table'
                         if att_type == type_word and att.get('Number') == number:
                             att_id = att['AttachmentID']
-                            return f'{preceding_space}<a href="#" class="text-[#F76C6C] hover:underline font-semibold" onclick="openImageModalById(\'{att_id}\'); return false;">{type_word} {number}</a>'
+                            return f'{preceding_space}<b><a href="#" class="text-[#F76C6C] hover:underline" onclick="openImageModalById(\'{att_id}\'); return false;">{type_word} {number}</a></b>'
                     return match.group(0)  # Return original if not found
 
                 # Find "Table 307.1(1) 및 307.1(2)" or "Figure 1 and 2" patterns
@@ -567,7 +569,7 @@ def create_all_library_content(hierarchy):
                         att_type = 'Figure' if att['Type'] == 'F' else 'Table'
                         if att_type == type_word and att.get('Number') == first_number:
                             att_id = att['AttachmentID']
-                            first_link = f'<a href="#" class="text-[#F76C6C] hover:underline font-semibold" onclick="openImageModalById(\'{att_id}\'); return false;">{type_word} {first_number}</a>'
+                            first_link = f'<b><a href="#" class="text-[#F76C6C] hover:underline" onclick="openImageModalById(\'{att_id}\'); return false;">{type_word} {first_number}</a></b>'
                             break
                     if not first_link:
                         first_link = f'{type_word} {first_number}'
@@ -578,7 +580,7 @@ def create_all_library_content(hierarchy):
                         att_type = 'Figure' if att['Type'] == 'F' else 'Table'
                         if att_type == type_word and att.get('Number') == second_number:
                             att_id = att['AttachmentID']
-                            second_link = f'<a href="#" class="text-[#F76C6C] hover:underline font-semibold" onclick="openImageModalById(\'{att_id}\'); return false;">{second_number}</a>'
+                            second_link = f'<b><a href="#" class="text-[#F76C6C] hover:underline" onclick="openImageModalById(\'{att_id}\'); return false;">{second_number}</a></b>'
                             break
                     if not second_link:
                         second_link = second_number
@@ -618,8 +620,11 @@ def create_all_library_content(hierarchy):
                 section_title = section_num if section_num == 'General' else f'Section {section_num}'
                 title_suffix = f' - {first_content["TitleEN"]}' if first_content.get('TitleEN') else ''
 
+                # Create safe ID by removing special characters
+                section_id_safe = str(section_num).replace('[', '').replace(']', '').replace('.', '-')
+
                 content_html.append(f'''
-                <div class="content-section mb-8" id="section-{chapter_id}-{section_num}">
+                <div class="content-section mb-8" id="section-{chapter_id}-{section_id_safe}">
                     <h3 class="text-xl font-semibold text-[#374785] mb-3">{section_title}{title_suffix}</h3>
                     {f'<p class="text-lg text-gray-600 mb-4">{first_content["TitleKR"]}</p>' if first_content.get('TitleKR') else ''}
                     <div class="space-y-4">''')
@@ -634,6 +639,9 @@ def create_all_library_content(hierarchy):
                         section_number = f"General-{unique_id}"
                     else:
                         section_number = f"{section_num}{subsection}"
+
+                    # Create safe ID by removing special characters and replacing dots with dashes
+                    section_number_safe = str(section_number).replace('[', '').replace(']', '').replace('.', '-')
 
                     # Attachments
                     attachments = [att for att in hierarchy.data['CodeAttachment']
@@ -692,9 +700,9 @@ def create_all_library_content(hierarchy):
                         index_tags_html = '\n                            <span class="text-xs bg-[#F8E9A1] text-[#24305E] px-2 py-0.5 rounded">건축</span>'
 
                     content_html.append(f'''
-                    <div class="bg-gray-50 p-4 rounded-lg relative" id="section-{chapter_id}-{section_number.replace('.', '-')}">
+                    <div class="bg-gray-50 p-4 rounded-lg relative" id="section-{chapter_id}-{section_number_safe}">
                         <div class="absolute top-3 left-3 z-10 flex gap-2">
-                            <button class="back-btn hidden px-3 py-1.5 bg-[#F76C6C] text-white hover:bg-[#d85a5a] rounded-md shadow-md transition-colors flex items-center gap-1 text-sm font-medium" title="Go back" onclick="goBackToSection()" id="back-btn-{chapter_id}-{section_number.replace('.', '-')}">
+                            <button class="back-btn hidden px-3 py-1.5 bg-[#F76C6C] text-white hover:bg-[#d85a5a] rounded-md shadow-md transition-colors flex items-center gap-1 text-sm font-medium" title="Go back" onclick="goBackToSection()" id="back-btn-{chapter_id}-{section_number_safe}">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"></path>
                                 </svg>
@@ -1388,8 +1396,9 @@ function navigateToSection(chapterId, sectionNum) {{
 
 // Scroll to section with header offset (returns true if found, false otherwise)
 function scrollToSection(chapterId, sectionNum, saveHistory = false) {{
-    // Replace dots with dashes for ID matching
-    const sectionId = 'section-' + chapterId + '-' + sectionNum.toString().replace(/\./g, '-');
+    // Remove special characters and replace dots with dashes for ID matching
+    const sectionIdSafe = sectionNum.toString().replace(/[\[\]]/g, '').replace(/\./g, '-');
+    const sectionId = 'section-' + chapterId + '-' + sectionIdSafe;
     const sectionElement = document.getElementById(sectionId);
 
     if (sectionElement) {{
@@ -1403,7 +1412,7 @@ function scrollToSection(chapterId, sectionNum, saveHistory = false) {{
             }});
 
             // Show back button in target section
-            const backBtnId = 'back-btn-' + chapterId + '-' + sectionNum.toString().replace(/\./g, '-');
+            const backBtnId = 'back-btn-' + chapterId + '-' + sectionIdSafe;
             const backBtn = document.getElementById(backBtnId);
             if (backBtn) {{
                 backBtn.classList.remove('hidden');
