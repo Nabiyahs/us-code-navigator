@@ -1403,8 +1403,11 @@ function scrollToSection(chapterId, sectionNum, saveHistory = false) {{
 
     // Replace dots with dashes for ID matching
     const sectionId = 'section-' + chapterId + '-' + sectionNum.toString().replace(/\./g, '-');
+    console.log('Looking for section ID:', sectionId, 'Chapter:', chapterId, 'Section:', sectionNum);
+
     // Use querySelector with CSS.escape to handle special characters like [ ]
     const sectionElement = document.querySelector('#' + CSS.escape(sectionId));
+    console.log('Found section element:', sectionElement ? 'YES' : 'NO');
 
     if (sectionElement) {{
         // Save current position to history if requested
@@ -1457,11 +1460,13 @@ function scrollToSection(chapterId, sectionNum, saveHistory = false) {{
         document.querySelectorAll('.section-item').forEach(item => {{
             item.classList.remove('bg-[#A8D0E6]', 'text-white');
         }});
-        // Find and highlight the clicked section item (if called from sidebar)
+        // Find and highlight the clicked section item by matching onclick attribute
         const sectionItems = document.querySelectorAll('.section-item');
+        const targetOnclick = `scrollToSection('${{chapterId}}', '${{sectionNum}}')`;
         sectionItems.forEach(item => {{
-            if (item.textContent.trim().includes(sectionNum.toString())) {{
+            if (item.getAttribute('onclick') && item.getAttribute('onclick').includes(targetOnclick)) {{
                 item.classList.add('bg-[#A8D0E6]', 'text-white');
+                console.log('Highlighted section item:', item.textContent.trim());
             }}
         }});
 
