@@ -307,13 +307,39 @@ def create_all_library_content(hierarchy):
         if not latest_version:
             continue
 
-        # 챕터가 있는지 확인
-        chapters = hierarchy.get_children('ModelCodeVersion', latest_version)
-        if 'CodeChapter' not in chapters or len(chapters['CodeChapter']) == 0:
+        # 챕터 확인: CodeChapter에 정의된 것과 CodeContent에만 있는 것 모두 포함
+        chapters_from_schema = hierarchy.get_children('ModelCodeVersion', latest_version)
+        defined_chapters = chapters_from_schema.get('CodeChapter', [])
+
+        # CodeContent에서 이 버전의 모든 unique 챕터 번호 추출
+        version_contents = [c for c in hierarchy.data['CodeContent']
+                           if c.get('ModelCodeVersionID') == latest_version['ModelCodeVersionID']]
+
+        if not version_contents and len(defined_chapters) == 0:
             continue
 
+        # Unique 챕터 번호 추출
+        unique_chapters = set(c.get('Chapter') for c in version_contents if c.get('Chapter'))
+
+        # 챕터 리스트 구성: 정의된 챕터 + 정의되지 않은 챕터
+        chapter_dict = {ch['Chapter']: ch for ch in defined_chapters}
+
+        # 정의되지 않은 챕터는 동적으로 생성
+        for chapter_num in unique_chapters:
+            if chapter_num not in chapter_dict:
+                # 이 챕터의 첫 번째 content에서 타이틀 가져오기
+                first_content = next((c for c in version_contents if c.get('Chapter') == chapter_num), None)
+                chapter_dict[chapter_num] = {
+                    'ChapterID': f'CH-{latest_version["ModelCodeVersionID"]}-{chapter_num}',
+                    'Chapter': chapter_num,
+                    'ModelCodeVersionID': latest_version['ModelCodeVersionID'],
+                    'TitleEN': first_content.get('TitleEN', f'Chapter {chapter_num}') if first_content else f'Chapter {chapter_num}',
+                    'TitleKR': first_content.get('TitleKR', '') if first_content else '',
+                    'ChapterComment': None
+                }
+
         # 첫 번째 활성 코드 찾음!
-        chapter_list = sorted(chapters['CodeChapter'], key=lambda x: x['Chapter'])
+        chapter_list = sorted(chapter_dict.values(), key=lambda x: x['Chapter'])
 
         # 챕터 리스트 HTML 생성 (섹션 포함)
         chapters_html = []
@@ -343,16 +369,31 @@ def create_all_library_content(hierarchy):
 
             for section_num in sorted(sections.keys(), key=section_sort_key):
                 section_title = sections[section_num]
+                # Display "General" without "Section" prefix
+                display_name = section_num if section_num == 'General' else f'Section {section_num}'
                 sections_html.append(f'''
-                  <div class="section-item px-4 py-2 text-xs text-gray-600 hover:bg-gray-100 rounded cursor-pointer"
+                  <div class="section-item px-4 py-2 text-xs text-gray-600 rounded cursor-pointer"
                        onclick="scrollToSection('{chapter_id}', '{section_num}')">
-                    Section {section_num}
+                    {display_name}
                   </div>''')
 
             # 챕터 그룹 (챕터 + 섹션)
             expanded_class = 'max-h-96' if i == 0 else 'max-h-0'
             icon_rotation = 'rotate-180' if i == 0 else ''
             title_kr = ch.get('TitleKR', '')
+
+            # Only show chevron if there are sections
+            has_sections = len(sections_html) > 0
+            chevron_html = f'''
+                  <svg class="w-4 h-4 text-[#24305E] transition-transform {icon_rotation}" id="chevron-{chapter_id}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                  </svg>''' if has_sections else ''
+
+            sections_div = f'''
+                <div class="sections-list overflow-hidden transition-all duration-300 {expanded_class}" id="sections-{chapter_id}">
+                  {''.join(sections_html)}
+                </div>''' if has_sections else ''
+
             chapters_html.append(f'''
               <div class="chapter-group">
                 <div class="chapter-item {active_class} px-4 py-3 rounded-lg cursor-pointer flex items-center justify-between"
@@ -360,16 +401,8 @@ def create_all_library_content(hierarchy):
                      onclick="toggleChapterSidebar('{chapter_id}')">
                   <div>
                     <div class="font-semibold text-[#24305E] text-sm">Chapter {chapter_num}</div>
-                    <div class="text-xs text-gray-600 mt-1">{ch['TitleEN'] or ''}</div>
-                    {f'<div class="text-sm text-gray-500 mt-0.5">{title_kr}</div>' if title_kr else ''}
-                  </div>
-                  <svg class="w-4 h-4 text-[#24305E] transition-transform {icon_rotation}" id="chevron-{chapter_id}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                  </svg>
-                </div>
-                <div class="sections-list overflow-hidden transition-all duration-300 {expanded_class}" id="sections-{chapter_id}">
-                  {''.join(sections_html)}
-                </div>
+                  </div>{chevron_html}
+                </div>{sections_div}
               </div>''')
 
         # 모든 챕터의 콘텐츠 생성
@@ -379,7 +412,12 @@ def create_all_library_content(hierarchy):
             chapter_num = chapter['Chapter']
 
             # 이 챕터의 콘텐츠 가져오기
-            contents = [c for c in hierarchy.data['CodeContent'] if c.get('ChapterID') == chapter_id]
+            # ChapterID가 있으면 그걸로 매칭, 없으면 (ModelCodeVersionID, Chapter)로 매칭
+            contents = [c for c in hierarchy.data['CodeContent']
+                       if (c.get('ChapterID') == chapter_id) or
+                          (c.get('ModelCodeVersionID') == latest_version['ModelCodeVersionID'] and
+                           c.get('Chapter') == chapter_num and
+                           not c.get('ChapterID'))]
 
             # Helper function to parse section/subsection for sorting
             def parse_section_key(value):
@@ -428,9 +466,8 @@ def create_all_library_content(hierarchy):
                 # Find "Section [number]" or "Section [number].[number]"
                 def replace_section(match):
                     section_ref = match.group(1)
-                    # Check if this section exists in current chapter
-                    section_id = f"section-{current_chapter_id}-{section_ref}"
-                    return f'<a href="#section-{section_id.replace(".", "-")}" class="text-[#F76C6C] hover:underline font-semibold" onclick="scrollToSection(\'{current_chapter_id}\', \'{section_ref}\')">Section {section_ref}</a>'
+                    # Just add red underline, keep text same, make it clickable
+                    return f'<span class="section-link cursor-pointer" style="text-decoration: underline; text-decoration-color: #F76C6C; text-underline-offset: 2px;" onclick="navigateToSection(\'{current_chapter_id}\', \'{section_ref}\')">Section {section_ref}</span>'
 
                 # Find "Chapter [number]"
                 def replace_chapter(match):
@@ -442,8 +479,8 @@ def create_all_library_content(hierarchy):
                             return f'<a href="#chapter-{chapter_id}" class="text-[#F76C6C] hover:underline font-semibold" onclick="scrollToChapter(\'{chapter_id}\')">Chapter {chapter_ref}</a>'
                     return match.group(0)  # Return original if not found
 
-                # Replace Section references
-                text = re.sub(r'Section (\d+(?:\.\d+)?)', replace_section, text)
+                # Replace Section references - matches Section 304.1.3.4 etc
+                text = re.sub(r'Section (\d+(?:\.\d+)*)', replace_section, text)
                 # Replace Chapter references
                 text = re.sub(r'Chapter (\d+)', replace_chapter, text)
 
@@ -475,9 +512,15 @@ def create_all_library_content(hierarchy):
                     <div class="space-y-4">''')
 
                 # 각 subsection
-                for content in section_contents:
+                for idx, content in enumerate(section_contents):
                     subsection = f".{content['Subsection']}" if content.get('Subsection') else ''
-                    section_number = f"{section_num}{subsection}"
+                    # If section is General and no subsection, use OrderKey or index for uniqueness
+                    if section_num == 'General' and not subsection:
+                        # Use OrderKey if available, otherwise use index
+                        unique_id = content.get('OrderKey', f'{idx:04d}')
+                        section_number = f"General-{unique_id}"
+                    else:
+                        section_number = f"{section_num}{subsection}"
 
                     # Attachments
                     attachments = [att for att in hierarchy.data['CodeAttachment']
@@ -490,15 +533,19 @@ def create_all_library_content(hierarchy):
                     if attachments:
                         att_items = []
                         for att in attachments:
-                            icon = 'M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z' if att['Type'].lower() == 'table' else 'M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z'
+                            type_label = 'Table' if att['Type'] == 'T' else 'Figure'
+                            # Escape quotes in JSON data for onclick
+                            import json
+                            att_json = json.dumps(att).replace('"', '&quot;')
+                            # Confluence wiki URL
+                            base_url = 'https://wiki.samoo.com/download/attachments'
+                            file_name = att['FileName']
+                            image_url = f"{base_url}/HTPEDIA/Code+Image/{file_name}"
+
                             att_items.append(f'''
-                            <div class="border border-gray-300 rounded p-2 hover:border-[#A8D0E6] transition-colors cursor-pointer flex-shrink-0" style="min-width: 120px;">
-                                <div class="bg-gray-100 h-16 rounded flex items-center justify-center mb-1">
-                                    <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{icon}"></path>
-                                    </svg>
-                                </div>
-                                <p class="text-xs font-medium text-gray-700 text-center">{att['Type']} {att.get('Number') or ''}</p>
+                            <div class="border border-gray-300 rounded p-3 hover:border-[#A8D0E6] transition-colors cursor-pointer flex-shrink-0" onclick='openImageModal({att_json})'>
+                                <img src="{image_url}" alt="{type_label} {att.get('Number') or ''}" class="w-full h-auto rounded mb-2" style="max-width: 400px;">
+                                <p class="text-xs font-medium text-gray-700 text-center">{type_label} {att.get('Number') or ''}</p>
                             </div>''')
                         attachment_html = f'''
                         <div class="mt-3 pt-3 border-t border-gray-200">
@@ -527,9 +574,16 @@ def create_all_library_content(hierarchy):
                         index_tags_html = '\n                            <span class="text-xs bg-[#F8E9A1] text-[#24305E] px-2 py-0.5 rounded">건축</span>'
 
                     content_html.append(f'''
-                    <div class="bg-gray-50 p-4 rounded-lg relative" id="section-{section_number.replace('.', '-')}">
-                        <div class="absolute top-3 right-3">
-                            <button class="p-1.5 hover:bg-gray-200 rounded transition-colors" title="Copy content" onclick="copyCodeContent('{section_number}')">
+                    <div class="bg-gray-50 p-4 rounded-lg relative" id="section-{chapter_id}-{section_number.replace('.', '-')}">
+                        <div class="absolute top-2 left-2 flex gap-2">
+                            <button class="back-btn hidden p-2 bg-white hover:bg-gray-200 rounded-full shadow transition-colors" title="Go back" onclick="goBackToSection()" id="back-btn-{chapter_id}-{section_number.replace('.', '-')}">
+                                <svg class="w-5 h-5 text-[#F76C6C]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="absolute top-3 right-3 flex gap-2">
+                            <button class="p-1.5 hover:bg-gray-200 rounded transition-colors" title="Copy content" onclick="copyCodeContent('{chapter_id}-{section_number}')">
                                 <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
                                 </svg>
@@ -1145,14 +1199,51 @@ function toggleChapterSidebar(chapterId) {{
         }}
     }}
 
+    // Update active state
+    document.querySelectorAll('.chapter-item').forEach(item => {{
+        item.classList.remove('active', 'bg-[#F8E9A1]');
+    }});
+    const activeItem = document.querySelector(`[data-chapter-id="${{chapterId}}"]`);
+    if (activeItem) {{
+        activeItem.classList.add('active', 'bg-[#F8E9A1]');
+    }}
+
     // Also scroll to chapter
     scrollToChapter(chapterId);
 }}
 
+// Navigation history stack
+let navigationHistory = [];
+
+// Navigate to section from hyperlink (with history)
+function navigateToSection(chapterId, sectionNum) {{
+    scrollToSection(chapterId, sectionNum, true);
+}}
+
 // Scroll to section with header offset
-function scrollToSection(chapterId, sectionNum) {{
-    const sectionElement = document.getElementById('section-' + chapterId + '-' + sectionNum);
+function scrollToSection(chapterId, sectionNum, saveHistory = false) {{
+    // Replace dots with dashes for ID matching
+    const sectionId = 'section-' + chapterId + '-' + sectionNum.toString().replace(/\./g, '-');
+    const sectionElement = document.getElementById(sectionId);
+
     if (sectionElement) {{
+        // Save current position to history if requested
+        if (saveHistory) {{
+            const contentContainer = document.querySelector('#librarySection .flex-1.overflow-y-auto');
+            const currentScrollTop = contentContainer ? contentContainer.scrollTop : window.pageYOffset;
+
+            navigationHistory.push({{
+                scrollTop: currentScrollTop
+            }});
+
+            // Show back button in target section
+            const backBtnId = 'back-btn-' + chapterId + '-' + sectionNum.toString().replace(/\./g, '-');
+            const backBtn = document.getElementById(backBtnId);
+            if (backBtn) {{
+                backBtn.classList.remove('hidden');
+            }}
+        }}
+
         // Get the scrollable content container
         const contentContainer = document.querySelector('#librarySection .flex-1.overflow-y-auto');
 
@@ -1173,6 +1264,30 @@ function scrollToSection(chapterId, sectionNum) {{
 
             window.scrollTo({{
                 top: offsetPosition,
+                behavior: 'smooth'
+            }});
+        }}
+    }}
+}}
+
+// Go back to previous section
+function goBackToSection() {{
+    if (navigationHistory.length > 0) {{
+        const previous = navigationHistory.pop();
+
+        // Hide all back buttons
+        document.querySelectorAll('.back-btn').forEach(btn => btn.classList.add('hidden'));
+
+        // Scroll to previous position
+        const contentContainer = document.querySelector('#librarySection .flex-1.overflow-y-auto');
+        if (contentContainer) {{
+            contentContainer.scrollTo({{
+                top: previous.scrollTop,
+                behavior: 'smooth'
+            }});
+        }} else {{
+            window.scrollTo({{
+                top: previous.scrollTop,
                 behavior: 'smooth'
             }});
         }}
@@ -1293,14 +1408,19 @@ function performTopSearch() {{
         const contentEN = (content.ContentEN || '').toLowerCase();
         const contentKR = (content.ContentKR || '').toLowerCase();
 
-        // Check if any field contains the keyword
+        // Get chapter info for chapter title search
+        const chapter = appData.CodeChapter.find(ch => ch.ChapterID === content.ChapterID);
+        const chapterTitleEN = chapter ? (chapter.TitleEN || '').toLowerCase() : '';
+        const chapterTitleKR = chapter ? (chapter.TitleKR || '').toLowerCase() : '';
+
+        // Check if any field contains the keyword (including chapter title)
         if (titleEN.includes(keyword) || titleKR.includes(keyword) ||
-            contentEN.includes(keyword) || contentKR.includes(keyword)) {{
+            contentEN.includes(keyword) || contentKR.includes(keyword) ||
+            chapterTitleEN.includes(keyword) || chapterTitleKR.includes(keyword)) {{
 
             // Get code info
             const modelCode = appData.ModelCode.find(mc => mc.ModelCodeID === content.ModelCodeID);
             const version = appData.ModelCodeVersion.find(v => v.ModelCodeVersionID === content.ModelCodeVersionID);
-            const chapter = appData.CodeChapter.find(ch => ch.ChapterID === content.ChapterID);
 
             if (modelCode && version && chapter) {{
                 const result = {{
@@ -1319,10 +1439,11 @@ function performTopSearch() {{
                     chapterId: content.ChapterID
                 }};
 
-                // Check for exact match
+                // Check for exact match (including chapter title)
                 const wordBoundaryRegex = new RegExp('\\\\b' + keyword.replace(/[.*+?^${{}}()|[\\]\\\\]/g, '\\\\$&') + '\\\\b', 'i');
                 const isExactMatch = wordBoundaryRegex.test(titleEN) || wordBoundaryRegex.test(titleKR) ||
-                                   wordBoundaryRegex.test(contentEN) || wordBoundaryRegex.test(contentKR);
+                                   wordBoundaryRegex.test(contentEN) || wordBoundaryRegex.test(contentKR) ||
+                                   wordBoundaryRegex.test(chapterTitleEN) || wordBoundaryRegex.test(chapterTitleKR);
 
                 if (isExactMatch) {{
                     exactMatches.push(result);
@@ -1350,9 +1471,23 @@ function displayTopSearchResults(exactMatches, partialMatches, keyword) {{
     if (!resultsContainer) {{
         searchResultsSection.innerHTML = `
             <header class="bg-white border-b border-gray-200 shadow-sm mb-6">
-                <div class="px-8 py-6">
-                    <h1 class="text-3xl font-bold text-[#24305E]">검색 결과</h1>
-                    <p class="text-gray-600 mt-1" id="topSearchKeyword"></p>
+                <div class="px-8 py-6 flex items-center justify-between">
+                    <div>
+                        <h1 class="text-3xl font-bold text-[#24305E]">검색 결과</h1>
+                        <p class="text-gray-600 mt-1" id="topSearchKeyword"></p>
+                    </div>
+                    <div class="flex gap-2">
+                        <button onclick="toggleAllSearchResults(true)" class="p-2 hover:bg-gray-100 rounded transition-colors" title="Expand all">
+                            <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                        <button onclick="toggleAllSearchResults(false)" class="p-2 hover:bg-gray-100 rounded transition-colors" title="Collapse all">
+                            <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path>
+                            </svg>
+                        </button>
+                    </div>
                 </div>
             </header>
             <div class="px-8 pb-8">
@@ -1388,31 +1523,46 @@ function displayTopSearchResults(exactMatches, partialMatches, keyword) {{
         const highlightedContentEN = highlightKeyword(result.contentEN, keyword, isExactMatch);
         const highlightedContentKR = highlightKeyword(result.contentKR, keyword, isExactMatch);
 
-        // Use reference.txt design with bg-gray-50 and location header
+        // Use reference.txt design with collapse/expand functionality
         html += `
-            <div class="bg-gray-50 p-4 rounded-lg relative search-result-item"
-                 data-result='${{JSON.stringify(result).replace(/'/g, "\\'")}}'
-                 onmousedown="handleResultMouseDown(event)"
-                 onmouseup="handleResultMouseUp(event)">
-                <!-- Copy button only -->
-                <div class="absolute top-3 right-3">
+            <div class="bg-gray-50 p-4 rounded-lg relative search-result-item" id="search-result-${{index}}">
+                <!-- Expand/Collapse Toggle -->
+                <button class="absolute top-3 left-3 p-1 hover:bg-gray-200 rounded transition-colors"
+                        onclick="toggleSearchResult(${{index}})"
+                        title="Expand/Collapse">
+                    <span class="result-toggle-icon">▼</span>
+                </button>
+
+                <!-- Copy and Navigate buttons -->
+                <div class="absolute top-3 right-3 flex gap-2">
+                    <button class="p-1.5 hover:bg-gray-200 rounded transition-colors"
+                            title="Go to section"
+                            onclick="openSearchResult('${{result.codeId}}', '${{result.versionId}}', '${{result.chapterId}}', '${{sectionNum}}')">
+                        <svg class="w-4 h-4 text-[#F76C6C]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                        </svg>
+                    </button>
                     <button class="p-1.5 hover:bg-gray-200 rounded transition-colors" title="Copy content" onclick="copySearchResultContent(event, this)">
                         <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
                         </svg>
                     </button>
                 </div>
-                <!-- Location and Index tags -->
-                <div class="flex items-center gap-2 mb-3 flex-wrap">
-                    <span class="text-xs bg-[#A8D0E6] text-[#24305E] font-semibold px-2 py-0.5 rounded">${{result.code}} ${{result.year}}: Chapter ${{result.chapter}} - ${{sectionNum}}</span>
-                    <span class="text-xs bg-[#F8E9A1] text-[#24305E] px-2 py-0.5 rounded">건축</span>
+
+                <!-- Summary (always visible) -->
+                <div class="ml-12 pr-20">
+                    <div class="flex items-center gap-2 mb-2 flex-wrap">
+                        <span class="text-xs bg-[#A8D0E6] text-[#24305E] font-semibold px-2 py-0.5 rounded">${{result.code}} ${{result.year}}: Ch.${{result.chapter}} - ${{sectionNum}}</span>
+                    </div>
+                    <h4 class="font-semibold text-[#24305E] text-sm cursor-pointer" onclick="toggleSearchResult(${{index}})">${{sectionNum}}${{result.titleEN ? ' ' + highlightedTitleEN : ''}}</h4>
                 </div>
-                <div class="flex items-center gap-2 mb-2">
-                    <h4 class="font-semibold text-[#24305E] text-sm">${{sectionNum}}${{result.titleEN ? ' ' + highlightedTitleEN : ''}}</h4>
+
+                <!-- Details (collapsible) -->
+                <div class="result-details hidden ml-12 pr-20 mt-2 border-t border-gray-200 pt-2">
+                    ${{result.titleKR ? `<p class="text-gray-600 text-sm leading-relaxed mb-2">${{highlightedTitleKR}}</p>` : ''}}
+                    ${{result.contentEN ? `<p class="text-gray-700 text-sm leading-relaxed mb-2 line-clamp-3">${{highlightedContentEN}}</p>` : ''}}
+                    ${{result.contentKR ? `<p class="text-gray-600 text-sm leading-relaxed line-clamp-3">${{highlightedContentKR}}</p>` : ''}}
                 </div>
-                ${{result.titleKR ? `<p class="text-gray-600 text-sm leading-relaxed mb-1 line-clamp-1">${{highlightedTitleKR}}</p>` : ''}}
-                ${{result.contentEN ? `<p class="text-gray-700 text-xs leading-relaxed mb-1 line-clamp-2">${{highlightedContentEN}}</p>` : ''}}
-                ${{result.contentKR ? `<p class="text-gray-600 text-xs leading-relaxed mb-2 line-clamp-2">${{highlightedContentKR}}</p>` : ''}}
             </div>
         `;
     }});
@@ -1420,6 +1570,40 @@ function displayTopSearchResults(exactMatches, partialMatches, keyword) {{
     html += '</div>';
 
     resultsContainer.innerHTML = html;
+}}
+
+// Toggle individual search result
+function toggleSearchResult(index) {{
+    const resultElement = document.getElementById(`search-result-${{index}}`);
+    if (!resultElement) return;
+
+    const details = resultElement.querySelector('.result-details');
+    const toggleIcon = resultElement.querySelector('.result-toggle-icon');
+
+    if (details.classList.contains('hidden')) {{
+        details.classList.remove('hidden');
+        toggleIcon.textContent = '▲';
+    }} else {{
+        details.classList.add('hidden');
+        toggleIcon.textContent = '▼';
+    }}
+}}
+
+// Toggle all search results
+function toggleAllSearchResults(expand) {{
+    const allResults = document.querySelectorAll('.search-result-item');
+    allResults.forEach((resultElement, index) => {{
+        const details = resultElement.querySelector('.result-details');
+        const toggleIcon = resultElement.querySelector('.result-toggle-icon');
+
+        if (expand) {{
+            details.classList.remove('hidden');
+            toggleIcon.textContent = '▲';
+        }} else {{
+            details.classList.add('hidden');
+            toggleIcon.textContent = '▼';
+        }}
+    }});
 }}
 
 function performSearch() {{
@@ -1498,15 +1682,19 @@ function performSearch() {{
                 const titleKR = (content.TitleKR || '').toLowerCase();
                 const contentEN = (content.ContentEN || '').toLowerCase();
                 const contentKR = (content.ContentKR || '').toLowerCase();
+                const chapterTitleEN = chapter ? (chapter.TitleEN || '').toLowerCase() : '';
+                const chapterTitleKR = chapter ? (chapter.TitleKR || '').toLowerCase() : '';
 
-                // Check if any field contains the keyword
+                // Check if any field contains the keyword (including chapter title)
                 if (titleEN.includes(keyword) || titleKR.includes(keyword) ||
-                    contentEN.includes(keyword) || contentKR.includes(keyword)) {{
+                    contentEN.includes(keyword) || contentKR.includes(keyword) ||
+                    chapterTitleEN.includes(keyword) || chapterTitleKR.includes(keyword)) {{
 
-                    // Check for exact match (keyword as whole word)
+                    // Check for exact match (keyword as whole word, including chapter title)
                     const wordBoundaryRegex = new RegExp('\\\\b' + keyword.replace(/[.*+?^${{}}()|[\\]\\\\]/g, '\\\\$&') + '\\\\b', 'i');
                     const isExactMatch = wordBoundaryRegex.test(titleEN) || wordBoundaryRegex.test(titleKR) ||
-                                       wordBoundaryRegex.test(contentEN) || wordBoundaryRegex.test(contentKR);
+                                       wordBoundaryRegex.test(contentEN) || wordBoundaryRegex.test(contentKR) ||
+                                       wordBoundaryRegex.test(chapterTitleEN) || wordBoundaryRegex.test(chapterTitleKR);
 
                     if (isExactMatch) {{
                         exactMatches.push(result);
@@ -1536,8 +1724,8 @@ function highlightKeyword(text, keyword, isExactMatch) {{
     // Create regex for case-insensitive matching
     const regex = new RegExp(`(${{escapedKeyword}})`, 'gi');
 
-    // Different highlight colors: exact match = yellow, partial match = light blue
-    const highlightClass = isExactMatch ? 'bg-yellow-200 font-semibold' : 'bg-blue-200 font-medium';
+    // Yellow highlight for all matches
+    const highlightClass = 'bg-yellow-200 font-medium';
 
     // Replace matches with highlighted spans
     return text.replace(regex, `<mark class="${{highlightClass}}">$1</mark>`);
@@ -1867,6 +2055,73 @@ function copyCodeContent(sectionNumber) {{
     }});
 }}
 
+// === Image Modal Functions ===
+function openImageModal(attachment) {{
+    const modal = document.getElementById('imageModal');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalImage = document.getElementById('modalImage');
+    const modalContent = document.getElementById('modalContent');
+
+    // Set title
+    const typeLabel = attachment.Type === 'T' ? 'Table' : 'Figure';
+    const number = attachment.Number ? ` ${{attachment.Number}}` : '';
+    modalTitle.textContent = `${{typeLabel}}${{number}}`;
+
+    // Construct Confluence image URL
+    // Base URL: https://wiki.samoo.com/download/attachments/
+    // The page "Code Image" needs to be accessed to get the actual attachment
+    const baseUrl = 'https://wiki.samoo.com/download/attachments';
+    const fileName = attachment.FileName;
+
+    // Try to load the image
+    const imageUrl = `${{baseUrl}}/HTPEDIA/Code+Image/${{fileName}}`;
+    modalImage.src = imageUrl;
+    modalImage.alt = `${{typeLabel}}${{number}}`;
+    modalImage.style.display = 'block';
+
+    // Set content
+    let contentHtml = '';
+
+    if (attachment.AttachTitleEN || attachment.AttachTitleKR) {{
+        contentHtml += '<div class="mb-4">';
+        if (attachment.AttachTitleEN) {{
+            contentHtml += `<h4 class="font-semibold text-[#24305E] mb-1">${{attachment.AttachTitleEN}}</h4>`;
+        }}
+        if (attachment.AttachTitleKR) {{
+            contentHtml += `<p class="text-gray-600 text-sm">${{attachment.AttachTitleKR}}</p>`;
+        }}
+        contentHtml += '</div>';
+    }}
+
+    if (attachment.AttachContentEN || attachment.AttachContentKR) {{
+        contentHtml += '<div class="mb-4 p-3 bg-gray-50 rounded">';
+        if (attachment.AttachContentEN) {{
+            contentHtml += `<p class="text-gray-700 text-sm leading-relaxed mb-2 whitespace-pre-line">${{attachment.AttachContentEN}}</p>`;
+        }}
+        if (attachment.AttachContentKR) {{
+            contentHtml += `<p class="text-gray-600 text-sm leading-relaxed whitespace-pre-line">${{attachment.AttachContentKR}}</p>`;
+        }}
+        contentHtml += '</div>';
+    }}
+
+    if (attachment.AttachComment) {{
+        contentHtml += '<div class="p-3 bg-[#FEE9EC] bg-opacity-30 rounded-lg">';
+        contentHtml += '<label class="text-xs font-semibold text-[#F76C6C] mb-1 block">Comment</label>';
+        contentHtml += `<p class="text-gray-700 text-sm leading-relaxed whitespace-pre-line">${{attachment.AttachComment}}</p>`;
+        contentHtml += '</div>';
+    }}
+
+    modalContent.innerHTML = contentHtml;
+
+    // Show modal
+    modal.classList.add('active');
+}}
+
+function closeImageModal() {{
+    const modal = document.getElementById('imageModal');
+    modal.classList.remove('active');
+}}
+
 // === Page Initialization ===
 document.addEventListener('DOMContentLoaded', function() {{
     console.log('US Code Navigator initialized with schema-based hierarchy');
@@ -1942,9 +2197,35 @@ document.addEventListener('DOMContentLoaded', function() {{
 }});
     '''
 
+    # 이미지 모달 HTML 추가
+    modal_html = '''
+    <div id="imageModal" class="modal">
+        <div class="modal-content">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-xl font-bold text-[#24305E]" id="modalTitle"></h3>
+                <button onclick="closeImageModal()" class="p-2 hover:bg-gray-100 rounded-lg transition-colors">
+                    <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            <div class="bg-white rounded-lg overflow-auto" style="max-height: 70vh;">
+                <img id="modalImage" src="" alt="" class="w-full h-auto" style="display: none;">
+                <div id="modalContent" class="p-4"></div>
+            </div>
+        </div>
+    </div>
+    '''
+    modal_soup = BeautifulSoup(modal_html, 'lxml')
+
     # script를 body 끝에 추가
     body_tag = soup.find('body')
     if body_tag:
+        # 모달 추가
+        modal_div = modal_soup.find('div', id='imageModal')
+        if modal_div:
+            body_tag.append(modal_div)
+        # script 추가
         body_tag.append(script_tag)
 
     return str(soup)
