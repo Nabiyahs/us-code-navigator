@@ -467,9 +467,10 @@ def create_all_library_content(hierarchy):
                 code_base = model_code['ModelCodeName'].split(':')[0].strip()
                 year = int(latest_version['Year']) if latest_version.get('Year') else ''
 
-                # Find "Section [number]" or "Section [number].[number]"
+                # Find "Section [number]" or "[F]Section [number]" or "[BS]414" etc
                 def replace_section(match):
-                    section_ref = match.group(1)
+                    prefix = match.group(1) if match.group(1) else ''  # [F], [BS], etc
+                    section_ref = match.group(2)
                     # Parse section number to find in which chapter it belongs
                     section_num_parts = section_ref.split('.')
                     section_main = section_num_parts[0]
@@ -477,7 +478,12 @@ def create_all_library_content(hierarchy):
                     # Find the content with this section number
                     found_chapter_id = None
                     for content in hierarchy.data['CodeContent']:
-                        if str(content.get('Section')) == section_main:
+                        # Handle both plain "414" and "[F]414" formats
+                        content_section = str(content.get('Section', ''))
+                        # Remove prefix like [F], [BS] from content section too
+                        content_section_clean = re.sub(r'^\[.*?\]', '', content_section)
+
+                        if content_section_clean == section_main or content_section == section_main:
                             # Check if it belongs to current version
                             if content.get('ChapterID'):
                                 # Verify this chapter belongs to current version
@@ -489,17 +495,22 @@ def create_all_library_content(hierarchy):
                                     break
 
                     section_id = section_ref.replace('.', '-')
+                    full_text = f'{prefix}Section {section_ref}' if prefix else f'Section {section_ref}'
+
+                    # Escape quotes for JavaScript
+                    search_query = f'{code_base} {year} Section {section_ref}'.replace("'", "\\'")
+
                     if found_chapter_id:
                         # Section exists - create normal hyperlink
-                        return f'<a href="#section-{found_chapter_id}-{section_id}" class="text-[#F76C6C] hover:underline font-semibold" onclick="return navigateToSectionOrSearch(\'{found_chapter_id}\', \'{section_ref}\', \'{code_base} {year} Section {section_ref}\');">Section {section_ref}</a>'
+                        return f'<a href="#section-{found_chapter_id}-{section_id}" class="text-[#F76C6C] hover:underline font-semibold" onclick="return navigateToSectionOrSearch(\'{found_chapter_id}\', \'{section_ref}\', \'{search_query}\');">{full_text}</a>'
                     else:
                         # Section not found - create Google search link
-                        search_query = f'{code_base} {year} Section {section_ref}'
-                        return f'<a href="#" class="text-[#F76C6C] hover:underline font-semibold" onclick="searchGoogle(\'{search_query}\'); return false;">Section {section_ref}</a>'
+                        return f'<a href="#" class="text-[#F76C6C] hover:underline font-semibold" onclick="searchGoogle(\'{search_query}\'); return false;">{full_text}</a>'
 
-                # Find "Chapter [number]"
+                # Find "Chapter [number]" or "[F]Chapter [number]"
                 def replace_chapter(match):
-                    chapter_ref = match.group(1)
+                    prefix = match.group(1) if match.group(1) else ''
+                    chapter_ref = match.group(2)
                     # Find chapter by number
                     found_chapter = None
                     for ch in hierarchy.data['CodeChapter']:
@@ -507,14 +518,17 @@ def create_all_library_content(hierarchy):
                             found_chapter = ch
                             break
 
+                    full_text = f'{prefix}Chapter {chapter_ref}' if prefix else f'Chapter {chapter_ref}'
+
+                    # Escape quotes for JavaScript
+                    search_query = f'{code_base} {year} Chapter {chapter_ref}'.replace("'", "\\'")
+
                     if found_chapter:
                         chapter_id = found_chapter['ChapterID']
-                        search_query = f'{code_base} {year} Chapter {chapter_ref}'
-                        return f'<a href="#chapter-{chapter_id}" class="text-[#F76C6C] hover:underline font-semibold" onclick="return scrollToChapterOrSearch(\'{chapter_id}\', \'{search_query}\');">Chapter {chapter_ref}</a>'
+                        return f'<a href="#chapter-{chapter_id}" class="text-[#F76C6C] hover:underline font-semibold" onclick="return scrollToChapterOrSearch(\'{chapter_id}\', \'{search_query}\');">{full_text}</a>'
                     else:
                         # Chapter not found - create Google search link
-                        search_query = f'{code_base} {year} Chapter {chapter_ref}'
-                        return f'<a href="#" class="text-[#F76C6C] hover:underline font-semibold" onclick="searchGoogle(\'{search_query}\'); return false;">Chapter {chapter_ref}</a>'
+                        return f'<a href="#" class="text-[#F76C6C] hover:underline font-semibold" onclick="searchGoogle(\'{search_query}\'); return false;">{full_text}</a>'
 
                 # Find "Figure [number]" or "Table [number]"
                 def replace_figure_table(match):
@@ -529,12 +543,50 @@ def create_all_library_content(hierarchy):
                             return f'<a href="#" class="text-[#F76C6C] hover:underline font-semibold" onclick="openImageModal({att_json}); return false;">{type_word} {number}</a>'
                     return match.group(0)  # Return original if not found
 
-                # Replace Section references - matches Section 304.1.3.4 etc
-                text = re.sub(r'Section (\d+(?:\.\d+)*)', replace_section, text)
-                # Replace Chapter references
-                text = re.sub(r'Chapter (\d+)', replace_chapter, text)
-                # Replace Figure and Table references
+                # Find "Table 307.1(1) 및 307.1(2)" or "Figure 1 and 2" patterns
+                def replace_figure_table_and(match):
+                    type_word = match.group(1)  # "Figure" or "Table"
+                    first_number = match.group(2)
+                    separator_word = match.group(3)  # "및" or "and"
+                    second_number = match.group(4)
+
+                    # Process first number
+                    first_link = None
+                    for att in hierarchy.data['CodeAttachment']:
+                        att_type = 'Figure' if att['Type'] == 'F' else 'Table'
+                        if att_type == type_word and att.get('Number') == first_number:
+                            import json
+                            att_json = json.dumps(att).replace('"', '&quot;').replace("'", '&apos;')
+                            first_link = f'<a href="#" class="text-[#F76C6C] hover:underline font-semibold" onclick="openImageModal({att_json}); return false;">{type_word} {first_number}</a>'
+                            break
+                    if not first_link:
+                        first_link = f'{type_word} {first_number}'
+
+                    # Process second number (assume same type)
+                    second_link = None
+                    for att in hierarchy.data['CodeAttachment']:
+                        att_type = 'Figure' if att['Type'] == 'F' else 'Table'
+                        if att_type == type_word and att.get('Number') == second_number:
+                            import json
+                            att_json = json.dumps(att).replace('"', '&quot;').replace("'", '&apos;')
+                            second_link = f'<a href="#" class="text-[#F76C6C] hover:underline font-semibold" onclick="openImageModal({att_json}); return false;">{second_number}</a>'
+                            break
+                    if not second_link:
+                        second_link = second_number
+
+                    # Return with " 및 " or " and " in between
+                    separator = f' {separator_word} '
+                    return f'{first_link}{separator}{second_link}'
+
+                # Replace patterns in order
+                # First handle "Table X 및 Y" or "Figure X and Y" patterns
+                text = re.sub(r'(Figure|Table)\s+(\d+(?:\.\d+)*(?:\([^)]+\))?)\s+(및|and)\s+(\d+(?:\.\d+)*(?:\([^)]+\))?)', replace_figure_table_and, text)
+                # Then handle single Figure/Table references
                 text = re.sub(r'(Figure|Table)\s+(\d+(?:\.\d+)*(?:\([^)]+\))?)', replace_figure_table, text)
+                # Section references with optional prefix like [F], [BS]
+                text = re.sub(r'(\[[A-Z]+\])?\s*Section\s+(\d+(?:\.\d+)*)', replace_section, text)
+                # Chapter references with optional prefix
+                text = re.sub(r'(\[[A-Z]+\])?\s*Chapter\s+(\d+)', replace_chapter, text)
 
                 return text
 
@@ -655,7 +707,7 @@ def create_all_library_content(hierarchy):
                         </div>
                         {f'<p class="text-base text-gray-600 mb-2">{content["TitleKR"]}</p>' if content.get('TitleKR') else ''}
                         {f'<p class="text-gray-700 leading-relaxed mb-2">{add_section_chapter_links(content["ContentEN"], chapter_id)}</p>' if content.get('ContentEN') else ''}
-                        {f'<p class="text-gray-600 text-base leading-relaxed mb-3">{add_section_chapter_links(content["ContentKR"], chapter_id)}</p>' if content.get('ContentKR') else ''}
+                        {f'<p class="text-gray-600 text-base leading-relaxed mb-3">{content["ContentKR"]}</p>' if content.get('ContentKR') else ''}
                         {f'<div class="mt-3 pt-3 border-t border-gray-200 bg-[#FEE9EC] bg-opacity-30 p-3 rounded-lg"><label class="text-xs font-semibold text-[#F76C6C] mb-1 block">Note</label><div class="w-full text-base p-2 bg-white border border-[#F76C6C] border-opacity-20 rounded text-gray-700 whitespace-pre-line">{content["Comment"]}</div></div>' if content.get('Comment') else ''}
                         {attachment_html}
                     </div>''')
