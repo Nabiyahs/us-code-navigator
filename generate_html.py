@@ -372,7 +372,7 @@ def create_all_library_content(hierarchy):
                 # Display "General" without "Section" prefix
                 display_name = section_num if section_num == 'General' else f'Section {section_num}'
                 sections_html.append(f'''
-                  <div class="section-item px-4 py-2 text-xs text-gray-600 rounded cursor-pointer"
+                  <div class="section-item px-4 py-2 text-xs text-gray-600 hover:bg-[#A8D0E6] rounded cursor-pointer"
                        onclick="scrollToSection('{chapter_id}', '{section_num}')">
                     {display_name}
                   </div>''')
@@ -1439,6 +1439,19 @@ function scrollToSection(chapterId, sectionNum, saveHistory = false) {{
                 behavior: 'smooth'
             }});
         }}
+
+        // Update active state for section items in sidebar
+        document.querySelectorAll('.section-item').forEach(item => {{
+            item.classList.remove('bg-[#A8D0E6]', 'text-white');
+        }});
+        // Find and highlight the clicked section item (if called from sidebar)
+        const sectionItems = document.querySelectorAll('.section-item');
+        sectionItems.forEach(item => {{
+            if (item.textContent.trim().includes(sectionNum.toString())) {{
+                item.classList.add('bg-[#A8D0E6]', 'text-white');
+            }}
+        }});
+
         return true; // Section found and scrolled
     }}
     return false; // Section not found
