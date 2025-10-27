@@ -1264,6 +1264,12 @@ function copyContent(sectionNumber) {{
 
 // Scroll to chapter function for pre-rendered content with header offset (returns true if found, false otherwise)
 function scrollToChapter(chapterId, saveHistory = false) {{
+    // Make sure library section is visible (hide search results if showing)
+    document.querySelectorAll('.main-section').forEach(section => {{
+        section.classList.remove('active');
+    }});
+    document.getElementById('librarySection').classList.add('active');
+
     const chapterElement = document.getElementById('chapter-' + chapterId);
     if (chapterElement) {{
         // Save current position to history if requested
@@ -1389,6 +1395,12 @@ function navigateToSection(chapterId, sectionNum) {{
 
 // Scroll to section with header offset (returns true if found, false otherwise)
 function scrollToSection(chapterId, sectionNum, saveHistory = false) {{
+    // Make sure library section is visible (hide search results if showing)
+    document.querySelectorAll('.main-section').forEach(section => {{
+        section.classList.remove('active');
+    }});
+    document.getElementById('librarySection').classList.add('active');
+
     // Replace dots with dashes for ID matching
     const sectionId = 'section-' + chapterId + '-' + sectionNum.toString().replace(/\./g, '-');
     // Use querySelector with CSS.escape to handle special characters like [ ]
