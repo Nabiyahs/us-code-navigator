@@ -463,22 +463,58 @@ def create_all_library_content(hierarchy):
                     return text
                 import re
 
+                # Get current code info for Google search
+                code_base = model_code['ModelCodeName'].split(':')[0].strip()
+                year = int(latest_version['Year']) if latest_version.get('Year') else ''
+
                 # Find "Section [number]" or "Section [number].[number]"
                 def replace_section(match):
                     section_ref = match.group(1)
-                    # Use anchor tag like Chapter links
+                    # Parse section number to find in which chapter it belongs
+                    section_num_parts = section_ref.split('.')
+                    section_main = section_num_parts[0]
+
+                    # Find the content with this section number
+                    found_chapter_id = None
+                    for content in hierarchy.data['CodeContent']:
+                        if str(content.get('Section')) == section_main:
+                            # Check if it belongs to current version
+                            if content.get('ChapterID'):
+                                # Verify this chapter belongs to current version
+                                for ch in hierarchy.data['CodeChapter']:
+                                    if ch['ChapterID'] == content['ChapterID'] and ch['ModelCodeVersionID'] == latest_version['ModelCodeVersionID']:
+                                        found_chapter_id = content['ChapterID']
+                                        break
+                                if found_chapter_id:
+                                    break
+
                     section_id = section_ref.replace('.', '-')
-                    return f'<a href="#section-{current_chapter_id}-{section_id}" class="text-[#F76C6C] hover:underline font-semibold" onclick="navigateToSection(\'{current_chapter_id}\', \'{section_ref}\'); return false;">Section {section_ref}</a>'
+                    if found_chapter_id:
+                        # Section exists - create normal hyperlink
+                        return f'<a href="#section-{found_chapter_id}-{section_id}" class="text-[#F76C6C] hover:underline font-semibold" onclick="return navigateToSectionOrSearch(\'{found_chapter_id}\', \'{section_ref}\', \'{code_base} {year} Section {section_ref}\');">Section {section_ref}</a>'
+                    else:
+                        # Section not found - create Google search link
+                        search_query = f'{code_base} {year} Section {section_ref}'
+                        return f'<a href="#" class="text-[#F76C6C] hover:underline font-semibold" onclick="searchGoogle(\'{search_query}\'); return false;">Section {section_ref}</a>'
 
                 # Find "Chapter [number]"
                 def replace_chapter(match):
                     chapter_ref = match.group(1)
                     # Find chapter by number
+                    found_chapter = None
                     for ch in hierarchy.data['CodeChapter']:
                         if ch.get('Chapter') == int(chapter_ref) and ch.get('ModelCodeVersionID') == latest_version['ModelCodeVersionID']:
-                            chapter_id = ch['ChapterID']
-                            return f'<a href="#chapter-{chapter_id}" class="text-[#F76C6C] hover:underline font-semibold" onclick="scrollToChapter(\'{chapter_id}\')">Chapter {chapter_ref}</a>'
-                    return match.group(0)  # Return original if not found
+                            found_chapter = ch
+                            break
+
+                    if found_chapter:
+                        chapter_id = found_chapter['ChapterID']
+                        search_query = f'{code_base} {year} Chapter {chapter_ref}'
+                        return f'<a href="#chapter-{chapter_id}" class="text-[#F76C6C] hover:underline font-semibold" onclick="return scrollToChapterOrSearch(\'{chapter_id}\', \'{search_query}\');">Chapter {chapter_ref}</a>'
+                    else:
+                        # Chapter not found - create Google search link
+                        search_query = f'{code_base} {year} Chapter {chapter_ref}'
+                        return f'<a href="#" class="text-[#F76C6C] hover:underline font-semibold" onclick="searchGoogle(\'{search_query}\'); return false;">Chapter {chapter_ref}</a>'
 
                 # Find "Figure [number]" or "Table [number]"
                 def replace_figure_table(match):
@@ -1164,7 +1200,7 @@ function copyContent(sectionNumber) {{
     }}
 }}
 
-// Scroll to chapter function for pre-rendered content with header offset
+// Scroll to chapter function for pre-rendered content with header offset (returns true if found, false otherwise)
 function scrollToChapter(chapterId) {{
     const chapterElement = document.getElementById('chapter-' + chapterId);
     if (chapterElement) {{
@@ -1201,7 +1237,9 @@ function scrollToChapter(chapterId) {{
         if (activeItem) {{
             activeItem.classList.add('active', 'bg-[#F8E9A1]');
         }}
+        return true; // Chapter found and scrolled
     }}
+    return false; // Chapter not found
 }}
 
 // Toggle chapter sidebar sections
@@ -1237,12 +1275,36 @@ function toggleChapterSidebar(chapterId) {{
 // Navigation history stack
 let navigationHistory = [];
 
+// Google search fallback
+function searchGoogle(query) {{
+    const googleUrl = `https://www.google.com/search?q=${{encodeURIComponent(query)}}`;
+    window.open(googleUrl, '_blank');
+}}
+
+// Navigate to section or search if not found
+function navigateToSectionOrSearch(chapterId, sectionNum, searchQuery) {{
+    const success = scrollToSection(chapterId, sectionNum, true);
+    if (!success) {{
+        searchGoogle(searchQuery);
+    }}
+    return false; // Prevent default link behavior
+}}
+
+// Scroll to chapter or search if not found
+function scrollToChapterOrSearch(chapterId, searchQuery) {{
+    const success = scrollToChapter(chapterId);
+    if (!success) {{
+        searchGoogle(searchQuery);
+    }}
+    return false; // Prevent default link behavior
+}}
+
 // Navigate to section from hyperlink (with history)
 function navigateToSection(chapterId, sectionNum) {{
     scrollToSection(chapterId, sectionNum, true);
 }}
 
-// Scroll to section with header offset
+// Scroll to section with header offset (returns true if found, false otherwise)
 function scrollToSection(chapterId, sectionNum, saveHistory = false) {{
     // Replace dots with dashes for ID matching
     const sectionId = 'section-' + chapterId + '-' + sectionNum.toString().replace(/\./g, '-');
@@ -1289,7 +1351,9 @@ function scrollToSection(chapterId, sectionNum, saveHistory = false) {{
                 behavior: 'smooth'
             }});
         }}
+        return true; // Section found and scrolled
     }}
+    return false; // Section not found
 }}
 
 // Go back to previous section
