@@ -1391,7 +1391,8 @@ function navigateToSection(chapterId, sectionNum) {{
 function scrollToSection(chapterId, sectionNum, saveHistory = false) {{
     // Replace dots with dashes for ID matching
     const sectionId = 'section-' + chapterId + '-' + sectionNum.toString().replace(/\./g, '-');
-    const sectionElement = document.getElementById(sectionId);
+    // Use querySelector with CSS.escape to handle special characters like [ ]
+    const sectionElement = document.querySelector('#' + CSS.escape(sectionId));
 
     if (sectionElement) {{
         // Save current position to history if requested
@@ -1405,7 +1406,7 @@ function scrollToSection(chapterId, sectionNum, saveHistory = false) {{
 
             // Show back button in target section
             const backBtnId = 'back-btn-' + chapterId + '-' + sectionNum.toString().replace(/\./g, '-');
-            const backBtn = document.getElementById(backBtnId);
+            const backBtn = document.querySelector('#' + CSS.escape(backBtnId));
             if (backBtn) {{
                 backBtn.classList.remove('hidden');
             }} else {{
