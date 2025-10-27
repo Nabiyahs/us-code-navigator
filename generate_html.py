@@ -372,7 +372,7 @@ def create_all_library_content(hierarchy):
                 # Display "General" without "Section" prefix
                 display_name = section_num if section_num == 'General' else f'Section {section_num}'
                 sections_html.append(f'''
-                  <div class="section-item px-4 py-2 text-xs text-gray-600 rounded cursor-pointer"
+                  <div class="section-item px-4 py-2 text-xs text-gray-600 hover:bg-[#A8D0E6] rounded cursor-pointer"
                        onclick="scrollToSection('{chapter_id}', '{section_num}')">
                     {display_name}
                   </div>''')
@@ -510,8 +510,8 @@ def create_all_library_content(hierarchy):
                     search_query = f'{code_base} {year} Section {section_ref}'.replace("'", "\\'")
 
                     if found_chapter_id:
-                        # Section exists - create hyperlink with bold
-                        return f'{preceding_space}<a href="#section-{found_chapter_id}-{section_id}" class="text-[#F76C6C] hover:underline font-semibold" onclick="return navigateToSectionOrSearch(\'{found_chapter_id}\', \'{section_ref}\', \'{search_query}\');">{full_text}</a>'
+                        # Section exists - create hyperlink with bold (using <b> tag)
+                        return f'{preceding_space}<b><a href="#section-{found_chapter_id}-{section_id}" class="text-[#F76C6C] hover:underline" onclick="return navigateToSectionOrSearch(\'{found_chapter_id}\', \'{section_ref}\', \'{search_query}\');">{full_text}</a></b>'
                     else:
                         # Section not found - create Google search link (no bold)
                         return f'{preceding_space}<a href="#" class="text-[#F76C6C] hover:underline" onclick="searchGoogle(\'{search_query}\'); return false;">{full_text}</a>'
@@ -535,7 +535,8 @@ def create_all_library_content(hierarchy):
 
                     if found_chapter:
                         chapter_id = found_chapter['ChapterID']
-                        return f'{preceding_space}<a href="#chapter-{chapter_id}" class="text-[#F76C6C] hover:underline font-semibold" onclick="return scrollToChapterOrSearch(\'{chapter_id}\', \'{search_query}\');">{full_text}</a>'
+                        # Internal link - bold using <b> tag
+                        return f'{preceding_space}<b><a href="#chapter-{chapter_id}" class="text-[#F76C6C] hover:underline" onclick="return scrollToChapterOrSearch(\'{chapter_id}\', \'{search_query}\');">{full_text}</a></b>'
                     else:
                         # Chapter not found - create Google search link (no bold)
                         return f'{preceding_space}<a href="#" class="text-[#F76C6C] hover:underline" onclick="searchGoogle(\'{search_query}\'); return false;">{full_text}</a>'
@@ -550,7 +551,7 @@ def create_all_library_content(hierarchy):
                         att_type = 'Figure' if att['Type'] == 'F' else 'Table'
                         if att_type == type_word and att.get('Number') == number:
                             att_id = att['AttachmentID']
-                            return f'{preceding_space}<a href="#" class="text-[#F76C6C] hover:underline font-semibold" onclick="openImageModalById(\'{att_id}\'); return false;">{type_word} {number}</a>'
+                            return f'{preceding_space}<b><a href="#" class="text-[#F76C6C] hover:underline" onclick="openImageModalById(\'{att_id}\'); return false;">{type_word} {number}</a></b>'
                     return match.group(0)  # Return original if not found
 
                 # Find "Table 307.1(1) 및 307.1(2)" or "Figure 1 and 2" patterns
@@ -567,7 +568,7 @@ def create_all_library_content(hierarchy):
                         att_type = 'Figure' if att['Type'] == 'F' else 'Table'
                         if att_type == type_word and att.get('Number') == first_number:
                             att_id = att['AttachmentID']
-                            first_link = f'<a href="#" class="text-[#F76C6C] hover:underline font-semibold" onclick="openImageModalById(\'{att_id}\'); return false;">{type_word} {first_number}</a>'
+                            first_link = f'<b><a href="#" class="text-[#F76C6C] hover:underline" onclick="openImageModalById(\'{att_id}\'); return false;">{type_word} {first_number}</a></b>'
                             break
                     if not first_link:
                         first_link = f'{type_word} {first_number}'
@@ -578,7 +579,7 @@ def create_all_library_content(hierarchy):
                         att_type = 'Figure' if att['Type'] == 'F' else 'Table'
                         if att_type == type_word and att.get('Number') == second_number:
                             att_id = att['AttachmentID']
-                            second_link = f'<a href="#" class="text-[#F76C6C] hover:underline font-semibold" onclick="openImageModalById(\'{att_id}\'); return false;">{second_number}</a>'
+                            second_link = f'<b><a href="#" class="text-[#F76C6C] hover:underline" onclick="openImageModalById(\'{att_id}\'); return false;">{second_number}</a></b>'
                             break
                     if not second_link:
                         second_link = second_number
@@ -1263,8 +1264,26 @@ function copyContent(sectionNumber) {{
 
 // Scroll to chapter function for pre-rendered content with header offset (returns true if found, false otherwise)
 function scrollToChapter(chapterId, saveHistory = false) {{
+    // Make sure library section is visible (hide search results if showing)
+    document.querySelectorAll('.main-section').forEach(section => {{
+        section.classList.remove('active');
+    }});
+    document.getElementById('librarySection').classList.add('active');
+
     const chapterElement = document.getElementById('chapter-' + chapterId);
     if (chapterElement) {{
+        // CRITICAL: Find which code-content this chapter belongs to and show it
+        const codeContent = chapterElement.closest('.code-content');
+        if (codeContent) {{
+            // Hide all code contents
+            document.querySelectorAll('.code-content').forEach(content => {{
+                content.style.display = 'none';
+            }});
+            // Show the correct code content
+            codeContent.style.display = 'block';
+            console.log('Switched to code for chapter:', codeContent.id);
+        }}
+
         // Save current position to history if requested
         if (saveHistory) {{
             const contentContainer = document.querySelector('#librarySection .flex-1.overflow-y-auto');
@@ -1388,11 +1407,32 @@ function navigateToSection(chapterId, sectionNum) {{
 
 // Scroll to section with header offset (returns true if found, false otherwise)
 function scrollToSection(chapterId, sectionNum, saveHistory = false) {{
+    // Make sure library section is visible (hide search results if showing)
+    document.querySelectorAll('.main-section').forEach(section => {{
+        section.classList.remove('active');
+    }});
+    document.getElementById('librarySection').classList.add('active');
+
     // Replace dots with dashes for ID matching
     const sectionId = 'section-' + chapterId + '-' + sectionNum.toString().replace(/\./g, '-');
-    const sectionElement = document.getElementById(sectionId);
+    console.log('Looking for section ID:', sectionId, 'Chapter:', chapterId, 'Section:', sectionNum);
+
+    // Use querySelector with CSS.escape to handle special characters like [ ]
+    const sectionElement = document.querySelector('#' + CSS.escape(sectionId));
+    console.log('Found section element:', sectionElement ? 'YES' : 'NO');
 
     if (sectionElement) {{
+        // CRITICAL: Find which code-content this section belongs to and show it
+        const codeContent = sectionElement.closest('.code-content');
+        if (codeContent) {{
+            // Hide all code contents
+            document.querySelectorAll('.code-content').forEach(content => {{
+                content.style.display = 'none';
+            }});
+            // Show the correct code content
+            codeContent.style.display = 'block';
+            console.log('Switched to code:', codeContent.id);
+        }}
         // Save current position to history if requested
         if (saveHistory) {{
             const contentContainer = document.querySelector('#librarySection .flex-1.overflow-y-auto');
@@ -1404,7 +1444,7 @@ function scrollToSection(chapterId, sectionNum, saveHistory = false) {{
 
             // Show back button in target section
             const backBtnId = 'back-btn-' + chapterId + '-' + sectionNum.toString().replace(/\./g, '-');
-            const backBtn = document.getElementById(backBtnId);
+            const backBtn = document.querySelector('#' + CSS.escape(backBtnId));
             if (backBtn) {{
                 backBtn.classList.remove('hidden');
             }} else {{
@@ -1438,6 +1478,21 @@ function scrollToSection(chapterId, sectionNum, saveHistory = false) {{
                 behavior: 'smooth'
             }});
         }}
+
+        // Update active state for section items in sidebar
+        document.querySelectorAll('.section-item').forEach(item => {{
+            item.classList.remove('bg-[#A8D0E6]', 'text-white');
+        }});
+        // Find and highlight the clicked section item by matching onclick attribute
+        const sectionItems = document.querySelectorAll('.section-item');
+        const targetOnclick = `scrollToSection('${{chapterId}}', '${{sectionNum}}')`;
+        sectionItems.forEach(item => {{
+            if (item.getAttribute('onclick') && item.getAttribute('onclick').includes(targetOnclick)) {{
+                item.classList.add('bg-[#A8D0E6]', 'text-white');
+                console.log('Highlighted section item:', item.textContent.trim());
+            }}
+        }});
+
         return true; // Section found and scrolled
     }}
     return false; // Section not found
