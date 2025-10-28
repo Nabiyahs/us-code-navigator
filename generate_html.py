@@ -485,9 +485,12 @@ def create_all_library_content(hierarchy):
                     section_main = section_num_parts[0]
 
                     # Find the content with this section number (ignoring prefix)
-                    # "Section 403" should match 403, [BE]403, [BS]403, [F]403, etc.
+                    # Priority: match prefixed sections first (e.g., [F]403), then plain sections (403)
                     found_chapter_id = None
                     matched_section = None
+                    plain_match = None
+                    plain_match_chapter = None
+
                     for content in hierarchy.data['CodeContent']:
                         content_section = str(content.get('Section', ''))
 
@@ -505,11 +508,27 @@ def create_all_library_content(hierarchy):
                                 # Verify this chapter belongs to current version
                                 for ch in hierarchy.data['CodeChapter']:
                                     if ch['ChapterID'] == content['ChapterID'] and ch['ModelCodeVersionID'] == latest_version['ModelCodeVersionID']:
-                                        found_chapter_id = content['ChapterID']
-                                        matched_section = content_section_base  # Use actual section from data (with prefix if exists)
+                                        # Check if this is a prefixed or plain section
+                                        has_prefix = content_section_base != content_section_no_prefix
+
+                                        if has_prefix:
+                                            # Prefixed section - use immediately (priority match)
+                                            found_chapter_id = content['ChapterID']
+                                            matched_section = content_section_base
+                                            break
+                                        else:
+                                            # Plain section - save as fallback
+                                            if not plain_match:
+                                                plain_match = content_section_base
+                                                plain_match_chapter = content['ChapterID']
                                         break
                                 if found_chapter_id:
                                     break
+
+                    # If no prefixed section found, use plain section as fallback
+                    if not found_chapter_id and plain_match:
+                        found_chapter_id = plain_match_chapter
+                        matched_section = plain_match
 
                     full_text = f'{prefix}Section {section_ref}' if prefix else f'Section {section_ref}'
 
@@ -641,9 +660,18 @@ def create_all_library_content(hierarchy):
 
                 # Create base section ID for navigation anchor
                 section_base_id = f"section-{chapter_id}-{str(section_num).replace('.', '-')}"
+                back_btn_id = f"back-btn-{chapter_id}-{str(section_num).replace('.', '-')}"
 
                 content_html.append(f'''
-                <div class="content-section mb-8" id="{section_base_id}">
+                <div class="content-section mb-8 relative" id="{section_base_id}">
+                    <div class="absolute top-2 right-2 z-10">
+                        <button class="back-btn hidden px-3 py-1.5 bg-[#F76C6C] text-white hover:bg-[#d85a5a] rounded-md shadow-md transition-colors flex items-center gap-1.5 text-sm font-medium" title="Go back" onclick="goBackToSection()" id="{back_btn_id}">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                            </svg>
+                            <span>Back</span>
+                        </button>
+                    </div>
                     <h3 class="text-xl font-semibold text-[#374785] mb-3">{section_title}{title_suffix}</h3>
                     {f'<p class="text-lg text-gray-600 mb-4">{first_content["TitleKR"]}</p>' if first_content.get('TitleKR') else ''}
                     <div class="space-y-4">''')
@@ -726,14 +754,6 @@ def create_all_library_content(hierarchy):
 
                     content_html.append(f'''
                     <div class="bg-gray-50 p-4 rounded-lg relative" {subsection_id_attr}>
-                        <div class="absolute top-3 left-3 z-10 flex gap-2">
-                            <button class="back-btn hidden px-3 py-1.5 bg-[#F76C6C] text-white hover:bg-[#d85a5a] rounded-md shadow-md transition-colors flex items-center gap-1 text-sm font-medium" title="Go back" onclick="goBackToSection()" id="back-btn-{chapter_id}-{section_number.replace('.', '-')}"
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"></path>
-                                </svg>
-                                <span>Back</span>
-                            </button>
-                        </div>
                         <div class="absolute top-3 right-3 flex gap-2">
                             <button class="p-1.5 hover:bg-gray-200 rounded transition-colors" title="Copy content" onclick="copyCodeContent('{chapter_id}-{section_number}')">
                                 <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1491,9 +1511,12 @@ function scrollToSection(chapterId, sectionNum, saveHistory = false) {{
                     scrollTop: currentScrollTop
                 }});
 
-                // Show back button in target section
-                const backBtnId = 'back-btn-' + getSectionId(chapterId, sectionNum).replace('section-', '');
+                // Show back button in target section (using section base ID)
+                // Extract base section number without subsection
+                const sectionNumBase = sectionNum.toString().split('.')[0];
+                const backBtnId = 'back-btn-' + chapterId + '-' + sectionNumBase.replace(/\./g, '-');
                 const backBtn = document.querySelector('#' + CSS.escape(backBtnId));
+                console.log('Looking for back button:', backBtnId);
                 if (backBtn) {{
                     backBtn.classList.remove('hidden');
                 }} else {{
