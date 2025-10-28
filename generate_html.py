@@ -443,9 +443,9 @@ def create_all_library_content(hierarchy):
             content_html.append(f'''
             <div class="bg-white rounded-lg shadow-sm p-8 mb-6 relative" id="chapter-{chapter_id}">
                 <div class="absolute top-3 left-3 z-10 flex gap-2">
-                    <button class="back-btn hidden px-3 py-1.5 bg-[#F76C6C] text-white hover:bg-[#d85a5a] rounded-md shadow-md transition-colors flex items-center gap-1 text-sm font-medium" title="Go back" onclick="goBackToSection()" id="back-btn-chapter-{chapter_id}">
+                    <button class="back-btn hidden px-3 py-1.5 bg-[#F76C6C] text-white hover:bg-[#d85a5a] rounded-md shadow-md transition-colors flex items-center gap-1.5 text-sm font-medium" title="Go back" onclick="goBackToSection()" id="back-btn-chapter-{chapter_id}">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
                         </svg>
                         <span>Back</span>
                     </button>
@@ -664,10 +664,10 @@ def create_all_library_content(hierarchy):
 
                 content_html.append(f'''
                 <div class="content-section mb-8 relative" id="{section_base_id}">
-                    <div class="absolute top-2 right-2 z-10">
+                    <div class="absolute top-2 left-2 z-10">
                         <button class="back-btn hidden px-3 py-1.5 bg-[#F76C6C] text-white hover:bg-[#d85a5a] rounded-md shadow-md transition-colors flex items-center gap-1.5 text-sm font-medium" title="Go back" onclick="goBackToSection()" id="{back_btn_id}">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
                             </svg>
                             <span>Back</span>
                         </button>
