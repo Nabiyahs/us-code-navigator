@@ -42779,8 +42779,8 @@ function displayTopSearchResults(exactMatches, partialMatches, keyword) {
         // Extract context around keyword first, then highlight
         const contextTitleEN = extractContextAroundKeyword(result.titleEN, keyword, 150);
         const contextTitleKR = extractContextAroundKeyword(result.titleKR, keyword, 150);
-        const contextContentEN = extractContextAroundKeyword(result.contentEN, keyword, 250);
-        const contextContentKR = extractContextAroundKeyword(result.contentKR, keyword, 250);
+        const contextContentEN = extractContextAroundKeyword(result.contentEN, keyword, 400);
+        const contextContentKR = extractContextAroundKeyword(result.contentKR, keyword, 400);
 
         // Then apply highlighting
         const highlightedTitleEN = highlightKeyword(contextTitleEN, keyword, isExactMatch);
@@ -42788,18 +42788,24 @@ function displayTopSearchResults(exactMatches, partialMatches, keyword) {
         const highlightedContentEN = highlightKeyword(contextContentEN, keyword, isExactMatch);
         const highlightedContentKR = highlightKeyword(contextContentKR, keyword, isExactMatch);
 
-        // Use reference.txt design with collapse/expand functionality
+        // Check if content is long enough to need collapse/expand
+        const totalContentLength = (result.contentEN || '').length + (result.contentKR || '').length;
+        const needsToggle = totalContentLength > 300;
+
+        // Use reference.txt design with conditional collapse/expand functionality
         html += `
             <div class="bg-gray-50 p-4 rounded-lg relative search-result-item" id="search-result-${index}">
-                <!-- Expand/Collapse Toggle -->
-                <button class="absolute top-3 left-3 p-1 hover:bg-gray-200 rounded transition-colors"
-                        onclick="toggleSearchResult(${index})"
-                        title="Expand/Collapse">
-                    <span class="result-toggle-icon">▼</span>
-                </button>
-
                 <!-- Copy and Navigate buttons -->
                 <div class="absolute top-3 right-3 flex gap-2">
+                    ${needsToggle ? `
+                    <button class="p-1.5 hover:bg-gray-200 rounded transition-colors"
+                            onclick="toggleSearchResult(${index})"
+                            title="Expand/Collapse">
+                        <svg class="w-4 h-4 text-gray-600 result-toggle-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </button>
+                    ` : ''}
                     <button class="p-1.5 hover:bg-gray-200 rounded transition-colors"
                             title="Go to section"
                             onclick="openSearchResult('${result.codeId}', '${result.versionId}', '${result.chapterId}', '${sectionNum}')">
@@ -42815,18 +42821,18 @@ function displayTopSearchResults(exactMatches, partialMatches, keyword) {
                 </div>
 
                 <!-- Summary (always visible) -->
-                <div class="ml-12 pr-20">
+                <div class="pr-24">
                     <div class="flex items-center gap-2 mb-2 flex-wrap">
                         <span class="text-xs bg-[#A8D0E6] text-[#24305E] font-semibold px-2 py-0.5 rounded">${result.code} ${result.year}: Ch.${result.chapter} - ${sectionNum}</span>
                     </div>
-                    <h4 class="font-semibold text-[#24305E] text-sm cursor-pointer" onclick="toggleSearchResult(${index})">${sectionNum}${result.titleEN ? ' ' + highlightedTitleEN : ''}</h4>
+                    <h4 class="font-semibold text-[#24305E] text-base mb-2">${sectionNum}${result.titleEN ? ' ' + highlightedTitleEN : ''}</h4>
+                    ${result.titleKR ? `<p class="text-gray-600 text-sm leading-relaxed mb-3">${highlightedTitleKR}</p>` : ''}
                 </div>
 
-                <!-- Details (collapsible) -->
-                <div class="result-details hidden ml-12 pr-20 mt-2 border-t border-gray-200 pt-2">
-                    ${result.titleKR ? `<p class="text-gray-600 text-sm leading-relaxed mb-2">${highlightedTitleKR}</p>` : ''}
-                    ${result.contentEN ? `<p class="text-gray-700 text-sm leading-relaxed mb-2">${highlightedContentEN}</p>` : ''}
-                    ${result.contentKR ? `<p class="text-gray-600 text-sm leading-relaxed">${highlightedContentKR}</p>` : ''}
+                <!-- Content (always visible for short content, collapsible for long content) -->
+                <div class="result-details ${needsToggle ? 'hidden' : ''} pr-24 mt-2 ${needsToggle ? 'border-t border-gray-200 pt-3' : ''}">
+                    ${result.contentEN ? `<p class="text-gray-700 text-base leading-relaxed mb-3">${highlightedContentEN}</p>` : ''}
+                    ${result.contentKR ? `<p class="text-gray-600 text-base leading-relaxed">${highlightedContentKR}</p>` : ''}
                 </div>
             </div>
         `;
@@ -42845,12 +42851,16 @@ function toggleSearchResult(index) {
     const details = resultElement.querySelector('.result-details');
     const toggleIcon = resultElement.querySelector('.result-toggle-icon');
 
+    if (!toggleIcon) return; // No toggle icon means content is short
+
     if (details.classList.contains('hidden')) {
         details.classList.remove('hidden');
-        toggleIcon.textContent = '▲';
+        // Change to collapse icon (chevron up)
+        toggleIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path>';
     } else {
         details.classList.add('hidden');
-        toggleIcon.textContent = '▼';
+        // Change to expand icon (chevron down)
+        toggleIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>';
     }
 }
 
@@ -42861,12 +42871,16 @@ function toggleAllSearchResults(expand) {
         const details = resultElement.querySelector('.result-details');
         const toggleIcon = resultElement.querySelector('.result-toggle-icon');
 
+        if (!toggleIcon) return; // Skip if no toggle icon (short content)
+
         if (expand) {
             details.classList.remove('hidden');
-            toggleIcon.textContent = '▲';
+            // Change to collapse icon (chevron up)
+            toggleIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path>';
         } else {
             details.classList.add('hidden');
-            toggleIcon.textContent = '▼';
+            // Change to expand icon (chevron down)
+            toggleIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>';
         }
     });
 }
