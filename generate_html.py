@@ -484,15 +484,28 @@ def create_all_library_content(hierarchy):
                     section_num_parts = section_ref.split('.')
                     section_main = section_num_parts[0]
 
+                    # Build the full section identifier with prefix (if any)
+                    # This is what we're looking for in the data
+                    if prefix:
+                        # Looking for exact match like "[F]414"
+                        target_section_base = f"{prefix}{section_main}"
+                    else:
+                        # Looking for plain "414" (no prefix)
+                        target_section_base = section_main
+
                     # Find the content with this section number
                     found_chapter_id = None
                     for content in hierarchy.data['CodeContent']:
-                        # Handle both plain "414" and "[F]414" formats
                         content_section = str(content.get('Section', ''))
-                        # Remove prefix like [F], [BS] from content section too
-                        content_section_clean = re.sub(r'^\[.*?\]', '', content_section)
 
-                        if content_section_clean == section_main or content_section == section_main:
+                        # Extract base section number (first part before any dots)
+                        content_section_parts = content_section.split('.')
+                        content_section_base = content_section_parts[0] if content_section_parts else content_section
+
+                        # Exact match required for base section
+                        # If looking for "[F]414", only match "[F]414*"
+                        # If looking for "414", only match "414*" (no prefix)
+                        if content_section_base == target_section_base:
                             # Check if it belongs to current version
                             if content.get('ChapterID'):
                                 # Verify this chapter belongs to current version
@@ -503,7 +516,14 @@ def create_all_library_content(hierarchy):
                                 if found_chapter_id:
                                     break
 
-                    section_id = section_ref.replace('.', '-')
+                    # Build target_section with full number (including subsection) and prefix
+                    if prefix:
+                        target_section = f"{prefix}{section_ref}"
+                    else:
+                        target_section = section_ref
+
+                    # Build section_id for href
+                    section_id = target_section.replace('.', '-')
                     full_text = f'{prefix}Section {section_ref}' if prefix else f'Section {section_ref}'
 
                     # Escape quotes for JavaScript
@@ -511,7 +531,7 @@ def create_all_library_content(hierarchy):
 
                     if found_chapter_id:
                         # Section exists - create hyperlink with bold (using <b> tag)
-                        return f'{preceding_space}<b><a href="#section-{found_chapter_id}-{section_id}" class="text-[#F76C6C] hover:underline" onclick="return navigateToSectionOrSearch(\'{found_chapter_id}\', \'{section_ref}\', \'{search_query}\');">{full_text}</a></b>'
+                        return f'{preceding_space}<b><a href="#section-{found_chapter_id}-{section_id}" class="text-[#F76C6C] hover:underline" onclick="return navigateToSectionOrSearch(\'{found_chapter_id}\', \'{target_section}\', \'{search_query}\');">{full_text}</a></b>'
                     else:
                         # Section not found - create Google search link (no bold)
                         return f'{preceding_space}<a href="#" class="text-[#F76C6C] hover:underline" onclick="searchGoogle(\'{search_query}\'); return false;">{full_text}</a>'
