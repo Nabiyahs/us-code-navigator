@@ -22007,133 +22007,8 @@ Pelev = Pressure due to elevation difference(표고차로 인한 압력)
       console.log('[v0] Version changed to:', this.value);
     });
 
-    function clearSearchInput() {
-      document.getElementById('topSearchInput').value = '';
-      document.getElementById('topSearchInput').focus();
-    }
-
-    function performTopSearch() {
-      const searchValue = document.getElementById('topSearchInput').value;
-      if (searchValue.trim()) {
-        showSection('searchResults');
-        document.getElementById('searchResultsSubtitle').textContent = `검색어: "${searchValue}"`;
-        
-        const searchResultsList = document.getElementById('searchResultsList');
-        const highlightedText = (text, query) => {
-          if (!query) return text;
-          const regex = new RegExp(`(${query})`, 'gi');
-          return text.replace(regex, '<span class="search-highlight">$1</span>');
-        };
-        
-        // Updated search results with fold/unfold and eye icon
-        searchResultsList.innerHTML = `
-          <div class="border rounded-lg bg-white overflow-hidden">
-            <div class="result-collapsible p-4 hover:bg-gray-50 transition-colors" onclick="toggleResultItem('result1')">
-              <div class="flex items-center justify-between">
-                <div class="flex items-center gap-3 flex-1">
-                  <svg id="result1Icon" class="w-5 h-5 text-gray-600 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                  </svg>
-                  <div class="flex-1">
-                    <div class="flex items-center gap-2 mb-1">
-                      <span class="bg-[#F76C6C] text-white text-xs font-semibold px-2 py-1 rounded">IBC 2024</span>
-                      <span class="text-sm text-gray-500">Chapter 1, Section 101.1</span>
-                    </div>
-                    <h3 class="font-semibold text-[#24305E]">${highlightedText('Title', searchValue)}</h3>
-                  </div>
-                </div>
-                <!-- Updated eye icon to open popup instead of navigating -->
-                <button class="ml-4 p-2 bg-[#A8D0E6] text-[#24305E] rounded-lg hover:bg-[#8fc0d9] transition-colors" onclick="event.stopPropagation(); openSectionModal('101.1', 'IBC 2024', 'Title');" title="View section">
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                  </svg>
-                </button>
-              </div>
-            </div>
-            <div id="result1" class="result-content">
-              <div class="px-4 pb-4 text-sm text-gray-600 leading-relaxed space-y-1 border-t pt-3">
-                <p>${highlightedText('These regulations shall be known as the International Building Code', searchValue)}</p>
-                <p>${highlightedText('of [NAME OF JURISDICTION], hereinafter referred to as "this code."', searchValue)}</p>
-                <p class="text-gray-500 italic">${highlightedText('이 규정은 [관할 구역 이름]의 국제 건축 코드로 알려져야 하며...', searchValue)}</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="border rounded-lg bg-white overflow-hidden">
-            <div class="result-collapsible p-4 hover:bg-gray-50 transition-colors" onclick="toggleResultItem('result2')">
-              <div class="flex items-center justify-between">
-                <div class="flex items-center gap-3 flex-1">
-                  <svg id="result2Icon" class="w-5 h-5 text-gray-600 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                  </svg>
-                  <div class="flex-1">
-                    <div class="flex items-center gap-2 mb-1">
-                      <span class="bg-[#F76C6C] text-white text-xs font-semibold px-2 py-1 rounded">IBC 2024</span>
-                      <span class="text-sm text-gray-500">Chapter 1, Section 101.2</span>
-                    </div>
-                    <h3 class="font-semibold text-[#24305E]">${highlightedText('Scope', searchValue)}</h3>
-                  </div>
-                </div>
-                <button class="ml-4 p-2 bg-[#A8D0E6] text-[#24305E] rounded-lg hover:bg-[#8fc0d9] transition-colors" onclick="event.stopPropagation(); openSectionModal('101.2', 'IBC 2024', 'Scope');" title="View section">
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                  </svg>
-                </button>
-              </div>
-            </div>
-            <div id="result2" class="result-content">
-              <div class="px-4 pb-4 text-sm text-gray-600 leading-relaxed space-y-1 border-t pt-3">
-                <p>${highlightedText('The provisions of this code shall apply to the construction, alteration,', searchValue)}</p>
-                <p>${highlightedText('relocation, enlargement, replacement, repair, equipment, use and occupancy,', searchValue)}</p>
-                <p>${highlightedText('location, maintenance, removal and demolition of every building or structure...', searchValue)}</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="border rounded-lg bg-white overflow-hidden">
-            <div class="result-collapsible p-4 hover:bg-gray-50 transition-colors" onclick="toggleResultItem('result3')">
-              <div class="flex items-center justify-between">
-                <div class="flex items-center gap-3 flex-1">
-                  <svg id="result3Icon" class="w-5 h-5 text-gray-600 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                  </svg>
-                  <div class="flex-1">
-                    <div class="flex items-center gap-2 mb-1">
-                      <span class="bg-[#A8D0E6] text-[#24305E] text-xs font-semibold px-2 py-1 rounded">NFPA 13 2024</span>
-                      <span class="text-sm text-gray-500">Chapter 8, Section 8.3</span>
-                    </div>
-                    <h3 class="font-semibold text-[#24305E]">${highlightedText('System Components', searchValue)}</h3>
-                  </div>
-                </div>
-                <button class="ml-4 p-2 bg-[#A8D0E6] text-[#24305E] rounded-lg hover:bg-[#8fc0d9] transition-colors" onclick="event.stopPropagation(); openSectionModal('8.3', 'NFPA 13 2024', 'System Components');" title="View section">
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                  </svg>
-                </button>
-              </div>
-            </div>
-            <div id="result3" class="result-content">
-              <div class="px-4 pb-4 text-sm text-gray-600 leading-relaxed space-y-1 border-t pt-3">
-                <p>${highlightedText('Sprinkler system components shall be listed for their intended use', searchValue)}</p>
-                <p>${highlightedText('and installed in accordance with manufacturer\'s specifications', searchValue)}</p>
-                <p>${highlightedText('and this standard. All components must meet applicable standards...', searchValue)}</p>
-              </div>
-            </div>
-          </div>
-        `;
-        
-        document.getElementById('searchResultsCount').textContent = '3개 결과';
-      }
-    }
-
-    document.getElementById('topSearchInput')?.addEventListener('keypress', function(e) {
-      if (e.key === 'Enter') {
-        performTopSearch();
-      }
-    });
+    // Removed duplicate performTopSearch() function and event listener
+    // The actual implementation is in the main script below (line ~42646)
 
     const searchBtn = document.getElementById('searchBtn');
     const resetBtn = document.getElementById('resetBtn');
@@ -22500,38 +22375,9 @@ ${note}
       }
     }
 
-    function clearAdvancedSearchInput() {
-      const input = document.getElementById('keywordInput');
-      input.value = '';
-      const clearBtn = document.getElementById('advancedSearchClearBtn');
-      if (clearBtn) clearBtn.style.display = 'none';
-    }
-
-    function performAdvancedSearch() {
-      const keyword = document.getElementById('keywordInput').value.trim();
-      if (keyword) {
-        // Perform search logic here
-        console.log('[v0] Advanced search for:', keyword);
-      }
-    }
-
-    document.addEventListener('DOMContentLoaded', function() {
-      const keywordInput = document.getElementById('keywordInput');
-      if (keywordInput) {
-        keywordInput.addEventListener('input', function() {
-          const clearBtn = document.getElementById('advancedSearchClearBtn');
-          if (clearBtn) {
-            clearBtn.style.display = this.value ? 'block' : 'none';
-          }
-        });
-        
-        keywordInput.addEventListener('keypress', function(e) {
-          if (e.key === 'Enter') {
-            performAdvancedSearch();
-          }
-        });
-      }
-    });
+    // Removed duplicate clearAdvancedSearchInput() and performAdvancedSearch() functions
+    // Removed duplicate event listeners for keywordInput
+    // The actual implementation is in the main script below (performSearch function line ~42818)
   </script>
 <div class="modal" id="imageModal">
 <div class="modal-content">
