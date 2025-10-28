@@ -484,34 +484,54 @@ def create_all_library_content(hierarchy):
                     section_num_parts = section_ref.split('.')
                     section_main = section_num_parts[0]
 
-                    # Find the content with this section number
+                    # Find the content with this section number (ignoring prefix)
+                    # "Section 403" should match 403, [BE]403, [BS]403, [F]403, etc.
                     found_chapter_id = None
+                    matched_section = None
                     for content in hierarchy.data['CodeContent']:
-                        # Handle both plain "414" and "[F]414" formats
                         content_section = str(content.get('Section', ''))
-                        # Remove prefix like [F], [BS] from content section too
-                        content_section_clean = re.sub(r'^\[.*?\]', '', content_section)
 
-                        if content_section_clean == section_main or content_section == section_main:
+                        # Extract base section number (first part before any dots)
+                        content_section_parts = content_section.split('.')
+                        content_section_base = content_section_parts[0] if content_section_parts else content_section
+
+                        # Remove prefix from content section (e.g., "[BE]403" -> "403")
+                        content_section_no_prefix = re.sub(r'^\[.*?\]', '', content_section_base)
+
+                        # Match by base number only, ignoring prefix
+                        if content_section_no_prefix == section_main:
                             # Check if it belongs to current version
                             if content.get('ChapterID'):
                                 # Verify this chapter belongs to current version
                                 for ch in hierarchy.data['CodeChapter']:
                                     if ch['ChapterID'] == content['ChapterID'] and ch['ModelCodeVersionID'] == latest_version['ModelCodeVersionID']:
                                         found_chapter_id = content['ChapterID']
+                                        matched_section = content_section_base  # Use actual section from data (with prefix if exists)
                                         break
                                 if found_chapter_id:
                                     break
 
-                    section_id = section_ref.replace('.', '-')
                     full_text = f'{prefix}Section {section_ref}' if prefix else f'Section {section_ref}'
 
                     # Escape quotes for JavaScript
                     search_query = f'{code_base} {year} Section {section_ref}'.replace("'", "\\'")
 
-                    if found_chapter_id:
+                    if found_chapter_id and matched_section:
+                        # Build target_section using matched section from data
+                        # If data has "[BE]403", use "[BE]403"
+                        # If section_ref has subsection like "403.1", append it
+                        if len(section_num_parts) > 1:
+                            # Has subsection, append it
+                            target_section = matched_section + '.' + '.'.join(section_num_parts[1:])
+                        else:
+                            # No subsection, use matched section as-is
+                            target_section = matched_section
+
+                        # Build section_id for href
+                        section_id = target_section.replace('.', '-')
+
                         # Section exists - create hyperlink with bold (using <b> tag)
-                        return f'{preceding_space}<b><a href="#section-{found_chapter_id}-{section_id}" class="text-[#F76C6C] hover:underline" onclick="return navigateToSectionOrSearch(\'{found_chapter_id}\', \'{section_ref}\', \'{search_query}\');">{full_text}</a></b>'
+                        return f'{preceding_space}<b><a href="#section-{found_chapter_id}-{section_id}" class="text-[#F76C6C] hover:underline" onclick="return navigateToSectionOrSearch(\'{found_chapter_id}\', \'{target_section}\', \'{search_query}\');">{full_text}</a></b>'
                     else:
                         # Section not found - create Google search link (no bold)
                         return f'{preceding_space}<a href="#" class="text-[#F76C6C] hover:underline" onclick="searchGoogle(\'{search_query}\'); return false;">{full_text}</a>'
@@ -619,8 +639,11 @@ def create_all_library_content(hierarchy):
                 section_title = section_num if section_num == 'General' else f'Section {section_num}'
                 title_suffix = f' - {first_content["TitleEN"]}' if first_content.get('TitleEN') else ''
 
+                # Create base section ID for navigation anchor
+                section_base_id = f"section-{chapter_id}-{str(section_num).replace('.', '-')}"
+
                 content_html.append(f'''
-                <div class="content-section mb-8" id="section-{chapter_id}-{section_num}">
+                <div class="content-section mb-8" id="{section_base_id}">
                     <h3 class="text-xl font-semibold text-[#374785] mb-3">{section_title}{title_suffix}</h3>
                     {f'<p class="text-lg text-gray-600 mb-4">{first_content["TitleKR"]}</p>' if first_content.get('TitleKR') else ''}
                     <div class="space-y-4">''')
@@ -628,17 +651,20 @@ def create_all_library_content(hierarchy):
                 # 각 subsection
                 for idx, content in enumerate(section_contents):
                     subsection = f".{content['Subsection']}" if content.get('Subsection') else ''
-                    # If section is General and no subsection, use OrderKey or index for uniqueness
+                    # If section is General and no subsection, use index for unique ID
                     if section_num == 'General' and not subsection:
-                        # Use OrderKey if available, otherwise use index
-                        unique_id = content.get('OrderKey', f'{idx:04d}')
-                        section_number = f"General-{unique_id}"
+                        # Always use index for uniqueness (OrderKey may not be unique)
+                        section_number = f"General-{idx:04d}"
                         # For display, don't show the section number for General definitions
                         display_section_number = ''
                     else:
                         section_number = f"{section_num}{subsection}"
                         # For regular sections, display the section number
                         display_section_number = section_number
+
+                    # Only add ID to subsection div if there's actually a subsection
+                    # Otherwise use parent section ID to avoid duplicates
+                    subsection_id_attr = f'id="section-{chapter_id}-{section_number.replace(".", "-")}"' if subsection or section_num == 'General' else ''
 
                     # Attachments
                     attachments = [att for att in hierarchy.data['CodeAttachment']
@@ -699,9 +725,9 @@ def create_all_library_content(hierarchy):
                         index_tags_html = '\n                            <span class="text-xs bg-[#F8E9A1] text-[#24305E] px-2 py-0.5 rounded">건축</span>'
 
                     content_html.append(f'''
-                    <div class="bg-gray-50 p-4 rounded-lg relative" id="section-{chapter_id}-{section_number.replace('.', '-')}">
+                    <div class="bg-gray-50 p-4 rounded-lg relative" {subsection_id_attr}>
                         <div class="absolute top-3 left-3 z-10 flex gap-2">
-                            <button class="back-btn hidden px-3 py-1.5 bg-[#F76C6C] text-white hover:bg-[#d85a5a] rounded-md shadow-md transition-colors flex items-center gap-1 text-sm font-medium" title="Go back" onclick="goBackToSection()" id="back-btn-{chapter_id}-{section_number.replace('.', '-')}">
+                            <button class="back-btn hidden px-3 py-1.5 bg-[#F76C6C] text-white hover:bg-[#d85a5a] rounded-md shadow-md transition-colors flex items-center gap-1 text-sm font-medium" title="Go back" onclick="goBackToSection()" id="back-btn-{chapter_id}-{section_number.replace('.', '-')}"
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"></path>
                                 </svg>
@@ -1322,7 +1348,7 @@ function scrollToChapter(chapterId, saveHistory = false) {{
 
             contentContainer.scrollTo({{
                 top: scrollPosition,
-                behavior: 'smooth'
+                behavior: 'auto'
             }});
         }} else {{
             // Fallback to window scroll if container not found
@@ -1334,7 +1360,7 @@ function scrollToChapter(chapterId, saveHistory = false) {{
 
             window.scrollTo({{
                 top: Math.max(0, offsetPosition),
-                behavior: 'smooth'
+                behavior: 'auto'
             }});
         }}
 
@@ -1386,6 +1412,11 @@ function toggleChapterSidebar(chapterId) {{
 // Navigation history stack
 let navigationHistory = [];
 
+// Unified function to generate section ID
+function getSectionId(chapterId, sectionNum) {{
+    return 'section-' + chapterId + '-' + sectionNum.replace(/\./g, '-');
+}}
+
 // Google search fallback
 function searchGoogle(query) {{
     const googleUrl = `https://www.google.com/search?q=${{encodeURIComponent(query)}}`;
@@ -1423,8 +1454,8 @@ function scrollToSection(chapterId, sectionNum, saveHistory = false) {{
     }});
     document.getElementById('librarySection').classList.add('active');
 
-    // Replace dots with dashes for ID matching
-    const sectionId = 'section-' + chapterId + '-' + sectionNum.toString().replace(/\./g, '-');
+    // Use unified ID generation function
+    const sectionId = getSectionId(chapterId, sectionNum);
     console.log('Looking for section ID:', sectionId, 'Chapter:', chapterId, 'Section:', sectionNum);
 
     // Use querySelector with CSS.escape to handle special characters like [ ]
@@ -1461,7 +1492,7 @@ function scrollToSection(chapterId, sectionNum, saveHistory = false) {{
                 }});
 
                 // Show back button in target section
-                const backBtnId = 'back-btn-' + chapterId + '-' + sectionNum.toString().replace(/\./g, '-');
+                const backBtnId = 'back-btn-' + getSectionId(chapterId, sectionNum).replace('section-', '');
                 const backBtn = document.querySelector('#' + CSS.escape(backBtnId));
                 if (backBtn) {{
                     backBtn.classList.remove('hidden');
@@ -1474,10 +1505,14 @@ function scrollToSection(chapterId, sectionNum, saveHistory = false) {{
             const contentContainer = document.querySelector('#librarySection .flex-1.overflow-y-auto');
 
         if (contentContainer) {{
-            // Scroll within the content container
-            // Show more context by scrolling to 150px before the target
-            const elementTop = sectionElement.offsetTop;
-            const scrollPosition = Math.max(0, elementTop - 150);
+            // Calculate accurate scroll position using getBoundingClientRect
+            // This works correctly even when element is in a different code-content div
+            const containerRect = contentContainer.getBoundingClientRect();
+            const elementRect = sectionElement.getBoundingClientRect();
+            const relativeTop = elementRect.top - containerRect.top;
+            const scrollPosition = Math.max(0, contentContainer.scrollTop + relativeTop - 150);
+
+            console.log('Container top:', containerRect.top, 'Element top:', elementRect.top, 'Relative:', relativeTop, 'Scroll to:', scrollPosition);
 
             contentContainer.scrollTo({{
                 top: scrollPosition,
@@ -2315,7 +2350,7 @@ function copyModalContent(button) {{
 }}
 
 function copyCodeContent(sectionNumber) {{
-    const sectionElement = document.getElementById('section-' + sectionNumber.replace('.', '-'));
+    const sectionElement = document.getElementById('section-' + sectionNumber.replace(/\./g, '-'));
     if (!sectionElement) return;
 
     const titleElement = sectionElement.querySelector('h4');
