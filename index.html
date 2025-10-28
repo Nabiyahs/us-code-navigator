@@ -42567,7 +42567,7 @@ function performTopSearch() {
     document.getElementById('topSearchInput').value = '';
 }
 
-// Display top search results with detailed preview (5 lines)
+// Display top search results with detailed preview (with more content shown)
 function displayTopSearchResults(exactMatches, partialMatches, keyword) {
     const searchResultsSection = document.getElementById('searchResultsSection');
     if (!searchResultsSection) return;
@@ -42579,11 +42579,11 @@ function displayTopSearchResults(exactMatches, partialMatches, keyword) {
             <header class="bg-white border-b border-gray-200 shadow-sm mb-6">
                 <div class="px-8 py-6">
                     <div class="flex items-center gap-4">
-                        <h1 class="text-4xl font-bold text-[#24305E]">검색 결과</h1>
-                        <p class="text-xl text-gray-600" id="topSearchKeyword"></p>
-                        <button onclick="toggleSearchResults()" class="ml-auto p-2 hover:bg-gray-100 rounded-lg transition-colors" title="목록 보기">
+                        <button onclick="toggleSearchResults()" class="p-2 hover:bg-gray-100 rounded-lg transition-colors" title="목록 보기">
                             <i data-lucide="list" class="w-7 h-7 text-gray-600" id="toggleSearchIcon"></i>
                         </button>
+                        <h1 class="text-4xl font-bold text-[#24305E]">검색 결과</h1>
+                        <p class="text-xl text-gray-600 ml-auto" id="topSearchKeyword"></p>
                     </div>
                 </div>
             </header>
@@ -42619,11 +42619,11 @@ function displayTopSearchResults(exactMatches, partialMatches, keyword) {
         const sectionNum = result.section === 'General' ? 'General' : result.section + (result.subsection ? '.' + result.subsection : '');
         const isExactMatch = index < exactMatches.length;
 
-        // Extract context around keyword first, then highlight
-        const contextTitleEN = extractContextAroundKeyword(result.titleEN, keyword, 150);
-        const contextTitleKR = extractContextAroundKeyword(result.titleKR, keyword, 150);
-        const contextContentEN = extractContextAroundKeyword(result.contentEN, keyword, 400);
-        const contextContentKR = extractContextAroundKeyword(result.contentKR, keyword, 400);
+        // Extract context around keyword first, then highlight (increased length for more content)
+        const contextTitleEN = extractContextAroundKeyword(result.titleEN, keyword, 200);
+        const contextTitleKR = extractContextAroundKeyword(result.titleKR, keyword, 200);
+        const contextContentEN = extractContextAroundKeyword(result.contentEN, keyword, 800);
+        const contextContentKR = extractContextAroundKeyword(result.contentKR, keyword, 800);
 
         // Then apply highlighting
         const highlightedTitleEN = highlightKeyword(contextTitleEN, keyword, isExactMatch);
@@ -42631,26 +42631,37 @@ function displayTopSearchResults(exactMatches, partialMatches, keyword) {
         const highlightedContentEN = highlightKeyword(contextContentEN, keyword, isExactMatch);
         const highlightedContentKR = highlightKeyword(contextContentKR, keyword, isExactMatch);
 
-        // Check if content is long enough to need collapse/expand
-        const totalContentLength = (result.contentEN || '').length + (result.contentKR || '').length;
-        const needsToggle = totalContentLength > 300;
-
         // Use reference.txt design with conditional collapse/expand functionality
         const resultDataJson = JSON.stringify(result).replace(/'/g, "\\'");
         html += `
-            <div class="bg-gray-50 p-6 rounded-lg relative search-result-item hover:bg-gray-100 transition-colors"
-                 id="search-result-${index}"
-                 data-result='${resultDataJson}'
-                 onclick="openSearchResultModalFromCard(this)"
-                 style="cursor: pointer;">
+            <div class="bg-white border-2 border-gray-200 rounded-lg overflow-hidden hover:border-[#A8D0E6] transition-colors"
+                 id="search-result-${index}">
 
-                <!-- Summary (always visible) -->
-                <div>
+                <!-- Card header (clickable to open modal) -->
+                <div class="p-6 cursor-pointer hover:bg-gray-50 transition-colors"
+                     data-result='${resultDataJson}'
+                     onclick="openSearchResultModalFromCard(this)">
                     <div class="flex items-center gap-2 mb-4 flex-wrap">
                         <span class="text-base bg-[#A8D0E6] text-[#24305E] font-semibold px-3 py-1.5 rounded">${result.code} ${result.year}: Ch.${result.chapter} - ${sectionNum}</span>
                     </div>
                     <h4 class="font-semibold text-[#24305E] text-2xl mb-3">${sectionNum}${result.titleEN ? ' ' + highlightedTitleEN : ''}</h4>
-                    ${result.titleKR ? `<p class="text-gray-600 text-xl leading-relaxed mb-3">${highlightedTitleKR}</p>` : ''}
+                    ${result.titleKR ? `<p class="text-gray-600 text-xl leading-relaxed mb-4">${highlightedTitleKR}</p>` : ''}
+
+                    <!-- Content preview (with EN/KR distinction) -->
+                    ${highlightedContentEN ? `
+                        <div class="mt-4 space-y-3">
+                            <div class="text-[#24305E] text-lg leading-relaxed">
+                                <strong class="text-sm text-gray-500 uppercase tracking-wide">English:</strong>
+                                <p class="mt-1">${highlightedContentEN}</p>
+                            </div>
+                            ${highlightedContentKR ? `
+                                <div class="text-gray-700 text-lg leading-relaxed border-l-4 border-[#F8E9A1] pl-4">
+                                    <strong class="text-sm text-gray-500 uppercase tracking-wide">한국어:</strong>
+                                    <p class="mt-1">${highlightedContentKR}</p>
+                                </div>
+                            ` : ''}
+                        </div>
+                    ` : ''}
                 </div>
             </div>
         `;
@@ -43351,19 +43362,35 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Enter key in search inputs
+    // Enter key in search inputs (with debug logging)
     const keywordInput = document.getElementById('keywordInput');
     if (keywordInput) {
+        console.log('✓ keywordInput event listener attached');
         keywordInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') performSearch();
+            console.log('keywordInput keypress:', e.key);
+            if (e.key === 'Enter') {
+                console.log('Enter key pressed in keywordInput');
+                e.preventDefault();
+                performSearch();
+            }
         });
+    } else {
+        console.warn('✗ keywordInput element not found');
     }
 
     const topSearchInput = document.getElementById('topSearchInput');
     if (topSearchInput) {
+        console.log('✓ topSearchInput event listener attached');
         topSearchInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') performTopSearch();
+            console.log('topSearchInput keypress:', e.key);
+            if (e.key === 'Enter') {
+                console.log('Enter key pressed in topSearchInput');
+                e.preventDefault();
+                performTopSearch();
+            }
         });
+    } else {
+        console.warn('✗ topSearchInput element not found');
     }
 
     // Initialize lucide icons
