@@ -484,17 +484,10 @@ def create_all_library_content(hierarchy):
                     section_num_parts = section_ref.split('.')
                     section_main = section_num_parts[0]
 
-                    # Build the full section identifier with prefix (if any)
-                    # This is what we're looking for in the data
-                    if prefix:
-                        # Looking for exact match like "[F]414"
-                        target_section_base = f"{prefix}{section_main}"
-                    else:
-                        # Looking for plain "414" (no prefix)
-                        target_section_base = section_main
-
-                    # Find the content with this section number
+                    # Find the content with this section number (ignoring prefix)
+                    # "Section 403" should match 403, [BE]403, [BS]403, [F]403, etc.
                     found_chapter_id = None
+                    matched_section = None
                     for content in hierarchy.data['CodeContent']:
                         content_section = str(content.get('Section', ''))
 
@@ -502,34 +495,41 @@ def create_all_library_content(hierarchy):
                         content_section_parts = content_section.split('.')
                         content_section_base = content_section_parts[0] if content_section_parts else content_section
 
-                        # Exact match required for base section
-                        # If looking for "[F]414", only match "[F]414*"
-                        # If looking for "414", only match "414*" (no prefix)
-                        if content_section_base == target_section_base:
+                        # Remove prefix from content section (e.g., "[BE]403" -> "403")
+                        content_section_no_prefix = re.sub(r'^\[.*?\]', '', content_section_base)
+
+                        # Match by base number only, ignoring prefix
+                        if content_section_no_prefix == section_main:
                             # Check if it belongs to current version
                             if content.get('ChapterID'):
                                 # Verify this chapter belongs to current version
                                 for ch in hierarchy.data['CodeChapter']:
                                     if ch['ChapterID'] == content['ChapterID'] and ch['ModelCodeVersionID'] == latest_version['ModelCodeVersionID']:
                                         found_chapter_id = content['ChapterID']
+                                        matched_section = content_section_base  # Use actual section from data (with prefix if exists)
                                         break
                                 if found_chapter_id:
                                     break
 
-                    # Build target_section with full number (including subsection) and prefix
-                    if prefix:
-                        target_section = f"{prefix}{section_ref}"
-                    else:
-                        target_section = section_ref
-
-                    # Build section_id for href
-                    section_id = target_section.replace('.', '-')
                     full_text = f'{prefix}Section {section_ref}' if prefix else f'Section {section_ref}'
 
                     # Escape quotes for JavaScript
                     search_query = f'{code_base} {year} Section {section_ref}'.replace("'", "\\'")
 
-                    if found_chapter_id:
+                    if found_chapter_id and matched_section:
+                        # Build target_section using matched section from data
+                        # If data has "[BE]403", use "[BE]403"
+                        # If section_ref has subsection like "403.1", append it
+                        if len(section_num_parts) > 1:
+                            # Has subsection, append it
+                            target_section = matched_section + '.' + '.'.join(section_num_parts[1:])
+                        else:
+                            # No subsection, use matched section as-is
+                            target_section = matched_section
+
+                        # Build section_id for href
+                        section_id = target_section.replace('.', '-')
+
                         # Section exists - create hyperlink with bold (using <b> tag)
                         return f'{preceding_space}<b><a href="#section-{found_chapter_id}-{section_id}" class="text-[#F76C6C] hover:underline" onclick="return navigateToSectionOrSearch(\'{found_chapter_id}\', \'{target_section}\', \'{search_query}\');">{full_text}</a></b>'
                     else:
