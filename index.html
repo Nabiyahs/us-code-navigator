@@ -21470,7 +21470,25 @@ Pelev = Pressure due to elevation difference(표고차로 인한 압력)
 </header>
 <div class="p-8">
 <div class="bg-white rounded-lg shadow-md p-6 mb-6">
-<!-- Reduced keyword search input width to half and moved enter icon inside -->
+<!-- Advanced Search Card Search Bar -->
+<div class="mb-6">
+<div class="search-input-wrapper" style="max-width: 100%;">
+<input class="search-input w-full px-4 py-2.5 pl-10 pr-20 border-2 border-gray-300 rounded-lg text-[#24305E] transition-all text-sm" id="advancedSearchInput" placeholder="Search codes, keywords, chapters..." type="text"/>
+<svg class="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<button class="search-clear-button" onclick="clearAdvancedSearchInput()" title="Clear search">
+<svg class="w-3.5 h-3.5 text-gray-500" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+<button class="search-button absolute right-2 top-1/2 transform -translate-y-1/2 bg-[#F76C6C] text-white p-1.5 rounded-md hover:bg-[#e55a5a] transition-colors" onclick="performAdvancedSearch()" title="Search">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M13 7l5 5m0 0l-5 5m5-5H6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+</div>
+</div>
 
 <div class="border-t border-gray-200 pt-4">
 <div class="collapsible-header flex items-center justify-between p-3 rounded-lg" onclick="toggleCollapsible('filterSection')">
@@ -42493,6 +42511,17 @@ function performTopSearch() {
     const query = document.getElementById('topSearchInput').value.trim();
     if (!query) return;
 
+    // Clear the top search input
+    document.getElementById('topSearchInput').value = '';
+
+    // Perform the search with the query
+    performTopSearchWithQuery(query);
+}
+
+// Search function with query parameter (used by both top search and advanced search)
+function performTopSearchWithQuery(query) {
+    if (!query) return;
+
     // Switch to search results section (not advanced search)
     document.querySelectorAll('.section-content').forEach(s => s.classList.remove('active'));
     document.getElementById('searchResultsSection').classList.add('active');
@@ -42562,9 +42591,6 @@ function performTopSearch() {
 
     // Display results in search results section
     displayTopSearchResults(exactMatches, partialMatches, keyword);
-
-    // Clear the top search input
-    document.getElementById('topSearchInput').value = '';
 }
 
 // Display top search results with detailed preview (5 lines)
@@ -42626,10 +42652,10 @@ function displayTopSearchResults(exactMatches, partialMatches, keyword) {
         const contextContentKR = extractContextAroundKeyword(result.contentKR, keyword, 400);
 
         // Then apply highlighting
-        const highlightedTitleEN = highlightKeyword(contextTitleEN, keyword, isExactMatch);
-        const highlightedTitleKR = highlightKeyword(contextTitleKR, keyword, isExactMatch);
-        const highlightedContentEN = highlightKeyword(contextContentEN, keyword, isExactMatch);
-        const highlightedContentKR = highlightKeyword(contextContentKR, keyword, isExactMatch);
+        const highlightedTitleEN = highlightKeyword(contextTitleEN, keyword, isExactMatch, 'default');
+        const highlightedTitleKR = highlightKeyword(contextTitleKR, keyword, isExactMatch, 'titleKR');
+        const highlightedContentEN = highlightKeyword(contextContentEN, keyword, isExactMatch, 'default');
+        const highlightedContentKR = highlightKeyword(contextContentKR, keyword, isExactMatch, 'contentKR');
 
         // Check if content is long enough to need collapse/expand
         const totalContentLength = (result.contentEN || '').length + (result.contentKR || '').length;
@@ -42791,7 +42817,7 @@ function performSearch() {
 }
 
 // Helper function to highlight keyword in text - with different colors for exact vs partial
-function highlightKeyword(text, keyword, isExactMatch) {
+function highlightKeyword(text, keyword, isExactMatch, textType = 'default') {
     if (!text || !keyword) return text;
 
     // Escape special regex characters in keyword
@@ -42801,8 +42827,18 @@ function highlightKeyword(text, keyword, isExactMatch) {
     // Create regex for case-insensitive matching
     const regex = new RegExp(`(${escapedKeyword})`, 'gi');
 
-    // Yellow highlight for all matches
-    const highlightClass = 'bg-yellow-200 font-medium';
+    // Different highlighting based on text type
+    let highlightClass;
+    if (textType === 'titleKR') {
+        // Korean titles: no highlighting at all
+        return text;
+    } else if (textType === 'contentKR') {
+        // Korean content: only font-medium, no background
+        highlightClass = 'font-medium';
+    } else {
+        // Default (English): yellow background + font-medium
+        highlightClass = 'bg-yellow-200 font-medium';
+    }
 
     // Replace matches with highlighted spans
     return text.replace(regex, `<mark class="${highlightClass}">$1</mark>`);
@@ -42869,10 +42905,10 @@ function displaySearchResults(exactMatches, partialMatches, allFilteredResults, 
         let displayContentKR = result.contentKR;
 
         if (keyword) {
-            displayTitleEN = highlightKeyword(result.titleEN, keyword, isExactMatch);
-            displayTitleKR = highlightKeyword(result.titleKR, keyword, isExactMatch);
-            displayContentEN = highlightKeyword(result.contentEN, keyword, isExactMatch);
-            displayContentKR = highlightKeyword(result.contentKR, keyword, isExactMatch);
+            displayTitleEN = highlightKeyword(result.titleEN, keyword, isExactMatch, 'default');
+            displayTitleKR = highlightKeyword(result.titleKR, keyword, isExactMatch, 'titleKR');
+            displayContentEN = highlightKeyword(result.contentEN, keyword, isExactMatch, 'default');
+            displayContentKR = highlightKeyword(result.contentKR, keyword, isExactMatch, 'contentKR');
         }
 
         html += `
@@ -43127,6 +43163,25 @@ function openSearchResult(codeId, versionId, chapterId, section) {
 
 function clearSearchInput() {
     document.getElementById('topSearchInput').value = '';
+}
+
+function clearAdvancedSearchInput() {
+    document.getElementById('advancedSearchInput').value = '';
+}
+
+function performAdvancedSearch() {
+    const query = document.getElementById('advancedSearchInput').value.trim();
+    if (!query) return;
+
+    // Switch to search results section (not advanced search)
+    document.querySelectorAll('.section-content').forEach(s => s.classList.remove('active'));
+    document.getElementById('searchResultsSection').classList.add('active');
+
+    // Update sidebar
+    document.querySelectorAll('.sidebar-item').forEach(item => item.classList.remove('active'));
+
+    // Perform the search
+    performTopSearchWithQuery(query);
 }
 
 // === Chapter/Section Navigation ===
@@ -43404,6 +43459,13 @@ document.addEventListener('DOMContentLoaded', function() {
     if (topSearchInput) {
         topSearchInput.addEventListener('keypress', function(e) {
             if (e.key === 'Enter') performTopSearch();
+        });
+    }
+
+    const advancedSearchInput = document.getElementById('advancedSearchInput');
+    if (advancedSearchInput) {
+        advancedSearchInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') performAdvancedSearch();
         });
     }
 
