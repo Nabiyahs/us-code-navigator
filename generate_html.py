@@ -485,9 +485,12 @@ def create_all_library_content(hierarchy):
                     section_main = section_num_parts[0]
 
                     # Find the content with this section number (ignoring prefix)
-                    # "Section 403" should match 403, [BE]403, [BS]403, [F]403, etc.
+                    # Priority: match prefixed sections first (e.g., [F]403), then plain sections (403)
                     found_chapter_id = None
                     matched_section = None
+                    plain_match = None
+                    plain_match_chapter = None
+
                     for content in hierarchy.data['CodeContent']:
                         content_section = str(content.get('Section', ''))
 
@@ -505,11 +508,27 @@ def create_all_library_content(hierarchy):
                                 # Verify this chapter belongs to current version
                                 for ch in hierarchy.data['CodeChapter']:
                                     if ch['ChapterID'] == content['ChapterID'] and ch['ModelCodeVersionID'] == latest_version['ModelCodeVersionID']:
-                                        found_chapter_id = content['ChapterID']
-                                        matched_section = content_section_base  # Use actual section from data (with prefix if exists)
+                                        # Check if this is a prefixed or plain section
+                                        has_prefix = content_section_base != content_section_no_prefix
+
+                                        if has_prefix:
+                                            # Prefixed section - use immediately (priority match)
+                                            found_chapter_id = content['ChapterID']
+                                            matched_section = content_section_base
+                                            break
+                                        else:
+                                            # Plain section - save as fallback
+                                            if not plain_match:
+                                                plain_match = content_section_base
+                                                plain_match_chapter = content['ChapterID']
                                         break
                                 if found_chapter_id:
                                     break
+
+                    # If no prefixed section found, use plain section as fallback
+                    if not found_chapter_id and plain_match:
+                        found_chapter_id = plain_match_chapter
+                        matched_section = plain_match
 
                     full_text = f'{prefix}Section {section_ref}' if prefix else f'Section {section_ref}'
 
