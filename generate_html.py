@@ -1485,10 +1485,14 @@ function scrollToSection(chapterId, sectionNum, saveHistory = false) {{
             const contentContainer = document.querySelector('#librarySection .flex-1.overflow-y-auto');
 
         if (contentContainer) {{
-            // Scroll within the content container
-            // Show more context by scrolling to 150px before the target
-            const elementTop = sectionElement.offsetTop;
-            const scrollPosition = Math.max(0, elementTop - 150);
+            // Calculate accurate scroll position using getBoundingClientRect
+            // This works correctly even when element is in a different code-content div
+            const containerRect = contentContainer.getBoundingClientRect();
+            const elementRect = sectionElement.getBoundingClientRect();
+            const relativeTop = elementRect.top - containerRect.top;
+            const scrollPosition = Math.max(0, contentContainer.scrollTop + relativeTop - 150);
+
+            console.log('Container top:', containerRect.top, 'Element top:', elementRect.top, 'Relative:', relativeTop, 'Scroll to:', scrollPosition);
 
             contentContainer.scrollTo({{
                 top: scrollPosition,
