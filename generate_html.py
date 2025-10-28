@@ -619,8 +619,11 @@ def create_all_library_content(hierarchy):
                 section_title = section_num if section_num == 'General' else f'Section {section_num}'
                 title_suffix = f' - {first_content["TitleEN"]}' if first_content.get('TitleEN') else ''
 
+                # Create base section ID for navigation anchor
+                section_base_id = f"section-{chapter_id}-{str(section_num).replace('.', '-')}"
+
                 content_html.append(f'''
-                <div class="content-section mb-8">
+                <div class="content-section mb-8" id="{section_base_id}">
                     <h3 class="text-xl font-semibold text-[#374785] mb-3">{section_title}{title_suffix}</h3>
                     {f'<p class="text-lg text-gray-600 mb-4">{first_content["TitleKR"]}</p>' if first_content.get('TitleKR') else ''}
                     <div class="space-y-4">''')
@@ -638,6 +641,10 @@ def create_all_library_content(hierarchy):
                         section_number = f"{section_num}{subsection}"
                         # For regular sections, display the section number
                         display_section_number = section_number
+
+                    # Only add ID to subsection div if there's actually a subsection
+                    # Otherwise use parent section ID to avoid duplicates
+                    subsection_id_attr = f'id="section-{chapter_id}-{section_number.replace(".", "-")}"' if subsection or section_num == 'General' else ''
 
                     # Attachments
                     attachments = [att for att in hierarchy.data['CodeAttachment']
@@ -698,9 +705,9 @@ def create_all_library_content(hierarchy):
                         index_tags_html = '\n                            <span class="text-xs bg-[#F8E9A1] text-[#24305E] px-2 py-0.5 rounded">건축</span>'
 
                     content_html.append(f'''
-                    <div class="bg-gray-50 p-4 rounded-lg relative" id="section-{chapter_id}-{section_number.replace('.', '-')}">
+                    <div class="bg-gray-50 p-4 rounded-lg relative" {subsection_id_attr}>
                         <div class="absolute top-3 left-3 z-10 flex gap-2">
-                            <button class="back-btn hidden px-3 py-1.5 bg-[#F76C6C] text-white hover:bg-[#d85a5a] rounded-md shadow-md transition-colors flex items-center gap-1 text-sm font-medium" title="Go back" onclick="goBackToSection()" id="back-btn-{chapter_id}-{section_number.replace('.', '-')}">
+                            <button class="back-btn hidden px-3 py-1.5 bg-[#F76C6C] text-white hover:bg-[#d85a5a] rounded-md shadow-md transition-colors flex items-center gap-1 text-sm font-medium" title="Go back" onclick="goBackToSection()" id="back-btn-{chapter_id}-{section_number.replace('.', '-')}"
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"></path>
                                 </svg>
@@ -1385,6 +1392,11 @@ function toggleChapterSidebar(chapterId) {{
 // Navigation history stack
 let navigationHistory = [];
 
+// Unified function to generate section ID
+function getSectionId(chapterId, sectionNum) {{
+    return 'section-' + chapterId + '-' + sectionNum.replace(/\./g, '-');
+}}
+
 // Google search fallback
 function searchGoogle(query) {{
     const googleUrl = `https://www.google.com/search?q=${{encodeURIComponent(query)}}`;
@@ -1422,8 +1434,8 @@ function scrollToSection(chapterId, sectionNum, saveHistory = false) {{
     }});
     document.getElementById('librarySection').classList.add('active');
 
-    // Replace dots with dashes for ID matching
-    const sectionId = 'section-' + chapterId + '-' + sectionNum.toString().replace(/\./g, '-');
+    // Use unified ID generation function
+    const sectionId = getSectionId(chapterId, sectionNum);
     console.log('Looking for section ID:', sectionId, 'Chapter:', chapterId, 'Section:', sectionNum);
 
     // Use querySelector with CSS.escape to handle special characters like [ ]
@@ -1460,7 +1472,7 @@ function scrollToSection(chapterId, sectionNum, saveHistory = false) {{
                 }});
 
                 // Show back button in target section
-                const backBtnId = 'back-btn-' + chapterId + '-' + sectionNum.toString().replace(/\./g, '-');
+                const backBtnId = 'back-btn-' + getSectionId(chapterId, sectionNum).replace('section-', '');
                 const backBtn = document.querySelector('#' + CSS.escape(backBtnId));
                 if (backBtn) {{
                     backBtn.classList.remove('hidden');
@@ -2314,7 +2326,7 @@ function copyModalContent(button) {{
 }}
 
 function copyCodeContent(sectionNumber) {{
-    const sectionElement = document.getElementById('section-' + sectionNumber.replace('.', '-'));
+    const sectionElement = document.getElementById('section-' + sectionNumber.replace(/\./g, '-'));
     if (!sectionElement) return;
 
     const titleElement = sectionElement.querySelector('h4');
