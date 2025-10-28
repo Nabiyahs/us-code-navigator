@@ -5,6 +5,7 @@
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>US CODE NAVIGATOR</title>
 <script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
     
@@ -42730,22 +42731,12 @@ function displayTopSearchResults(exactMatches, partialMatches, keyword) {
     if (!resultsContainer) {
         searchResultsSection.innerHTML = `
             <header class="bg-white border-b border-gray-200 shadow-sm mb-6">
-                <div class="px-8 py-6 flex items-center justify-between">
-                    <div>
+                <div class="px-8 py-6">
+                    <div class="flex items-center justify-between mb-2">
                         <h1 class="text-3xl font-bold text-[#24305E]">검색 결과</h1>
-                        <p class="text-gray-600 mt-1" id="topSearchKeyword"></p>
                     </div>
-                    <div class="flex gap-2">
-                        <button onclick="toggleAllSearchResults(true)" class="p-2 hover:bg-gray-100 rounded transition-colors" title="Expand all">
-                            <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                            </svg>
-                        </button>
-                        <button onclick="toggleAllSearchResults(false)" class="p-2 hover:bg-gray-100 rounded transition-colors" title="Collapse all">
-                            <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path>
-                            </svg>
-                        </button>
+                    <div class="flex items-center gap-3">
+                        <p class="text-gray-600" id="topSearchKeyword"></p>
                     </div>
                 </div>
             </header>
@@ -42793,46 +42784,21 @@ function displayTopSearchResults(exactMatches, partialMatches, keyword) {
         const needsToggle = totalContentLength > 300;
 
         // Use reference.txt design with conditional collapse/expand functionality
+        const resultDataJson = JSON.stringify(result).replace(/'/g, "\\'");
         html += `
-            <div class="bg-gray-50 p-4 rounded-lg relative search-result-item" id="search-result-${index}">
-                <!-- Copy and Navigate buttons -->
-                <div class="absolute top-3 right-3 flex gap-2">
-                    ${needsToggle ? `
-                    <button class="p-1.5 hover:bg-gray-200 rounded transition-colors"
-                            onclick="toggleSearchResult(${index})"
-                            title="Expand/Collapse">
-                        <svg class="w-4 h-4 text-gray-600 result-toggle-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                        </svg>
-                    </button>
-                    ` : ''}
-                    <button class="p-1.5 hover:bg-gray-200 rounded transition-colors"
-                            title="Go to section"
-                            onclick="openSearchResult('${result.codeId}', '${result.versionId}', '${result.chapterId}', '${sectionNum}')">
-                        <svg class="w-4 h-4 text-[#F76C6C]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
-                        </svg>
-                    </button>
-                    <button class="p-1.5 hover:bg-gray-200 rounded transition-colors" title="Copy content" onclick="copySearchResultContent(event, this)">
-                        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
-                        </svg>
-                    </button>
-                </div>
+            <div class="bg-gray-50 p-4 rounded-lg relative search-result-item hover:bg-gray-100 transition-colors"
+                 id="search-result-${index}"
+                 data-result='${resultDataJson}'
+                 onclick="openSearchResultModalFromCard(this)"
+                 style="cursor: pointer;">
 
                 <!-- Summary (always visible) -->
-                <div class="pr-24">
-                    <div class="flex items-center gap-2 mb-2 flex-wrap">
-                        <span class="text-xs bg-[#A8D0E6] text-[#24305E] font-semibold px-2 py-0.5 rounded">${result.code} ${result.year}: Ch.${result.chapter} - ${sectionNum}</span>
+                <div>
+                    <div class="flex items-center gap-2 mb-3 flex-wrap">
+                        <span class="text-sm bg-[#A8D0E6] text-[#24305E] font-semibold px-2.5 py-1 rounded">${result.code} ${result.year}: Ch.${result.chapter} - ${sectionNum}</span>
                     </div>
-                    <h4 class="font-semibold text-[#24305E] text-base mb-2">${sectionNum}${result.titleEN ? ' ' + highlightedTitleEN : ''}</h4>
-                    ${result.titleKR ? `<p class="text-gray-600 text-sm leading-relaxed mb-3">${highlightedTitleKR}</p>` : ''}
-                </div>
-
-                <!-- Content (always visible for short content, collapsible for long content) -->
-                <div class="result-details ${needsToggle ? 'hidden' : ''} pr-24 mt-2 ${needsToggle ? 'border-t border-gray-200 pt-3' : ''}">
-                    ${result.contentEN ? `<p class="text-gray-700 text-base leading-relaxed mb-3">${highlightedContentEN}</p>` : ''}
-                    ${result.contentKR ? `<p class="text-gray-600 text-base leading-relaxed">${highlightedContentKR}</p>` : ''}
+                    <h4 class="font-semibold text-[#24305E] text-lg mb-2">${sectionNum}${result.titleEN ? ' ' + highlightedTitleEN : ''}</h4>
+                    ${result.titleKR ? `<p class="text-gray-600 text-base leading-relaxed mb-3">${highlightedTitleKR}</p>` : ''}
                 </div>
             </div>
         `;
@@ -42841,48 +42807,6 @@ function displayTopSearchResults(exactMatches, partialMatches, keyword) {
     html += '</div>';
 
     resultsContainer.innerHTML = html;
-}
-
-// Toggle individual search result
-function toggleSearchResult(index) {
-    const resultElement = document.getElementById(`search-result-${index}`);
-    if (!resultElement) return;
-
-    const details = resultElement.querySelector('.result-details');
-    const toggleIcon = resultElement.querySelector('.result-toggle-icon');
-
-    if (!toggleIcon) return; // No toggle icon means content is short
-
-    if (details.classList.contains('hidden')) {
-        details.classList.remove('hidden');
-        // Change to collapse icon (chevron up)
-        toggleIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path>';
-    } else {
-        details.classList.add('hidden');
-        // Change to expand icon (chevron down)
-        toggleIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>';
-    }
-}
-
-// Toggle all search results
-function toggleAllSearchResults(expand) {
-    const allResults = document.querySelectorAll('.search-result-item');
-    allResults.forEach((resultElement, index) => {
-        const details = resultElement.querySelector('.result-details');
-        const toggleIcon = resultElement.querySelector('.result-toggle-icon');
-
-        if (!toggleIcon) return; // Skip if no toggle icon (short content)
-
-        if (expand) {
-            details.classList.remove('hidden');
-            // Change to collapse icon (chevron up)
-            toggleIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path>';
-        } else {
-            details.classList.add('hidden');
-            // Change to expand icon (chevron down)
-            toggleIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>';
-        }
-    });
 }
 
 function performSearch() {
@@ -43143,6 +43067,19 @@ function handleResultMouseUp(event) {
     mouseDownPos = null;
 }
 
+// Helper function to open modal from card click
+function openSearchResultModalFromCard(cardElement) {
+    const resultData = cardElement.getAttribute('data-result');
+    if (resultData) {
+        try {
+            const result = JSON.parse(resultData);
+            openSearchResultModal(result);
+        } catch (e) {
+            console.error('Failed to parse result data:', e);
+        }
+    }
+}
+
 // Open search result in modal popup
 function openSearchResultModal(result) {
     // Create modal if it doesn't exist
@@ -43158,25 +43095,14 @@ function openSearchResultModal(result) {
                         <h2 id="modalTitle" class="text-2xl font-bold text-[#24305E]"></h2>
                         <p id="modalLocation" class="text-sm text-gray-500 mt-1"></p>
                     </div>
-                    <div class="flex items-center gap-2">
-                        <button
-                            onclick="navigateToLibraryFromModal()"
-                            class="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-                            title="라이브러리에서 보기"
-                        >
-                            <svg class="w-6 h-6 text-[#F76C6C]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
-                            </svg>
-                        </button>
-                        <button
-                            onclick="closeSearchResultModal()"
-                            class="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-                        >
-                            <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                            </svg>
-                        </button>
-                    </div>
+                    <button
+                        onclick="closeSearchResultModal()"
+                        class="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                    >
+                        <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
                 </div>
                 <div id="modalContent" class="p-6 overflow-y-auto max-h-[calc(90vh-100px)]"></div>
             </div>
@@ -43200,40 +43126,46 @@ function openSearchResultModal(result) {
     // Create content with reference.txt card design
     let contentHTML = `
         <div class="bg-gray-50 p-4 rounded-lg relative" data-section="${sectionNum}" data-code="${result.code}" data-year="${result.year}" data-chapter="${result.chapter}">
-            <!-- Copy button only -->
-            <div class="absolute top-3 right-3">
-                <button class="p-1.5 hover:bg-gray-200 rounded transition-colors" title="Copy content" onclick="copyModalContent(this)">
-                    <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <!-- Copy and Navigate buttons -->
+            <div class="absolute top-3 right-3 flex gap-2">
+                <button class="p-2 hover:bg-gray-200 rounded transition-colors"
+                        title="본문 바로가기"
+                        onclick="navigateToLibraryFromModal()">
+                    <svg class="w-5 h-5 text-[#F76C6C]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                    </svg>
+                </button>
+                <button class="p-2 hover:bg-gray-200 rounded transition-colors" title="Copy content" onclick="copyModalContent(this)">
+                    <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
                     </svg>
                 </button>
             </div>
 
             <!-- Location and Index tags -->
-            <div class="flex items-center gap-2 mb-3 flex-wrap">
-                <span class="text-xs bg-[#A8D0E6] text-[#24305E] font-semibold px-2 py-0.5 rounded">${result.code} ${result.year}: Chapter ${result.chapter} - ${sectionNum}</span>
-                <span class="text-xs bg-[#F8E9A1] text-[#24305E] px-2 py-0.5 rounded">건축</span>
+            <div class="flex items-center gap-2 mb-3 flex-wrap pr-24">
+                <span class="text-sm bg-[#A8D0E6] text-[#24305E] font-semibold px-2.5 py-1 rounded">${result.code} ${result.year}: Chapter ${result.chapter} - ${sectionNum}</span>
             </div>
 
             <!-- Section title -->
-            <div class="flex items-center gap-2 mb-2">
-                <h4 class="font-semibold text-[#24305E]">${sectionNum}${result.titleEN ? ' ' + result.titleEN : ''}</h4>
+            <div class="flex items-center gap-2 mb-3 pr-24">
+                <h4 class="font-semibold text-[#24305E] text-xl">${sectionNum}${result.titleEN ? ' ' + result.titleEN : ''}</h4>
             </div>
     `;
 
     // Add title in Korean if exists
     if (result.titleKR) {
-        contentHTML += `<p class="text-gray-600 text-lg leading-relaxed mb-2">${result.titleKR}</p>`;
+        contentHTML += `<p class="text-gray-600 text-lg leading-relaxed mb-4 pr-24">${result.titleKR}</p>`;
     }
 
     // Add content in English if exists
     if (result.contentEN) {
-        contentHTML += `<p class="text-gray-700 leading-relaxed mb-2">${result.contentEN}</p>`;
+        contentHTML += `<p class="text-gray-700 text-base leading-relaxed mb-4 pr-24">${result.contentEN}</p>`;
     }
 
     // Add content in Korean if exists
     if (result.contentKR) {
-        contentHTML += `<p class="text-gray-600 text-lg leading-relaxed mb-3">${result.contentKR}</p>`;
+        contentHTML += `<p class="text-gray-600 text-base leading-relaxed mb-3 pr-24">${result.contentKR}</p>`;
     }
 
     contentHTML += `</div>`;
@@ -43559,6 +43491,11 @@ document.addEventListener('DOMContentLoaded', function() {
         topSearchInput.addEventListener('keypress', function(e) {
             if (e.key === 'Enter') performTopSearch();
         });
+    }
+
+    // Initialize lucide icons
+    if (typeof lucide !== 'undefined') {
+        lucide.createIcons();
     }
 });
     </script></body>
