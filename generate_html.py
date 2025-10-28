@@ -641,9 +641,18 @@ def create_all_library_content(hierarchy):
 
                 # Create base section ID for navigation anchor
                 section_base_id = f"section-{chapter_id}-{str(section_num).replace('.', '-')}"
+                back_btn_id = f"back-btn-{chapter_id}-{str(section_num).replace('.', '-')}"
 
                 content_html.append(f'''
-                <div class="content-section mb-8" id="{section_base_id}">
+                <div class="content-section mb-8 relative" id="{section_base_id}">
+                    <div class="absolute top-2 right-2 z-10">
+                        <button class="back-btn hidden px-3 py-1.5 bg-[#F76C6C] text-white hover:bg-[#d85a5a] rounded-md shadow-md transition-colors flex items-center gap-1.5 text-sm font-medium" title="Go back" onclick="goBackToSection()" id="{back_btn_id}">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                            </svg>
+                            <span>Back</span>
+                        </button>
+                    </div>
                     <h3 class="text-xl font-semibold text-[#374785] mb-3">{section_title}{title_suffix}</h3>
                     {f'<p class="text-lg text-gray-600 mb-4">{first_content["TitleKR"]}</p>' if first_content.get('TitleKR') else ''}
                     <div class="space-y-4">''')
@@ -726,14 +735,6 @@ def create_all_library_content(hierarchy):
 
                     content_html.append(f'''
                     <div class="bg-gray-50 p-4 rounded-lg relative" {subsection_id_attr}>
-                        <div class="absolute top-3 left-3 z-10 flex gap-2">
-                            <button class="back-btn hidden px-3 py-1.5 bg-[#F76C6C] text-white hover:bg-[#d85a5a] rounded-md shadow-md transition-colors flex items-center gap-1 text-sm font-medium" title="Go back" onclick="goBackToSection()" id="back-btn-{chapter_id}-{section_number.replace('.', '-')}"
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"></path>
-                                </svg>
-                                <span>Back</span>
-                            </button>
-                        </div>
                         <div class="absolute top-3 right-3 flex gap-2">
                             <button class="p-1.5 hover:bg-gray-200 rounded transition-colors" title="Copy content" onclick="copyCodeContent('{chapter_id}-{section_number}')">
                                 <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1491,9 +1492,12 @@ function scrollToSection(chapterId, sectionNum, saveHistory = false) {{
                     scrollTop: currentScrollTop
                 }});
 
-                // Show back button in target section
-                const backBtnId = 'back-btn-' + getSectionId(chapterId, sectionNum).replace('section-', '');
+                // Show back button in target section (using section base ID)
+                // Extract base section number without subsection
+                const sectionNumBase = sectionNum.toString().split('.')[0];
+                const backBtnId = 'back-btn-' + chapterId + '-' + sectionNumBase.replace(/\./g, '-');
                 const backBtn = document.querySelector('#' + CSS.escape(backBtnId));
+                console.log('Looking for back button:', backBtnId);
                 if (backBtn) {{
                     backBtn.classList.remove('hidden');
                 }} else {{
