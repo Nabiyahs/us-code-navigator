@@ -713,9 +713,16 @@
 <div class="section-content" id="librarySection">
 <header class="bg-white border-b border-gray-200 shadow-sm sticky top-0 z-10">
 <div class="px-8 py-4 flex items-center justify-between">
+<div class="flex items-center gap-4">
+<button class="p-2 hover:bg-gray-100 rounded-lg transition-colors hidden" id="libraryBackButton" onclick="goBackFromLibrary()" title="돌아가기">
+<svg class="w-6 h-6 text-[#24305E]" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M15 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
 <div>
 <h1 class="text-2xl font-bold text-[#24305E]" id="codeTitle">IBC 2024</h1>
 <p class="text-sm text-gray-600" id="codeSubtitle">International Building Code</p>
+</div>
 </div>
 <!-- REMOVED -->
 <!-- <select id="versionSelect" class="px-4 py-2 border-2 border-gray-300 rounded-lg text-sm font-medium text-gray-700 focus:outline-none focus:border-[#A8D0E6]">
@@ -21608,8 +21615,9 @@ Pelev = Pressure due to elevation difference(표고차로 인한 압력)
 <h2 class="text-xl font-bold text-[#24305E]">검색 결과</h2>
 <div class="flex items-center gap-3">
 <span class="text-sm text-gray-600" id="resultCount">0개 결과</span>
-
-
+<button onclick="toggleAdvancedSearchResults()" class="p-2 hover:bg-gray-100 rounded-lg transition-colors" title="목록 보기/펼쳐보기">
+<i data-lucide="list" class="w-6 h-6 text-gray-600" id="toggleAdvancedSearchIcon"></i>
+</button>
 </div>
 </div>
 <div class="space-y-3" id="resultsList">
@@ -21637,7 +21645,12 @@ Pelev = Pressure due to elevation difference(표고차로 인한 압력)
 <div class="bg-white rounded-lg shadow-md p-6">
 <div class="flex items-center justify-between mb-4">
 <h2 class="text-xl font-bold text-[#24305E]">결과</h2>
+<div class="flex items-center gap-3">
 <span class="text-sm text-gray-600" id="searchResultsCount">0개 결과</span>
+<button onclick="toggleTopSearchResults()" class="p-2 hover:bg-gray-100 rounded-lg transition-colors" title="목록 보기/펼쳐보기">
+<i data-lucide="list" class="w-6 h-6 text-gray-600" id="toggleTopSearchIcon"></i>
+</button>
+</div>
 </div>
 <div class="space-y-4" id="searchResultsList">
 <!-- Search results will be populated here -->
@@ -42881,9 +42894,11 @@ function displaySearchResults(exactMatches, partialMatches, allFilteredResults, 
                 <div class="flex items-center gap-2 mb-2">
                     <h4 class="font-semibold text-[#24305E] text-sm">${sectionNum}${result.titleEN ? ' ' + result.titleEN : ''}</h4>
                 </div>
-                ${displayTitleKR ? `<p class="text-gray-600 text-sm leading-relaxed mb-1 line-clamp-1">${displayTitleKR}</p>` : ''}
-                ${displayContentEN ? `<p class="text-gray-700 text-xs leading-relaxed mb-1 line-clamp-2">${displayContentEN}</p>` : ''}
-                ${displayContentKR ? `<p class="text-gray-600 text-xs leading-relaxed mb-2 line-clamp-2">${displayContentKR}</p>` : ''}
+                ${displayTitleKR ? `<p class="result-title-kr text-gray-600 text-sm leading-relaxed mb-1 line-clamp-1">${displayTitleKR}</p>` : ''}
+                <div class="result-content">
+                    ${displayContentEN ? `<p class="text-gray-700 text-xs leading-relaxed mb-1 line-clamp-2">${displayContentEN}</p>` : ''}
+                    ${displayContentKR ? `<p class="text-gray-600 text-xs leading-relaxed mb-2 line-clamp-2">${displayContentKR}</p>` : ''}
+                </div>
             </div>
         `;
     });
@@ -42891,6 +42906,11 @@ function displaySearchResults(exactMatches, partialMatches, allFilteredResults, 
     html += '</div>';
 
     resultsList.innerHTML = html;
+
+    // Initialize lucide icons for the toggle button
+    if (typeof lucide !== 'undefined') {
+        lucide.createIcons();
+    }
 }
 
 // Handle result card mouse events to distinguish click from drag
@@ -43134,21 +43154,21 @@ function closeSearchResultModal() {
 }
 
 // Toggle search results visibility
-function toggleSearchResults() {
-    const icon = document.getElementById('toggleSearchIcon');
+// Toggle for advanced search (in-page results)
+let isAdvancedSearchListViewMode = false;
 
-    // Toggle mode
-    isListViewMode = !isListViewMode;
+function toggleAdvancedSearchResults() {
+    const icon = document.getElementById('toggleAdvancedSearchIcon');
+    isAdvancedSearchListViewMode = !isAdvancedSearchListViewMode;
 
-    // Get all result content and Korean title elements within search results
-    const searchResultsSection = document.getElementById('searchResultsSection');
-    if (!searchResultsSection) return;
+    const resultsSection = document.getElementById('resultsSection');
+    if (!resultsSection) return;
 
-    const allResultContents = searchResultsSection.querySelectorAll('.result-content');
-    const allTitleKR = searchResultsSection.querySelectorAll('.result-title-kr');
+    const allResultContents = resultsSection.querySelectorAll('.result-content');
+    const allTitleKR = resultsSection.querySelectorAll('.result-title-kr');
 
-    if (isListViewMode) {
-        // List view: hide content and Korean titles, show only English titles
+    if (isAdvancedSearchListViewMode) {
+        // List view: hide content and Korean titles
         allResultContents.forEach(content => {
             content.style.display = 'none';
         });
@@ -43156,11 +43176,10 @@ function toggleSearchResults() {
             kr.style.display = 'none';
         });
         if (icon) {
-            // In list view, show 'maximize-2' icon (indicates can switch to detail view)
             icon.setAttribute('data-lucide', 'maximize-2');
         }
     } else {
-        // Detail view: show all content (DEFAULT)
+        // Detail view: show all content
         allResultContents.forEach(content => {
             content.style.display = 'block';
         });
@@ -43168,15 +43187,60 @@ function toggleSearchResults() {
             kr.style.display = 'block';
         });
         if (icon) {
-            // In detail view, show 'list' icon (indicates can switch to list view)
             icon.setAttribute('data-lucide', 'list');
         }
     }
 
-    // Reinitialize lucide icons
     if (typeof lucide !== 'undefined') {
         lucide.createIcons();
     }
+}
+
+// Toggle for top search (separate page results)
+let isTopSearchListViewMode = false;
+
+function toggleTopSearchResults() {
+    const icon = document.getElementById('toggleTopSearchIcon');
+    isTopSearchListViewMode = !isTopSearchListViewMode;
+
+    const searchResultsSection = document.getElementById('searchResultsSection');
+    if (!searchResultsSection) return;
+
+    const allResultContents = searchResultsSection.querySelectorAll('.result-content');
+    const allTitleKR = searchResultsSection.querySelectorAll('.result-title-kr');
+
+    if (isTopSearchListViewMode) {
+        // List view: hide content and Korean titles
+        allResultContents.forEach(content => {
+            content.style.display = 'none';
+        });
+        allTitleKR.forEach(kr => {
+            kr.style.display = 'none';
+        });
+        if (icon) {
+            icon.setAttribute('data-lucide', 'maximize-2');
+        }
+    } else {
+        // Detail view: show all content
+        allResultContents.forEach(content => {
+            content.style.display = 'block';
+        });
+        allTitleKR.forEach(kr => {
+            kr.style.display = 'block';
+        });
+        if (icon) {
+            icon.setAttribute('data-lucide', 'list');
+        }
+    }
+
+    if (typeof lucide !== 'undefined') {
+        lucide.createIcons();
+    }
+}
+
+// Legacy function (kept for compatibility)
+function toggleSearchResults() {
+    toggleTopSearchResults();
 }
 
 // Toggle content expand/collapse
@@ -43200,6 +43264,18 @@ function navigateToLibraryFromModal() {
         const result = window.currentModalResult;
         closeSearchResultModal();
 
+        // Save the origin section to enable back navigation
+        const currentSection = document.querySelector('.section-content.active');
+        if (currentSection) {
+            window.libraryNavigationOrigin = currentSection.id;
+        }
+
+        // Show back button
+        const backButton = document.getElementById('libraryBackButton');
+        if (backButton) {
+            backButton.classList.remove('hidden');
+        }
+
         // Switch to library and load the code
         switchToLibraryCode(result.codeId, result.versionId);
 
@@ -43207,6 +43283,24 @@ function navigateToLibraryFromModal() {
         setTimeout(() => {
             scrollToSection(result.chapterId, result.section);
         }, 500);
+    }
+}
+
+function goBackFromLibrary() {
+    // Hide back button
+    const backButton = document.getElementById('libraryBackButton');
+    if (backButton) {
+        backButton.classList.add('hidden');
+    }
+
+    // Go back to origin section
+    if (window.libraryNavigationOrigin) {
+        document.querySelectorAll('.section-content').forEach(s => s.classList.remove('active'));
+        const originSection = document.getElementById(window.libraryNavigationOrigin);
+        if (originSection) {
+            originSection.classList.add('active');
+        }
+        window.libraryNavigationOrigin = null;
     }
 }
 
