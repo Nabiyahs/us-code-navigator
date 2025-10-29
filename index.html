@@ -374,15 +374,16 @@
     .result-collapsible {
       cursor: pointer;
     }
-    
+
     .result-content {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.3s ease;
+      /* Default: visible (detail view) */
+      max-height: none;
+      overflow: visible;
+      transition: all 0.3s ease;
     }
-    
+
     .result-content.expanded {
-      max-height: 500px;
+      max-height: none;
     }
 
     /* Added modal styles for section content popup */
@@ -42766,6 +42767,22 @@ function displayTopSearchResults(exactMatches, partialMatches, keyword) {
     html += '</div>';
 
     resultsContainer.innerHTML = html;
+
+    // Apply initial view mode state (default is detail view)
+    setTimeout(() => {
+        const allResultContents = searchResultsSection.querySelectorAll('.result-content');
+        const allTitleKR = searchResultsSection.querySelectorAll('.result-title-kr');
+
+        if (isListViewMode) {
+            // List view: hide content
+            allResultContents.forEach(content => content.style.display = 'none');
+            allTitleKR.forEach(kr => kr.style.display = 'none');
+        } else {
+            // Detail view: show all content (DEFAULT)
+            allResultContents.forEach(content => content.style.display = 'block');
+            allTitleKR.forEach(kr => kr.style.display = 'block');
+        }
+    }, 0);
 }
 
 function performSearch() {
