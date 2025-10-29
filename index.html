@@ -22029,119 +22029,17 @@ Pelev = Pressure due to elevation difference(표고차로 인한 압력)
     const resetBtn = document.getElementById('resetBtn');
     const resultCount = document.getElementById('resultCount');
 
-    searchBtn?.addEventListener('click', function() {
-      const keyword = document.getElementById('keywordInput').value;
-      const selectedArchCategories = Array.from(document.querySelectorAll('input[name="archCategory"]:checked')).map(cb => cb.value);
-      const selectedFireCategories = Array.from(document.querySelectorAll('input[name="fireCategory"]:checked')).map(cb => cb.value);
-      
-      console.log('[v0] Search parameters:', { 
-        keyword, 
-        archCategories: selectedArchCategories,
-        fireCategories: selectedFireCategories
-      });
-      
-      const resultsList = document.getElementById('resultsList');
-      // Updated advanced search results with fold/unfold and eye icon
-      resultsList.innerHTML = `
-        <div class="border rounded-lg bg-white overflow-hidden">
-          <div class="result-collapsible p-4 hover:bg-gray-50 transition-colors" onclick="toggleResultItem('advResult1')">
-            <div class="flex items-center justify-between">
-              <div class="flex items-center gap-3 flex-1">
-                <svg id="advResult1Icon" class="w-5 h-5 text-gray-600 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                </svg>
-                <div class="flex-1">
-                  <div class="flex items-center gap-2 mb-1">
-                    <span class="bg-[#F76C6C] text-white text-xs font-semibold px-2 py-1 rounded">IBC 2024</span>
-                    <span class="text-sm text-gray-500">Chapter 5, Section 503</span>
-                  </div>
-                  <h3 class="font-semibold text-[#24305E]">General Building Heights and Areas</h3>
-                </div>
-              </div>
-              <!-- Updated eye icon to open popup -->
-              <button class="ml-4 p-2 bg-[#A8D0E6] text-[#24305E] rounded-lg hover:bg-[#8fc0d9] transition-colors" onclick="event.stopPropagation(); openSectionModal('503', 'IBC 2024', 'General Building Heights and Areas');" title="View section">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                </svg>
-              </button>
-            </div>
-          </div>
-          <div id="advResult1" class="result-content">
-            <div class="px-4 pb-4 text-sm text-gray-600 leading-relaxed border-t pt-3">
-              The height and area of buildings shall be limited based on the occupancy classification, 
-              type of construction, and the presence of automatic sprinkler systems...
-            </div>
-          </div>
-        </div>
-
-        <div class="border rounded-lg bg-white overflow-hidden">
-          <div class="result-collapsible p-4 hover:bg-gray-50 transition-colors" onclick="toggleResultItem('advResult2')">
-            <div class="flex items-center justify-between">
-              <div class="flex items-center gap-3 flex-1">
-                <svg id="advResult2Icon" class="w-5 h-5 text-gray-600 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                </svg>
-                <div class="flex-1">
-                  <div class="flex items-center gap-2 mb-1">
-                    <span class="bg-[#A8D0E6] text-[#24305E] text-xs font-semibold px-2 py-1 rounded">NFPA 13 2024</span>
-                    <span class="text-sm text-gray-500">Chapter 8, Section 8.3</span>
-                  </div>
-                  <h3 class="font-semibold text-[#24305E]">System Components and Hardware</h3>
-                </div>
-              </div>
-              <button class="ml-4 p-2 bg-[#A8D0E6] text-[#24305E] rounded-lg hover:bg-[#8fc0d9] transition-colors" onclick="event.stopPropagation(); openSectionModal('8.3', 'NFPA 13 2024', 'System Components and Hardware');" title="View section">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                </svg>
-              </button>
-            </div>
-          </div>
-          <div id="advResult2" class="result-content">
-            <div class="px-4 pb-4 text-sm text-gray-600 leading-relaxed border-t pt-3">
-              Sprinkler system components shall be listed for their intended use and installed in accordance 
-              with manufacturer's specifications and this standard...
-            </div>
-          </div>
-        </div>
-
-        <div class="border rounded-lg bg-white overflow-hidden">
-          <div class="result-collapsible p-4 hover:bg-gray-50 transition-colors" onclick="toggleResultItem('advResult3')">
-            <div class="flex items-center justify-between">
-              <div class="flex items-center gap-3 flex-1">
-                <svg id="advResult3Icon" class="w-5 h-5 text-gray-600 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                </svg>
-                <div class="flex-1">
-                  <div class="flex items-center gap-2 mb-1">
-                    <span class="bg-[#A8D0E6] text-[#24305E] text-xs font-semibold px-2 py-1 rounded">NFPA 72 2024</span>
-                    <span class="text-sm text-gray-500">Chapter 10, Section 10.4</span>
-                  </div>
-                  <h3 class="font-semibold text-[#24305E]">Fire Alarm System Design</h3>
-                </div>
-              </div>
-              <button class="ml-4 p-2 bg-[#A8D0E6] text-[#24305E] rounded-lg hover:bg-[#8fc0d9] transition-colors" onclick="event.stopPropagation(); openSectionModal('10.4', 'NFPA 72 2024', 'Fire Alarm System Design');" title="View section">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                </svg>
-              </button>
-            </div>
-          </div>
-          <div id="advResult3" class="result-content">
-            <div class="px-4 pb-4 text-sm text-gray-600 leading-relaxed border-t pt-3">
-              Fire alarm systems shall be designed to provide early warning of fire conditions and shall be 
-              installed in accordance with the requirements of this chapter...
-            </div>
-          </div>
-        </div>
-      `;
-      resultCount.textContent = '3개 결과';
-    });
+    // Search button event listener is now set up in the main initialization code below
+    // (see line ~43602 for the actual event listener)
 
     resetBtn?.addEventListener('click', function() {
-      document.getElementById('keywordInput').value = '';
+      // Clear search inputs
+      const keywordInput = document.getElementById('keywordInput');
+      const advancedSearchInput = document.getElementById('advancedSearchInput');
+      if (keywordInput) keywordInput.value = '';
+      if (advancedSearchInput) advancedSearchInput.value = '';
+
+      // Uncheck all filters
       document.querySelectorAll('input[name="archCategory"]:checked').forEach(cb => {
         cb.checked = false;
       });
@@ -22150,6 +22048,8 @@ Pelev = Pressure due to elevation difference(표고차로 인한 압력)
       });
       document.getElementById('selectAllArch').checked = false;
       document.getElementById('selectAllFire').checked = false;
+
+      // Clear results
       document.getElementById('resultsList').innerHTML = '';
       resultCount.textContent = '0개 결과';
     });
@@ -42746,44 +42646,30 @@ function displayTopSearchResults(exactMatches, partialMatches, keyword) {
 }
 
 function performSearch() {
-    // No keyword input in advanced search - filter only
-    const keyword = '';
+    // Get keyword from advanced search input
+    const keyword = document.getElementById('advancedSearchInput').value.trim().toLowerCase();
 
     const selectedArchCategories = Array.from(document.querySelectorAll('input[name="archCategory"]:checked')).map(cb => cb.value);
     const selectedFireCategories = Array.from(document.querySelectorAll('input[name="fireCategory"]:checked')).map(cb => cb.value);
 
-    // Check if at least one filter is selected
-    if (selectedArchCategories.length === 0 && selectedFireCategories.length === 0) {
-        alert('최소 하나의 필터를 선택해주세요');
+    // Check if at least keyword or one filter is provided
+    if (!keyword && selectedArchCategories.length === 0 && selectedFireCategories.length === 0) {
+        alert('검색어를 입력하거나 최소 하나의 필터를 선택해주세요');
         return;
     }
 
-    console.log('Searching with filters only');
+    console.log('Searching with keyword and filters');
+    console.log('Keyword:', keyword);
     console.log('Arch categories:', selectedArchCategories);
     console.log('Fire categories:', selectedFireCategories);
 
-    // Filter by selected codes
+    // Filter by selected codes - search all codes for now
+    // In the future, we can map categories to specific codes
     let searchResults = [];
-    let modelCodeIds = new Set();
+    let modelCodeIds = new Set(['MC001', 'MC007', 'MC008', 'MC009']);
 
-    // Add codes based on selected categories
-    if (selectedArchCategories.length > 0) {
-        selectedArchCategories.forEach(cat => {
-            if (cat === 'IBC') modelCodeIds.add('MC001');
-        });
-    }
-    if (selectedFireCategories.length > 0) {
-        selectedFireCategories.forEach(cat => {
-            if (cat === 'NFPA13') modelCodeIds.add('MC007');
-            if (cat === 'NFPA14') modelCodeIds.add('MC008');
-            if (cat === 'NFPA20') modelCodeIds.add('MC009');
-        });
-    }
-
-    // If no categories selected, search all
-    if (modelCodeIds.size === 0) {
-        modelCodeIds = new Set(['MC001', 'MC007', 'MC008', 'MC009']);
-    }
+    // Store selected filters for potential future filtering
+    const selectedFilters = [...selectedArchCategories, ...selectedFireCategories];
 
     // Search in CodeContent - separate exact and partial matches
     const exactMatches = [];
@@ -42914,8 +42800,14 @@ function extractContextAroundKeyword(text, keyword, contextLength = 200) {
 
 function displaySearchResults(exactMatches, partialMatches, allFilteredResults, keyword) {
     const resultsList = document.getElementById('resultsList');
+    const resultCount = document.getElementById('resultCount');
 
     const totalResults = exactMatches.length + partialMatches.length + allFilteredResults.length;
+
+    // Update result count
+    if (resultCount) {
+        resultCount.textContent = `${totalResults}개 결과`;
+    }
 
     if (totalResults === 0) {
         resultsList.innerHTML = '<p class="text-gray-500 text-center py-8">검색 결과가 없습니다</p>';
@@ -43353,23 +43245,10 @@ function clearAdvancedSearchInput() {
 
 function performAdvancedSearch() {
     console.debug('[Search] performAdvancedSearch() called');
-    const query = document.getElementById('advancedSearchInput').value.trim();
-    console.debug('[Search] advancedSearchInput value:', query);
 
-    if (!query) {
-        console.debug('[Search] Empty query, aborting');
-        return;
-    }
-
-    // Switch to search results section (not advanced search)
-    document.querySelectorAll('.section-content').forEach(s => s.classList.remove('active'));
-    document.getElementById('searchResultsSection').classList.add('active');
-
-    // Update sidebar
-    document.querySelectorAll('.sidebar-item').forEach(item => item.classList.remove('active'));
-
-    // Perform the search
-    performTopSearchWithQuery(query);
+    // Stay in the same page and use performSearch() which now reads from advancedSearchInput
+    // and applies both keyword and filter intersection logic
+    performSearch();
 }
 
 // === Chapter/Section Navigation ===
