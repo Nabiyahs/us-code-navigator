@@ -42662,7 +42662,21 @@ function displayTopSearchResults(exactMatches, partialMatches, keyword) {
         const needsToggle = totalContentLength > 300;
 
         // Clean card design with left border to distinguish EN/KR content
-        const resultDataJson = JSON.stringify(result).replace(/'/g, "\\'");
+        // Store only identifiers in card data - full content will be fetched when modal opens
+        const resultMetadata = {
+            code: result.code,
+            year: result.year,
+            chapter: result.chapter,
+            chapterTitle: result.chapterTitle,
+            section: result.section,
+            subsection: result.subsection,
+            titleEN: result.titleEN,
+            titleKR: result.titleKR,
+            codeId: result.codeId,
+            versionId: result.versionId,
+            chapterId: result.chapterId
+        };
+        const resultDataJson = JSON.stringify(resultMetadata).replace(/'/g, "\\'");
         html += `
             <div class="bg-white border-2 border-gray-300 hover:border-[#A8D0E6] p-5 rounded-lg relative search-result-item transition-colors cursor-pointer"
                  id="search-result-${index}"
@@ -42925,9 +42939,24 @@ function displaySearchResults(exactMatches, partialMatches, allFilteredResults, 
             displayContentKR = highlightKeyword(result.contentKR, keyword, isExactMatch, 'contentKR');
         }
 
+        // Store only identifiers in card data - full content will be fetched when modal opens
+        const resultMetadata = {
+            code: result.code,
+            year: result.year,
+            chapter: result.chapter,
+            chapterTitle: result.chapterTitle,
+            section: result.section,
+            subsection: result.subsection,
+            titleEN: result.titleEN,
+            titleKR: result.titleKR,
+            codeId: result.codeId,
+            versionId: result.versionId,
+            chapterId: result.chapterId
+        };
+
         html += `
             <div class="bg-gray-50 p-4 rounded-lg relative search-result-item"
-                 data-result='${JSON.stringify(result).replace(/'/g, "\'")}'
+                 data-result='${JSON.stringify(resultMetadata).replace(/'/g, "\'")}'
                  onmousedown="handleResultMouseDown(event)"
                  onmouseup="handleResultMouseUp(event)">
                 <!-- Copy button only -->
@@ -43006,6 +43035,29 @@ function openSearchResultModalFromCard(cardElement) {
 
 // Open search result in modal popup
 function openSearchResultModal(result) {
+    // Fetch full content from CodeContent using the identifiers
+    const fullContent = appData.CodeContent.find(content =>
+        content.ModelCodeID === result.codeId &&
+        content.ModelCodeVersionID === result.versionId &&
+        content.ChapterID === result.chapterId &&
+        (content.Section || 'General') === result.section &&
+        (content.Subsection || '') === result.subsection
+    );
+
+    // If full content found, update result with complete data
+    if (fullContent) {
+        result.contentEN = fullContent.ContentEN || '';
+        result.contentKR = fullContent.ContentKR || '';
+        result.titleEN = fullContent.TitleEN || result.titleEN;
+        result.titleKR = fullContent.TitleKR || result.titleKR;
+        console.log('Full content loaded:', {
+            contentENLength: result.contentEN.length,
+            contentKRLength: result.contentKR.length
+        });
+    } else {
+        console.warn('Could not find full content for:', result);
+    }
+
     // Create modal if it doesn't exist
     let modal = document.getElementById('searchResultModal');
     if (!modal) {
