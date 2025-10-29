@@ -374,15 +374,16 @@
     .result-collapsible {
       cursor: pointer;
     }
-    
+
     .result-content {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.3s ease;
+      /* Default: visible (detail view) */
+      max-height: none;
+      overflow: visible;
+      transition: all 0.3s ease;
     }
-    
+
     .result-content.expanded {
-      max-height: 500px;
+      max-height: none;
     }
 
     /* Added modal styles for section content popup */
@@ -42637,8 +42638,8 @@ function displayTopSearchResults(exactMatches, partialMatches, keyword) {
                     <div class="flex items-center gap-4">
                         <h1 class="text-3xl font-bold text-[#24305E]">검색 결과</h1>
                         <p class="text-lg text-gray-600" id="topSearchKeyword"></p>
-                        <button onclick="toggleSearchResults()" class="ml-auto p-2 hover:bg-gray-100 rounded-lg transition-colors" title="목록 보기">
-                            <i data-lucide="list" class="w-7 h-7 text-gray-600" id="toggleSearchIcon"></i>
+                        <button onclick="toggleSearchResults()" class="ml-auto p-2 hover:bg-gray-100 rounded-lg transition-colors" title="목록 보기/펼쳐보기">
+                            <i data-lucide="align-left" class="w-7 h-7 text-gray-600" id="toggleSearchIcon"></i>
                         </button>
                     </div>
                 </div>
@@ -42687,13 +42688,7 @@ function displayTopSearchResults(exactMatches, partialMatches, keyword) {
         const highlightedContentEN = highlightKeyword(contextContentEN, keyword, isExactMatch, 'default');
         const highlightedContentKR = highlightKeyword(contextContentKR, keyword, isExactMatch, 'contentKR');
 
-        // Check if content is long enough to need collapse/expand
-        const totalContentLength = (result.contentEN || '').length + (result.contentKR || '').length;
-        const needsToggle = totalContentLength > 300;
-
-        // Clean card design with left border to distinguish EN/KR content
         // Store only identifiers in card data - content will be fetched when modal opens
-        // Do NOT include contentEN/contentKR as they are too large for HTML data attributes
         const resultMetadata = {
             code: result.code,
             year: result.year,
@@ -42714,22 +42709,8 @@ function displayTopSearchResults(exactMatches, partialMatches, keyword) {
                  data-result='${resultDataJson}'
                  onclick="openSearchResultModalFromCard(document.getElementById('search-result-${index}'))">
 
-                <!-- Layout: [Toggle Icon] [Search Results] [Keywords] -->
+                <!-- Layout: [Search Results] -->
                 <div class="flex gap-4">
-                    <!-- Toggle Icon (left) -->
-                    ${needsToggle ? `
-                    <div class="flex-shrink-0 pt-1">
-                        <button onclick="event.stopPropagation(); toggleContent(${index})"
-                                class="text-[#24305E] hover:text-[#F76C6C] transition-colors">
-                            <svg id="toggle-icon-${index}" class="w-5 h-5 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                            </svg>
-                        </button>
-                    </div>
-                    ` : `
-                    <div class="flex-shrink-0 pt-1 w-5"></div>
-                    `}
-
                     <!-- Search Results (center) -->
                     <div class="flex-1 min-w-0">
                         <!-- Header -->
@@ -42738,25 +42719,14 @@ function displayTopSearchResults(exactMatches, partialMatches, keyword) {
                         </div>
 
                         <!-- Titles -->
-                        <h4 class="font-semibold text-[#24305E] text-lg mb-2 hover:text-[#F76C6C] transition-colors">${sectionNum}${result.titleEN ? ' ' + highlightedTitleEN : ''}</h4>
-                        ${result.titleKR ? `<p class="text-gray-600 text-base leading-relaxed mb-3">${highlightedTitleKR}</p>` : ''}
+                        <h4 class="result-title font-semibold text-[#24305E] text-lg mb-2 hover:text-[#F76C6C] transition-colors">${sectionNum}${result.titleEN ? ' ' + highlightedTitleEN : ''}</h4>
+                        ${result.titleKR ? `<p class="result-title-kr text-gray-600 text-base leading-relaxed mb-3">${highlightedTitleKR}</p>` : ''}
 
-                        <!-- Content with left border -->
-                        ${needsToggle ? `
-                        <div id="content-preview-${index}" class="overflow-hidden transition-all duration-300" style="max-height: 0px;">
+                        <!-- Content with left border (always visible by default) -->
+                        <div class="result-content mt-3">
                             ${highlightedContentEN ? `<div class="pl-3 mb-2"><p class="text-gray-700 text-sm leading-relaxed">${highlightedContentEN}</p></div>` : ''}
                             ${highlightedContentKR ? `<div class="border-l-4 border-yellow-400 pl-3"><p class="text-gray-600 text-sm leading-relaxed">${highlightedContentKR}</p></div>` : ''}
                         </div>
-                        ` : `
-                        <div class="mt-3">
-                            ${highlightedContentEN ? `<div class="pl-3 mb-2"><p class="text-gray-700 text-sm leading-relaxed">${highlightedContentEN}</p></div>` : ''}
-                            ${highlightedContentKR ? `<div class="border-l-4 border-yellow-400 pl-3"><p class="text-gray-600 text-sm leading-relaxed">${highlightedContentKR}</p></div>` : ''}
-                        </div>
-                        `}
-                    </div>
-
-                    <!-- Keywords (right) -->
-                    <div class="flex-shrink-0 flex flex-col gap-1 items-end">
                     </div>
                 </div>
             </div>
@@ -42766,6 +42736,22 @@ function displayTopSearchResults(exactMatches, partialMatches, keyword) {
     html += '</div>';
 
     resultsContainer.innerHTML = html;
+
+    // Apply initial view mode state (default is detail view)
+    setTimeout(() => {
+        const allResultContents = searchResultsSection.querySelectorAll('.result-content');
+        const allTitleKR = searchResultsSection.querySelectorAll('.result-title-kr');
+
+        if (isListViewMode) {
+            // List view: hide content
+            allResultContents.forEach(content => content.style.display = 'none');
+            allTitleKR.forEach(kr => kr.style.display = 'none');
+        } else {
+            // Detail view: show all content (DEFAULT)
+            allResultContents.forEach(content => content.style.display = 'block');
+            allTitleKR.forEach(kr => kr.style.display = 'block');
+        }
+    }, 0);
 }
 
 function performSearch() {
@@ -43281,22 +43267,47 @@ function closeSearchResultModal() {
 
 // Toggle search results visibility
 function toggleSearchResults() {
-    const container = document.getElementById('searchResultsContainer');
     const icon = document.getElementById('toggleSearchIcon');
 
-    if (container && icon) {
-        if (container.style.display === 'none') {
-            container.style.display = 'block';
-            icon.setAttribute('data-lucide', 'list');
-        } else {
-            container.style.display = 'none';
-            icon.setAttribute('data-lucide', 'layout-grid');
-        }
+    // Toggle mode
+    isListViewMode = !isListViewMode;
 
-        // Reinitialize lucide icons
-        if (typeof lucide !== 'undefined') {
-            lucide.createIcons();
+    // Get all result content and Korean title elements within search results
+    const searchResultsSection = document.getElementById('searchResultsSection');
+    if (!searchResultsSection) return;
+
+    const allResultContents = searchResultsSection.querySelectorAll('.result-content');
+    const allTitleKR = searchResultsSection.querySelectorAll('.result-title-kr');
+
+    if (isListViewMode) {
+        // List view: hide content and Korean titles, show only English titles
+        allResultContents.forEach(content => {
+            content.style.display = 'none';
+        });
+        allTitleKR.forEach(kr => {
+            kr.style.display = 'none';
+        });
+        if (icon) {
+            // In list view, show 'file-text' icon (indicates can switch to detail view)
+            icon.setAttribute('data-lucide', 'file-text');
         }
+    } else {
+        // Detail view: show all content (DEFAULT)
+        allResultContents.forEach(content => {
+            content.style.display = 'block';
+        });
+        allTitleKR.forEach(kr => {
+            kr.style.display = 'block';
+        });
+        if (icon) {
+            // In detail view, show 'align-left' icon (indicates can switch to list view)
+            icon.setAttribute('data-lucide', 'align-left');
+        }
+    }
+
+    // Reinitialize lucide icons
+    if (typeof lucide !== 'undefined') {
+        lucide.createIcons();
     }
 }
 
