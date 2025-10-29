@@ -43016,11 +43016,7 @@ function openSearchResultModal(result) {
         modal.className = 'fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center hidden';
         modal.innerHTML = `
             <div class="bg-white rounded-lg shadow-2xl max-w-5xl w-full mx-4 max-h-[90vh] overflow-hidden">
-                <div class="flex items-center justify-between p-6 border-b border-gray-200">
-                    <div class="flex-1">
-                        <h2 id="searchModalTitle" class="text-2xl font-bold text-[#24305E]"></h2>
-                        <p id="searchModalLocation" class="text-sm text-gray-500 mt-2"></p>
-                    </div>
+                <div class="flex justify-end p-4">
                     <button
                         onclick="closeSearchResultModal()"
                         class="p-2 hover:bg-gray-100 rounded-lg transition-colors"
@@ -43030,7 +43026,7 @@ function openSearchResultModal(result) {
                         </svg>
                     </button>
                 </div>
-                <div id="searchModalContent" class="p-8 overflow-y-auto max-h-[calc(90vh-100px)]"></div>
+                <div id="searchModalContent" class="px-8 pb-8 overflow-y-auto max-h-[calc(90vh-100px)]"></div>
             </div>
         `;
         document.body.appendChild(modal);
@@ -43060,7 +43056,7 @@ function openSearchResultModal(result) {
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
                     </svg>
-                    <span class="font-medium text-sm">조문으로 이동</span>
+                    <span class="font-medium text-sm">본문 이동</span>
                 </button>
                 <button class="p-2 hover:bg-gray-200 rounded-lg transition-colors" title="복사" onclick="copyModalContent(this)">
                     <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -43100,33 +43096,17 @@ function openSearchResultModal(result) {
         console.warn('[DEBUG] ⚠️ No English content to display');
     }
 
-    // Add content in Korean if exists
+    // Add content in Korean if exists (with yellow left border)
     if (result.contentKR && result.contentKR.trim()) {
-        contentHTML += `<p class="text-gray-600 text-sm leading-relaxed mb-3 pr-44">${result.contentKR}</p>`;
+        contentHTML += `<p class="text-gray-600 text-sm leading-relaxed mb-3 pr-44 border-l-4 border-[#F8E9A1] pl-4">${result.contentKR}</p>`;
     } else {
         console.warn('[DEBUG] ⚠️ No Korean content to display');
     }
 
     contentHTML += `</div>`;
 
-    // Update modal title and location using UNIQUE IDs
-    const modalTitleElement = document.getElementById('searchModalTitle');
-    const modalLocationElement = document.getElementById('searchModalLocation');
+    // Update modal content
     const modalContentElement = document.getElementById('searchModalContent');
-
-    if (modalTitleElement) {
-        modalTitleElement.textContent = sectionNum + (result.titleEN ? ' ' + result.titleEN : '');
-        console.log('[DEBUG] ✅ Modal title set:', modalTitleElement.textContent);
-    } else {
-        console.error('[DEBUG] ❌ searchModalTitle element not found!');
-    }
-
-    if (modalLocationElement) {
-        modalLocationElement.textContent = `${result.code} ${result.year} - Chapter ${result.chapter}: ${result.chapterTitle}`;
-        console.log('[DEBUG] ✅ Modal location set:', modalLocationElement.textContent);
-    } else {
-        console.error('[DEBUG] ❌ searchModalLocation element not found!');
-    }
 
     if (modalContentElement) {
         modalContentElement.innerHTML = contentHTML;
