@@ -43149,8 +43149,8 @@ function openSearchResultModal(result) {
             <div class="bg-white rounded-lg shadow-2xl max-w-5xl w-full mx-4 max-h-[90vh] overflow-hidden">
                 <div class="flex items-center justify-between p-6 border-b border-gray-200">
                     <div class="flex-1">
-                        <h2 id="modalTitle" class="text-2xl font-bold text-[#24305E]"></h2>
-                        <p id="modalLocation" class="text-sm text-gray-500 mt-2"></p>
+                        <h2 id="searchModalTitle" class="text-2xl font-bold text-[#24305E]"></h2>
+                        <p id="searchModalLocation" class="text-sm text-gray-500 mt-2"></p>
                     </div>
                     <button
                         onclick="closeSearchResultModal()"
@@ -43161,7 +43161,7 @@ function openSearchResultModal(result) {
                         </svg>
                     </button>
                 </div>
-                <div id="modalContent" class="p-8 overflow-y-auto max-h-[calc(90vh-100px)]"></div>
+                <div id="searchModalContent" class="p-8 overflow-y-auto max-h-[calc(90vh-100px)]"></div>
             </div>
         `;
         document.body.appendChild(modal);
@@ -43240,15 +43240,36 @@ function openSearchResultModal(result) {
 
     contentHTML += `</div>`;
 
-    // Update modal title and location
-    document.getElementById('modalTitle').textContent = sectionNum + (result.titleEN ? ' ' + result.titleEN : '');
-    document.getElementById('modalLocation').textContent = `${result.code} ${result.year} - Chapter ${result.chapter}: ${result.chapterTitle}`;
-    document.getElementById('modalContent').innerHTML = contentHTML;
+    // Update modal title and location using UNIQUE IDs
+    const modalTitleElement = document.getElementById('searchModalTitle');
+    const modalLocationElement = document.getElementById('searchModalLocation');
+    const modalContentElement = document.getElementById('searchModalContent');
 
-    console.log('[DEBUG] Modal HTML length:', contentHTML.length);
+    if (modalTitleElement) {
+        modalTitleElement.textContent = sectionNum + (result.titleEN ? ' ' + result.titleEN : '');
+        console.log('[DEBUG] ✅ Modal title set:', modalTitleElement.textContent);
+    } else {
+        console.error('[DEBUG] ❌ searchModalTitle element not found!');
+    }
+
+    if (modalLocationElement) {
+        modalLocationElement.textContent = `${result.code} ${result.year} - Chapter ${result.chapter}: ${result.chapterTitle}`;
+        console.log('[DEBUG] ✅ Modal location set:', modalLocationElement.textContent);
+    } else {
+        console.error('[DEBUG] ❌ searchModalLocation element not found!');
+    }
+
+    if (modalContentElement) {
+        modalContentElement.innerHTML = contentHTML;
+        console.log('[DEBUG] ✅ Modal content HTML set, length:', contentHTML.length);
+        console.log('[DEBUG] ✅ Modal content element innerHTML length:', modalContentElement.innerHTML.length);
+    } else {
+        console.error('[DEBUG] ❌ searchModalContent element not found!');
+    }
 
     // Show modal
     modal.classList.remove('hidden');
+    console.log('[DEBUG] ✅ Modal shown (hidden class removed)');
 }
 
 function closeSearchResultModal() {
