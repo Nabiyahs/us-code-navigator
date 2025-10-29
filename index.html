@@ -43052,12 +43052,13 @@ function openSearchResultModal(result) {
         <div class="bg-gray-50 p-6 rounded-lg relative" data-section="${sectionNum}" data-code="${result.code}" data-year="${result.year}" data-chapter="${result.chapter}">
             <!-- Copy and Navigate buttons -->
             <div class="absolute top-4 right-4 flex gap-2">
-                <button class="p-2 hover:bg-gray-200 rounded-lg transition-colors"
+                <button class="flex items-center gap-2 px-4 py-2 bg-[#F76C6C] text-white hover:bg-[#e55a5a] rounded-lg transition-colors shadow-md"
                         title="해당 조문으로 바로가기"
                         onclick="navigateToLibraryFromModal()">
-                    <svg class="w-5 h-5 text-[#F76C6C]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
                     </svg>
+                    <span class="font-medium text-sm">조문으로 이동</span>
                 </button>
                 <button class="p-2 hover:bg-gray-200 rounded-lg transition-colors" title="복사" onclick="copyModalContent(this)">
                     <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -43067,29 +43068,29 @@ function openSearchResultModal(result) {
             </div>
 
             <!-- Location and Index tags -->
-            <div class="flex items-center gap-2 mb-3 flex-wrap pr-24">
+            <div class="flex items-center gap-2 mb-3 flex-wrap pr-44">
                 <span class="text-sm bg-[#A8D0E6] text-[#24305E] font-semibold px-3 py-1 rounded">${result.code} ${result.year}: Chapter ${result.chapter} - ${sectionNum}</span>
             </div>
 
             <!-- Section title -->
-            <div class="flex items-center gap-2 mb-3 pr-24">
+            <div class="flex items-center gap-2 mb-3 pr-44">
                 <h4 class="font-semibold text-[#24305E] text-lg">${sectionNum}${result.titleEN ? ' ' + result.titleEN : ''}</h4>
             </div>
     `;
 
     // Add title in Korean if exists
     if (result.titleKR) {
-        contentHTML += `<p class="text-gray-600 text-base leading-relaxed mb-4 pr-24">${result.titleKR}</p>`;
+        contentHTML += `<p class="text-gray-600 text-base leading-relaxed mb-4 pr-44">${result.titleKR}</p>`;
     }
 
     // Add content in English if exists
     if (result.contentEN) {
-        contentHTML += `<p class="text-gray-700 text-sm leading-relaxed mb-4 pr-24">${result.contentEN}</p>`;
+        contentHTML += `<p class="text-gray-700 text-sm leading-relaxed mb-4 pr-44">${result.contentEN}</p>`;
     }
 
     // Add content in Korean if exists
     if (result.contentKR) {
-        contentHTML += `<p class="text-gray-600 text-sm leading-relaxed mb-3 pr-24">${result.contentKR}</p>`;
+        contentHTML += `<p class="text-gray-600 text-sm leading-relaxed mb-3 pr-44">${result.contentKR}</p>`;
     }
 
     contentHTML += `</div>`;
