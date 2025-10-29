@@ -42648,8 +42648,8 @@ function displayTopSearchResults(exactMatches, partialMatches, keyword) {
         // Extract context around keyword first, then highlight
         const contextTitleEN = extractContextAroundKeyword(result.titleEN, keyword, 150);
         const contextTitleKR = extractContextAroundKeyword(result.titleKR, keyword, 150);
-        const contextContentEN = extractContextAroundKeyword(result.contentEN, keyword, 400);
-        const contextContentKR = extractContextAroundKeyword(result.contentKR, keyword, 400);
+        const contextContentEN = extractContextAroundKeyword(result.contentEN, keyword, 800);
+        const contextContentKR = extractContextAroundKeyword(result.contentKR, keyword, 800);
 
         // Then apply highlighting
         const highlightedTitleEN = highlightKeyword(contextTitleEN, keyword, isExactMatch, 'default');
@@ -42699,12 +42699,12 @@ function displayTopSearchResults(exactMatches, partialMatches, keyword) {
                         <!-- Content with left border -->
                         ${needsToggle ? `
                         <div id="content-preview-${index}" class="overflow-hidden transition-all duration-300" style="max-height: 0px;">
-                            ${highlightedContentEN ? `<div class="border-l-4 border-yellow-400 pl-3 mb-2"><p class="text-gray-700 text-sm leading-relaxed">${highlightedContentEN}</p></div>` : ''}
+                            ${highlightedContentEN ? `<div class="pl-3 mb-2"><p class="text-gray-700 text-sm leading-relaxed">${highlightedContentEN}</p></div>` : ''}
                             ${highlightedContentKR ? `<div class="border-l-4 border-yellow-400 pl-3"><p class="text-gray-600 text-sm leading-relaxed">${highlightedContentKR}</p></div>` : ''}
                         </div>
                         ` : `
                         <div class="mt-3">
-                            ${highlightedContentEN ? `<div class="border-l-4 border-yellow-400 pl-3 mb-2"><p class="text-gray-700 text-sm leading-relaxed">${highlightedContentEN}</p></div>` : ''}
+                            ${highlightedContentEN ? `<div class="pl-3 mb-2"><p class="text-gray-700 text-sm leading-relaxed">${highlightedContentEN}</p></div>` : ''}
                             ${highlightedContentKR ? `<div class="border-l-4 border-yellow-400 pl-3"><p class="text-gray-600 text-sm leading-relaxed">${highlightedContentKR}</p></div>` : ''}
                         </div>
                         `}
@@ -42712,7 +42712,6 @@ function displayTopSearchResults(exactMatches, partialMatches, keyword) {
 
                     <!-- Keywords (right) -->
                     <div class="flex-shrink-0 flex flex-col gap-1 items-end">
-                        <span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">${isExactMatch ? 'Exact' : 'Partial'}</span>
                     </div>
                 </div>
             </div>
