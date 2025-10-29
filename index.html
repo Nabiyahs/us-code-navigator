@@ -714,7 +714,7 @@
 <header class="bg-white border-b border-gray-200 shadow-sm sticky top-0 z-10">
 <div class="px-8 py-4 flex items-center justify-between">
 <div class="flex items-center gap-4">
-<button class="p-2 hover:bg-gray-100 rounded-lg transition-colors hidden" id="libraryBackButton" onclick="goBackFromLibrary()" title="돌아가기">
+<button class="p-2 hover:bg-gray-100 rounded-lg transition-colors" id="libraryBackButton" onclick="goBackFromLibrary()" title="돌아가기" style="display: none;">
 <svg class="w-6 h-6 text-[#24305E]" fill="none" stroke="currentColor" viewbox="0 0 24 24">
 <path d="M15 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
 </svg>
@@ -43268,12 +43268,16 @@ function navigateToLibraryFromModal() {
         const currentSection = document.querySelector('.section-content.active');
         if (currentSection) {
             window.libraryNavigationOrigin = currentSection.id;
+            console.log('[Navigation] Saved origin section:', currentSection.id);
         }
 
         // Show back button
         const backButton = document.getElementById('libraryBackButton');
         if (backButton) {
-            backButton.classList.remove('hidden');
+            backButton.style.display = 'block';
+            console.log('[Navigation] Back button shown');
+        } else {
+            console.error('[Navigation] Back button not found!');
         }
 
         // Switch to library and load the code
@@ -43287,20 +43291,28 @@ function navigateToLibraryFromModal() {
 }
 
 function goBackFromLibrary() {
+    console.log('[Navigation] Going back from library');
+
     // Hide back button
     const backButton = document.getElementById('libraryBackButton');
     if (backButton) {
-        backButton.classList.add('hidden');
+        backButton.style.display = 'none';
+        console.log('[Navigation] Back button hidden');
     }
 
     // Go back to origin section
     if (window.libraryNavigationOrigin) {
+        console.log('[Navigation] Returning to section:', window.libraryNavigationOrigin);
         document.querySelectorAll('.section-content').forEach(s => s.classList.remove('active'));
         const originSection = document.getElementById(window.libraryNavigationOrigin);
         if (originSection) {
             originSection.classList.add('active');
+            console.log('[Navigation] Origin section activated');
         }
         window.libraryNavigationOrigin = null;
+    } else {
+        console.warn('[Navigation] No origin section saved, going to home');
+        showSection('home');
     }
 }
 
