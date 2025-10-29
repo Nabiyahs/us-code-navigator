@@ -1,0 +1,220 @@
+diff --git a/index.html b/index.html
+index fb0dd5e..ac63bf0 100644
+--- a/index.html
++++ b/index.html
+@@ -517,7 +517,7 @@
+ <!-- Header height now matches sidebar header -->
+ <header class="bg-white border-b border-gray-200 sticky top-0 shadow-sm z-20">
+ <div class="px-8 py-4">
+-<div class="max-w-2xl mx-auto search-input-wrapper">
++<form class="max-w-2xl mx-auto search-input-wrapper" id="topSearchForm" onsubmit="return false;">
+ <input class="search-input w-full px-4 py-3 pl-12 pr-24 border-2 border-gray-300 rounded-lg text-[#24305E] transition-all" id="topSearchInput" placeholder="Search codes, keywords, chapters..." type="text"/>
+ <svg class="w-5 h-5 absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+ <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+@@ -532,7 +532,7 @@
+ <path d="M13 7l5 5m0 0l-5 5m5-5H6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+ </svg>
+ </button>
+-</div>
++</form>
+ </div>
+ </header>
+ <!-- Home Section -->
+@@ -21472,7 +21472,7 @@ Pelev = Pressure due to elevation difference(표고차로 인한 압력)
+ <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+ <!-- Advanced Search Card Search Bar -->
+ <div class="mb-6">
+-<div class="search-input-wrapper" style="max-width: 100%;">
++<form class="search-input-wrapper" id="advancedSearchForm" style="max-width: 100%;" onsubmit="return false;">
+ <input class="search-input w-full px-4 py-2.5 pl-10 pr-20 border-2 border-gray-300 rounded-lg text-[#24305E] transition-all text-sm" id="advancedSearchInput" placeholder="Search codes, keywords, chapters..." type="text"/>
+ <svg class="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+ <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+@@ -21487,7 +21487,7 @@ Pelev = Pressure due to elevation difference(표고차로 인한 압력)
+ <path d="M13 7l5 5m0 0l-5 5m5-5H6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+ </svg>
+ </button>
+-</div>
++</form>
+ </div>
+ 
+ <div class="border-t border-gray-200 pt-4">
+@@ -42508,8 +42508,15 @@ function switchToLibraryCode(codeId, versionId) {
+ 
+ // Search function for top search bar
+ function performTopSearch() {
++    console.debug('[Search] performTopSearch() called');
+     const query = document.getElementById('topSearchInput').value.trim();
+-    if (!query) return;
++    console.debug('[Search] topSearchInput value:', query);
++
++    if (!query) {
++        console.debug('[Search] Empty query, aborting');
++        return;
++    }
++    console.debug('[Search] Query valid, proceeding with search');
+ 
+     // Clear the top search input
+     document.getElementById('topSearchInput').value = '';
+@@ -42520,8 +42527,17 @@ function performTopSearch() {
+ 
+ // Search function with query parameter (used by both top search and advanced search)
+ function performTopSearchWithQuery(query) {
++    console.debug('[Search] performTopSearchWithQuery() called with:', query);
+     if (!query) return;
+ 
++    // Log visibility BEFORE changes
++    const resultsSection = document.getElementById('searchResultsSection');
++    console.debug('[Search] searchResultsSection before:', {
++        element: resultsSection ? 'exists' : 'null',
++        display: resultsSection ? window.getComputedStyle(resultsSection).display : 'n/a',
++        hasActiveClass: resultsSection ? resultsSection.classList.contains('active') : false
++    });
++
+     // Switch to search results section (not advanced search)
+     document.querySelectorAll('.section-content').forEach(s => s.classList.remove('active'));
+     document.getElementById('searchResultsSection').classList.add('active');
+@@ -42529,6 +42545,13 @@ function performTopSearchWithQuery(query) {
+     // Update sidebar
+     document.querySelectorAll('.sidebar-item').forEach(item => item.classList.remove('active'));
+ 
++    // Log visibility AFTER changes
++    console.debug('[Search] searchResultsSection after:', {
++        hasActiveClass: resultsSection.classList.contains('active'),
++        display: window.getComputedStyle(resultsSection).display,
++        visibility: window.getComputedStyle(resultsSection).visibility
++    });
++
+     // Perform search across all codes with the keyword
+     const modelCodeIds = new Set(['MC001', 'MC007', 'MC008', 'MC009']);
+     const exactMatches = [];
+@@ -42595,7 +42618,14 @@ function performTopSearchWithQuery(query) {
+ 
+ // Display top search results with detailed preview (5 lines)
+ function displayTopSearchResults(exactMatches, partialMatches, keyword) {
++    console.debug('[Search] displayTopSearchResults() called', {
++        exactMatches: exactMatches.length,
++        partialMatches: partialMatches.length,
++        keyword: keyword
++    });
++
+     const searchResultsSection = document.getElementById('searchResultsSection');
++    console.debug('[Search] searchResultsSection element:', searchResultsSection ? 'exists' : 'null');
+     if (!searchResultsSection) return;
+ 
+     // Find or create results container
+@@ -43234,8 +43264,14 @@ function clearAdvancedSearchInput() {
+ }
+ 
+ function performAdvancedSearch() {
++    console.debug('[Search] performAdvancedSearch() called');
+     const query = document.getElementById('advancedSearchInput').value.trim();
+-    if (!query) return;
++    console.debug('[Search] advancedSearchInput value:', query);
++
++    if (!query) {
++        console.debug('[Search] Empty query, aborting');
++        return;
++    }
+ 
+     // Switch to search results section (not advanced search)
+     document.querySelectorAll('.section-content').forEach(s => s.classList.remove('active'));
+@@ -43456,6 +43492,7 @@ function closeImageModal() {
+ // === Page Initialization ===
+ document.addEventListener('DOMContentLoaded', function() {
+     console.log('US Code Navigator initialized with schema-based hierarchy');
++    console.debug('[Init] DOMContentLoaded fired, setting up event listeners');
+     console.log('Loaded data:', appData);
+ 
+     // Library card click handlers
+@@ -43511,28 +43548,84 @@ document.addEventListener('DOMContentLoaded', function() {
+         });
+     }
+ 
+-    // Enter key in search inputs
++    // === INSTRUMENTED SEARCH INPUT HANDLERS ===
++    console.debug('[Init] Setting up search input event handlers');
++
++    // Top search form submit handler
++    const topSearchForm = document.getElementById('topSearchForm');
++    console.debug('[Init] topSearchForm element:', topSearchForm ? 'exists' : 'null');
++    if (topSearchForm) {
++        topSearchForm.addEventListener('submit', function(e) {
++            console.debug('[Event] topSearchForm submit event fired');
++            e.preventDefault();
++            console.debug('[Event] preventDefault() called on form submit');
++            performTopSearch();
++        });
++    }
++
++    // Advanced search form submit handler
++    const advancedSearchForm = document.getElementById('advancedSearchForm');
++    console.debug('[Init] advancedSearchForm element:', advancedSearchForm ? 'exists' : 'null');
++    if (advancedSearchForm) {
++        advancedSearchForm.addEventListener('submit', function(e) {
++            console.debug('[Event] advancedSearchForm submit event fired');
++            e.preventDefault();
++            console.debug('[Event] preventDefault() called on form submit');
++            performAdvancedSearch();
++        });
++    }
++
++    // Keyword input (keydown with IME handling)
+     const keywordInput = document.getElementById('keywordInput');
++    console.debug('[Init] keywordInput element:', keywordInput ? 'exists' : 'null');
+     if (keywordInput) {
+-        keywordInput.addEventListener('keypress', function(e) {
+-            if (e.key === 'Enter') performSearch();
++        keywordInput.addEventListener('keydown', function(e) {
++            console.debug('[Event] keywordInput keydown:', e.key, 'isComposing:', e.isComposing);
++            if (e.key === 'Enter' && !e.isComposing) {
++                console.debug('[Event] Enter key detected (not composing), calling performSearch()');
++                e.preventDefault();
++                performSearch();
++            }
+         });
+     }
+ 
++    // Top search input (keydown with IME handling)
+     const topSearchInput = document.getElementById('topSearchInput');
++    console.debug('[Init] topSearchInput element:', topSearchInput ? 'exists' : 'null');
+     if (topSearchInput) {
+-        topSearchInput.addEventListener('keypress', function(e) {
+-            if (e.key === 'Enter') performTopSearch();
++        topSearchInput.addEventListener('keydown', function(e) {
++            console.debug('[Event] topSearchInput keydown:', e.key, 'isComposing:', e.isComposing);
++            if (e.key === 'Enter' && !e.isComposing) {
++                console.debug('[Event] Enter key detected (not composing), calling performTopSearch()');
++                e.preventDefault();
++                performTopSearch();
++            }
+         });
+     }
+ 
++    // Advanced search input (keydown with IME handling)
+     const advancedSearchInput = document.getElementById('advancedSearchInput');
++    console.debug('[Init] advancedSearchInput element:', advancedSearchInput ? 'exists' : 'null');
+     if (advancedSearchInput) {
+-        advancedSearchInput.addEventListener('keypress', function(e) {
+-            if (e.key === 'Enter') performAdvancedSearch();
++        advancedSearchInput.addEventListener('keydown', function(e) {
++            console.debug('[Event] advancedSearchInput keydown:', e.key, 'isComposing:', e.isComposing);
++            if (e.key === 'Enter' && !e.isComposing) {
++                console.debug('[Event] advancedSearchInput Enter key detected (not composing), calling performAdvancedSearch()');
++                e.preventDefault();
++                performAdvancedSearch();
++            }
+         });
+     }
+ 
++    console.debug('[Init] All search event listeners attached');
++    console.debug('[Init] Elements check:', {
++        topSearchInput: !!topSearchInput,
++        advancedSearchInput: !!advancedSearchInput,
++        keywordInput: !!keywordInput,
++        topSearchForm: !!topSearchForm,
++        advancedSearchForm: !!advancedSearchForm
++    });
++
+     // Initialize lucide icons
+     if (typeof lucide !== 'undefined') {
+         lucide.createIcons();
