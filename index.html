@@ -43275,7 +43275,11 @@ function navigateToLibraryFromModal() {
         const backButton = document.getElementById('libraryBackButton');
         if (backButton) {
             backButton.style.display = 'block';
+            backButton.style.visibility = 'visible';
             console.log('[Navigation] Back button shown');
+            console.log('[Navigation] Button display:', backButton.style.display);
+            console.log('[Navigation] Button visibility:', backButton.style.visibility);
+            console.log('[Navigation] Button computed display:', window.getComputedStyle(backButton).display);
         } else {
             console.error('[Navigation] Back button not found!');
         }
@@ -43552,6 +43556,13 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('US Code Navigator initialized with schema-based hierarchy');
     console.debug('[Init] DOMContentLoaded fired, setting up event listeners');
     console.log('Loaded data:', appData);
+
+    // Initialize library back button (hide it initially)
+    const libraryBackButton = document.getElementById('libraryBackButton');
+    if (libraryBackButton) {
+        libraryBackButton.style.display = 'none';
+        console.log('[Init] Library back button initialized');
+    }
 
     // Library card click handlers
     document.querySelectorAll('.code-card[data-version-id]').forEach(card => {
