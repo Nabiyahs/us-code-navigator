@@ -42692,7 +42692,8 @@ function displayTopSearchResults(exactMatches, partialMatches, keyword) {
         const needsToggle = totalContentLength > 300;
 
         // Clean card design with left border to distinguish EN/KR content
-        // Store only identifiers in card data - full content will be fetched when modal opens
+        // Store only identifiers in card data - content will be fetched when modal opens
+        // Do NOT include contentEN/contentKR as they are too large for HTML data attributes
         const resultMetadata = {
             code: result.code,
             year: result.year,
@@ -42969,7 +42970,8 @@ function displaySearchResults(exactMatches, partialMatches, allFilteredResults, 
             displayContentKR = highlightKeyword(result.contentKR, keyword, isExactMatch, 'contentKR');
         }
 
-        // Store only identifiers in card data - full content will be fetched when modal opens
+        // Store only identifiers in card data - content will be fetched when modal opens
+        // Do NOT include contentEN/contentKR as they are too large for HTML data attributes
         const resultMetadata = {
             code: result.code,
             year: result.year,
@@ -43065,27 +43067,76 @@ function openSearchResultModalFromCard(cardElement) {
 
 // Open search result in modal popup
 function openSearchResultModal(result) {
-    // Fetch full content from CodeContent using the identifiers
-    const fullContent = appData.CodeContent.find(content =>
-        content.ModelCodeID === result.codeId &&
-        content.ModelCodeVersionID === result.versionId &&
-        content.ChapterID === result.chapterId &&
-        (content.Section || 'General') === result.section &&
-        (content.Subsection || '') === result.subsection
-    );
+    console.log('[DEBUG] openSearchResultModal called with result:', result);
+    console.log('[DEBUG] Looking for Section:', result.section, 'Subsection:', result.subsection);
 
-    // If full content found, update result with complete data
+    // Always fetch full content from CodeContent for accuracy
+    const fullContent = appData.CodeContent.find(content => {
+        // Match codeId, versionId, chapterId
+        const basicMatch = content.ModelCodeID === result.codeId &&
+                          content.ModelCodeVersionID === result.versionId &&
+                          content.ChapterID === result.chapterId;
+
+        if (!basicMatch) return false;
+
+        // Match Section: handle both null/'General' and numeric values
+        let sectionMatch = false;
+        if (result.section === 'General') {
+            sectionMatch = content.Section === null;
+        } else {
+            // Convert both to numbers for comparison if result.section is numeric
+            const resultSectionNum = typeof result.section === 'string' ? parseInt(result.section) : result.section;
+            sectionMatch = content.Section === resultSectionNum ||
+                          content.Section === result.section ||
+                          String(content.Section) === String(result.section);
+        }
+
+        if (!sectionMatch) return false;
+
+        // Match Subsection: handle null, empty string, and numeric values
+        const contentSub = content.Subsection === null || content.Subsection === '' ? '' : content.Subsection;
+        const resultSub = result.subsection === null || result.subsection === '' || result.subsection === undefined ? '' : result.subsection;
+        const subsectionMatch = contentSub === resultSub ||
+                               String(contentSub) === String(resultSub) ||
+                               (contentSub === '' && resultSub === '');
+
+        return subsectionMatch;
+    });
+
     if (fullContent) {
         result.contentEN = fullContent.ContentEN || '';
         result.contentKR = fullContent.ContentKR || '';
         result.titleEN = fullContent.TitleEN || result.titleEN;
         result.titleKR = fullContent.TitleKR || result.titleKR;
-        console.log('Full content loaded:', {
+        console.log('[DEBUG] ✅ Content loaded successfully:', {
+            titleEN: result.titleEN,
             contentENLength: result.contentEN.length,
             contentKRLength: result.contentKR.length
         });
     } else {
-        console.warn('Could not find full content for:', result);
+        console.error('[DEBUG] ❌ Could not find content for:', {
+            codeId: result.codeId,
+            versionId: result.versionId,
+            chapterId: result.chapterId,
+            section: result.section,
+            subsection: result.subsection
+        });
+
+        // Show available sections for debugging
+        const availableSections = appData.CodeContent
+            .filter(c => c.ModelCodeID === result.codeId &&
+                        c.ModelCodeVersionID === result.versionId &&
+                        c.ChapterID === result.chapterId)
+            .map(c => ({
+                Section: c.Section,
+                Subsection: c.Subsection,
+                TitleEN: c.TitleEN
+            }));
+        console.error('[DEBUG] Available sections in this chapter:', availableSections.slice(0, 5));
+
+        // Set empty content
+        result.contentEN = '';
+        result.contentKR = '';
     }
 
     // Create modal if it doesn't exist
@@ -43098,8 +43149,8 @@ function openSearchResultModal(result) {
             <div class="bg-white rounded-lg shadow-2xl max-w-5xl w-full mx-4 max-h-[90vh] overflow-hidden">
                 <div class="flex items-center justify-between p-6 border-b border-gray-200">
                     <div class="flex-1">
-                        <h2 id="modalTitle" class="text-2xl font-bold text-[#24305E]"></h2>
-                        <p id="modalLocation" class="text-sm text-gray-500 mt-2"></p>
+                        <h2 id="searchModalTitle" class="text-2xl font-bold text-[#24305E]"></h2>
+                        <p id="searchModalLocation" class="text-sm text-gray-500 mt-2"></p>
                     </div>
                     <button
                         onclick="closeSearchResultModal()"
@@ -43110,7 +43161,7 @@ function openSearchResultModal(result) {
                         </svg>
                     </button>
                 </div>
-                <div id="modalContent" class="p-8 overflow-y-auto max-h-[calc(90vh-100px)]"></div>
+                <div id="searchModalContent" class="p-8 overflow-y-auto max-h-[calc(90vh-100px)]"></div>
             </div>
         `;
         document.body.appendChild(modal);
@@ -43165,25 +43216,60 @@ function openSearchResultModal(result) {
         contentHTML += `<p class="text-gray-600 text-base leading-relaxed mb-4 pr-44">${result.titleKR}</p>`;
     }
 
+    // Debug: Check content availability
+    console.log('[DEBUG] Modal content check:', {
+        hasContentEN: !!result.contentEN,
+        contentENLength: result.contentEN?.length || 0,
+        hasContentKR: !!result.contentKR,
+        contentKRLength: result.contentKR?.length || 0
+    });
+
     // Add content in English if exists
-    if (result.contentEN) {
+    if (result.contentEN && result.contentEN.trim()) {
         contentHTML += `<p class="text-gray-700 text-sm leading-relaxed mb-4 pr-44">${result.contentEN}</p>`;
+    } else {
+        console.warn('[DEBUG] ⚠️ No English content to display');
     }
 
     // Add content in Korean if exists
-    if (result.contentKR) {
+    if (result.contentKR && result.contentKR.trim()) {
         contentHTML += `<p class="text-gray-600 text-sm leading-relaxed mb-3 pr-44">${result.contentKR}</p>`;
+    } else {
+        console.warn('[DEBUG] ⚠️ No Korean content to display');
     }
 
     contentHTML += `</div>`;
 
-    // Update modal title and location
-    document.getElementById('modalTitle').textContent = sectionNum + (result.titleEN ? ' ' + result.titleEN : '');
-    document.getElementById('modalLocation').textContent = `${result.code} ${result.year} - Chapter ${result.chapter}: ${result.chapterTitle}`;
-    document.getElementById('modalContent').innerHTML = contentHTML;
+    // Update modal title and location using UNIQUE IDs
+    const modalTitleElement = document.getElementById('searchModalTitle');
+    const modalLocationElement = document.getElementById('searchModalLocation');
+    const modalContentElement = document.getElementById('searchModalContent');
+
+    if (modalTitleElement) {
+        modalTitleElement.textContent = sectionNum + (result.titleEN ? ' ' + result.titleEN : '');
+        console.log('[DEBUG] ✅ Modal title set:', modalTitleElement.textContent);
+    } else {
+        console.error('[DEBUG] ❌ searchModalTitle element not found!');
+    }
+
+    if (modalLocationElement) {
+        modalLocationElement.textContent = `${result.code} ${result.year} - Chapter ${result.chapter}: ${result.chapterTitle}`;
+        console.log('[DEBUG] ✅ Modal location set:', modalLocationElement.textContent);
+    } else {
+        console.error('[DEBUG] ❌ searchModalLocation element not found!');
+    }
+
+    if (modalContentElement) {
+        modalContentElement.innerHTML = contentHTML;
+        console.log('[DEBUG] ✅ Modal content HTML set, length:', contentHTML.length);
+        console.log('[DEBUG] ✅ Modal content element innerHTML length:', modalContentElement.innerHTML.length);
+    } else {
+        console.error('[DEBUG] ❌ searchModalContent element not found!');
+    }
 
     // Show modal
     modal.classList.remove('hidden');
+    console.log('[DEBUG] ✅ Modal shown (hidden class removed)');
 }
 
 function closeSearchResultModal() {
