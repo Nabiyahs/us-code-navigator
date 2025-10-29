@@ -42661,44 +42661,59 @@ function displayTopSearchResults(exactMatches, partialMatches, keyword) {
         const totalContentLength = (result.contentEN || '').length + (result.contentKR || '').length;
         const needsToggle = totalContentLength > 300;
 
-        // Use reference.txt design with conditional collapse/expand functionality
+        // Clean card design with left border to distinguish EN/KR content
         const resultDataJson = JSON.stringify(result).replace(/'/g, "\\'");
         html += `
-            <div class="bg-gray-50 p-6 rounded-lg relative search-result-item"
+            <div class="bg-white border-2 border-gray-300 hover:border-[#A8D0E6] p-5 rounded-lg relative search-result-item transition-colors cursor-pointer"
                  id="search-result-${index}"
-                 data-result='${resultDataJson}'>
+                 data-result='${resultDataJson}'
+                 onclick="openSearchResultModalFromCard(document.getElementById('search-result-${index}'))">
 
-                <!-- Summary (always visible) -->
-                <div>
-                    <div class="flex items-center gap-2 mb-3 flex-wrap">
-                        <span class="text-sm bg-[#A8D0E6] text-[#24305E] font-semibold px-3 py-1 rounded">${result.code} ${result.year}: Ch.${result.chapter} - ${sectionNum}</span>
-                    </div>
-                    <h4 class="font-semibold text-[#24305E] text-lg mb-2 hover:text-[#F76C6C] transition-colors cursor-pointer"
-                        onclick="openSearchResultModalFromCard(document.getElementById('search-result-${index}'))">${sectionNum}${result.titleEN ? ' ' + highlightedTitleEN : ''}</h4>
-                    ${result.titleKR ? `<p class="text-gray-600 text-base leading-relaxed mb-3">${highlightedTitleKR}</p>` : ''}
-
+                <!-- Layout: [Toggle Icon] [Search Results] [Keywords] -->
+                <div class="flex gap-4">
+                    <!-- Toggle Icon (left) -->
                     ${needsToggle ? `
-                    <!-- Collapsible Content -->
-                    <div class="mt-3">
-                        <div id="content-preview-${index}" class="overflow-hidden transition-all duration-300" style="max-height: 120px;">
-                            ${highlightedContentEN ? `<p class="text-gray-700 text-sm leading-relaxed mb-2">${highlightedContentEN}</p>` : ''}
-                            ${highlightedContentKR ? `<p class="text-gray-600 text-sm leading-relaxed">${highlightedContentKR}</p>` : ''}
-                        </div>
-                        <button onclick="toggleContent(${index})"
-                                class="mt-2 flex items-center gap-1 text-[#24305E] hover:text-[#F76C6C] transition-colors text-sm font-medium">
-                            <span id="toggle-text-${index}">더보기</span>
-                            <svg id="toggle-icon-${index}" class="w-4 h-4 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="flex-shrink-0 pt-1">
+                        <button onclick="event.stopPropagation(); toggleContent(${index})"
+                                class="text-[#24305E] hover:text-[#F76C6C] transition-colors">
+                            <svg id="toggle-icon-${index}" class="w-5 h-5 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                             </svg>
                         </button>
                     </div>
                     ` : `
-                    <!-- Content (not collapsible) -->
-                    <div class="mt-3">
-                        ${highlightedContentEN ? `<p class="text-gray-700 text-sm leading-relaxed mb-2">${highlightedContentEN}</p>` : ''}
-                        ${highlightedContentKR ? `<p class="text-gray-600 text-sm leading-relaxed">${highlightedContentKR}</p>` : ''}
-                    </div>
+                    <div class="flex-shrink-0 pt-1 w-5"></div>
                     `}
+
+                    <!-- Search Results (center) -->
+                    <div class="flex-1 min-w-0">
+                        <!-- Header -->
+                        <div class="flex items-center gap-2 mb-3">
+                            <span class="text-sm bg-[#A8D0E6] text-[#24305E] font-semibold px-3 py-1 rounded">${result.code} ${result.year}: Ch.${result.chapter} - ${sectionNum}</span>
+                        </div>
+
+                        <!-- Titles -->
+                        <h4 class="font-semibold text-[#24305E] text-lg mb-2 hover:text-[#F76C6C] transition-colors">${sectionNum}${result.titleEN ? ' ' + highlightedTitleEN : ''}</h4>
+                        ${result.titleKR ? `<p class="text-gray-600 text-base leading-relaxed mb-3">${highlightedTitleKR}</p>` : ''}
+
+                        <!-- Content with left border -->
+                        ${needsToggle ? `
+                        <div id="content-preview-${index}" class="overflow-hidden transition-all duration-300" style="max-height: 0px;">
+                            ${highlightedContentEN ? `<div class="border-l-4 border-yellow-400 pl-3 mb-2"><p class="text-gray-700 text-sm leading-relaxed">${highlightedContentEN}</p></div>` : ''}
+                            ${highlightedContentKR ? `<div class="border-l-4 border-yellow-400 pl-3"><p class="text-gray-600 text-sm leading-relaxed">${highlightedContentKR}</p></div>` : ''}
+                        </div>
+                        ` : `
+                        <div class="mt-3">
+                            ${highlightedContentEN ? `<div class="border-l-4 border-yellow-400 pl-3 mb-2"><p class="text-gray-700 text-sm leading-relaxed">${highlightedContentEN}</p></div>` : ''}
+                            ${highlightedContentKR ? `<div class="border-l-4 border-yellow-400 pl-3"><p class="text-gray-600 text-sm leading-relaxed">${highlightedContentKR}</p></div>` : ''}
+                        </div>
+                        `}
+                    </div>
+
+                    <!-- Keywords (right) -->
+                    <div class="flex-shrink-0 flex flex-col gap-1 items-end">
+                        <span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">${isExactMatch ? 'Exact' : 'Partial'}</span>
+                    </div>
                 </div>
             </div>
         `;
@@ -43120,17 +43135,14 @@ function toggleSearchResults() {
 // Toggle content expand/collapse
 function toggleContent(index) {
     const contentDiv = document.getElementById(`content-preview-${index}`);
-    const toggleText = document.getElementById(`toggle-text-${index}`);
     const toggleIcon = document.getElementById(`toggle-icon-${index}`);
 
-    if (contentDiv && toggleText && toggleIcon) {
-        if (contentDiv.style.maxHeight === '120px' || !contentDiv.style.maxHeight) {
-            contentDiv.style.maxHeight = 'none';
-            toggleText.textContent = '접기';
+    if (contentDiv && toggleIcon) {
+        if (contentDiv.style.maxHeight === '0px' || !contentDiv.style.maxHeight) {
+            contentDiv.style.maxHeight = contentDiv.scrollHeight + 'px';
             toggleIcon.style.transform = 'rotate(180deg)';
         } else {
-            contentDiv.style.maxHeight = '120px';
-            toggleText.textContent = '더보기';
+            contentDiv.style.maxHeight = '0px';
             toggleIcon.style.transform = 'rotate(0deg)';
         }
     }
