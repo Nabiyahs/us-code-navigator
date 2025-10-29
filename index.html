@@ -43065,14 +43065,50 @@ function openSearchResultModalFromCard(cardElement) {
 
 // Open search result in modal popup
 function openSearchResultModal(result) {
+    // Debug logging
+    console.log('[DEBUG] openSearchResultModal called with result:', result);
+    console.log('[DEBUG] Searching for content with:', {
+        codeId: result.codeId,
+        versionId: result.versionId,
+        chapterId: result.chapterId,
+        section: result.section,
+        subsection: result.subsection
+    });
+
     // Fetch full content from CodeContent using the identifiers
-    const fullContent = appData.CodeContent.find(content =>
-        content.ModelCodeID === result.codeId &&
-        content.ModelCodeVersionID === result.versionId &&
-        content.ChapterID === result.chapterId &&
-        (content.Section || 'General') === result.section &&
-        (content.Subsection || '') === result.subsection
-    );
+    // Fix: Handle type comparison properly for Section and Subsection
+    const fullContent = appData.CodeContent.find(content => {
+        // Match codeId, versionId, chapterId
+        const basicMatch = content.ModelCodeID === result.codeId &&
+                          content.ModelCodeVersionID === result.versionId &&
+                          content.ChapterID === result.chapterId;
+
+        if (!basicMatch) return false;
+
+        // Match Section: handle both null/'General' and numeric values
+        const sectionMatch = (content.Section === null && result.section === 'General') ||
+                            (content.Section === result.section) ||
+                            (String(content.Section) === String(result.section));
+
+        if (!sectionMatch) return false;
+
+        // Match Subsection: handle null, empty string, and numeric values
+        const contentSub = content.Subsection === null || content.Subsection === '' ? '' : content.Subsection;
+        const resultSub = result.subsection === null || result.subsection === '' || result.subsection === undefined ? '' : result.subsection;
+        const subsectionMatch = contentSub === resultSub || String(contentSub) === String(resultSub);
+
+        // Debug logging for each match attempt
+        if (basicMatch && sectionMatch && !subsectionMatch) {
+            console.log('[DEBUG] Section match but subsection mismatch:', {
+                contentSub: contentSub,
+                resultSub: resultSub,
+                contentSubType: typeof contentSub,
+                resultSubType: typeof resultSub
+            });
+        }
+
+        return subsectionMatch;
+    });
 
     // If full content found, update result with complete data
     if (fullContent) {
@@ -43080,12 +43116,25 @@ function openSearchResultModal(result) {
         result.contentKR = fullContent.ContentKR || '';
         result.titleEN = fullContent.TitleEN || result.titleEN;
         result.titleKR = fullContent.TitleKR || result.titleKR;
-        console.log('Full content loaded:', {
+        console.log('[DEBUG] Full content loaded successfully:', {
             contentENLength: result.contentEN.length,
-            contentKRLength: result.contentKR.length
+            contentKRLength: result.contentKR.length,
+            titleEN: result.titleEN,
+            titleKR: result.titleKR
         });
     } else {
-        console.warn('Could not find full content for:', result);
+        console.error('[DEBUG] Could not find full content for:', result);
+        console.error('[DEBUG] Available matching chapters:',
+            appData.CodeContent.filter(c =>
+                c.ModelCodeID === result.codeId &&
+                c.ModelCodeVersionID === result.versionId &&
+                c.ChapterID === result.chapterId
+            ).map(c => ({
+                Section: c.Section,
+                Subsection: c.Subsection,
+                TitleEN: c.TitleEN
+            }))
+        );
     }
 
     // Create modal if it doesn't exist
