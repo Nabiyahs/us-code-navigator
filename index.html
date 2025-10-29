@@ -42692,7 +42692,7 @@ function displayTopSearchResults(exactMatches, partialMatches, keyword) {
         const needsToggle = totalContentLength > 300;
 
         // Clean card design with left border to distinguish EN/KR content
-        // Store only identifiers in card data - full content will be fetched when modal opens
+        // Store full content in card data for modal display
         const resultMetadata = {
             code: result.code,
             year: result.year,
@@ -42702,6 +42702,8 @@ function displayTopSearchResults(exactMatches, partialMatches, keyword) {
             subsection: result.subsection,
             titleEN: result.titleEN,
             titleKR: result.titleKR,
+            contentEN: result.contentEN,
+            contentKR: result.contentKR,
             codeId: result.codeId,
             versionId: result.versionId,
             chapterId: result.chapterId
@@ -42969,7 +42971,7 @@ function displaySearchResults(exactMatches, partialMatches, allFilteredResults, 
             displayContentKR = highlightKeyword(result.contentKR, keyword, isExactMatch, 'contentKR');
         }
 
-        // Store only identifiers in card data - full content will be fetched when modal opens
+        // Store full content in card data for modal display
         const resultMetadata = {
             code: result.code,
             year: result.year,
@@ -42979,6 +42981,8 @@ function displaySearchResults(exactMatches, partialMatches, allFilteredResults, 
             subsection: result.subsection,
             titleEN: result.titleEN,
             titleKR: result.titleKR,
+            contentEN: result.contentEN,
+            contentKR: result.contentKR,
             codeId: result.codeId,
             versionId: result.versionId,
             chapterId: result.chapterId
@@ -43065,76 +43069,50 @@ function openSearchResultModalFromCard(cardElement) {
 
 // Open search result in modal popup
 function openSearchResultModal(result) {
-    // Debug logging
     console.log('[DEBUG] openSearchResultModal called with result:', result);
-    console.log('[DEBUG] Searching for content with:', {
-        codeId: result.codeId,
-        versionId: result.versionId,
-        chapterId: result.chapterId,
-        section: result.section,
-        subsection: result.subsection
-    });
 
-    // Fetch full content from CodeContent using the identifiers
-    // Fix: Handle type comparison properly for Section and Subsection
-    const fullContent = appData.CodeContent.find(content => {
-        // Match codeId, versionId, chapterId
-        const basicMatch = content.ModelCodeID === result.codeId &&
-                          content.ModelCodeVersionID === result.versionId &&
-                          content.ChapterID === result.chapterId;
+    // Check if result already has content (from search results)
+    // If not, fetch from CodeContent as fallback
+    if (!result.contentEN && !result.contentKR) {
+        console.log('[DEBUG] Content not in result, fetching from CodeContent');
 
-        if (!basicMatch) return false;
+        const fullContent = appData.CodeContent.find(content => {
+            // Match codeId, versionId, chapterId
+            const basicMatch = content.ModelCodeID === result.codeId &&
+                              content.ModelCodeVersionID === result.versionId &&
+                              content.ChapterID === result.chapterId;
 
-        // Match Section: handle both null/'General' and numeric values
-        const sectionMatch = (content.Section === null && result.section === 'General') ||
-                            (content.Section === result.section) ||
-                            (String(content.Section) === String(result.section));
+            if (!basicMatch) return false;
 
-        if (!sectionMatch) return false;
+            // Match Section: handle both null/'General' and numeric values
+            const sectionMatch = (content.Section === null && result.section === 'General') ||
+                                (content.Section === result.section) ||
+                                (String(content.Section) === String(result.section));
 
-        // Match Subsection: handle null, empty string, and numeric values
-        const contentSub = content.Subsection === null || content.Subsection === '' ? '' : content.Subsection;
-        const resultSub = result.subsection === null || result.subsection === '' || result.subsection === undefined ? '' : result.subsection;
-        const subsectionMatch = contentSub === resultSub || String(contentSub) === String(resultSub);
+            if (!sectionMatch) return false;
 
-        // Debug logging for each match attempt
-        if (basicMatch && sectionMatch && !subsectionMatch) {
-            console.log('[DEBUG] Section match but subsection mismatch:', {
-                contentSub: contentSub,
-                resultSub: resultSub,
-                contentSubType: typeof contentSub,
-                resultSubType: typeof resultSub
-            });
-        }
+            // Match Subsection: handle null, empty string, and numeric values
+            const contentSub = content.Subsection === null || content.Subsection === '' ? '' : content.Subsection;
+            const resultSub = result.subsection === null || result.subsection === '' || result.subsection === undefined ? '' : result.subsection;
+            const subsectionMatch = contentSub === resultSub || String(contentSub) === String(resultSub);
 
-        return subsectionMatch;
-    });
-
-    // If full content found, update result with complete data
-    if (fullContent) {
-        result.contentEN = fullContent.ContentEN || '';
-        result.contentKR = fullContent.ContentKR || '';
-        result.titleEN = fullContent.TitleEN || result.titleEN;
-        result.titleKR = fullContent.TitleKR || result.titleKR;
-        console.log('[DEBUG] Full content loaded successfully:', {
-            contentENLength: result.contentEN.length,
-            contentKRLength: result.contentKR.length,
-            titleEN: result.titleEN,
-            titleKR: result.titleKR
+            return subsectionMatch;
         });
+
+        if (fullContent) {
+            result.contentEN = fullContent.ContentEN || '';
+            result.contentKR = fullContent.ContentKR || '';
+            result.titleEN = fullContent.TitleEN || result.titleEN;
+            result.titleKR = fullContent.TitleKR || result.titleKR;
+            console.log('[DEBUG] Full content loaded from CodeContent');
+        } else {
+            console.error('[DEBUG] Could not find full content for:', result);
+        }
     } else {
-        console.error('[DEBUG] Could not find full content for:', result);
-        console.error('[DEBUG] Available matching chapters:',
-            appData.CodeContent.filter(c =>
-                c.ModelCodeID === result.codeId &&
-                c.ModelCodeVersionID === result.versionId &&
-                c.ChapterID === result.chapterId
-            ).map(c => ({
-                Section: c.Section,
-                Subsection: c.Subsection,
-                TitleEN: c.TitleEN
-            }))
-        );
+        console.log('[DEBUG] Using content from result object:', {
+            contentENLength: result.contentEN?.length || 0,
+            contentKRLength: result.contentKR?.length || 0
+        });
     }
 
     // Create modal if it doesn't exist
