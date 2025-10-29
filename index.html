@@ -21867,11 +21867,7 @@ Pelev = Pressure due to elevation difference(표고차로 인한 압력)
 <!-- Added section content modal -->
 <div class="section-modal" id="sectionModal">
 <div class="section-modal-content">
-<div class="flex items-center justify-between mb-6 pb-4 border-b">
-<div>
-<h2 class="text-2xl font-bold text-[#24305E]" id="sectionModalTitle">Section Title</h2>
-<p class="text-sm text-gray-600 mt-1" id="sectionModalSubtitle">Code Name</p>
-</div>
+<div class="flex justify-end mb-4">
 <button class="p-2 hover:bg-gray-100 rounded-lg transition-colors" onclick="closeSectionModal()">
 <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewbox="0 0 24 24">
 <path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
@@ -22285,12 +22281,7 @@ ${note}
     
     function openSectionModal(sectionId, codeName, sectionTitle) {
       const modal = document.getElementById('sectionModal');
-      const modalTitle = document.getElementById('sectionModalTitle');
-      const modalSubtitle = document.getElementById('sectionModalSubtitle');
       const modalContent = document.getElementById('sectionModalContent');
-      
-      modalTitle.textContent = `Section ${sectionId}: ${sectionTitle}`;
-      modalSubtitle.textContent = codeName;
       
       // Sample content - in a real application, this would be fetched from a database
       modalContent.innerHTML = `
@@ -42639,7 +42630,7 @@ function displayTopSearchResults(exactMatches, partialMatches, keyword) {
                         <h1 class="text-3xl font-bold text-[#24305E]">검색 결과</h1>
                         <p class="text-lg text-gray-600" id="topSearchKeyword"></p>
                         <button onclick="toggleSearchResults()" class="ml-auto p-2 hover:bg-gray-100 rounded-lg transition-colors" title="목록 보기/펼쳐보기">
-                            <i data-lucide="align-left" class="w-7 h-7 text-gray-600" id="toggleSearchIcon"></i>
+                            <i data-lucide="list" class="w-7 h-7 text-gray-600" id="toggleSearchIcon"></i>
                         </button>
                     </div>
                 </div>
@@ -43288,8 +43279,8 @@ function toggleSearchResults() {
             kr.style.display = 'none';
         });
         if (icon) {
-            // In list view, show 'file-text' icon (indicates can switch to detail view)
-            icon.setAttribute('data-lucide', 'file-text');
+            // In list view, show 'maximize-2' icon (indicates can switch to detail view)
+            icon.setAttribute('data-lucide', 'maximize-2');
         }
     } else {
         // Detail view: show all content (DEFAULT)
@@ -43300,8 +43291,8 @@ function toggleSearchResults() {
             kr.style.display = 'block';
         });
         if (icon) {
-            // In detail view, show 'align-left' icon (indicates can switch to list view)
-            icon.setAttribute('data-lucide', 'align-left');
+            // In detail view, show 'list' icon (indicates can switch to list view)
+            icon.setAttribute('data-lucide', 'list');
         }
     }
 
