@@ -43478,17 +43478,23 @@ function openImageModal(attachment) {
     let fileName = attachment.FileName;
 
     // Create multiple filename patterns to try:
-    // 1. Original filename with dots
-    // 2. Filename with dots replaced by underscores (common naming convention)
-    const fileNameWithUnderscores = fileName.replace(/\./g, '_');
+    // 1. Original filename
+    // 2. Replace first dot after ']number' with underscore (e.g., [BE]403.5.1 -> [BE]403_5.1)
+    // 3. Replace all dots with underscores
+    const fileNameVariant1 = fileName.replace(/(\]\d+)\./, '$1_');  // First dot after ]number
+    const fileNameVariant2 = fileName.replace(/\./g, '_');  // All dots
 
-    // Try different combinations: original and converted, with .jpg and .JPG
-    const imagePatternsToTry = [
-        `./${fileName}.jpg`,
-        `./${fileName}.JPG`,
-        `./${fileNameWithUnderscores}.jpg`,
-        `./${fileNameWithUnderscores}.JPG`
-    ];
+    // Build unique patterns list
+    const patterns = [fileName];
+    if (fileNameVariant1 !== fileName) patterns.push(fileNameVariant1);
+    if (fileNameVariant2 !== fileName && fileNameVariant2 !== fileNameVariant1) patterns.push(fileNameVariant2);
+
+    // Try different combinations with .jpg and .JPG extensions
+    const imagePatternsToTry = [];
+    patterns.forEach(pattern => {
+        imagePatternsToTry.push(`./${pattern}.jpg`);
+        imagePatternsToTry.push(`./${pattern}.JPG`);
+    });
 
     let currentPatternIndex = 0;
 
