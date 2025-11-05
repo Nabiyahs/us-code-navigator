@@ -41975,7 +41975,7 @@ function loadChapterContent(chapterId, versionId) {
             const sectionNumber = `${sectionNum}${subsection}`;
 
             // Attachments 찾기
-            const attachments = getAttachments(versionId, content.Chapter, sectionNum, content.Subsection);
+            const attachments = getAttachments(versionId, content.Chapter, content.Section, content.Subsection);
 
             html += `
                 <div class="bg-gray-50 p-4 rounded-lg relative" id="section-${sectionNumber.replace('.', '-')}">
