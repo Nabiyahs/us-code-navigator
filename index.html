@@ -41975,7 +41975,7 @@ function loadChapterContent(chapterId, versionId) {
             const sectionNumber = `${sectionNum}${subsection}`;
 
             // Attachments 찾기
-            const attachments = getAttachments(versionId, content.Chapter, sectionNum, content.Subsection);
+            const attachments = getAttachments(versionId, content.Chapter, content.Section, content.Subsection);
 
             html += `
                 <div class="bg-gray-50 p-4 rounded-lg relative" id="section-${sectionNumber.replace('.', '-')}">
@@ -43476,25 +43476,48 @@ function openImageModal(attachment) {
 
     // Construct local image URL (GitHub repository)
     let fileName = attachment.FileName;
-    // Try both .jpg and .JPG extensions
-    let imageUrl = `./${fileName}.jpg`;
 
-    modalImage.src = imageUrl;
+    // Create multiple filename patterns to try:
+    // 1. Original filename
+    // 2. Replace first dot after ']number' with underscore (e.g., [BE]403.5.1 -> [BE]403_5.1)
+    // 3. Replace all dots with underscores
+    const fileNameVariant1 = fileName.replace(/(\]\d+)\./, '$1_');  // First dot after ]number
+    const fileNameVariant2 = fileName.replace(/\./g, '_');  // All dots
+
+    // Build unique patterns list
+    const patterns = [fileName];
+    if (fileNameVariant1 !== fileName) patterns.push(fileNameVariant1);
+    if (fileNameVariant2 !== fileName && fileNameVariant2 !== fileNameVariant1) patterns.push(fileNameVariant2);
+
+    // Try different combinations with .jpg and .JPG extensions
+    const imagePatternsToTry = [];
+    patterns.forEach(pattern => {
+        // Use encodeURI to properly encode special characters like brackets
+        // encodeURI preserves path structure while encoding reserved characters
+        imagePatternsToTry.push(encodeURI(`./${pattern}.jpg`));
+        imagePatternsToTry.push(encodeURI(`./${pattern}.JPG`));
+    });
+
+    let currentPatternIndex = 0;
+
+    // Function to try loading next pattern
+    function tryNextPattern() {
+        if (currentPatternIndex < imagePatternsToTry.length) {
+            const imageUrl = imagePatternsToTry[currentPatternIndex];
+            currentPatternIndex++;
+            modalImage.src = imageUrl;
+        } else {
+            // All patterns failed, show placeholder
+            modalImage.style.display = 'none';
+            console.error(`Image not found. Tried patterns:`, imagePatternsToTry);
+        }
+    }
+
+    // Set initial image source
     modalImage.alt = `${typeLabel}${number}`;
     modalImage.style.display = 'block';
-
-    // Handle image load error (try .JPG extension)
-    modalImage.onerror = function() {
-        if (imageUrl.endsWith('.jpg')) {
-            imageUrl = `./${fileName}.JPG`;
-            modalImage.src = imageUrl;
-            modalImage.onerror = function() {
-                // If both fail, show placeholder
-                modalImage.style.display = 'none';
-                console.error(`Image not found: ${fileName}`);
-            };
-        }
-    };
+    modalImage.onerror = tryNextPattern;
+    tryNextPattern(); // Start with first pattern
 
     // Set content
     let contentHtml = '';
