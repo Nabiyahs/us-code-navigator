@@ -41815,12 +41815,61 @@ function getModelCodeVersions(modelCodeId) {
     return appData.ModelCodeVersion.filter(v => v.ModelCodeID === modelCodeId);
 }
 
+// === Data Access Functions ===
+//
+// DATA NORMALIZATION RULES:
+// ========================
+//
+// PRIMARY KEYS:
+// - CodeChapter.ChapterID (string, e.g., "CH001", "CH002")
+// - CodeContent.ContentID (string, e.g., "C001", "C002")
+// - CodeAttachment.AttachmentID (string, e.g., "D001", "D002")
+//
+// FOREIGN KEYS:
+// - CodeContent.ChapterID → CodeChapter.ChapterID (ID-based join, preferred)
+// - CodeAttachment does NOT have ChapterID (uses position-based composite key)
+//
+// POSITION FIELDS (Natural Keys):
+// - CodeChapter.Chapter (number) - chapter number for display
+// - CodeContent.Chapter (number) - DENORMALIZED, redundant with ChapterID lookup
+// - CodeContent.Section (number/string) - section number
+// - CodeContent.Subsection (number/null) - subsection number
+// - CodeAttachment.Chapter (number) - used for position-based join
+// - CodeAttachment.Section (number/string) - section number
+// - CodeAttachment.Subsection (number/null) - subsection number
+//
+// JOIN STRATEGIES:
+// ================
+//
+// 1. CodeContent ← CodeChapter:
+//    Use ChapterID (ID-based join, normalized)
+//    Example: getContents(chapterId)
+//    Filter: content.ChapterID === chapterId
+//
+// 2. CodeAttachment ← CodeContent:
+//    Use (ModelCodeVersionID, Chapter, Section, Subsection) composite key (position-based)
+//    Example: getAttachments(versionId, chapter, section, subsection)
+//    Reason: CodeAttachment lacks ChapterID
+//    Note: chapter parameter should be content.Chapter (number), NOT content.ChapterID
+//
+// NAMING CONVENTIONS:
+// ===================
+// - chapterId → ChapterID value (string, e.g., "CH003")
+// - chapterNum or chapterNumber → Chapter number (int, e.g., 3)
+// - chapter.Chapter → Chapter field from CodeChapter table
+// - content.Chapter → Chapter field from CodeContent table (denormalized)
+// - content.ChapterID → Foreign key to CodeChapter
+//
+// IMPORTANT: Do NOT confuse ChapterID (string PK) with Chapter (number field)
+//
+
 function getChapters(versionId) {
     return appData.CodeChapter.filter(ch => ch.ModelCodeVersionID === versionId)
         .sort((a, b) => a.Chapter - b.Chapter);
 }
 
 function getContents(chapterId) {
+    // ID-based join using ChapterID (normalized)
     return appData.CodeContent.filter(c => c.ChapterID === chapterId)
         .sort((a, b) => {
             const aSection = parseFloat(a.Section) || 0;
@@ -41834,11 +41883,14 @@ function getContents(chapterId) {
 }
 
 function getAttachments(versionId, chapter, section, subsection) {
+    // Position-based composite key join (Chapter, Section, Subsection)
+    // NOTE: 'chapter' parameter must be Chapter NUMBER (int), not ChapterID (string)
+    // Should be called with: getAttachments(versionId, content.Chapter, content.Section, content.Subsection)
     return appData.CodeAttachment.filter(att => {
         // Match version
         if (att.ModelCodeVersionID !== versionId) return false;
 
-        // Match chapter (convert to number for comparison)
+        // Match chapter NUMBER (not ChapterID)
         if (att.Chapter !== parseInt(chapter)) return false;
 
         // Match section (handle both number and string types)
