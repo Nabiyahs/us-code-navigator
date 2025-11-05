@@ -41817,6 +41817,13 @@ function getModelCodeVersions(modelCodeId) {
 
 // === Data Access Functions ===
 //
+// DATA LOADING GUARANTEE:
+// =======================
+// - appData is defined inline in <script> tag (synchronous loading)
+// - DOMContentLoaded ensures DOM is ready before initialization
+// - Data integrity checks verify all required tables are loaded
+// - Rendering functions are only called after data validation passes
+//
 // DATA NORMALIZATION RULES:
 // ========================
 //
@@ -41861,6 +41868,35 @@ function getModelCodeVersions(modelCodeId) {
 // - content.ChapterID → Foreign key to CodeChapter
 //
 // IMPORTANT: Do NOT confuse ChapterID (string PK) with Chapter (number field)
+//
+// DATA INTEGRITY ISSUES (Known):
+// ===============================
+//
+// 1. ORPHANED RECORDS (251 items):
+//    - CodeContent records with ChapterID = null/None
+//    - Affects Chapters: 5, 6, 7, 8, 9, 10, 16, 17, 19, 21, 23, 28
+//    - These records have Chapter numbers but missing ChapterID FK
+//    - Impact: These records won't be displayed in chapter views (uses ChapterID filter)
+//    - Workaround: Could fallback to Chapter number matching, but not implemented
+//
+// 2. UNMATCHED ATTACHMENTS (5 items):
+//    - CodeAttachment records with no matching CodeContent
+//    - D015: (MCV002, Ch5, Sec506, Sub2)
+//    - D016: (MCV002, Ch5, Sec506, Sub3.2)
+//    - D017: (MCV002, Ch5, Sec506, Sub3.3)
+//    - D021: (MCV006, Ch12, Sec3, SubNone)
+//    - D025: (MCV003, Ch17, Sec17, Sub4.2.1)
+//    - Impact: These attachments won't be displayed (no content to attach to)
+//
+// 3. DUPLICATE POSITION KEYS (Expected):
+//    - Multiple CodeContent with same (Version, Chapter, Section, Subsection)
+//    - Common in Chapter 2 (Definitions) where Section/Subsection are null
+//    - This is NORMAL and intentional for definition chapters
+//    - Each definition is a separate content item
+//
+// 4. PRIMARY KEY INTEGRITY:
+//    - ✅ No duplicate ContentIDs, ChapterIDs, or AttachmentIDs
+//    - All primary keys are unique
 //
 
 function getChapters(versionId) {
@@ -43656,7 +43692,29 @@ function closeImageModal() {
 document.addEventListener('DOMContentLoaded', function() {
     console.log('US Code Navigator initialized with schema-based hierarchy');
     console.debug('[Init] DOMContentLoaded fired, setting up event listeners');
+
+    // CRITICAL: Verify appData is loaded before proceeding
+    if (typeof appData === 'undefined' || !appData) {
+        console.error('[Init] FATAL: appData is not loaded!');
+        document.body.innerHTML = '<div style="padding: 20px; color: red;">Error: Data failed to load. Please refresh the page.</div>';
+        return;
+    }
+
+    // Verify required data structures
+    const requiredTables = ['CodeChapter', 'CodeContent', 'CodeAttachment', 'ModelCode', 'ModelCodeVersion'];
+    for (const table of requiredTables) {
+        if (!appData[table] || !Array.isArray(appData[table])) {
+            console.error(`[Init] FATAL: appData.${table} is missing or invalid!`);
+            document.body.innerHTML = `<div style="padding: 20px; color: red;">Error: ${table} data is missing. Please refresh the page.</div>`;
+            return;
+        }
+    }
+
     console.log('Loaded data:', appData);
+    console.log(`[Init] Data integrity check passed: ${Object.keys(appData).length} tables loaded`);
+
+    // Data is guaranteed to be loaded at this point
+    // All rendering functions can safely access appData
 
     // Initialize library back button (hide it initially)
     const libraryBackButton = document.getElementById('libraryBackButton');
