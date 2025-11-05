@@ -43492,8 +43492,10 @@ function openImageModal(attachment) {
     // Try different combinations with .jpg and .JPG extensions
     const imagePatternsToTry = [];
     patterns.forEach(pattern => {
-        imagePatternsToTry.push(`./${pattern}.jpg`);
-        imagePatternsToTry.push(`./${pattern}.JPG`);
+        // Use encodeURI to properly encode special characters like brackets
+        // encodeURI preserves path structure while encoding reserved characters
+        imagePatternsToTry.push(encodeURI(`./${pattern}.jpg`));
+        imagePatternsToTry.push(encodeURI(`./${pattern}.JPG`));
     });
 
     let currentPatternIndex = 0;
