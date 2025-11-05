@@ -43476,25 +43476,40 @@ function openImageModal(attachment) {
 
     // Construct local image URL (GitHub repository)
     let fileName = attachment.FileName;
-    // Try both .jpg and .JPG extensions
-    let imageUrl = `./${fileName}.jpg`;
 
-    modalImage.src = imageUrl;
+    // Create multiple filename patterns to try:
+    // 1. Original filename with dots
+    // 2. Filename with dots replaced by underscores (common naming convention)
+    const fileNameWithUnderscores = fileName.replace(/\./g, '_');
+
+    // Try different combinations: original and converted, with .jpg and .JPG
+    const imagePatternsToTry = [
+        `./${fileName}.jpg`,
+        `./${fileName}.JPG`,
+        `./${fileNameWithUnderscores}.jpg`,
+        `./${fileNameWithUnderscores}.JPG`
+    ];
+
+    let currentPatternIndex = 0;
+
+    // Function to try loading next pattern
+    function tryNextPattern() {
+        if (currentPatternIndex < imagePatternsToTry.length) {
+            const imageUrl = imagePatternsToTry[currentPatternIndex];
+            currentPatternIndex++;
+            modalImage.src = imageUrl;
+        } else {
+            // All patterns failed, show placeholder
+            modalImage.style.display = 'none';
+            console.error(`Image not found. Tried patterns:`, imagePatternsToTry);
+        }
+    }
+
+    // Set initial image source
     modalImage.alt = `${typeLabel}${number}`;
     modalImage.style.display = 'block';
-
-    // Handle image load error (try .JPG extension)
-    modalImage.onerror = function() {
-        if (imageUrl.endsWith('.jpg')) {
-            imageUrl = `./${fileName}.JPG`;
-            modalImage.src = imageUrl;
-            modalImage.onerror = function() {
-                // If both fail, show placeholder
-                modalImage.style.display = 'none';
-                console.error(`Image not found: ${fileName}`);
-            };
-        }
-    };
+    modalImage.onerror = tryNextPattern;
+    tryNextPattern(); // Start with first pattern
 
     // Set content
     let contentHtml = '';
