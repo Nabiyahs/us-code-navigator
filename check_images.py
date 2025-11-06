@@ -22,8 +22,8 @@ print(f"Total: {len(actual_files)} files\n")
 
 # Define the CodeAttachment data from index.html
 attachments = [
-    {"id": "D001", "filename": "IBC_3_307.1_T307.1(1)"},
-    {"id": "D002", "filename": "IBC_3_307.1_T307.1(2)"},
+    {"id": "D001", "filename": "IBC_3_307.1.1_T1"},
+    {"id": "D002", "filename": "IBC_3_307.1.1_T2"},
     {"id": "D003", "filename": "IBC_4_403_F"},
     {"id": "D004", "filename": "IBC_4_[BE]403.5.1_F"},
     {"id": "D005", "filename": "IBC_4_[F]414.2_F"},
@@ -42,6 +42,9 @@ attachments = [
     {"id": "D018", "filename": "IBC_5_508.4_T"},
     {"id": "D019", "filename": "IBC_5_509.1_T"},
     {"id": "D020", "filename": "IBC_5_510.2_F"},
+    {"id": "D021", "filename": "NFPA 13_3_3.3.89_F"},
+    {"id": "D022", "filename": "NFPA 13_16_16.12_F"},
+    {"id": "D023", "filename": "NFPA 13_17_17.4_F"},
 ]
 
 print("=== CodeAttachment References in index.html ===")
