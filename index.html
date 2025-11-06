@@ -43583,13 +43583,15 @@ function openImageModal(attachment) {
     if (fileNameVariant1 !== fileName) patterns.push(fileNameVariant1);
     if (fileNameVariant2 !== fileName && fileNameVariant2 !== fileNameVariant1) patterns.push(fileNameVariant2);
 
-    // Try different combinations with .jpg and .JPG extensions
+    // Try different combinations with image extensions (.jpg, .JPG, .jpeg, .JPEG)
     const imagePatternsToTry = [];
     patterns.forEach(pattern => {
         // Use encodeURI to properly encode special characters like brackets
         // encodeURI preserves path structure while encoding reserved characters
         imagePatternsToTry.push(encodeURI(`./${pattern}.jpg`));
         imagePatternsToTry.push(encodeURI(`./${pattern}.JPG`));
+        imagePatternsToTry.push(encodeURI(`./${pattern}.jpeg`));
+        imagePatternsToTry.push(encodeURI(`./${pattern}.JPEG`));
     });
 
     let currentPatternIndex = 0;
