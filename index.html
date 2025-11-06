@@ -41854,10 +41854,10 @@ function getModelCodeVersions(modelCodeId) {
 //    Filter: content.ChapterID === chapterId
 //
 // 2. CodeAttachment ← CodeContent:
-//    Use (ModelCodeVersionID, Chapter, Section, Subsection) composite key (position-based)
-//    Example: getAttachments(versionId, chapter, section, subsection)
-//    Reason: CodeAttachment lacks ChapterID
-//    Note: chapter parameter should be content.Chapter (number), NOT content.ChapterID
+//    Primary: Use content.AttachmentID field (supports semicolon-separated IDs: "D001;D002")
+//    Fallback: Use (ModelCodeVersionID, Chapter, Section, Subsection) composite key (position-based)
+//    Example: getAttachments(versionId, content)
+//    Note: AttachmentID field takes precedence when present
 //
 // NAMING CONVENTIONS:
 // ===================
@@ -41918,24 +41918,30 @@ function getContents(chapterId) {
         });
 }
 
-function getAttachments(versionId, chapter, section, subsection) {
-    // Position-based composite key join (Chapter, Section, Subsection)
-    // NOTE: 'chapter' parameter must be Chapter NUMBER (int), not ChapterID (string)
-    // Should be called with: getAttachments(versionId, content.Chapter, content.Section, content.Subsection)
+function getAttachments(versionId, content) {
+    // AttachmentID 필드가 있으면 우선 사용 (세미콜론으로 구분된 여러 ID 지원)
+    if (content.AttachmentID) {
+        const ids = content.AttachmentID.split(';').map(id => id.trim());
+        return ids.map(id =>
+            appData.CodeAttachment.find(att => att.AttachmentID === id)
+        ).filter(att => att !== undefined);
+    }
+
+    // AttachmentID가 없으면 기존 방식 (Chapter/Section/Subsection 매칭)
     return appData.CodeAttachment.filter(att => {
         // Match version
         if (att.ModelCodeVersionID !== versionId) return false;
 
         // Match chapter NUMBER (not ChapterID)
-        if (att.Chapter !== parseInt(chapter)) return false;
+        if (att.Chapter !== parseInt(content.Chapter)) return false;
 
         // Match section (handle both number and string types)
         const attSection = String(att.Section);
-        const searchSection = String(section);
+        const searchSection = String(content.Section);
         if (attSection !== searchSection) return false;
 
         // Match subsection (handle null and undefined)
-        if (att.Subsection !== subsection) return false;
+        if (att.Subsection !== content.Subsection) return false;
 
         return true;
     });
@@ -42062,8 +42068,8 @@ function loadChapterContent(chapterId, versionId) {
             const subsection = content.Subsection ? `.${content.Subsection}` : '';
             const sectionNumber = `${sectionNum}${subsection}`;
 
-            // Attachments 찾기
-            const attachments = getAttachments(versionId, content.Chapter, content.Section, content.Subsection);
+            // Attachments 찾기 (AttachmentID 필드 우선 사용)
+            const attachments = getAttachments(versionId, content);
 
             html += `
                 <div class="bg-gray-50 p-4 rounded-lg relative" id="section-${sectionNumber.replace('.', '-')}">
