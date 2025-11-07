@@ -43653,6 +43653,11 @@ function openImageModal(attachment) {
     const modalImage = document.getElementById('modalImage');
     const modalContent = document.getElementById('modalContent');
 
+    if (!modal || !modalTitle || !modalImage || !modalContent) {
+        console.error('[openImageModal] Required DOM elements not found');
+        return;
+    }
+
     // Store current attachment for navigation
     currentModalAttachment = attachment;
 
@@ -43661,7 +43666,8 @@ function openImageModal(attachment) {
     const number = attachment.Number ? ` ${attachment.Number}` : '';
     modalTitle.textContent = `${typeLabel}${number}`;
 
-    // Construct local image URL (GitHub repository)
+    // Construct relative image path for GitHub Pages
+    // Use attachment.FileName directly (no blob URLs)
     let fileName = attachment.FileName;
 
     // Create multiple filename patterns to try:
@@ -43678,13 +43684,17 @@ function openImageModal(attachment) {
 
     // Try different combinations with image extensions (.jpg, .JPG, .jpeg, .JPEG)
     const imagePatternsToTry = [];
+    const extensions = ['jpg', 'JPG', 'jpeg', 'JPEG'];
+
     patterns.forEach(pattern => {
-        // Use encodeURI to properly encode special characters like brackets
-        // encodeURI preserves path structure while encoding reserved characters
-        imagePatternsToTry.push(encodeURI(`./${pattern}.jpg`));
-        imagePatternsToTry.push(encodeURI(`./${pattern}.JPG`));
-        imagePatternsToTry.push(encodeURI(`./${pattern}.jpeg`));
-        imagePatternsToTry.push(encodeURI(`./${pattern}.JPEG`));
+        extensions.forEach(ext => {
+            // Use encodeURIComponent to properly encode:
+            // - Spaces (→ %20) for files like "NFPA 13_16_16.12_F.jpg"
+            // - Brackets (→ %5B, %5D) for files like "[BE]403.5.1"
+            // - Other special characters
+            // Relative path for GitHub Pages (no blob URLs)
+            imagePatternsToTry.push(`./${encodeURIComponent(pattern)}.${ext}`);
+        });
     });
 
     let currentPatternIndex = 0;
@@ -43693,19 +43703,35 @@ function openImageModal(attachment) {
     function tryNextPattern() {
         if (currentPatternIndex < imagePatternsToTry.length) {
             const imageUrl = imagePatternsToTry[currentPatternIndex];
+            console.debug(`[openImageModal] Trying image URL (${currentPatternIndex + 1}/${imagePatternsToTry.length}):`, imageUrl);
             currentPatternIndex++;
             modalImage.src = imageUrl;
         } else {
-            // All patterns failed, show placeholder
+            // All patterns failed, show error message
             modalImage.style.display = 'none';
-            console.error(`Image not found. Tried patterns:`, imagePatternsToTry);
+            console.error(`[openImageModal] Image not found for ${fileName}. Tried ${imagePatternsToTry.length} patterns:`, imagePatternsToTry);
+
+            // Show error message in modal
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'bg-red-50 border border-red-200 rounded p-4 text-center';
+            errorDiv.innerHTML = `
+                <p class="text-red-700 font-semibold mb-2">이미지를 찾을 수 없습니다</p>
+                <p class="text-red-600 text-sm">파일명: ${fileName}</p>
+                <p class="text-gray-600 text-xs mt-2">Network 탭에서 404 오류를 확인하세요</p>
+            `;
+            modalImage.parentElement.insertBefore(errorDiv, modalImage);
         }
     }
 
-    // Set initial image source
+    // Set initial image properties
     modalImage.alt = `${typeLabel}${number}`;
     modalImage.style.display = 'block';
     modalImage.onerror = tryNextPattern;
+
+    // Remove any previous error messages
+    const previousError = modalImage.parentElement.querySelector('.bg-red-50');
+    if (previousError) previousError.remove();
+
     tryNextPattern(); // Start with first pattern
 
     // Set content
@@ -43744,6 +43770,7 @@ function openImageModal(attachment) {
 
     // Show modal
     modal.classList.add('active');
+    console.log(`[openImageModal] Modal opened for ${typeLabel}${number}`);
 }
 
 function goToContentFromModal() {
