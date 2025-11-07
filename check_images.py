@@ -7,9 +7,9 @@ import os
 import glob
 import re
 
-# Get all JPG files in the repository
+# Get all JPG/JPEG files in the repository
 actual_files = set()
-for pattern in ['*.jpg', '*.JPG']:
+for pattern in ['*.jpg', '*.JPG', '*.jpeg', '*.JPEG']:
     for f in glob.glob(pattern):
         # Store just the basename without extension
         name_without_ext = os.path.splitext(f)[0]
