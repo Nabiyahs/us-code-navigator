@@ -717,7 +717,7 @@ def create_all_library_content(hierarchy):
                         for att in attachments:
                             type_label = 'Table' if att['Type'] == 'T' else 'Figure'
                             att_id = att['AttachmentID']
-                            # Local image path in /public folder
+                            # Local image path in root folder
                             from urllib.parse import quote
                             import os
                             file_name = att['FileName']
@@ -726,7 +726,7 @@ def create_all_library_content(hierarchy):
                             actual_file = None
                             for ext in extensions:
                                 if not file_name.endswith(ext):
-                                    test_file = f"public/{file_name}{ext}"
+                                    test_file = f"{file_name}{ext}"
                                     if os.path.exists(test_file):
                                         actual_file = file_name + ext
                                         break
@@ -740,7 +740,7 @@ def create_all_library_content(hierarchy):
 
                             # URL encode the filename (handles special chars like parentheses)
                             encoded_file_name = quote(actual_file)
-                            image_url = f"public/{encoded_file_name}"
+                            image_url = f"{encoded_file_name}"
 
                             att_items.append(f'''
                             <div class="border border-gray-300 rounded p-3 hover:border-[#A8D0E6] transition-colors cursor-pointer flex-shrink-0" onclick="openImageModalById('{att_id}')">
@@ -2446,7 +2446,7 @@ function openImageModal(attachment) {{
     const number = attachment.Number ? ` ${{attachment.Number}}` : '';
     modalTitle.textContent = `${{typeLabel}}${{number}}`;
 
-    // Construct local image URL from /public folder
+    // Construct local image URL from root folder
     let fileName = attachment.FileName;
 
     // Try different extensions to find the image
@@ -2457,7 +2457,7 @@ function openImageModal(attachment) {{
         // If fileName already has an extension, use it directly
         if (fileName.match(/\.(jpg|JPG|jpeg|JPEG|png|PNG)$/)) {{
             const encodedFileName = encodeURIComponent(fileName);
-            modalImage.src = `public/${{encodedFileName}}`;
+            modalImage.src = `${{encodedFileName}}`;
             return;
         }}
 
@@ -2465,7 +2465,7 @@ function openImageModal(attachment) {{
         if (extensionIndex < extensions.length) {{
             const testFileName = fileName + extensions[extensionIndex];
             const encodedFileName = encodeURIComponent(testFileName);
-            modalImage.src = `public/${{encodedFileName}}`;
+            modalImage.src = `${{encodedFileName}}`;
         }} else {{
             // All extensions failed, show error
             console.error(`Image not found: ${{fileName}}`);
