@@ -22276,9 +22276,15 @@ ${note}
     }
 
     function toggleChapterSections(chapterNum) {
-      const sectionsDiv = document.getElementById(`chapterSections${chapterNum}`);
-      const icon = document.getElementById(`chapterIcon${chapterNum}`);
-      
+      const sectionsDiv = document.getElementById(getChapterSectionsId(chapterNum));
+      const icon = document.getElementById(getChapterIconId(chapterNum));
+
+      // Guard: Check if elements exist
+      if (!sectionsDiv || !icon) {
+        console.warn(`[toggleChapterSections] Elements not found for chapter ${chapterNum}`);
+        return;
+      }
+
       if (sectionsDiv.classList.contains('hidden')) {
         sectionsDiv.classList.remove('hidden');
         icon.classList.add('rotate-180');
@@ -42261,8 +42267,8 @@ function scrollToChapter(chapterId, saveHistory = false) {
 
 // Toggle chapter sidebar sections
 function toggleChapterSidebar(chapterId) {
-    const sectionsDiv = document.getElementById('sections-' + chapterId);
-    const chevron = document.getElementById('chevron-' + chapterId);
+    const sectionsDiv = document.getElementById(getSidebarSectionsId(chapterId));
+    const chevron = document.getElementById(getSidebarChevronId(chapterId));
 
     if (sectionsDiv && chevron) {
         if (sectionsDiv.classList.contains('max-h-0')) {
@@ -42292,9 +42298,38 @@ function toggleChapterSidebar(chapterId) {
 // Navigation history stack
 let navigationHistory = [];
 
-// Unified function to generate section ID
+// Search result view mode (false = detail view, true = list view)
+let isListViewMode = false;
+
+// ===== ID Generation Helper Functions =====
+// Unified functions to generate consistent element IDs throughout the application
+
 function getSectionId(chapterId, sectionNum) {
     return 'section-' + chapterId + '-' + sectionNum.replace(/\./g, '-');
+}
+
+function getChapterSectionsId(chapterNum) {
+    return 'chapterSections' + chapterNum;
+}
+
+function getChapterIconId(chapterNum) {
+    return 'chapterIcon' + chapterNum;
+}
+
+function getSidebarSectionsId(chapterId) {
+    return 'sections-' + chapterId;
+}
+
+function getSidebarChevronId(chapterId) {
+    return 'chevron-' + chapterId;
+}
+
+function getCodeChaptersId(codeId) {
+    return 'chapters-' + codeId;
+}
+
+function getCodeContentId(codeId) {
+    return 'content-' + codeId;
 }
 
 // Google search fallback
@@ -42475,6 +42510,11 @@ function toggleLibrarySubmenu(event) {
 }
 
 function loadCodeFromSidebar(versionId, codeId) {
+    // Validate required parameters
+    if (!versionId || !codeId) {
+        console.error('[loadCodeFromSidebar] Missing required parameters:', { versionId, codeId });
+        return;
+    }
     switchToLibraryCode(codeId, versionId);
 }
 
@@ -42507,25 +42547,6 @@ function switchToLibraryCode(codeId, versionId) {
     document.querySelectorAll('.code-chapters').forEach(el => el.style.display = 'none');
     document.querySelectorAll('.code-content').forEach(el => el.style.display = 'none');
 
-    // Show selected code chapters and content
-    const selectedChapters = document.getElementById('chapters-' + codeId);
-    const selectedContent = document.getElementById('content-' + codeId);
-
-    console.log('Chapters element:', selectedChapters);
-    console.log('Content element:', selectedContent);
-
-    if (selectedChapters) {
-        selectedChapters.style.display = 'block';
-    } else {
-        console.error('Chapters not found for codeId:', codeId);
-    }
-
-    if (selectedContent) {
-        selectedContent.style.display = 'block';
-    } else {
-        console.error('Content not found for codeId:', codeId);
-    }
-
     // Update header with code info
     const modelCode = appData.ModelCode.find(mc => mc.ModelCodeID === codeId);
     const version = appData.ModelCodeVersion.find(v => v.ModelCodeVersionID === versionId);
@@ -42537,12 +42558,34 @@ function switchToLibraryCode(codeId, versionId) {
         document.getElementById('codeSubtitle').textContent = modelCode.Description || '';
     }
 
-    // Reset scroll to top - both window and content container (instant, no animation)
-    window.scrollTo({ top: 0, behavior: 'instant' });
-    const contentContainer = document.querySelector('#librarySection .flex-1.overflow-y-auto');
-    if (contentContainer) {
-        contentContainer.scrollTo({ top: 0, behavior: 'instant' });
-    }
+    // Defer content display and scroll to next frame (RAF)
+    requestAnimationFrame(() => {
+        // Show selected code chapters and content
+        const selectedChapters = document.getElementById(getCodeChaptersId(codeId));
+        const selectedContent = document.getElementById(getCodeContentId(codeId));
+
+        console.log('Chapters element:', selectedChapters);
+        console.log('Content element:', selectedContent);
+
+        if (selectedChapters) {
+            selectedChapters.style.display = 'block';
+        } else {
+            console.error('Chapters not found for codeId:', codeId);
+        }
+
+        if (selectedContent) {
+            selectedContent.style.display = 'block';
+        } else {
+            console.error('Content not found for codeId:', codeId);
+        }
+
+        // Reset scroll to top - both window and content container (instant, no animation)
+        window.scrollTo({ top: 0, behavior: 'instant' });
+        const contentContainer = document.querySelector('#librarySection .flex-1.overflow-y-auto');
+        if (contentContainer) {
+            contentContainer.scrollTo({ top: 0, behavior: 'instant' });
+        }
+    });
 }
 
 // Search function for top search bar
