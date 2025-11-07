@@ -707,17 +707,15 @@ def create_all_library_content(hierarchy):
                         for att in attachments:
                             type_label = 'Table' if att['Type'] == 'T' else 'Figure'
                             att_id = att['AttachmentID']
-                            # Confluence wiki URL pattern
-                            # Page ID 62830860 is the "Code Image" page
+                            # Local image path in /public folder
                             from urllib.parse import quote
-                            page_id = '62830860'
                             file_name = att['FileName']
                             # Add .jpg extension (all images are jpg format)
                             if not file_name.endswith('.jpg'):
                                 file_name = file_name + '.jpg'
                             # URL encode the filename (handles special chars like parentheses)
                             encoded_file_name = quote(file_name)
-                            image_url = f"https://wiki.samoo.com/download/attachments/{page_id}/{encoded_file_name}?api=v2"
+                            image_url = f"public/{encoded_file_name}"
 
                             att_items.append(f'''
                             <div class="border border-gray-300 rounded p-3 hover:border-[#A8D0E6] transition-colors cursor-pointer flex-shrink-0" onclick="openImageModalById('{att_id}')">
@@ -2423,9 +2421,7 @@ function openImageModal(attachment) {{
     const number = attachment.Number ? ` ${{attachment.Number}}` : '';
     modalTitle.textContent = `${{typeLabel}}${{number}}`;
 
-    // Construct Confluence image URL
-    // Page ID 62830860 is the "Code Image" page
-    const pageId = '62830860';
+    // Construct local image URL from /public folder
     let fileName = attachment.FileName;
     // Add .jpg extension (all images are jpg format)
     if (!fileName.endsWith('.jpg')) {{
@@ -2433,7 +2429,7 @@ function openImageModal(attachment) {{
     }}
     // URL encode the filename (handles special chars like parentheses)
     const encodedFileName = encodeURIComponent(fileName);
-    const imageUrl = `https://wiki.samoo.com/download/attachments/${{pageId}}/${{encodedFileName}}?api=v2`;
+    const imageUrl = `public/${{encodedFileName}}`;
 
     modalImage.src = imageUrl;
     modalImage.alt = `${{typeLabel}}${{number}}`;
