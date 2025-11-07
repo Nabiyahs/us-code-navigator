@@ -22322,6 +22322,11 @@ ${note}
 </div>
 </div><script>
 // === Data Layer ===
+
+// === Global State Variables ===
+let activeCodeId = null;
+let activeVersion = null;
+
 const appData = {
   "CodeType": [
     {
@@ -42157,6 +42162,12 @@ function loadChapterContent(chapterId, versionId) {
 
     html += '</div>';
     contentArea.innerHTML = html;
+
+    // Use RAF to ensure DOM is ready before any potential interactions
+    requestAnimationFrame(() => {
+        console.log('[loadChapterContent] Content rendered for chapter:', chapterId);
+        // Future: Add event delegation here for dynamically created elements
+    });
 }
 
 // Attachment modal function - removed (use openImageModalById instead)
@@ -42270,7 +42281,14 @@ function toggleChapterSidebar(chapterId) {
     const sectionsDiv = document.getElementById(getSidebarSectionsId(chapterId));
     const chevron = document.getElementById(getSidebarChevronId(chapterId));
 
-    if (sectionsDiv && chevron) {
+    if (!sectionsDiv || !chevron) {
+        console.warn(`[toggleChapterSidebar] Elements not found for chapterId: ${chapterId}`);
+        return;
+    }
+
+    // Use RAF to ensure smooth transitions after DOM updates
+    requestAnimationFrame(() => {
+        // Toggle sections visibility
         if (sectionsDiv.classList.contains('max-h-0')) {
             sectionsDiv.classList.remove('max-h-0');
             sectionsDiv.classList.add('max-h-96');
@@ -42280,19 +42298,21 @@ function toggleChapterSidebar(chapterId) {
             sectionsDiv.classList.add('max-h-0');
             chevron.classList.remove('rotate-180');
         }
-    }
 
-    // Update active state
-    document.querySelectorAll('.chapter-item').forEach(item => {
-        item.classList.remove('active', 'bg-[#F8E9A1]');
+        // Update active state
+        document.querySelectorAll('.chapter-item').forEach(item => {
+            item.classList.remove('active', 'bg-[#F8E9A1]');
+        });
+        const activeItem = document.querySelector(`[data-chapter-id="${chapterId}"]`);
+        if (activeItem) {
+            activeItem.classList.add('active', 'bg-[#F8E9A1]');
+        }
+
+        // Scroll to chapter in next frame for smooth transition
+        requestAnimationFrame(() => {
+            scrollToChapter(chapterId);
+        });
     });
-    const activeItem = document.querySelector(`[data-chapter-id="${chapterId}"]`);
-    if (activeItem) {
-        activeItem.classList.add('active', 'bg-[#F8E9A1]');
-    }
-
-    // Also scroll to chapter
-    scrollToChapter(chapterId);
 }
 
 // Navigation history stack
@@ -43769,46 +43789,20 @@ function closeImageModal() {
     modal.classList.remove('active');
 }
 
-// === Page Initialization ===
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('US Code Navigator initialized with schema-based hierarchy');
-    console.debug('[Init] DOMContentLoaded fired, setting up event listeners');
-
-    // CRITICAL: Verify appData is loaded before proceeding
-    if (typeof appData === 'undefined' || !appData) {
-        console.error('[Init] FATAL: appData is not loaded!');
-        document.body.innerHTML = '<div style="padding: 20px; color: red;">Error: Data failed to load. Please refresh the page.</div>';
-        return;
-    }
-
-    // Verify required data structures
-    const requiredTables = ['CodeChapter', 'CodeContent', 'CodeAttachment', 'ModelCode', 'ModelCodeVersion'];
-    for (const table of requiredTables) {
-        if (!appData[table] || !Array.isArray(appData[table])) {
-            console.error(`[Init] FATAL: appData.${table} is missing or invalid!`);
-            document.body.innerHTML = `<div style="padding: 20px; color: red;">Error: ${table} data is missing. Please refresh the page.</div>`;
-            return;
-        }
-    }
-
-    console.log('Loaded data:', appData);
-    console.log(`[Init] Data integrity check passed: ${Object.keys(appData).length} tables loaded`);
-
-    // Data is guaranteed to be loaded at this point
-    // All rendering functions can safely access appData
-
-    // Initialize library back button (hide it initially)
-    const libraryBackButton = document.getElementById('libraryBackButton');
-    if (libraryBackButton) {
-        libraryBackButton.style.display = 'none';
-        console.log('[Init] Library back button initialized');
-    }
+// === Event Binding Function ===
+// Binds all event listeners after DOM is rendered
+function bindEvents() {
+    console.debug('[bindEvents] Binding all event listeners');
 
     // Library card click handlers
     document.querySelectorAll('.code-card[data-version-id]').forEach(card => {
         card.addEventListener('click', function() {
             const versionId = this.dataset.versionId;
             const codeId = this.dataset.codeId;
+
+            // Update global state
+            activeCodeId = codeId;
+            activeVersion = versionId;
 
             // Switch to library code
             switchToLibraryCode(codeId, versionId);
@@ -43857,36 +43851,29 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // === INSTRUMENTED SEARCH INPUT HANDLERS ===
-    console.debug('[Init] Setting up search input event handlers');
-
+    // === SEARCH INPUT HANDLERS ===
     // Top search form submit handler
     const topSearchForm = document.getElementById('topSearchForm');
-    console.debug('[Init] topSearchForm element:', topSearchForm ? 'exists' : 'null');
     if (topSearchForm) {
         topSearchForm.addEventListener('submit', function(e) {
             console.debug('[Event] topSearchForm submit event fired');
             e.preventDefault();
-            console.debug('[Event] preventDefault() called on form submit');
             performTopSearch();
         });
     }
 
     // Advanced search form submit handler
     const advancedSearchForm = document.getElementById('advancedSearchForm');
-    console.debug('[Init] advancedSearchForm element:', advancedSearchForm ? 'exists' : 'null');
     if (advancedSearchForm) {
         advancedSearchForm.addEventListener('submit', function(e) {
             console.debug('[Event] advancedSearchForm submit event fired');
             e.preventDefault();
-            console.debug('[Event] preventDefault() called on form submit');
             performAdvancedSearch();
         });
     }
 
     // Keyword input (keydown with IME handling)
     const keywordInput = document.getElementById('keywordInput');
-    console.debug('[Init] keywordInput element:', keywordInput ? 'exists' : 'null');
     if (keywordInput) {
         keywordInput.addEventListener('keydown', function(e) {
             console.debug('[Event] keywordInput keydown:', e.key, 'isComposing:', e.isComposing);
@@ -43900,7 +43887,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Top search input (keydown with IME handling)
     const topSearchInput = document.getElementById('topSearchInput');
-    console.debug('[Init] topSearchInput element:', topSearchInput ? 'exists' : 'null');
     if (topSearchInput) {
         topSearchInput.addEventListener('keydown', function(e) {
             console.debug('[Event] topSearchInput keydown:', e.key, 'isComposing:', e.isComposing);
@@ -43914,7 +43900,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Advanced search input (keydown with IME handling)
     const advancedSearchInput = document.getElementById('advancedSearchInput');
-    console.debug('[Init] advancedSearchInput element:', advancedSearchInput ? 'exists' : 'null');
     if (advancedSearchInput) {
         advancedSearchInput.addEventListener('keydown', function(e) {
             console.debug('[Event] advancedSearchInput keydown:', e.key, 'isComposing:', e.isComposing);
@@ -43926,19 +43911,64 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    console.debug('[Init] All search event listeners attached');
-    console.debug('[Init] Elements check:', {
-        topSearchInput: !!topSearchInput,
-        advancedSearchInput: !!advancedSearchInput,
-        keywordInput: !!keywordInput,
-        topSearchForm: !!topSearchForm,
-        advancedSearchForm: !!advancedSearchForm
-    });
+    console.debug('[bindEvents] All event listeners bound successfully');
+}
 
-    // Initialize lucide icons
-    if (typeof lucide !== 'undefined') {
-        lucide.createIcons();
+// === Page Initialization ===
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('US Code Navigator initialized with schema-based hierarchy');
+    console.debug('[Init] DOMContentLoaded fired, setting up event listeners');
+
+    // CRITICAL: Verify appData is loaded before proceeding
+    if (typeof appData === 'undefined' || !appData) {
+        console.error('[Init] FATAL: appData is not loaded!');
+        document.body.innerHTML = '<div style="padding: 20px; color: red;">Error: Data failed to load. Please refresh the page.</div>';
+        return;
     }
+
+    // Verify required data structures
+    const requiredTables = ['CodeChapter', 'CodeContent', 'CodeAttachment', 'ModelCode', 'ModelCodeVersion'];
+    for (const table of requiredTables) {
+        if (!appData[table] || !Array.isArray(appData[table])) {
+            console.error(`[Init] FATAL: appData.${table} is missing or invalid!`);
+            document.body.innerHTML = `<div style="padding: 20px; color: red;">Error: ${table} data is missing. Please refresh the page.</div>`;
+            return;
+        }
+    }
+
+    console.log('Loaded data:', appData);
+    console.log(`[Init] Data integrity check passed: ${Object.keys(appData).length} tables loaded`);
+
+    // Data is guaranteed to be loaded at this point
+    // All rendering functions can safely access appData
+
+    // === Initialize global state with default values ===
+    // Set default active code and version (IBC 2024)
+    activeCodeId = 'MC001';
+    activeVersion = 'MCV002';
+    console.log('[Init] Default activeCodeId/activeVersion set:', activeCodeId, activeVersion);
+
+    // Initialize library back button (hide it initially)
+    const libraryBackButton = document.getElementById('libraryBackButton');
+    if (libraryBackButton) {
+        libraryBackButton.style.display = 'none';
+        console.log('[Init] Library back button initialized');
+    }
+
+    // === Bind all event listeners after DOM is ready ===
+    // Use RAF to ensure DOM is fully rendered before binding events
+    requestAnimationFrame(() => {
+        console.log('[Init] DOM render complete, binding events');
+        bindEvents();
+
+        // Initialize lucide icons
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
+            console.log('[Init] Lucide icons initialized');
+        }
+
+        console.log('[Init] Initialization complete');
+    });
 });
     </script></body>
 </html>
