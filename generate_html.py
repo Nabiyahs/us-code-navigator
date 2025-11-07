@@ -694,12 +694,22 @@ def create_all_library_content(hierarchy):
                     # Otherwise use parent section ID to avoid duplicates
                     subsection_id_attr = f'id="section-{chapter_id}-{section_number.replace(".", "-")}"' if subsection or section_num == 'General' else ''
 
-                    # Attachments
+                    # Attachments - compare as strings for flexibility
+                    def normalize_value(val):
+                        """Normalize values for comparison"""
+                        if val is None:
+                            return None
+                        # Convert to string and remove trailing .0 for whole numbers
+                        s = str(val)
+                        if s.endswith('.0'):
+                            s = s[:-2]
+                        return s
+
                     attachments = [att for att in hierarchy.data['CodeAttachment']
                                    if att.get('ModelCodeVersionID') == latest_version['ModelCodeVersionID']
-                                   and att.get('Chapter') == str(chapter_num)
-                                   and att.get('Section') == str(section_num)
-                                   and att.get('Subsection') == content.get('Subsection')]
+                                   and normalize_value(att.get('Chapter')) == normalize_value(chapter_num)
+                                   and normalize_value(att.get('Section')) == normalize_value(section_num)
+                                   and normalize_value(att.get('Subsection')) == normalize_value(content.get('Subsection'))]
 
                     attachment_html = ''
                     if attachments:
@@ -709,12 +719,27 @@ def create_all_library_content(hierarchy):
                             att_id = att['AttachmentID']
                             # Local image path in /public folder
                             from urllib.parse import quote
+                            import os
                             file_name = att['FileName']
-                            # Add .jpg extension (all images are jpg format)
-                            if not file_name.endswith('.jpg'):
-                                file_name = file_name + '.jpg'
+                            # Try different extensions to find the actual file
+                            extensions = ['.jpg', '.JPG', '.jpeg', '.JPEG', '.png', '.PNG']
+                            actual_file = None
+                            for ext in extensions:
+                                if not file_name.endswith(ext):
+                                    test_file = f"public/{file_name}{ext}"
+                                    if os.path.exists(test_file):
+                                        actual_file = file_name + ext
+                                        break
+                                else:
+                                    actual_file = file_name
+                                    break
+
+                            # Fallback to .jpg if file not found
+                            if not actual_file:
+                                actual_file = file_name + '.jpg'
+
                             # URL encode the filename (handles special chars like parentheses)
-                            encoded_file_name = quote(file_name)
+                            encoded_file_name = quote(actual_file)
                             image_url = f"public/{encoded_file_name}"
 
                             att_items.append(f'''
@@ -2423,17 +2448,47 @@ function openImageModal(attachment) {{
 
     // Construct local image URL from /public folder
     let fileName = attachment.FileName;
-    // Add .jpg extension (all images are jpg format)
-    if (!fileName.endsWith('.jpg')) {{
-        fileName = fileName + '.jpg';
-    }}
-    // URL encode the filename (handles special chars like parentheses)
-    const encodedFileName = encodeURIComponent(fileName);
-    const imageUrl = `public/${{encodedFileName}}`;
 
-    modalImage.src = imageUrl;
+    // Try different extensions to find the image
+    const extensions = ['.jpg', '.JPG', '.jpeg', '.JPEG', '.png', '.PNG'];
+    let extensionIndex = 0;
+
+    function tryLoadImage() {{
+        // If fileName already has an extension, use it directly
+        if (fileName.match(/\.(jpg|JPG|jpeg|JPEG|png|PNG)$/)) {{
+            const encodedFileName = encodeURIComponent(fileName);
+            modalImage.src = `public/${{encodedFileName}}`;
+            return;
+        }}
+
+        // Try extensions one by one
+        if (extensionIndex < extensions.length) {{
+            const testFileName = fileName + extensions[extensionIndex];
+            const encodedFileName = encodeURIComponent(testFileName);
+            modalImage.src = `public/${{encodedFileName}}`;
+        }} else {{
+            // All extensions failed, show error
+            console.error(`Image not found: ${{fileName}}`);
+            modalImage.alt = `Image not found: ${{fileName}}`;
+        }}
+    }}
+
+    // Handle image load errors by trying next extension
+    modalImage.onerror = function() {{
+        extensionIndex++;
+        tryLoadImage();
+    }};
+
+    // Handle successful load
+    modalImage.onload = function() {{
+        console.log(`Image loaded successfully: ${{modalImage.src}}`);
+    }};
+
     modalImage.alt = `${{typeLabel}}${{number}}`;
     modalImage.style.display = 'block';
+
+    // Start loading with first extension
+    tryLoadImage();
 
     // Set content
     let contentHtml = '';
