@@ -256,26 +256,65 @@
     .figures-scroll {
       display: flex;
       overflow-x: auto;
-      gap: 0.5rem;
+      gap: 0.75rem;
       padding-bottom: 0.5rem;
     }
-    
+
     .figures-scroll::-webkit-scrollbar {
       height: 6px;
     }
-    
+
     .figures-scroll::-webkit-scrollbar-track {
       background: #f1f1f1;
       border-radius: 3px;
     }
-    
+
     .figures-scroll::-webkit-scrollbar-thumb {
       background: #A8D0E6;
       border-radius: 3px;
     }
-    
+
     .figures-scroll::-webkit-scrollbar-thumb:hover {
       background: #8fc0d9;
+    }
+
+    /* Uniform thumbnail container for figures & tables */
+    .figure-thumbnail {
+      width: 180px;
+      height: 180px;
+      flex-shrink: 0;
+      border: 2px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      background: white;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .figure-thumbnail:hover {
+      border-color: #A8D0E6;
+      box-shadow: 0 4px 12px rgba(168, 208, 230, 0.3);
+      transform: translateY(-2px);
+    }
+
+    .figure-thumbnail-image {
+      width: 100%;
+      height: 140px;
+      object-fit: contain;
+      border-radius: 4px;
+      background: #f9fafb;
+    }
+
+    .figure-thumbnail-label {
+      margin-top: auto;
+      padding-top: 8px;
+      text-align: center;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: #374151;
+      border-top: 1px solid #e5e7eb;
     }
 
     /* Added clear button styles for section inputs */
@@ -2672,13 +2711,13 @@ Table 307.1.1에 따른 위험물질의 저장, 사용 및 취급은 최대 허�
 <div class="mt-3 pt-3 border-t border-gray-200 bg-[#FEE9EC] bg-opacity-30 p-3 rounded-lg"><label class="text-xs font-semibold text-[#F76C6C] mb-1 block">Note</label><div class="w-full text-base p-2 bg-white border border-[#F76C6C] border-opacity-20 rounded text-gray-700 whitespace-pre-line">2024 년 개정판에 추가된 Section 으로, Table 307.1.1에 따른 위험물의 저장, 사용 및 취급은 최대 허용량(Maximum Allowable Quantities)에 포함되는 것으로 간주되지 않으며, 그로 인해 용도가 Group H로 분류되지 않는다. 이러한 저장, 사용 및 취급은 IFC 의 해당 규정들을 준수하여야 한다.</div></div>
 <div class="mt-3 pt-3 border-t border-gray-200">
 <div class="figures-scroll">
-<div class="border border-gray-300 rounded p-3 hover:border-[#A8D0E6] transition-colors cursor-pointer flex-shrink-0" onclick="openImageModalById('D001')">
-<img alt="Table 1.0" class="w-full h-auto rounded mb-2" src="IBC_3_307.1.1_T1.jpg" style="max-width: 400px;"/>
-<p class="text-xs font-medium text-gray-700 text-center">Table 1.0</p>
+<div class="figure-thumbnail" onclick="openImageModalById('D001')">
+<img alt="Table 1.0" class="figure-thumbnail-image" src="IBC_3_307.1.1_T1.jpg"/>
+<p class="figure-thumbnail-label">Table 1.0</p>
 </div>
-<div class="border border-gray-300 rounded p-3 hover:border-[#A8D0E6] transition-colors cursor-pointer flex-shrink-0" onclick="openImageModalById('D002')">
-<img alt="Table 2.0" class="w-full h-auto rounded mb-2" src="IBC_3_307.1.1_T2.jpg" style="max-width: 400px;"/>
-<p class="text-xs font-medium text-gray-700 text-center">Table 2.0</p>
+<div class="figure-thumbnail" onclick="openImageModalById('D002')">
+<img alt="Table 2.0" class="figure-thumbnail-image" src="IBC_3_307.1.1_T2.jpg"/>
+<p class="figure-thumbnail-label">Table 2.0</p>
 </div>
 </div>
 </div>
@@ -3152,9 +3191,9 @@ Private garages, Retaining walls, Sheds, Stables, Tanks, Towers</p>
 <div class="mt-3 pt-3 border-t border-gray-200 bg-[#FEE9EC] bg-opacity-30 p-3 rounded-lg"><label class="text-xs font-semibold text-[#F76C6C] mb-1 block">Note</label><div class="w-full text-base p-2 bg-white border border-[#F76C6C] border-opacity-20 rounded text-gray-700 whitespace-pre-line">일반적인 미국 소방 사다리차가 사다리를 펼쳐 호수에서 물을 뿌려 닿을 수 있는 최대 높이</div></div>
 <div class="mt-3 pt-3 border-t border-gray-200">
 <div class="figures-scroll">
-<div class="border border-gray-300 rounded p-3 hover:border-[#A8D0E6] transition-colors cursor-pointer flex-shrink-0" onclick="openImageModalById('D003')">
-<img alt="Figure nan" class="w-full h-auto rounded mb-2" src="IBC_4_403_F.jpeg" style="max-width: 400px;"/>
-<p class="text-xs font-medium text-gray-700 text-center">Figure nan</p>
+<div class="figure-thumbnail" onclick="openImageModalById('D003')">
+<img alt="Figure nan" class="figure-thumbnail-image" src="IBC_4_403_F.jpeg"/>
+<p class="figure-thumbnail-label">Figure nan</p>
 </div>
 </div>
 </div>
@@ -3334,9 +3373,9 @@ Exceptions: The provisions of Sections 403.2 through 403.6 shall not apply to th
 <p class="text-gray-600 text-base leading-relaxed mb-3">내부 비상계단은 30 ft (9,144 mm) 이상 또는 해당 건물이나 구역의 전체 최대 대각선 치수의 1/4이상 이격하여 분리되어야 하며, 이 중 작은 값을 적용한다. 거리는 내부 비상계단을 둘러싼 구획부의 가장 가까운 지점 사이를 직선으로 측정한다. 내부 비상계단이 3개 이상인 건물에서는 비상 계단 중 최소 2개가 이 조항을 준수해야 한다. Interlocking Stairways또는 Scissor Stairways는 하나의 비상계단으로 계산한다.</p>
 <div class="mt-3 pt-3 border-t border-gray-200">
 <div class="figures-scroll">
-<div class="border border-gray-300 rounded p-3 hover:border-[#A8D0E6] transition-colors cursor-pointer flex-shrink-0" onclick="openImageModalById('D004')">
-<img alt="Figure nan" class="w-full h-auto rounded mb-2" src="IBC_4_%5BBE%5D403.5.1_F.jpg" style="max-width: 400px;"/>
-<p class="text-xs font-medium text-gray-700 text-center">Figure nan</p>
+<div class="figure-thumbnail" onclick="openImageModalById('D004')">
+<img alt="Figure nan" class="figure-thumbnail-image" src="IBC_4_%5BBE%5D403.5.1_F.jpg"/>
+<p class="figure-thumbnail-label">Figure nan</p>
 </div>
 </div>
 </div>
@@ -3685,9 +3724,9 @@ Exception: Exemptions listed in Table 307.1.1 shall not be required to comply wi
 <p class="text-gray-600 text-base leading-relaxed mb-3">관리구역은 구역 당 최대 허용량을 초과하지 않는 범위의 위험물질을 저장, 분배, 사용 또는 취급하는 건물 내부 공간으로 정의된다. IFC의 “Outdoor Control Area (실외 관리구역)”을 참조한다.</p>
 <div class="mt-3 pt-3 border-t border-gray-200">
 <div class="figures-scroll">
-<div class="border border-gray-300 rounded p-3 hover:border-[#A8D0E6] transition-colors cursor-pointer flex-shrink-0" onclick="openImageModalById('D005')">
-<img alt="Figure nan" class="w-full h-auto rounded mb-2" src="IBC_4_%5BF%5D414.2_F.jpg" style="max-width: 400px;"/>
-<p class="text-xs font-medium text-gray-700 text-center">Figure nan</p>
+<div class="figure-thumbnail" onclick="openImageModalById('D005')">
+<img alt="Figure nan" class="figure-thumbnail-image" src="IBC_4_%5BF%5D414.2_F.jpg"/>
+<p class="figure-thumbnail-label">Figure nan</p>
 </div>
 </div>
 </div>
@@ -3745,13 +3784,13 @@ Exception: Exemptions listed in Table 307.1.1 shall not be required to comply wi
 3. 승인된 캐비닛으로 다시 100% 크레딧을 받음.</div></div>
 <div class="mt-3 pt-3 border-t border-gray-200">
 <div class="figures-scroll">
-<div class="border border-gray-300 rounded p-3 hover:border-[#A8D0E6] transition-colors cursor-pointer flex-shrink-0" onclick="openImageModalById('D006')">
-<img alt="Table 1.0" class="w-full h-auto rounded mb-2" src="IBC_4_%5BF%5D414.2.2_T1.jpg" style="max-width: 400px;"/>
-<p class="text-xs font-medium text-gray-700 text-center">Table 1.0</p>
+<div class="figure-thumbnail" onclick="openImageModalById('D006')">
+<img alt="Table 1.0" class="figure-thumbnail-image" src="IBC_4_%5BF%5D414.2.2_T1.jpg"/>
+<p class="figure-thumbnail-label">Table 1.0</p>
 </div>
-<div class="border border-gray-300 rounded p-3 hover:border-[#A8D0E6] transition-colors cursor-pointer flex-shrink-0" onclick="openImageModalById('D007')">
-<img alt="Figure nan" class="w-full h-auto rounded mb-2" src="IBC_4_%5BF%5D414.2.2_F.jpg" style="max-width: 400px;"/>
-<p class="text-xs font-medium text-gray-700 text-center">Figure nan</p>
+<div class="figure-thumbnail" onclick="openImageModalById('D007')">
+<img alt="Figure nan" class="figure-thumbnail-image" src="IBC_4_%5BF%5D414.2.2_F.jpg"/>
+<p class="figure-thumbnail-label">Figure nan</p>
 </div>
 </div>
 </div>
@@ -3813,9 +3852,9 @@ Exception: Exemptions listed in Table 307.1.1 shall not be required to comply wi
 <div class="mt-3 pt-3 border-t border-gray-200 bg-[#FEE9EC] bg-opacity-30 p-3 rounded-lg"><label class="text-xs font-semibold text-[#F76C6C] mb-1 block">Note</label><div class="w-full text-base p-2 bg-white border border-[#F76C6C] border-opacity-20 rounded text-gray-700 whitespace-pre-line">이 조항은 폭발에 의한 압력에서 건물을 보호하기 위한 조항임.</div></div>
 <div class="mt-3 pt-3 border-t border-gray-200">
 <div class="figures-scroll">
-<div class="border border-gray-300 rounded p-3 hover:border-[#A8D0E6] transition-colors cursor-pointer flex-shrink-0" onclick="openImageModalById('D008')">
-<img alt="Table nan" class="w-full h-auto rounded mb-2" src="IBC_4_%5BF%5D414.5.1_T.JPG" style="max-width: 400px;"/>
-<p class="text-xs font-medium text-gray-700 text-center">Table nan</p>
+<div class="figure-thumbnail" onclick="openImageModalById('D008')">
+<img alt="Table nan" class="figure-thumbnail-image" src="IBC_4_%5BF%5D414.5.1_T.JPG"/>
+<p class="figure-thumbnail-label">Table nan</p>
 </div>
 </div>
 </div>
@@ -3973,9 +4012,9 @@ Exception: Fireworks manufacturing buildings separated in accordance with NFPA 1
 <p class="text-gray-600 text-base leading-relaxed mb-3">Table 415.6.5에 명시된 양을 초과하는 위험물질의 저장 또는 사용은 Section 415.7 및 Section 415.8의 해당 규정에 따라야 한다.</p>
 <div class="mt-3 pt-3 border-t border-gray-200">
 <div class="figures-scroll">
-<div class="border border-gray-300 rounded p-3 hover:border-[#A8D0E6] transition-colors cursor-pointer flex-shrink-0" onclick="openImageModalById('D009')">
-<img alt="Table nan" class="w-full h-auto rounded mb-2" src="IBC_4_%5BF%5D415.6.5_T.JPG" style="max-width: 400px;"/>
-<p class="text-xs font-medium text-gray-700 text-center">Table nan</p>
+<div class="figure-thumbnail" onclick="openImageModalById('D009')">
+<img alt="Table nan" class="figure-thumbnail-image" src="IBC_4_%5BF%5D415.6.5_T.JPG"/>
+<p class="figure-thumbnail-label">Table nan</p>
 </div>
 </div>
 </div>
@@ -4342,9 +4381,9 @@ Exception: The quantity limitations for any hazard category in Table 415.11.1.1 
 예외: 제조 구역이 Table 307.1(1) 및 307.1(2)에 규정된 관리구역당 위험물질이 최대 허용량을 초과하지 않는 경우 Table 415.11.1.1의 모든 위험 범주에 대한 수량 제한이 적용되지 않는다.</p>
 <div class="mt-3 pt-3 border-t border-gray-200">
 <div class="figures-scroll">
-<div class="border border-gray-300 rounded p-3 hover:border-[#A8D0E6] transition-colors cursor-pointer flex-shrink-0" onclick="openImageModalById('D010')">
-<img alt="Table nan" class="w-full h-auto rounded mb-2" src="IBC_4_%5BF%5D415.11.1.1_T.JPG" style="max-width: 400px;"/>
-<p class="text-xs font-medium text-gray-700 text-center">Table nan</p>
+<div class="figure-thumbnail" onclick="openImageModalById('D010')">
+<img alt="Table nan" class="figure-thumbnail-image" src="IBC_4_%5BF%5D415.11.1.1_T.JPG"/>
+<p class="figure-thumbnail-label">Table nan</p>
 </div>
 </div>
 </div>
@@ -4539,13 +4578,13 @@ Building height, number of stories and building area provisions shall be applied
 <p class="text-gray-600 text-base leading-relaxed mb-3">동일한 대지 내에 두 개 이상의 건물이 있는 경우, 이들은 별개의 건물로 취급되거나, 각 건물의 높이, 층수, 그리고 총합 건축면적이 Section 504 및 Section 506에 명시된 제한 내에 있는 경우 한 개의 건물로 간주될 수 있다. 총합 건물에 적용되는 본 규정의 조항들은 각 건물에도 적용된다.</p>
 <div class="mt-3 pt-3 border-t border-gray-200">
 <div class="figures-scroll">
-<div class="border border-gray-300 rounded p-3 hover:border-[#A8D0E6] transition-colors cursor-pointer flex-shrink-0" onclick="openImageModalById('D011')">
-<img alt="Figure 1.0" class="w-full h-auto rounded mb-2" src="IBC_5_503.1.2_F1.jpg" style="max-width: 400px;"/>
-<p class="text-xs font-medium text-gray-700 text-center">Figure 1.0</p>
+<div class="figure-thumbnail" onclick="openImageModalById('D011')">
+<img alt="Figure 1.0" class="figure-thumbnail-image" src="IBC_5_503.1.2_F1.jpg"/>
+<p class="figure-thumbnail-label">Figure 1.0</p>
 </div>
-<div class="border border-gray-300 rounded p-3 hover:border-[#A8D0E6] transition-colors cursor-pointer flex-shrink-0" onclick="openImageModalById('D012')">
-<img alt="Figure 2.0" class="w-full h-auto rounded mb-2" src="IBC_5_503.1.2_F2.jpg" style="max-width: 400px;"/>
-<p class="text-xs font-medium text-gray-700 text-center">Figure 2.0</p>
+<div class="figure-thumbnail" onclick="openImageModalById('D012')">
+<img alt="Figure 2.0" class="figure-thumbnail-image" src="IBC_5_503.1.2_F2.jpg"/>
+<p class="figure-thumbnail-label">Figure 2.0</p>
 </div>
 </div>
 </div>
@@ -4676,9 +4715,9 @@ Exception: Towers, spires, steeples and other rooftop structures shall be constr
 예외: 타워, 첨탑, 종탑 및 기타 옥상 구조물은 Section 1511.2.4에서 다른 구조가 허용되는 경우를 제외하고, 건물의 요구되는 구조 유형과 일치하는 재료로 건축되어야 한다. 이러한 구조물은 거주(Habitation) 또는 저장 용으로 사용될 수 없다. 비연소성 재료로 만들어진 경우, 이러한 구조물은 높이에 제한이 없으며, 가연성 재료로 만들어진 경우 허용 가능한 건물 높이보다 20 ft (6096mm)를 초과하여 연장될 수 없다. (추가 요건은 Chapter 15 참조)</p>
 <div class="mt-3 pt-3 border-t border-gray-200">
 <div class="figures-scroll">
-<div class="border border-gray-300 rounded p-3 hover:border-[#A8D0E6] transition-colors cursor-pointer flex-shrink-0" onclick="openImageModalById('D013')">
-<img alt="Table nan" class="w-full h-auto rounded mb-2" src="IBC_5_504.3_T.JPG" style="max-width: 400px;"/>
-<p class="text-xs font-medium text-gray-700 text-center">Table nan</p>
+<div class="figure-thumbnail" onclick="openImageModalById('D013')">
+<img alt="Table nan" class="figure-thumbnail-image" src="IBC_5_504.3_T.JPG"/>
+<p class="figure-thumbnail-label">Table nan</p>
 </div>
 </div>
 </div>
@@ -4703,9 +4742,9 @@ Exception: Towers, spires, steeples and other rooftop structures shall be constr
 <p class="text-gray-600 text-base leading-relaxed mb-3">건물의 지상층(Above Grade Plane) 의 최대 층수는 Table 504.4에 명시된 제한을 초과할 수 없다.</p>
 <div class="mt-3 pt-3 border-t border-gray-200">
 <div class="figures-scroll">
-<div class="border border-gray-300 rounded p-3 hover:border-[#A8D0E6] transition-colors cursor-pointer flex-shrink-0" onclick="openImageModalById('D014')">
-<img alt="Table nan" class="w-full h-auto rounded mb-2" src="IBC_5_504.4_T.JPG" style="max-width: 400px;"/>
-<p class="text-xs font-medium text-gray-700 text-center">Table nan</p>
+<div class="figure-thumbnail" onclick="openImageModalById('D014')">
+<img alt="Table nan" class="figure-thumbnail-image" src="IBC_5_504.4_T.JPG"/>
+<p class="figure-thumbnail-label">Table nan</p>
 </div>
 </div>
 </div>
@@ -5043,9 +5082,9 @@ NFPA 13R “저층 주거 시설에 대한 스프링클러 시스템 설치 기�
 <div class="mt-3 pt-3 border-t border-gray-200 bg-[#FEE9EC] bg-opacity-30 p-3 rounded-lg"><label class="text-xs font-semibold text-[#F76C6C] mb-1 block">Note</label><div class="w-full text-base p-2 bg-white border border-[#F76C6C] border-opacity-20 rounded text-gray-700 whitespace-pre-line">유의점: 5층 건물이어서 전체 면적이 69,000 SF 을 넘지 않은 선에서 층마다 면적이 다를 수 있지만 조항에서 언급한 것처럼 한 층의 면적이 23,000 SF를 넘을 수는 없습니다.</div></div>
 <div class="mt-3 pt-3 border-t border-gray-200">
 <div class="figures-scroll">
-<div class="border border-gray-300 rounded p-3 hover:border-[#A8D0E6] transition-colors cursor-pointer flex-shrink-0" onclick="openImageModalById('D015')">
-<img alt="Table " class="w-full h-auto rounded mb-2" src="IBC_5_506.2_T.jpg" style="max-width: 400px;"/>
-<p class="text-xs font-medium text-gray-700 text-center">Table </p>
+<div class="figure-thumbnail" onclick="openImageModalById('D015')">
+<img alt="Table " class="figure-thumbnail-image" src="IBC_5_506.2_T.jpg"/>
+<p class="figure-thumbnail-label">Table </p>
 </div>
 </div>
 </div>
@@ -5174,9 +5213,9 @@ Nonseparated occupancy 설계에서는 각 용도의 (실제 면적 ÷ 허용 �
 3. 동일 대지 내 인접 건물의 외벽</p>
 <div class="mt-3 pt-3 border-t border-gray-200">
 <div class="figures-scroll">
-<div class="border border-gray-300 rounded p-3 hover:border-[#A8D0E6] transition-colors cursor-pointer flex-shrink-0" onclick="openImageModalById('D016')">
-<img alt="Figure nan" class="w-full h-auto rounded mb-2" src="IBC_5_506.3.2_F.jpg" style="max-width: 400px;"/>
-<p class="text-xs font-medium text-gray-700 text-center">Figure nan</p>
+<div class="figure-thumbnail" onclick="openImageModalById('D016')">
+<img alt="Figure nan" class="figure-thumbnail-image" src="IBC_5_506.3.2_F.jpg"/>
+<p class="figure-thumbnail-label">Figure nan</p>
 </div>
 </div>
 </div>
@@ -5202,9 +5241,9 @@ Nonseparated occupancy 설계에서는 각 용도의 (실제 면적 ÷ 허용 �
 <div class="mt-3 pt-3 border-t border-gray-200 bg-[#FEE9EC] bg-opacity-30 p-3 rounded-lg"><label class="text-xs font-semibold text-[#F76C6C] mb-1 block">Note</label><div class="w-full text-base p-2 bg-white border border-[#F76C6C] border-opacity-20 rounded text-gray-700 whitespace-pre-line">위의 Equation 5-1, 5-2, 5-3 에 적용.</div></div>
 <div class="mt-3 pt-3 border-t border-gray-200">
 <div class="figures-scroll">
-<div class="border border-gray-300 rounded p-3 hover:border-[#A8D0E6] transition-colors cursor-pointer flex-shrink-0" onclick="openImageModalById('D017')">
-<img alt="Table nan" class="w-full h-auto rounded mb-2" src="IBC_5_506.3.3_T.JPG" style="max-width: 400px;"/>
-<p class="text-xs font-medium text-gray-700 text-center">Table nan</p>
+<div class="figure-thumbnail" onclick="openImageModalById('D017')">
+<img alt="Table nan" class="figure-thumbnail-image" src="IBC_5_506.3.3_T.JPG"/>
+<p class="figure-thumbnail-label">Table nan</p>
 </div>
 </div>
 </div>
@@ -5605,9 +5644,9 @@ Exceptions:
 <p class="text-gray-600 text-base leading-relaxed mb-3">이 조항들을 준수하는 건물 또는 건물의 일부는 분리 용도로 간주된다.</p>
 <div class="mt-3 pt-3 border-t border-gray-200">
 <div class="figures-scroll">
-<div class="border border-gray-300 rounded p-3 hover:border-[#A8D0E6] transition-colors cursor-pointer flex-shrink-0" onclick="openImageModalById('D018')">
-<img alt="Table nan" class="w-full h-auto rounded mb-2" src="IBC_5_508.4_T.JPG" style="max-width: 400px;"/>
-<p class="text-xs font-medium text-gray-700 text-center">Table nan</p>
+<div class="figure-thumbnail" onclick="openImageModalById('D018')">
+<img alt="Table nan" class="figure-thumbnail-image" src="IBC_5_508.4_T.JPG"/>
+<p class="figure-thumbnail-label">Table nan</p>
 </div>
 </div>
 </div>
@@ -5764,9 +5803,9 @@ Incidental uses within and serving a dwelling unit are not required to comply wi
 <div class="mt-3 pt-3 border-t border-gray-200 bg-[#FEE9EC] bg-opacity-30 p-3 rounded-lg"><label class="text-xs font-semibold text-[#F76C6C] mb-1 block">Note</label><div class="w-full text-base p-2 bg-white border border-[#F76C6C] border-opacity-20 rounded text-gray-700 whitespace-pre-line">Incidental Use는 Accessory 용도와 다른 건물에서 기능적으로 필요한 부가적 기능을 가진 용도를 의미하며, Table 509.1 에 따라 구획되어야 합니다.</div></div>
 <div class="mt-3 pt-3 border-t border-gray-200">
 <div class="figures-scroll">
-<div class="border border-gray-300 rounded p-3 hover:border-[#A8D0E6] transition-colors cursor-pointer flex-shrink-0" onclick="openImageModalById('D019')">
-<img alt="Table nan" class="w-full h-auto rounded mb-2" src="IBC_5_509.1_T.JPG" style="max-width: 400px;"/>
-<p class="text-xs font-medium text-gray-700 text-center">Table nan</p>
+<div class="figure-thumbnail" onclick="openImageModalById('D019')">
+<img alt="Table nan" class="figure-thumbnail-image" src="IBC_5_509.1_T.JPG"/>
+<p class="figure-thumbnail-label">Table nan</p>
 </div>
 </div>
 </div>
@@ -5859,9 +5898,9 @@ Exception: Where the enclosure walls below the horizontal assembly have not less
 <div class="mt-3 pt-3 border-t border-gray-200 bg-[#FEE9EC] bg-opacity-30 p-3 rounded-lg"><label class="text-xs font-semibold text-[#F76C6C] mb-1 block">Note</label><div class="w-full text-base p-2 bg-white border border-[#F76C6C] border-opacity-20 rounded text-gray-700 whitespace-pre-line">프로젝트의 특성 상, 그리고 건축 설계 의도 상, 허용면적과 층수 제한 요구사항을 충족하기 위해 건물을 수평적으로 구획해야 하는 경우가 있습니다. 예를 들어 주차장 위에 아파트가 있는 경우나, 하나의 건물에서 다른 Construction type들을 시공할 경우가 그 좋은 예입니다. 이런 경우에 건물을 3시간 이상의 Fire barrier로 구획할 수 있습니다. 본 조항은 그런 수평적 분할을 다루고 있습니다.</div></div>
 <div class="mt-3 pt-3 border-t border-gray-200">
 <div class="figures-scroll">
-<div class="border border-gray-300 rounded p-3 hover:border-[#A8D0E6] transition-colors cursor-pointer flex-shrink-0" onclick="openImageModalById('D020')">
-<img alt="Figure nan" class="w-full h-auto rounded mb-2" src="IBC_5_510.2_F.jpg" style="max-width: 400px;"/>
-<p class="text-xs font-medium text-gray-700 text-center">Figure nan</p>
+<div class="figure-thumbnail" onclick="openImageModalById('D020')">
+<img alt="Figure nan" class="figure-thumbnail-image" src="IBC_5_510.2_F.jpg"/>
+<p class="figure-thumbnail-label">Figure nan</p>
 </div>
 </div>
 </div>
@@ -28863,17 +28902,23 @@ Central Station의 감시 서비스는 건물의 소유자, 재실자 또는 관
 </div>
 </div>
 <div class="modal" id="imageModal">
-<div class="modal-content">
-<div class="flex items-center justify-between mb-4">
+<div class="modal-content" style="max-width: 90vw; max-height: 90vh; overflow-y: auto;">
+<div class="flex items-center justify-between mb-4 sticky top-0 bg-white z-10 pb-3 border-b border-gray-200">
+<div>
 <h3 class="text-xl font-bold text-[#24305E]" id="modalTitle">Table 101.1</h3>
+<p class="text-sm text-gray-600 mt-1" id="modalSubtitle"></p>
+</div>
 <button class="p-2 hover:bg-gray-100 rounded-lg transition-colors" onclick="closeModal()">
 <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewbox="0 0 24 24">
 <path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
 </svg>
 </button>
 </div>
-<div class="bg-gray-100 rounded-lg p-8 flex items-center justify-center" style="min-height: 400px;">
-<p class="text-gray-500">Table content would be displayed here</p>
+<div class="bg-gray-50 rounded-lg p-6 mb-4">
+<img id="modalImage" class="w-full h-auto rounded-lg shadow-md" alt="Figure or Table" style="max-height: 70vh; object-fit: contain; background: white;"/>
+</div>
+<div id="modalContent" class="space-y-3">
+<!-- Attachment details will be populated here -->
 </div>
 </div>
 </div>
@@ -59468,6 +59513,7 @@ function openImageModalById(attachmentId) {
 function openImageModal(attachment) {
     const modal = document.getElementById('imageModal');
     const modalTitle = document.getElementById('modalTitle');
+    const modalSubtitle = document.getElementById('modalSubtitle');
     const modalImage = document.getElementById('modalImage');
     const modalContent = document.getElementById('modalContent');
 
@@ -59478,6 +59524,15 @@ function openImageModal(attachment) {
     const typeLabel = attachment.Type === 'T' ? 'Table' : 'Figure';
     const number = attachment.Number ? ` ${attachment.Number}` : '';
     modalTitle.textContent = `${typeLabel}${number}`;
+
+    // Set subtitle with code section info
+    if (attachment.CodeID && attachment.ChapterID && attachment.SectionNum) {
+        const codeInfo = appData.MasterCode.find(c => c.CodeID === attachment.CodeID);
+        const codeName = codeInfo ? codeInfo.CodeName : '';
+        modalSubtitle.textContent = `${codeName} - Chapter ${attachment.ChapterID}, Section ${attachment.SectionNum}`;
+    } else {
+        modalSubtitle.textContent = '';
+    }
 
     // Construct local image URL from root folder
     let fileName = attachment.FileName;
