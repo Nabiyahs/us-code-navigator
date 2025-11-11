@@ -59063,6 +59063,9 @@ function performSearch() {
     const partialMatches = [];
     const allFilteredResults = [];
 
+    // Also track attachment results
+    const attachmentResults = [];
+
     appData.CodeContent.forEach(content => {
         if (!modelCodeIds.has(content.ModelCodeID)) return;
 
@@ -59085,7 +59088,8 @@ function performSearch() {
                 contentKR: content.ContentKR || '',
                 codeId: content.ModelCodeID,
                 versionId: content.ModelCodeVersionID,
-                chapterId: content.ChapterID
+                chapterId: content.ChapterID,
+                contentId: content.ContentID
             };
 
             // If keyword is provided, filter by keyword
@@ -59121,8 +59125,58 @@ function performSearch() {
         }
     });
 
-    // Display results with exact matches first
-    displaySearchResults(exactMatches, partialMatches, allFilteredResults, keyword);
+    // Search in CodeAttachment for images/tables
+    if (keyword) {
+        appData.CodeAttachment.forEach(attachment => {
+            const modelCode = appData.ModelCode.find(mc => mc.CodeID === attachment.CodeID);
+            if (!modelCode || !modelCodeIds.has(modelCode.ModelCodeID)) return;
+
+            const version = appData.ModelCodeVersion.find(v => v.ModelCodeVersionID === attachment.ModelCodeVersionID);
+            const chapter = appData.CodeChapter.find(ch => ch.ChapterID === attachment.ChapterID);
+
+            if (modelCode && version && chapter) {
+                const typeLabel = attachment.Type === 'T' ? 'Table' : 'Figure';
+                const sectionNum = attachment.SectionNum || '';
+
+                // Create search text with multiple variations
+                const searchTexts = [
+                    `${typeLabel} ${sectionNum}`,
+                    `${typeLabel.toLowerCase()} ${sectionNum}`,
+                    attachment.Type === 'T' ? `표 ${sectionNum}` : `그림 ${sectionNum}`,
+                    (attachment.AttachTitleEN || '').toLowerCase(),
+                    (attachment.AttachTitleKR || '').toLowerCase(),
+                    (attachment.AttachContentEN || '').toLowerCase(),
+                    (attachment.AttachContentKR || '').toLowerCase(),
+                    (attachment.AttachComment || '').toLowerCase(),
+                    sectionNum
+                ].join(' ');
+
+                // Check if keyword matches any attachment field
+                if (searchTexts.includes(keyword)) {
+                    const result = {
+                        type: 'attachment',
+                        attachmentId: attachment.AttachmentID,
+                        code: modelCode.ModelCodeName.split(':')[0].trim(),
+                        year: version.Year ? Math.floor(version.Year) : '',
+                        chapter: chapter.Chapter,
+                        chapterTitle: chapter.TitleEN || '',
+                        section: sectionNum.split('.')[0] || 'General',
+                        subsection: sectionNum.split('.').slice(1).join('.') || '',
+                        titleEN: `${typeLabel} ${sectionNum}`,
+                        titleKR: attachment.Type === 'T' ? `표 ${sectionNum}` : `그림 ${sectionNum}`,
+                        contentEN: attachment.AttachContentEN || attachment.AttachTitleEN || '',
+                        contentKR: attachment.AttachContentKR || attachment.AttachTitleKR || '',
+                        fileName: attachment.FileName,
+                        attachment: attachment
+                    };
+                    attachmentResults.push(result);
+                }
+            }
+        });
+    }
+
+    // Display results with exact matches first, then attachments
+    displaySearchResults(exactMatches, partialMatches, allFilteredResults, keyword, attachmentResults);
 }
 
 // Helper function to highlight keyword in text - with different colors for exact vs partial
@@ -59175,10 +59229,10 @@ function extractContextAroundKeyword(text, keyword, contextLength = 200) {
     return context;
 }
 
-function displaySearchResults(exactMatches, partialMatches, allFilteredResults, keyword) {
+function displaySearchResults(exactMatches, partialMatches, allFilteredResults, keyword, attachmentResults = []) {
     const resultsList = document.getElementById('resultsList');
 
-    const totalResults = exactMatches.length + partialMatches.length + allFilteredResults.length;
+    const totalResults = exactMatches.length + partialMatches.length + allFilteredResults.length + attachmentResults.length;
 
     if (totalResults === 0) {
         resultsList.innerHTML = '<p class="text-gray-500 text-center py-8">검색 결과가 없습니다</p>';
@@ -59187,8 +59241,8 @@ function displaySearchResults(exactMatches, partialMatches, allFilteredResults, 
 
     let html = '<div class="space-y-4">';
 
-    // Combine all results: exact matches first, then partial matches
-    const allResults = [...exactMatches, ...partialMatches, ...allFilteredResults];
+    // Combine all results: exact matches first, then partial matches, then attachments
+    const allResults = [...exactMatches, ...partialMatches, ...allFilteredResults, ...attachmentResults];
 
     allResults.forEach((result, index) => {
         const sectionNum = result.section + (result.subsection ? '.' + result.subsection : '');
@@ -59210,32 +59264,63 @@ function displaySearchResults(exactMatches, partialMatches, allFilteredResults, 
             displayContentKR = highlightKeyword(result.contentKR, keyword, isExactMatch);
         }
 
-        html += `
-            <div class="bg-gray-50 p-4 rounded-lg relative search-result-item"
-                 data-result='${JSON.stringify(result).replace(/'/g, "\'")}'
-                 onmousedown="handleResultMouseDown(event)"
-                 onmouseup="handleResultMouseUp(event)">
-                <!-- Copy button only -->
-                <div class="absolute top-3 right-3">
-                    <button class="p-1.5 hover:bg-gray-200 rounded transition-colors" title="Copy content" onclick="copySearchResultContent(event, this)">
-                        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
-                        </svg>
-                    </button>
+        // Check if this is an attachment result
+        if (result.type === 'attachment') {
+            // Display attachment with thumbnail
+            const encodedFileName = encodeURIComponent(result.fileName);
+            html += `
+                <div class="bg-gray-50 p-4 rounded-lg relative search-result-item"
+                     data-result='${JSON.stringify(result).replace(/'/g, "\'")}'
+                     onclick="openImageModalById('${result.attachmentId}')">
+                    <!-- Location and Index tags -->
+                    <div class="flex items-center gap-2 mb-3 flex-wrap">
+                        <span class="text-xs bg-[#A8D0E6] text-[#24305E] font-semibold px-2 py-0.5 rounded">${result.code} ${result.year}: Chapter ${result.chapter} - ${sectionNum}</span>
+                        <span class="text-xs bg-[#F76C6C] text-white px-2 py-0.5 rounded">이미지/표</span>
+                    </div>
+                    <div class="flex gap-4">
+                        <!-- Thumbnail -->
+                        <div class="flex-shrink-0">
+                            <img src="${encodedFileName}" alt="${displayTitleEN}" class="w-32 h-32 object-contain border-2 border-gray-300 rounded-lg bg-white" />
+                        </div>
+                        <!-- Content -->
+                        <div class="flex-1">
+                            <h4 class="font-semibold text-[#24305E] text-sm mb-1">${displayTitleEN}</h4>
+                            ${displayTitleKR ? `<p class="text-gray-600 text-sm leading-relaxed mb-2">${displayTitleKR}</p>` : ''}
+                            ${displayContentEN ? `<p class="text-gray-700 text-xs leading-relaxed mb-1 line-clamp-2">${displayContentEN}</p>` : ''}
+                            ${displayContentKR ? `<p class="text-gray-600 text-xs leading-relaxed line-clamp-2">${displayContentKR}</p>` : ''}
+                        </div>
+                    </div>
                 </div>
-                <!-- Location and Index tags -->
-                <div class="flex items-center gap-2 mb-3 flex-wrap">
-                    <span class="text-xs bg-[#A8D0E6] text-[#24305E] font-semibold px-2 py-0.5 rounded">${result.code} ${result.year}: Chapter ${result.chapter} - ${sectionNum}</span>
-                    <span class="text-xs bg-[#F8E9A1] text-[#24305E] px-2 py-0.5 rounded">건축</span>
+            `;
+        } else {
+            // Display regular content result
+            html += `
+                <div class="bg-gray-50 p-4 rounded-lg relative search-result-item"
+                     data-result='${JSON.stringify(result).replace(/'/g, "\'")}'
+                     onmousedown="handleResultMouseDown(event)"
+                     onmouseup="handleResultMouseUp(event)">
+                    <!-- Copy button only -->
+                    <div class="absolute top-3 right-3">
+                        <button class="p-1.5 hover:bg-gray-200 rounded transition-colors" title="Copy content" onclick="copySearchResultContent(event, this)">
+                            <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <!-- Location and Index tags -->
+                    <div class="flex items-center gap-2 mb-3 flex-wrap">
+                        <span class="text-xs bg-[#A8D0E6] text-[#24305E] font-semibold px-2 py-0.5 rounded">${result.code} ${result.year}: Chapter ${result.chapter} - ${sectionNum}</span>
+                        <span class="text-xs bg-[#F8E9A1] text-[#24305E] px-2 py-0.5 rounded">건축</span>
+                    </div>
+                    <div class="flex items-center gap-2 mb-2">
+                        <h4 class="font-semibold text-[#24305E] text-sm">${sectionNum}${result.titleEN ? ' ' + result.titleEN : ''}</h4>
+                    </div>
+                    ${displayTitleKR ? `<p class="text-gray-600 text-sm leading-relaxed mb-1 line-clamp-1">${displayTitleKR}</p>` : ''}
+                    ${displayContentEN ? `<p class="text-gray-700 text-xs leading-relaxed mb-1 line-clamp-2">${displayContentEN}</p>` : ''}
+                    ${displayContentKR ? `<p class="text-gray-600 text-xs leading-relaxed mb-2 line-clamp-2">${displayContentKR}</p>` : ''}
                 </div>
-                <div class="flex items-center gap-2 mb-2">
-                    <h4 class="font-semibold text-[#24305E] text-sm">${sectionNum}${result.titleEN ? ' ' + result.titleEN : ''}</h4>
-                </div>
-                ${displayTitleKR ? `<p class="text-gray-600 text-sm leading-relaxed mb-1 line-clamp-1">${displayTitleKR}</p>` : ''}
-                ${displayContentEN ? `<p class="text-gray-700 text-xs leading-relaxed mb-1 line-clamp-2">${displayContentEN}</p>` : ''}
-                ${displayContentKR ? `<p class="text-gray-600 text-xs leading-relaxed mb-2 line-clamp-2">${displayContentKR}</p>` : ''}
-            </div>
-        `;
+            `;
+        }
     });
 
     html += '</div>';
