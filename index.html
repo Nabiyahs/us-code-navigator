@@ -58860,15 +58860,73 @@ function performTopSearch() {
         }
     });
 
+    // Search in CodeAttachment for images/tables
+    const attachmentResults = [];
+    appData.CodeAttachment.forEach(attachment => {
+        // Find the correct version and code
+        const version = appData.ModelCodeVersion.find(v => v.ModelCodeVersionID === attachment.ModelCodeVersionID);
+        if (!version) return;
+
+        const modelCode = appData.ModelCode.find(mc => mc.ModelCodeID === version.ModelCodeID);
+        if (!modelCode || !modelCodeIds.has(modelCode.ModelCodeID)) return;
+
+        // Find chapter based on attachment's chapter, section, subsection
+        const chapter = appData.CodeChapter.find(ch =>
+            ch.ModelCodeVersionID === attachment.ModelCodeVersionID &&
+            ch.Chapter === attachment.Chapter
+        );
+
+        if (modelCode && version && chapter) {
+            const typeLabel = attachment.Type === 'T' ? 'Table' : 'Figure';
+            const sectionNum = `${attachment.Section || ''}${attachment.Subsection ? '.' + attachment.Subsection : ''}`;
+
+            // Prepare all searchable text fields
+            const attachTitleEN = (attachment.AttachTitleEN || '').toLowerCase();
+            const attachTitleKR = (attachment.AttachTitleKR || '').toLowerCase();
+            const attachContentEN = (attachment.AttachContentEN || '').toLowerCase();
+            const attachContentKR = (attachment.AttachContentKR || '').toLowerCase();
+            const attachComment = (attachment.AttachComment || '').toLowerCase();
+
+            // Create search text variations
+            const typeLabelLower = typeLabel.toLowerCase();
+            const typeKR = attachment.Type === 'T' ? '표' : '그림';
+            const searchableText = `${typeLabel} ${sectionNum} ${typeLabelLower} ${sectionNum} ${typeKR} ${sectionNum} ${attachTitleEN} ${attachTitleKR} ${attachContentEN} ${attachContentKR} ${attachComment} ${sectionNum}`;
+
+            // Check if keyword matches
+            if (searchableText.includes(keyword)) {
+                const result = {
+                    type: 'attachment',
+                    attachmentId: attachment.AttachmentID,
+                    code: modelCode.ModelCodeName.split(':')[0].trim(),
+                    year: version.Year ? Math.floor(version.Year) : '',
+                    chapter: chapter.Chapter,
+                    chapterTitle: chapter.TitleEN || '',
+                    section: attachment.Section || 'General',
+                    subsection: attachment.Subsection || '',
+                    titleEN: `${typeLabel} ${sectionNum}`,
+                    titleKR: `${typeKR} ${sectionNum}`,
+                    contentEN: attachment.AttachContentEN || attachment.AttachTitleEN || '',
+                    contentKR: attachment.AttachContentKR || attachment.AttachTitleKR || '',
+                    fileName: attachment.FileName,
+                    attachment: attachment,
+                    codeId: modelCode.ModelCodeID,
+                    versionId: attachment.ModelCodeVersionID,
+                    chapterId: chapter.ChapterID
+                };
+                attachmentResults.push(result);
+            }
+        }
+    });
+
     // Display results in search results section
-    displayTopSearchResults(exactMatches, partialMatches, keyword);
+    displayTopSearchResults(exactMatches, partialMatches, keyword, attachmentResults);
 
     // Clear the top search input
     document.getElementById('topSearchInput').value = '';
 }
 
 // Display top search results with detailed preview (5 lines)
-function displayTopSearchResults(exactMatches, partialMatches, keyword) {
+function displayTopSearchResults(exactMatches, partialMatches, keyword, attachmentResults = []) {
     const searchResultsSection = document.getElementById('searchResultsSection');
     if (!searchResultsSection) return;
 
@@ -58906,10 +58964,10 @@ function displayTopSearchResults(exactMatches, partialMatches, keyword) {
     // Update keyword display
     const keywordDisplay = searchResultsSection.querySelector('#topSearchKeyword');
     if (keywordDisplay) {
-        keywordDisplay.textContent = `"${keyword}" 검색 결과 ${exactMatches.length + partialMatches.length}개`;
+        keywordDisplay.textContent = `"${keyword}" 검색 결과 ${exactMatches.length + partialMatches.length + attachmentResults.length}개`;
     }
 
-    const allResults = [...exactMatches, ...partialMatches];
+    const allResults = [...exactMatches, ...partialMatches, ...attachmentResults];
 
     if (allResults.length === 0) {
         resultsContainer.innerHTML = '<p class="text-gray-500 text-center py-8">검색 결과가 없습니다</p>';
@@ -59019,8 +59077,9 @@ function toggleAllSearchResults(expand) {
 }
 
 function performSearch() {
-    // No keyword input in advanced search - filter only
-    const keyword = '';
+    // Get keyword from input field
+    const keywordInput = document.getElementById('keywordInput');
+    const keyword = keywordInput ? keywordInput.value.trim().toLowerCase() : '';
 
     const selectedArchCategories = Array.from(document.querySelectorAll('input[name="archCategory"]:checked')).map(cb => cb.value);
     const selectedFireCategories = Array.from(document.querySelectorAll('input[name="fireCategory"]:checked')).map(cb => cb.value);
@@ -59126,54 +59185,63 @@ function performSearch() {
     });
 
     // Search in CodeAttachment for images/tables
-    if (keyword) {
-        appData.CodeAttachment.forEach(attachment => {
-            const modelCode = appData.ModelCode.find(mc => mc.CodeID === attachment.CodeID);
-            if (!modelCode || !modelCodeIds.has(modelCode.ModelCodeID)) return;
+    appData.CodeAttachment.forEach(attachment => {
+        // Find the correct version and code
+        const version = appData.ModelCodeVersion.find(v => v.ModelCodeVersionID === attachment.ModelCodeVersionID);
+        if (!version) return;
 
-            const version = appData.ModelCodeVersion.find(v => v.ModelCodeVersionID === attachment.ModelCodeVersionID);
-            const chapter = appData.CodeChapter.find(ch => ch.ChapterID === attachment.ChapterID);
+        const modelCode = appData.ModelCode.find(mc => mc.ModelCodeID === version.ModelCodeID);
+        if (!modelCode || !modelCodeIds.has(modelCode.ModelCodeID)) return;
 
-            if (modelCode && version && chapter) {
-                const typeLabel = attachment.Type === 'T' ? 'Table' : 'Figure';
-                const sectionNum = attachment.SectionNum || '';
+        // Find chapter based on attachment's chapter, section, subsection
+        const chapter = appData.CodeChapter.find(ch =>
+            ch.ModelCodeVersionID === attachment.ModelCodeVersionID &&
+            ch.Chapter === attachment.Chapter
+        );
 
-                // Create search text with multiple variations
-                const searchTexts = [
-                    `${typeLabel} ${sectionNum}`,
-                    `${typeLabel.toLowerCase()} ${sectionNum}`,
-                    attachment.Type === 'T' ? `표 ${sectionNum}` : `그림 ${sectionNum}`,
-                    (attachment.AttachTitleEN || '').toLowerCase(),
-                    (attachment.AttachTitleKR || '').toLowerCase(),
-                    (attachment.AttachContentEN || '').toLowerCase(),
-                    (attachment.AttachContentKR || '').toLowerCase(),
-                    (attachment.AttachComment || '').toLowerCase(),
-                    sectionNum
-                ].join(' ');
+        if (modelCode && version && chapter) {
+            const typeLabel = attachment.Type === 'T' ? 'Table' : 'Figure';
+            const sectionNum = `${attachment.Section || ''}${attachment.Subsection ? '.' + attachment.Subsection : ''}`;
 
-                // Check if keyword matches any attachment field
-                if (searchTexts.includes(keyword)) {
-                    const result = {
-                        type: 'attachment',
-                        attachmentId: attachment.AttachmentID,
-                        code: modelCode.ModelCodeName.split(':')[0].trim(),
-                        year: version.Year ? Math.floor(version.Year) : '',
-                        chapter: chapter.Chapter,
-                        chapterTitle: chapter.TitleEN || '',
-                        section: sectionNum.split('.')[0] || 'General',
-                        subsection: sectionNum.split('.').slice(1).join('.') || '',
-                        titleEN: `${typeLabel} ${sectionNum}`,
-                        titleKR: attachment.Type === 'T' ? `표 ${sectionNum}` : `그림 ${sectionNum}`,
-                        contentEN: attachment.AttachContentEN || attachment.AttachTitleEN || '',
-                        contentKR: attachment.AttachContentKR || attachment.AttachTitleKR || '',
-                        fileName: attachment.FileName,
-                        attachment: attachment
-                    };
-                    attachmentResults.push(result);
-                }
+            // Prepare all searchable text fields
+            const attachTitleEN = (attachment.AttachTitleEN || '').toLowerCase();
+            const attachTitleKR = (attachment.AttachTitleKR || '').toLowerCase();
+            const attachContentEN = (attachment.AttachContentEN || '').toLowerCase();
+            const attachContentKR = (attachment.AttachContentKR || '').toLowerCase();
+            const attachComment = (attachment.AttachComment || '').toLowerCase();
+
+            // Create search text variations
+            const typeLabelLower = typeLabel.toLowerCase();
+            const typeKR = attachment.Type === 'T' ? '표' : '그림';
+            const searchableText = `${typeLabel} ${sectionNum} ${typeLabelLower} ${sectionNum} ${typeKR} ${sectionNum} ${attachTitleEN} ${attachTitleKR} ${attachContentEN} ${attachContentKR} ${attachComment} ${sectionNum}`;
+
+            // Check if keyword matches (or no keyword means include all)
+            const matchesKeyword = !keyword || searchableText.includes(keyword);
+
+            if (matchesKeyword) {
+                const result = {
+                    type: 'attachment',
+                    attachmentId: attachment.AttachmentID,
+                    code: modelCode.ModelCodeName.split(':')[0].trim(),
+                    year: version.Year ? Math.floor(version.Year) : '',
+                    chapter: chapter.Chapter,
+                    chapterTitle: chapter.TitleEN || '',
+                    section: attachment.Section || 'General',
+                    subsection: attachment.Subsection || '',
+                    titleEN: `${typeLabel} ${sectionNum}`,
+                    titleKR: `${typeKR} ${sectionNum}`,
+                    contentEN: attachment.AttachContentEN || attachment.AttachTitleEN || '',
+                    contentKR: attachment.AttachContentKR || attachment.AttachTitleKR || '',
+                    fileName: attachment.FileName,
+                    attachment: attachment,
+                    codeId: modelCode.ModelCodeID,
+                    versionId: attachment.ModelCodeVersionID,
+                    chapterId: chapter.ChapterID
+                };
+                attachmentResults.push(result);
             }
-        });
-    }
+        }
+    });
 
     // Display results with exact matches first, then attachments
     displaySearchResults(exactMatches, partialMatches, allFilteredResults, keyword, attachmentResults);
