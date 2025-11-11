@@ -59017,21 +59017,26 @@ function displayTopSearchResults(exactMatches, partialMatches, keyword, attachme
                     <h4 class="font-semibold text-[#24305E] text-sm mb-2">${highlightedTitleEN}</h4>
                     ${result.titleKR ? `<p class="text-gray-600 text-sm mb-3">${highlightedTitleKR}</p>` : ''}
 
-                    <!-- Image display in library style -->
+                    <!-- Image display in smaller size (90px x 90px) -->
                     <div class="mt-3 pt-3 border-t border-gray-200">
                         <div class="figures-scroll">
-                            <div class="figure-thumbnail" onclick="openImageModalById('${result.attachmentId}')">
-                                <img alt="${result.titleEN}" class="figure-thumbnail-image" src="${imagePath}"/>
-                                <p class="figure-thumbnail-label">${result.titleEN}</p>
+                            <div style="width: 90px; height: 90px; flex-shrink: 0; border: 2px solid #e5e7eb; border-radius: 8px; overflow: hidden; cursor: pointer; display: flex; flex-direction: column;" onclick="openImageModalById('${result.attachmentId}')">
+                                <img alt="${result.titleEN}" style="width: 100%; height: calc(100% - 24px); object-fit: contain; background-color: white;" src="${imagePath}"/>
+                                <p style="padding: 2px 4px; font-size: 9px; text-align: center; background-color: #f3f4f6; color: #374151; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${result.titleEN}</p>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Content text if available -->
+                    <!-- Content text if available (collapsed by default, 3 lines) -->
                     ${result.contentEN || result.contentKR ? `
                         <div class="mt-3 pt-3 border-t border-gray-200 text-sm text-gray-600">
-                            ${result.contentEN ? `<p class="mb-2">${highlightedContentEN}</p>` : ''}
-                            ${result.contentKR ? `<p>${highlightedContentKR}</p>` : ''}
+                            <div id="attachment-content-${index}" class="line-clamp-3">
+                                ${result.contentEN ? `<p class="mb-2">${highlightedContentEN}</p>` : ''}
+                                ${result.contentKR ? `<p>${highlightedContentKR}</p>` : ''}
+                            </div>
+                            <button onclick="toggleAttachmentContent(${index})" class="text-[#F76C6C] hover:underline text-xs mt-2" id="toggle-btn-${index}">
+                                더보기 ▼
+                            </button>
                         </div>
                     ` : ''}
                 </div>
@@ -59137,6 +59142,38 @@ function toggleAdvSearchResult(index) {
             details.classList.add('hidden');
             toggleIcon.textContent = '▼';
         }
+    }
+}
+
+// Toggle attachment content for top search results
+function toggleAttachmentContent(index) {
+    const contentElement = document.getElementById(`attachment-content-${index}`);
+    const toggleBtn = document.getElementById(`toggle-btn-${index}`);
+
+    if (!contentElement || !toggleBtn) return;
+
+    if (contentElement.classList.contains('line-clamp-3')) {
+        contentElement.classList.remove('line-clamp-3');
+        toggleBtn.innerHTML = '접기 ▲';
+    } else {
+        contentElement.classList.add('line-clamp-3');
+        toggleBtn.innerHTML = '더보기 ▼';
+    }
+}
+
+// Toggle attachment content for advanced search results
+function toggleAdvAttachmentContent(index) {
+    const contentElement = document.getElementById(`adv-attachment-content-${index}`);
+    const toggleBtn = document.getElementById(`adv-toggle-btn-${index}`);
+
+    if (!contentElement || !toggleBtn) return;
+
+    if (contentElement.classList.contains('line-clamp-3')) {
+        contentElement.classList.remove('line-clamp-3');
+        toggleBtn.innerHTML = '접기 ▲';
+    } else {
+        contentElement.classList.add('line-clamp-3');
+        toggleBtn.innerHTML = '더보기 ▼';
     }
 }
 
@@ -59420,21 +59457,26 @@ function displaySearchResults(exactMatches, partialMatches, allFilteredResults, 
                     <h4 class="font-semibold text-[#24305E] text-sm mb-2">${displayTitleEN}</h4>
                     ${displayTitleKR ? `<p class="text-gray-600 text-sm mb-3">${displayTitleKR}</p>` : ''}
 
-                    <!-- Image display in library style -->
+                    <!-- Image display in smaller size (90px x 90px) -->
                     <div class="mt-3 pt-3 border-t border-gray-200">
                         <div class="figures-scroll">
-                            <div class="figure-thumbnail" onclick="openImageModalById('${result.attachmentId}')">
-                                <img alt="${result.titleEN}" class="figure-thumbnail-image" src="${imagePath}"/>
-                                <p class="figure-thumbnail-label">${result.titleEN}</p>
+                            <div style="width: 90px; height: 90px; flex-shrink: 0; border: 2px solid #e5e7eb; border-radius: 8px; overflow: hidden; cursor: pointer; display: flex; flex-direction: column;" onclick="openImageModalById('${result.attachmentId}')">
+                                <img alt="${result.titleEN}" style="width: 100%; height: calc(100% - 24px); object-fit: contain; background-color: white;" src="${imagePath}"/>
+                                <p style="padding: 2px 4px; font-size: 9px; text-align: center; background-color: #f3f4f6; color: #374151; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${result.titleEN}</p>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Content text if available -->
+                    <!-- Content text if available (collapsed by default, 3 lines) -->
                     ${displayContentEN || displayContentKR ? `
                         <div class="mt-3 pt-3 border-t border-gray-200 text-sm text-gray-600">
-                            ${displayContentEN ? `<p class="mb-2">${displayContentEN}</p>` : ''}
-                            ${displayContentKR ? `<p>${displayContentKR}</p>` : ''}
+                            <div id="adv-attachment-content-${index}" class="line-clamp-3">
+                                ${displayContentEN ? `<p class="mb-2">${displayContentEN}</p>` : ''}
+                                ${displayContentKR ? `<p>${displayContentKR}</p>` : ''}
+                            </div>
+                            <button onclick="toggleAdvAttachmentContent(${index})" class="text-[#F76C6C] hover:underline text-xs mt-2" id="adv-toggle-btn-${index}">
+                                더보기 ▼
+                            </button>
                         </div>
                     ` : ''}
                 </div>
