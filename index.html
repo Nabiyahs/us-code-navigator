@@ -59477,16 +59477,46 @@ function copyCodeContent(sectionNumber) {
     const sectionElement = document.getElementById('section-' + sectionNumber.replace(/\./g, '-'));
     if (!sectionElement) return;
 
-    const titleElement = sectionElement.querySelector('h4');
-    const textElements = sectionElement.querySelectorAll('p');
-
     let copyText = '';
-    if (titleElement) copyText += titleElement.textContent + '\n\n';
-    textElements.forEach(p => {
-        // Skip note labels
-        if (p.parentElement.querySelector('label')) return;
-        copyText += p.textContent + '\n';
+
+    // Get section code reference (e.g., "IBC 2024: Chapter 3 - 307.1.1")
+    const codeTag = sectionElement.querySelector('span.bg-\\[\\#A8D0E6\\]');
+    if (codeTag) {
+        copyText += codeTag.textContent.trim() + '\n';
+    }
+
+    // Get title (h4)
+    const titleElement = sectionElement.querySelector('h4');
+    if (titleElement) {
+        copyText += titleElement.textContent.trim() + '\n\n';
+    }
+
+    // Get all paragraph content (p tags)
+    const paragraphs = sectionElement.querySelectorAll('p');
+    paragraphs.forEach(p => {
+        // Skip if it's inside the button area or is a figure label
+        if (p.closest('button') || p.classList.contains('figure-thumbnail-label')) return;
+
+        const text = p.textContent.trim();
+        if (text) {
+            copyText += text + '\n\n';
+        }
     });
+
+    // Get Note section content if it exists
+    const noteSection = sectionElement.querySelector('.bg-\\[\\#FEE9EC\\]');
+    if (noteSection) {
+        const noteLabel = noteSection.querySelector('label');
+        const noteContent = noteSection.querySelector('div.whitespace-pre-line');
+
+        if (noteLabel && noteContent) {
+            copyText += '--- ' + noteLabel.textContent.trim() + ' ---\n';
+            copyText += noteContent.textContent.trim() + '\n\n';
+        }
+    }
+
+    // Remove any extra blank lines at the end
+    copyText = copyText.trim();
 
     navigator.clipboard.writeText(copyText).then(() => {
         const button = sectionElement.querySelector('button');
