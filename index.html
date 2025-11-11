@@ -28930,14 +28930,33 @@ Central Station의 감시 서비스는 건물의 소유자, 재실자 또는 관
 <h3 class="text-xl font-bold text-[#24305E]" id="modalTitle">Table 101.1</h3>
 <p class="text-sm text-gray-600 mt-1" id="modalSubtitle"></p>
 </div>
+<div class="flex items-center gap-2">
+<!-- Zoom controls -->
+<button class="p-2 hover:bg-gray-100 rounded-lg transition-colors" onclick="zoomImage('out')" title="축소">
+<svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM13 10H7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+<button class="p-2 hover:bg-gray-100 rounded-lg transition-colors" onclick="zoomImage('reset')" title="원래 크기">
+<svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+<button class="p-2 hover:bg-gray-100 rounded-lg transition-colors" onclick="zoomImage('in')" title="확대">
+<svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+<!-- Close button -->
 <button class="p-2 hover:bg-gray-100 rounded-lg transition-colors" onclick="closeModal()">
 <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewbox="0 0 24 24">
 <path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
 </svg>
 </button>
 </div>
-<div class="bg-gray-50 rounded-lg p-6 mb-4">
-<img id="modalImage" class="w-full h-auto rounded-lg shadow-md" alt="Figure or Table" style="max-height: 70vh; object-fit: contain; background: white;"/>
+</div>
+<div class="bg-gray-50 rounded-lg p-6 mb-4" id="modalImageContainer" style="overflow: auto;">
+<img id="modalImage" class="w-full h-auto rounded-lg shadow-md" alt="Figure or Table" style="max-height: 70vh; object-fit: contain; background: white; transition: transform 0.2s ease;"/>
 </div>
 <div id="modalContent" class="space-y-3">
 <!-- Attachment details will be populated here -->
@@ -29452,6 +29471,29 @@ ${note}
     function closeModal() {
       const modal = document.getElementById('imageModal');
       modal.classList.remove('active');
+      // Reset zoom when closing modal
+      currentZoom = 1;
+      const image = document.getElementById('modalImage');
+      if (image) {
+        image.style.transform = 'scale(1)';
+      }
+    }
+
+    // Zoom functionality for image modal
+    let currentZoom = 1;
+    function zoomImage(action) {
+      const image = document.getElementById('modalImage');
+      if (!image) return;
+
+      if (action === 'in') {
+        currentZoom = Math.min(currentZoom + 0.25, 3); // Max 3x zoom
+      } else if (action === 'out') {
+        currentZoom = Math.max(currentZoom - 0.25, 0.5); // Min 0.5x zoom
+      } else if (action === 'reset') {
+        currentZoom = 1;
+      }
+
+      image.style.transform = `scale(${currentZoom})`;
     }
     
     function openSectionModal(sectionId, codeName, sectionTitle) {
