@@ -59485,8 +59485,8 @@ function performSearch() {
                 }
             }
 
-            // If we have Index/SubIndex filters and nothing matched, skip this content
-            if (!matchesFilter && selectedFireCategories.some(cat => cat !== 'NFPA13' && cat !== 'NFPA14' && cat !== 'NFPA20')) {
+            // If Index/SubIndex filter selected but didn't match, skip this content
+            if (!matchesFilter) {
                 if (processedCount <= 5) {
                     console.log(`  ✗ No match - skipping`);
                 }
@@ -59494,9 +59494,8 @@ function performSearch() {
                 return;
             }
 
-            if (matchesFilter) {
-                matchedCount++;
-            }
+            // Track matched items
+            matchedCount++;
         }
 
         // Get code info first
@@ -59683,6 +59682,10 @@ function displaySearchResults(exactMatches, partialMatches, allFilteredResults, 
 
     if (totalResults === 0) {
         resultsList.innerHTML = '<p class="text-gray-500 text-center py-8">검색 결과가 없습니다</p>';
+        const resultCount = document.getElementById('resultCount');
+        if (resultCount) {
+            resultCount.textContent = '0개 결과';
+        }
         return;
     }
 
@@ -59793,6 +59796,12 @@ function displaySearchResults(exactMatches, partialMatches, allFilteredResults, 
     html += '</div>';
 
     resultsList.innerHTML = html;
+
+    // Update result count
+    const resultCount = document.getElementById('resultCount');
+    if (resultCount) {
+        resultCount.textContent = `${totalResults}개 결과`;
+    }
 }
 
 // Handle result card mouse events to distinguish click from drag
