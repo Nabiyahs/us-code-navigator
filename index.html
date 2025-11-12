@@ -28601,143 +28601,170 @@ Central Station의 감시 서비스는 건물의 소유자, 재실자 또는 관
 </label>
 <h3 class="text-base font-bold text-[#24305E]">소방</h3>
 </div>
-<div class="grid grid-cols-2 gap-x-4 gap-y-1">
+<!-- 성능기반설계 -->
+<div class="mb-2">
 <label class="flex items-center cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
 <input class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="fireCategory" type="checkbox" value="성능기반설계"/>
 <span class="ml-2 text-sm text-gray-700">성능기반설계</span>
 </label>
-<label class="flex items-center cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
-<input class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="fireCategory" type="checkbox" value="소화펌프"/>
-<span class="ml-2 text-sm text-gray-700">소화펌프</span>
+</div>
+
+<!-- 소화펌프 -->
+<div class="mb-2">
+<div class="flex items-center gap-2 cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors" onclick="toggleCollapsible('firePump')">
+<svg class="w-4 h-4 text-gray-600 transition-transform" fill="none" id="firePumpIcon" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<label class="flex items-center cursor-pointer flex-1">
+<input class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="fireCategory" type="checkbox" value="소화펌프" onclick="event.stopPropagation()"/>
+<span class="ml-2 text-sm text-gray-700 font-medium">소화펌프</span>
 </label>
-<label class="flex items-center cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
-<input class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="fireCategory" type="checkbox" value="소화펌프_공급원"/>
-<span class="ml-2 text-sm text-gray-700">소화펌프_공급원</span>
+</div>
+<div class="collapsible-content" id="firePump" style="display: none;">
+<div class="ml-6 mt-1 grid grid-cols-2 gap-x-4 gap-y-1">
+<label class="flex items-center cursor-pointer hover:bg-gray-50 p-1 rounded transition-colors">
+<input class="w-3 h-3 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="fireCategory" type="checkbox" value="소화펌프_공급원"/>
+<span class="ml-2 text-xs text-gray-600">공급원</span>
 </label>
-<label class="flex items-center cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
-<input class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="fireCategory" type="checkbox" value="소화펌프_급수원"/>
-<span class="ml-2 text-sm text-gray-700">소화펌프_급수원</span>
+<label class="flex items-center cursor-pointer hover:bg-gray-50 p-1 rounded transition-colors">
+<input class="w-3 h-3 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="fireCategory" type="checkbox" value="소화펌프_급수원"/>
+<span class="ml-2 text-xs text-gray-600">급수원</span>
 </label>
-<label class="flex items-center cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
-<input class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="fireCategory" type="checkbox" value="소화펌프_베어링"/>
-<span class="ml-2 text-sm text-gray-700">소화펌프_베어링</span>
+<label class="flex items-center cursor-pointer hover:bg-gray-50 p-1 rounded transition-colors">
+<input class="w-3 h-3 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="fireCategory" type="checkbox" value="소화펌프_베어링"/>
+<span class="ml-2 text-xs text-gray-600">베어링</span>
 </label>
-<label class="flex items-center cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
-<input class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="fireCategory" type="checkbox" value="소화펌프_압력;충압 펌프"/>
-<span class="ml-2 text-sm text-gray-700">소화펌프_압력;충압 펌프</span>
+<label class="flex items-center cursor-pointer hover:bg-gray-50 p-1 rounded transition-colors">
+<input class="w-3 h-3 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="fireCategory" type="checkbox" value="소화펌프_압력;충압 펌프"/>
+<span class="ml-2 text-xs text-gray-600">압력;충압 펌프</span>
 </label>
-<label class="flex items-center cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
-<input class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="fireCategory" type="checkbox" value="소화펌프_액체 공급"/>
-<span class="ml-2 text-sm text-gray-700">소화펌프_액체 공급</span>
+<label class="flex items-center cursor-pointer hover:bg-gray-50 p-1 rounded transition-colors">
+<input class="w-3 h-3 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="fireCategory" type="checkbox" value="소화펌프_액체 공급"/>
+<span class="ml-2 text-xs text-gray-600">액체 공급</span>
 </label>
-<label class="flex items-center cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
-<input class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="fireCategory" type="checkbox" value="소화펌프_요구사항"/>
-<span class="ml-2 text-sm text-gray-700">소화펌프_요구사항</span>
+<label class="flex items-center cursor-pointer hover:bg-gray-50 p-1 rounded transition-colors">
+<input class="w-3 h-3 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="fireCategory" type="checkbox" value="소화펌프_요구사항"/>
+<span class="ml-2 text-xs text-gray-600">요구사항</span>
 </label>
-<label class="flex items-center cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
-<input class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="fireCategory" type="checkbox" value="소화펌프_유량시험 장치"/>
-<span class="ml-2 text-sm text-gray-700">소화펌프_유량시험 장치</span>
+<label class="flex items-center cursor-pointer hover:bg-gray-50 p-1 rounded transition-colors">
+<input class="w-3 h-3 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="fireCategory" type="checkbox" value="소화펌프_유량시험 장치"/>
+<span class="ml-2 text-xs text-gray-600">유량시험 장치</span>
 </label>
-<label class="flex items-center cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
-<input class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="fireCategory" type="checkbox" value="소화펌프_임펠러"/>
-<span class="ml-2 text-sm text-gray-700">소화펌프_임펠러</span>
+<label class="flex items-center cursor-pointer hover:bg-gray-50 p-1 rounded transition-colors">
+<input class="w-3 h-3 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="fireCategory" type="checkbox" value="소화펌프_임펠러"/>
+<span class="ml-2 text-xs text-gray-600">임펠러</span>
 </label>
-<label class="flex items-center cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
-<input class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="fireCategory" type="checkbox" value="소화펌프_최대 압력"/>
-<span class="ml-2 text-sm text-gray-700">소화펌프_최대 압력</span>
+<label class="flex items-center cursor-pointer hover:bg-gray-50 p-1 rounded transition-colors">
+<input class="w-3 h-3 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="fireCategory" type="checkbox" value="소화펌프_최대 압력"/>
+<span class="ml-2 text-xs text-gray-600">최대 압력</span>
 </label>
-<label class="flex items-center cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
-<input class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="fireCategory" type="checkbox" value="소화펌프_충압 펌프"/>
-<span class="ml-2 text-sm text-gray-700">소화펌프_충압 펌프</span>
+<label class="flex items-center cursor-pointer hover:bg-gray-50 p-1 rounded transition-colors">
+<input class="w-3 h-3 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="fireCategory" type="checkbox" value="소화펌프_충압 펌프"/>
+<span class="ml-2 text-xs text-gray-600">충압 펌프</span>
 </label>
-<label class="flex items-center cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
-<input class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="fireCategory" type="checkbox" value="소화펌프_커플링"/>
-<span class="ml-2 text-sm text-gray-700">소화펌프_커플링</span>
+<label class="flex items-center cursor-pointer hover:bg-gray-50 p-1 rounded transition-colors">
+<input class="w-3 h-3 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="fireCategory" type="checkbox" value="소화펌프_커플링"/>
+<span class="ml-2 text-xs text-gray-600">커플링</span>
 </label>
-<label class="flex items-center cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
-<input class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="fireCategory" type="checkbox" value="소화펌프_토출압력"/>
-<span class="ml-2 text-sm text-gray-700">소화펌프_토출압력</span>
+<label class="flex items-center cursor-pointer hover:bg-gray-50 p-1 rounded transition-colors">
+<input class="w-3 h-3 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="fireCategory" type="checkbox" value="소화펌프_토출압력"/>
+<span class="ml-2 text-xs text-gray-600">토출압력</span>
 </label>
-<label class="flex items-center cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
-<input class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="fireCategory" type="checkbox" value="소화펌프_토출압력;체절압력"/>
-<span class="ml-2 text-sm text-gray-700">소화펌프_토출압력;체절압력</span>
+<label class="flex items-center cursor-pointer hover:bg-gray-50 p-1 rounded transition-colors">
+<input class="w-3 h-3 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="fireCategory" type="checkbox" value="소화펌프_토출압력;체절압력"/>
+<span class="ml-2 text-xs text-gray-600">토출압력;체절압력</span>
 </label>
-<label class="flex items-center cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
-<input class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="fireCategory" type="checkbox" value="소화펌프_펌프 용량"/>
-<span class="ml-2 text-sm text-gray-700">소화펌프_펌프 용량</span>
+<label class="flex items-center cursor-pointer hover:bg-gray-50 p-1 rounded transition-colors">
+<input class="w-3 h-3 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="fireCategory" type="checkbox" value="소화펌프_펌프 용량"/>
+<span class="ml-2 text-xs text-gray-600">펌프 용량</span>
 </label>
-<label class="flex items-center cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
-<input class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="fireCategory" type="checkbox" value="소화펌프_피팅"/>
-<span class="ml-2 text-sm text-gray-700">소화펌프_피팅</span>
+<label class="flex items-center cursor-pointer hover:bg-gray-50 p-1 rounded transition-colors">
+<input class="w-3 h-3 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="fireCategory" type="checkbox" value="소화펌프_피팅"/>
+<span class="ml-2 text-xs text-gray-600">피팅</span>
 </label>
-<label class="flex items-center cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
-<input class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="fireCategory" type="checkbox" value="소화펌프_피팅;공기배출밸브"/>
-<span class="ml-2 text-sm text-gray-700">소화펌프_피팅;공기배출밸브</span>
+<label class="flex items-center cursor-pointer hover:bg-gray-50 p-1 rounded transition-colors">
+<input class="w-3 h-3 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="fireCategory" type="checkbox" value="소화펌프_피팅;공기배출밸브"/>
+<span class="ml-2 text-xs text-gray-600">피팅;공기배출밸브</span>
 </label>
-<label class="flex items-center cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
-<input class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="fireCategory" type="checkbox" value="옥내소화전"/>
-<span class="ml-2 text-sm text-gray-700">옥내소화전</span>
+</div>
+</div>
+</div>
+
+<!-- 옥내소화전 -->
+<div class="mb-2">
+<div class="flex items-center gap-2 cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors" onclick="toggleCollapsible('standpipe')">
+<svg class="w-4 h-4 text-gray-600 transition-transform" fill="none" id="standpipeIcon" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<label class="flex items-center cursor-pointer flex-1">
+<input class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="fireCategory" type="checkbox" value="옥내소화전" onclick="event.stopPropagation()"/>
+<span class="ml-2 text-sm text-gray-700 font-medium">옥내소화전</span>
 </label>
-<label class="flex items-center cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
-<input class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="fireCategory" type="checkbox" value="옥내소화전_개수"/>
-<span class="ml-2 text-sm text-gray-700">옥내소화전_개수</span>
+</div>
+<div class="collapsible-content" id="standpipe" style="display: none;">
+<div class="ml-6 mt-1 grid grid-cols-2 gap-x-4 gap-y-1">
+<label class="flex items-center cursor-pointer hover:bg-gray-50 p-1 rounded transition-colors">
+<input class="w-3 h-3 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="fireCategory" type="checkbox" value="옥내소화전_개수"/>
+<span class="ml-2 text-xs text-gray-600">개수</span>
 </label>
-<label class="flex items-center cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
-<input class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="fireCategory" type="checkbox" value="옥내소화전_개수;계단"/>
-<span class="ml-2 text-sm text-gray-700">옥내소화전_개수;계단</span>
+<label class="flex items-center cursor-pointer hover:bg-gray-50 p-1 rounded transition-colors">
+<input class="w-3 h-3 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="fireCategory" type="checkbox" value="옥내소화전_개수;계단"/>
+<span class="ml-2 text-xs text-gray-600">개수;계단</span>
 </label>
-<label class="flex items-center cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
-<input class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="fireCategory" type="checkbox" value="옥내소화전_개수;피난구"/>
-<span class="ml-2 text-sm text-gray-700">옥내소화전_개수;피난구</span>
+<label class="flex items-center cursor-pointer hover:bg-gray-50 p-1 rounded transition-colors">
+<input class="w-3 h-3 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="fireCategory" type="checkbox" value="옥내소화전_개수;피난구"/>
+<span class="ml-2 text-xs text-gray-600">개수;피난구</span>
 </label>
-<label class="flex items-center cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
-<input class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="fireCategory" type="checkbox" value="옥내소화전_복합 설비"/>
-<span class="ml-2 text-sm text-gray-700">옥내소화전_복합 설비</span>
+<label class="flex items-center cursor-pointer hover:bg-gray-50 p-1 rounded transition-colors">
+<input class="w-3 h-3 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="fireCategory" type="checkbox" value="옥내소화전_복합 설비"/>
+<span class="ml-2 text-xs text-gray-600">복합 설비</span>
 </label>
-<label class="flex items-center cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
-<input class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="fireCategory" type="checkbox" value="옥내소화전_수리계산"/>
-<span class="ml-2 text-sm text-gray-700">옥내소화전_수리계산</span>
+<label class="flex items-center cursor-pointer hover:bg-gray-50 p-1 rounded transition-colors">
+<input class="w-3 h-3 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="fireCategory" type="checkbox" value="옥내소화전_수리계산"/>
+<span class="ml-2 text-xs text-gray-600">수리계산</span>
 </label>
-<label class="flex items-center cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
-<input class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="fireCategory" type="checkbox" value="옥내소화전_시스템 등급"/>
-<span class="ml-2 text-sm text-gray-700">옥내소화전_시스템 등급</span>
+<label class="flex items-center cursor-pointer hover:bg-gray-50 p-1 rounded transition-colors">
+<input class="w-3 h-3 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="fireCategory" type="checkbox" value="옥내소화전_시스템 등급"/>
+<span class="ml-2 text-xs text-gray-600">시스템 등급</span>
 </label>
-<label class="flex items-center cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
-<input class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="fireCategory" type="checkbox" value="옥내소화전_시스템 등급;Class I"/>
-<span class="ml-2 text-sm text-gray-700">옥내소화전_시스템 등급;Class I</span>
+<label class="flex items-center cursor-pointer hover:bg-gray-50 p-1 rounded transition-colors">
+<input class="w-3 h-3 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="fireCategory" type="checkbox" value="옥내소화전_시스템 등급;Class I"/>
+<span class="ml-2 text-xs text-gray-600">시스템 등급;Class I</span>
 </label>
-<label class="flex items-center cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
-<input class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="fireCategory" type="checkbox" value="옥내소화전_시스템 등급;Class II"/>
-<span class="ml-2 text-sm text-gray-700">옥내소화전_시스템 등급;Class II</span>
+<label class="flex items-center cursor-pointer hover:bg-gray-50 p-1 rounded transition-colors">
+<input class="w-3 h-3 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="fireCategory" type="checkbox" value="옥내소화전_시스템 등급;Class II"/>
+<span class="ml-2 text-xs text-gray-600">시스템 등급;Class II</span>
 </label>
-<label class="flex items-center cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
-<input class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="fireCategory" type="checkbox" value="옥내소화전_시스템 등급;Class III"/>
-<span class="ml-2 text-sm text-gray-700">옥내소화전_시스템 등급;Class III</span>
+<label class="flex items-center cursor-pointer hover:bg-gray-50 p-1 rounded transition-colors">
+<input class="w-3 h-3 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="fireCategory" type="checkbox" value="옥내소화전_시스템 등급;Class III"/>
+<span class="ml-2 text-xs text-gray-600">시스템 등급;Class III</span>
 </label>
-<label class="flex items-center cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
-<input class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="fireCategory" type="checkbox" value="옥내소화전_압력"/>
-<span class="ml-2 text-sm text-gray-700">옥내소화전_압력</span>
+<label class="flex items-center cursor-pointer hover:bg-gray-50 p-1 rounded transition-colors">
+<input class="w-3 h-3 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="fireCategory" type="checkbox" value="옥내소화전_압력"/>
+<span class="ml-2 text-xs text-gray-600">압력</span>
 </label>
-<label class="flex items-center cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
-<input class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="fireCategory" type="checkbox" value="옥내소화전_연결송수구"/>
-<span class="ml-2 text-sm text-gray-700">옥내소화전_연결송수구</span>
+<label class="flex items-center cursor-pointer hover:bg-gray-50 p-1 rounded transition-colors">
+<input class="w-3 h-3 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="fireCategory" type="checkbox" value="옥내소화전_연결송수구"/>
+<span class="ml-2 text-xs text-gray-600">연결송수구</span>
 </label>
-<label class="flex items-center cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
-<input class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="fireCategory" type="checkbox" value="옥내소화전_유량"/>
-<span class="ml-2 text-sm text-gray-700">옥내소화전_유량</span>
+<label class="flex items-center cursor-pointer hover:bg-gray-50 p-1 rounded transition-colors">
+<input class="w-3 h-3 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="fireCategory" type="checkbox" value="옥내소화전_유량"/>
+<span class="ml-2 text-xs text-gray-600">유량</span>
 </label>
-<label class="flex items-center cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
-<input class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="fireCategory" type="checkbox" value="옥내소화전_호스 요구량"/>
-<span class="ml-2 text-sm text-gray-700">옥내소화전_호스 요구량</span>
+<label class="flex items-center cursor-pointer hover:bg-gray-50 p-1 rounded transition-colors">
+<input class="w-3 h-3 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="fireCategory" type="checkbox" value="옥내소화전_호스 요구량"/>
+<span class="ml-2 text-xs text-gray-600">호스 요구량</span>
 </label>
-<label class="flex items-center cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
-<input class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="fireCategory" type="checkbox" value="옥내소화전_호스접결구"/>
-<span class="ml-2 text-sm text-gray-700">옥내소화전_호스접결구</span>
+<label class="flex items-center cursor-pointer hover:bg-gray-50 p-1 rounded transition-colors">
+<input class="w-3 h-3 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="fireCategory" type="checkbox" value="옥내소화전_호스접결구"/>
+<span class="ml-2 text-xs text-gray-600">호스접결구</span>
 </label>
-<label class="flex items-center cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
-<input class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="fireCategory" type="checkbox" value="옥내소화전_호스접결구_Class I"/>
-<span class="ml-2 text-sm text-gray-700">옥내소화전_호스접결구_Class I</span>
+<label class="flex items-center cursor-pointer hover:bg-gray-50 p-1 rounded transition-colors">
+<input class="w-3 h-3 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="fireCategory" type="checkbox" value="옥내소화전_호스접결구_Class I"/>
+<span class="ml-2 text-xs text-gray-600">호스접결구_Class I</span>
 </label>
+</div>
+</div>
 </div>
 </div>
 </div>
