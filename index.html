@@ -28533,7 +28533,7 @@ Central Station의 감시 서비스는 건물의 소유자, 재실자 또는 관
 <div class="border-t border-gray-200 pt-4">
 <div class="collapsible-header flex items-center justify-between p-3 rounded-lg cursor-pointer hover:bg-gray-50" onclick="toggleCollapsible('filterSection')">
 <h3 class="text-base font-semibold text-[#24305E]">필터</h3>
-<svg class="w-5 h-5 text-gray-600 transition-transform" fill="none" id="filterSectionIcon" stroke="currentColor" viewbox="0 0 24 24">
+<svg class="w-5 h-5 text-gray-600 transition-transform" fill="none" id="filterSectionToggle" stroke="currentColor" viewbox="0 0 24 24">
 <path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
 </svg>
 </div>
@@ -28832,7 +28832,7 @@ Central Station의 감시 서비스는 건물의 소유자, 재실자 또는 관
 <div class="p-8">
 <div class="bg-white rounded-lg shadow-md p-6 mb-6">
 <div class="collapsible-header flex items-center justify-between p-3 rounded-lg" onclick="toggleCollapsible('codeSelectSection')">
-<svg class="w-5 h-5 text-gray-600 transition-transform" fill="none" id="codeSelectSectionIcon" stroke="currentColor" viewbox="0 0 24 24">
+<svg class="w-5 h-5 text-gray-600 transition-transform" fill="none" id="codeSelectSectionToggle" stroke="currentColor" viewbox="0 0 24 24">
 <path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
 </svg>
 </div>
@@ -29593,12 +29593,49 @@ ${note}
       const section = document.getElementById(sectionId);
       const toggle = document.getElementById(sectionId + 'Toggle');
 
-      if (section.style.display === 'none' || section.style.display === '') {
+      if (!section) {
+        console.error('Section not found:', sectionId);
+        return;
+      }
+
+      // Check if section is currently hidden
+      const isHidden = section.style.display === 'none' || section.style.display === '';
+      const isCollapsed = section.classList.contains('collapsed');
+
+      if (isHidden || isCollapsed) {
+        // Show/expand section
         section.style.display = 'block';
-        if (toggle) toggle.textContent = '−';
+        section.classList.remove('collapsed');
+        section.classList.add('expanded');
+
+        // Update toggle icon
+        if (toggle) {
+          // Check if it's an SVG (chevron) or text (+/−)
+          if (toggle.tagName === 'svg' || toggle.querySelector('svg')) {
+            // SVG chevron - rotate it
+            toggle.style.transform = 'rotate(180deg)';
+          } else {
+            // Text toggle
+            toggle.textContent = '−';
+          }
+        }
       } else {
+        // Hide/collapse section
         section.style.display = 'none';
-        if (toggle) toggle.textContent = '+';
+        section.classList.remove('expanded');
+        section.classList.add('collapsed');
+
+        // Update toggle icon
+        if (toggle) {
+          // Check if it's an SVG (chevron) or text (+/−)
+          if (toggle.tagName === 'svg' || toggle.querySelector('svg')) {
+            // SVG chevron - reset rotation
+            toggle.style.transform = 'rotate(0deg)';
+          } else {
+            // Text toggle
+            toggle.textContent = '+';
+          }
+        }
       }
     }
 
@@ -59398,11 +59435,12 @@ function performSearch() {
 
     // Auto-collapse filter section when showing results
     const filterSection = document.getElementById('filterSection');
-    const filterIcon = document.getElementById('filterSectionIcon');
-    if (filterSection && filterIcon) {
+    const filterToggle = document.getElementById('filterSectionToggle');
+    if (filterSection && filterToggle) {
+        filterSection.style.display = 'none';
         filterSection.classList.remove('expanded');
         filterSection.classList.add('collapsed');
-        filterIcon.style.transform = 'rotate(0deg)';
+        filterToggle.style.transform = 'rotate(0deg)';
     }
 
     console.log('=== Search Debug Info ===');
