@@ -59797,7 +59797,7 @@ function displaySearchResults(exactMatches, partialMatches, allFilteredResults, 
             const badgeText = result.attachment?.Type === 'T' ? '표' : '그림';
             const uniqueId = `searchResultAttachment${index}`;
             html += `
-                <div class="border rounded-lg bg-white overflow-hidden">
+                <div class="border rounded-lg bg-white overflow-hidden search-result-item" data-result='${JSON.stringify(result).replace(/'/g, "\'")}'>
                     <div class="result-collapsible p-4 hover:bg-gray-50 transition-colors" onclick="toggleResultItem('${uniqueId}')">
                         <div class="flex items-center justify-between">
                             <div class="flex items-center gap-3 flex-1">
@@ -59849,11 +59849,10 @@ function displaySearchResults(exactMatches, partialMatches, allFilteredResults, 
             // Display regular content result
             const uniqueId = `searchResult${index}`;
             html += `
-                <div class="border rounded-lg bg-white overflow-hidden">
+                <div class="border rounded-lg bg-white overflow-hidden search-result-item" data-result='${JSON.stringify(result).replace(/'/g, "\'")}'>
                     <div class="result-collapsible p-4 hover:bg-gray-50 transition-colors" onclick="toggleResultItem('${uniqueId}')"
                          onmousedown="handleResultMouseDown(event)"
-                         onmouseup="handleResultMouseUp(event)"
-                         data-result='${JSON.stringify(result).replace(/'/g, "\'")}'>
+                         onmouseup="handleResultMouseUp(event)">
                         <div class="flex items-center justify-between">
                             <div class="flex items-center gap-3 flex-1">
                                 <svg id="${uniqueId}Icon" class="w-5 h-5 text-gray-600 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
