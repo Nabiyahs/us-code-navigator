@@ -59765,7 +59765,7 @@ function displaySearchResults(exactMatches, partialMatches, allFilteredResults, 
         return;
     }
 
-    let html = '<div class="space-y-4">';
+    let html = '';
 
     // Combine all results: exact matches first, then partial matches, then attachments
     const allResults = [...exactMatches, ...partialMatches, ...allFilteredResults, ...attachmentResults];
@@ -59889,8 +59889,6 @@ function displaySearchResults(exactMatches, partialMatches, allFilteredResults, 
             `;
         }
     });
-
-    html += '</div>';
 
     resultsList.innerHTML = html;
 
