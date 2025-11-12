@@ -28616,7 +28616,7 @@ Central Station의 감시 서비스는 건물의 소유자, 재실자 또는 관
 <div class="flex items-center justify-between cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors" onclick="toggleCollapsible('firePump')">
 <div class="flex items-center">
 <input class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="fireCategory" type="checkbox" value="소화펌프" onclick="event.stopPropagation()"/>
-<span class="ml-2 text-sm text-gray-700 font-medium">소화펌프</span>
+<span class="ml-2 text-sm text-gray-700">소화펌프</span>
 </div>
 <div class="flex items-center justify-center w-5 h-5 text-gray-600 font-bold text-lg" id="firePumpToggle">+</div>
 </div>
@@ -28695,7 +28695,7 @@ Central Station의 감시 서비스는 건물의 소유자, 재실자 또는 관
 <div class="flex items-center justify-between cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors" onclick="toggleCollapsible('standpipe')">
 <div class="flex items-center">
 <input class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="fireCategory" type="checkbox" value="옥내소화전" onclick="event.stopPropagation()"/>
-<span class="ml-2 text-sm text-gray-700 font-medium">옥내소화전</span>
+<span class="ml-2 text-sm text-gray-700">옥내소화전</span>
 </div>
 <div class="flex items-center justify-center w-5 h-5 text-gray-600 font-bold text-lg" id="standpipeToggle">+</div>
 </div>
@@ -59405,9 +59405,10 @@ function performSearch() {
         filterIcon.style.transform = 'rotate(0deg)';
     }
 
-    console.log('Searching with filters only');
+    console.log('=== Search Debug Info ===');
     console.log('Arch categories:', selectedArchCategories);
     console.log('Fire categories:', selectedFireCategories);
+    console.log('Keyword:', keyword);
 
     // Filter by selected codes
     let searchResults = [];
@@ -59440,14 +59441,25 @@ function performSearch() {
     // Also track attachment results
     const attachmentResults = [];
 
+    let processedCount = 0;
+    let matchedCount = 0;
+    let skippedByFilter = 0;
+
     appData.CodeContent.forEach(content => {
         if (!modelCodeIds.has(content.ModelCodeID)) return;
+
+        processedCount++;
 
         // Check if fire category filters match Index/SubIndex
         if (selectedFireCategories.length > 0) {
             // Check if any selected fire category matches Index or SubIndex
             const contentIndex = content.Index || '';
             const contentSubIndex = content.SubIndex || '';
+
+            // Log first few items for debugging
+            if (processedCount <= 5) {
+                console.log(`Content ${processedCount}: Index="${contentIndex}", SubIndex="${contentSubIndex}"`);
+            }
 
             let matchesFilter = false;
             for (const category of selectedFireCategories) {
@@ -59457,19 +59469,33 @@ function performSearch() {
                 // Check for exact match or parent match
                 if (contentIndex === category || contentSubIndex === category) {
                     matchesFilter = true;
+                    if (processedCount <= 5) {
+                        console.log(`  ✓ Matched category "${category}" (exact match)`);
+                    }
                     break;
                 }
 
                 // Check if SubIndex starts with the category (for hierarchical matching)
                 if (contentSubIndex.startsWith(category + '_') || contentSubIndex.startsWith(category + ';')) {
                     matchesFilter = true;
+                    if (processedCount <= 5) {
+                        console.log(`  ✓ Matched category "${category}" (hierarchical match)`);
+                    }
                     break;
                 }
             }
 
             // If we have Index/SubIndex filters and nothing matched, skip this content
             if (!matchesFilter && selectedFireCategories.some(cat => cat !== 'NFPA13' && cat !== 'NFPA14' && cat !== 'NFPA20')) {
+                if (processedCount <= 5) {
+                    console.log(`  ✗ No match - skipping`);
+                }
+                skippedByFilter++;
                 return;
+            }
+
+            if (matchesFilter) {
+                matchedCount++;
             }
         }
 
@@ -59528,6 +59554,14 @@ function performSearch() {
             }
         }
     });
+
+    console.log('=== Filter Results ===');
+    console.log(`Processed: ${processedCount} items`);
+    console.log(`Matched: ${matchedCount} items`);
+    console.log(`Skipped by filter: ${skippedByFilter} items`);
+    console.log(`Exact matches: ${exactMatches.length}`);
+    console.log(`Partial matches: ${partialMatches.length}`);
+    console.log(`All filtered results: ${allFilteredResults.length}`);
 
     // Search in CodeAttachment for images/tables
     appData.CodeAttachment.forEach(attachment => {
