@@ -2518,11 +2518,19 @@ function getDiscipline(modelCodeId) {
 
 // === UI Functions ===
 function loadChapters(versionId, codeId) {
+    // 데이터 로딩 확인
+    if (!dataLoaded) {
+        console.warn('loadChapters called before data loaded');
+        return;
+    }
+
     const chapters = getChapters(versionId);
     const chapterList = document.getElementById('chapterList');
 
+    console.log('Loading chapters for version:', versionId, 'Found:', chapters.length, 'chapters');
+
     if (!chapters || chapters.length === 0) {
-        chapterList.innerHTML = '<p class="text-gray-500 text-sm p-4">No chapters available</p>';
+        chapterList.innerHTML = '<p class="text-gray-500 resp-text-sm resp-p-md">No chapters available for this version</p>';
         return;
     }
 
@@ -2537,7 +2545,7 @@ function loadChapters(versionId, codeId) {
         <div class="chapter-group">
             <div class="chapter-item resp-px-md resp-py-sm rounded-lg hover:bg-[#A8D0E6] cursor-pointer flex items-center justify-between"
                  data-chapter="${ch.Chapter}" data-chapter-id="${ch.ChapterID}"
-                 onclick="toggleChapterSections('${ch.ChapterID}', '${versionId}')">
+                 onclick="toggleChapterSections('${ch.ChapterID}', '${versionId}', event)">
                 <div>
                     <div class="font-semibold text-[#24305E] resp-text-sm">Chapter ${ch.Chapter}</div>
                     <div class="resp-text-sm text-gray-600 mt-1">${ch.TitleEN || ''}</div>
@@ -2549,7 +2557,7 @@ function loadChapters(versionId, codeId) {
             <div id="chapterSections-${ch.ChapterID}" class="pl-6 mt-1 space-y-1 ${i === 0 ? '' : 'hidden'}">
                 ${sectionNums.map(sec => `
                 <div class="section-item resp-px-md resp-py-sm resp-text-sm text-gray-700 hover:bg-[#A8D0E6] rounded cursor-pointer"
-                     data-section="${sec}" onclick="scrollToSection('${ch.ChapterID}', '${sec}', '${versionId}')">
+                     data-section="${sec}" onclick="scrollToSection('${ch.ChapterID}', '${sec}', '${versionId}', event)">
                     Section ${sec}
                 </div>
                 `).join('')}
@@ -2576,9 +2584,16 @@ function loadChapters(versionId, codeId) {
 }
 
 // 챕터 섹션 토글 (확장/접기)
-function toggleChapterSections(chapterId, versionId) {
+function toggleChapterSections(chapterId, versionId, event) {
+    // 이벤트 버블링 방지
+    if (event) {
+        event.stopPropagation();
+    }
+
     const sectionsDiv = document.getElementById('chapterSections-' + chapterId);
     const icon = document.getElementById('chapterIcon-' + chapterId);
+
+    console.log('Toggle chapter sections:', chapterId, sectionsDiv, icon);
 
     if (sectionsDiv && icon) {
         sectionsDiv.classList.toggle('hidden');
@@ -2590,7 +2605,12 @@ function toggleChapterSections(chapterId, versionId) {
 }
 
 // 섹션으로 스크롤
-function scrollToSection(chapterId, sectionNum, versionId) {
+function scrollToSection(chapterId, sectionNum, versionId, event) {
+    // 이벤트 버블링 방지
+    if (event) {
+        event.stopPropagation();
+    }
+
     // 먼저 해당 챕터 콘텐츠 로드
     loadChapterContent(chapterId, versionId);
 
@@ -2599,14 +2619,33 @@ function scrollToSection(chapterId, sectionNum, versionId) {
         const sectionId = 'section-' + sectionNum;
         const sectionElement = document.querySelector(`[id^="${sectionId}"]`);
         if (sectionElement) {
-            sectionElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            // 스크롤 가능한 컨테이너 내에서 스크롤
+            const contentContainer = document.querySelector('#librarySection .flex-1.overflow-y-auto');
+            if (contentContainer) {
+                const elementTop = sectionElement.offsetTop;
+                contentContainer.scrollTo({
+                    top: Math.max(0, elementTop - 20),
+                    behavior: 'smooth'
+                });
+            } else {
+                sectionElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
         }
-    }, 100);
+    }, 150);
 }
 
 function loadChapterContent(chapterId, versionId) {
+    // 데이터 로딩 확인
+    if (!dataLoaded) {
+        console.warn('loadChapterContent called before data loaded');
+        return;
+    }
+
     const chapter = appData.CodeChapter.find(ch => ch.ChapterID === chapterId);
-    if (!chapter) return;
+    if (!chapter) {
+        console.warn('Chapter not found:', chapterId);
+        return;
+    }
 
     // Get model code info for dynamic labels
     const version = appData.ModelCodeVersion.find(v => v.ModelCodeVersionID === versionId);
@@ -3092,6 +3131,16 @@ function loadCodeFromSidebar(versionId, codeId) {
 
 function switchToLibraryCode(codeId, versionId) {
     console.log('Switching to code:', codeId, 'version:', versionId);
+
+    // Wait for data to be loaded if not already
+    if (!dataLoaded) {
+        console.log('Data not yet loaded, waiting...');
+        document.addEventListener('appDataLoaded', function onDataLoaded() {
+            document.removeEventListener('appDataLoaded', onDataLoaded);
+            switchToLibraryCode(codeId, versionId);
+        });
+        return;
+    }
 
     // Switch to library section
     document.querySelectorAll('.section-content').forEach(s => s.classList.remove('active'));
