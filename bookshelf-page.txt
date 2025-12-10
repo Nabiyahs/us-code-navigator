@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Details</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>window.FontAwesomeConfig = { autoReplaceSvg: 'nest'};</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        ::-webkit-scrollbar { display: none;}
+        
+        .book-popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(8px);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .book-popup.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .book-container {
+            position: relative;
+            width: 90%;
+            max-width: 1400px;
+            height: 85vh;
+            max-height: 900px;
+            perspective: 2000px;
+            transform: scale(0.8) rotateX(10deg);
+            opacity: 0;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .book-popup.active .book-container {
+            transform: scale(1) rotateX(0deg);
+            opacity: 1;
+        }
+        
+        .book-pages {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            background: linear-gradient(to right, #f8f9fa 0%, #ffffff 50%, #f8f9fa 100%);
+            border-radius: 8px;
+            box-shadow: 
+                0 30px 60px rgba(0, 0, 0, 0.4),
+                0 0 0 1px rgba(0, 0, 0, 0.1),
+                inset 0 2px 4px rgba(255, 255, 255, 0.5);
+            overflow: hidden;
+        }
+        
+        .book-spine {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 40px;
+            background: linear-gradient(to right, 
+                rgba(0, 0, 0, 0.15) 0%,
+                rgba(0, 0, 0, 0.05) 20%,
+                rgba(255, 255, 255, 0.1) 50%,
+                rgba(0, 0, 0, 0.05) 80%,
+                rgba(0, 0, 0, 0.15) 100%);
+            transform: translateX(-50%);
+            z-index: 10;
+            box-shadow: 
+                inset 2px 0 4px rgba(0, 0, 0, 0.2),
+                inset -2px 0 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        .book-page {
+            flex: 1;
+            padding: 60px 80px;
+            overflow-y: auto;
+            background: linear-gradient(to bottom, #ffffff 0%, #fefefe 100%);
+            position: relative;
+        }
+        
+        .book-page::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .book-page::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.05);
+            border-radius: 4px;
+        }
+        
+        .book-page::-webkit-scrollbar-thumb {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 4px;
+        }
+        
+        .book-page-left {
+            border-right: 1px solid rgba(0, 0, 0, 0.08);
+        }
+        
+        .book-page-right {
+            border-left: 1px solid rgba(0, 0, 0, 0.08);
+        }
+        
+        .page-number {
+            position: absolute;
+            bottom: 30px;
+            font-size: 14px;
+            color: #94a3b8;
+            font-weight: 500;
+        }
+        
+        .book-page-left .page-number {
+            left: 80px;
+        }
+        
+        .book-page-right .page-number {
+            right: 80px;
+        }
+        
+        .close-book {
+            position: absolute;
+            top: -50px;
+            right: 0;
+            width: 48px;
+            height: 48px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+        
+        .close-book:hover {
+            transform: scale(1.1) rotate(90deg);
+            background: #ef4444;
+            color: white;
+        }
+        
+        .code-badge {
+            display: inline-block;
+            padding: 6px 16px;
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            color: white;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            margin-bottom: 16px;
+        }
+        
+        .section-divider {
+            height: 2px;
+            background: linear-gradient(to right, transparent 0%, #e2e8f0 20%, #e2e8f0 80%, transparent 100%);
+            margin: 32px 0;
+        }
+        
+        .info-card {
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            border-left: 4px solid #3b82f6;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .highlight-box {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-left: 4px solid #f59e0b;
+            padding: 16px 20px;
+            border-radius: 6px;
+            margin: 16px 0;
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gradient-to-br from-slate-50 to-slate-100 font-sans">
+    <header id="header" class="bg-white shadow-sm border-b border-slate-200">
+    </header>
+    
+    <main id="main-content" class="max-w-7xl mx-auto px-8 py-8">
+        <section id="disclaimer-section" class="mb-8">
+            <div class="bg-gradient-to-r from-amber-50 to-orange-50 rounded-2xl shadow-md p-8 border-l-4 border-orange-400">
+                <div class="flex items-start space-x-4">
+                    <div class="flex-shrink-0">
+                        <div class="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center">
+                            <i class="fa-solid fa-exclamation-triangle text-orange-600 text-xl"></i>
+                        </div>
+                    </div>
+                    <div class="flex-1">
+                        <h2 class="text-2xl font-bold text-slate-800 mb-4">Disclaimer</h2>
+                        <div class="space-y-3 text-slate-700 leading-relaxed">
+                            <p>본 웹페이지에 수록된 코드 내용은 관련 법규 및 기준의 일부 발췌본이며, 이해를 돕기 위해 해설, 주석 및 참고 이미지를 포함하고 있습니다.</p>
+                            <p class="font-medium">정확하고 전체적인 내용을 확인하기 위해서는 반드시 <b>구매한 코드 원본을 열람 및 참고</b>해주시기 바랍니다.</p>
+                            <p class="text-sm text-slate-600 pt-2 border-t border-orange-200">또한 댓글 기능을 통해 각 조항에 관련된 프로젝트 적용 사례나 해석을 간단히 공유할 수 있도록 지원할 예정입니다.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="bookshelf-section">
+            <div class="mb-6 flex items-center justify-between">
+                <div class="flex items-center space-x-2 text-sm text-slate-600">
+                    <i class="fa-solid fa-layer-group"></i>
+                    <span>30 Codes Available</span>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <button class="filter-btn active px-6 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-blue-700 text-white font-medium shadow-lg shadow-blue-200 hover:shadow-xl transition-all">
+                        <i class="fa-solid fa-list mr-2"></i>All Codes
+                    </button>
+                    <button class="filter-btn px-6 py-3 rounded-xl bg-slate-100 text-slate-700 font-medium hover:bg-slate-200 transition-all">
+                        <i class="fa-solid fa-building mr-2"></i>Architecture
+                    </button>
+                    <button class="filter-btn px-6 py-3 rounded-xl bg-slate-100 text-slate-700 font-medium hover:bg-slate-200 transition-all">
+                        <i class="fa-solid fa-fire-extinguisher mr-2"></i>Fire Mech
+                    </button>
+                    <button class="filter-btn px-6 py-3 rounded-xl bg-slate-100 text-slate-700 font-medium hover:bg-slate-200 transition-all">
+                        <i class="fa-solid fa-bolt mr-2"></i>Fire Elec
+                    </button>
+                    <button class="filter-btn px-6 py-3 rounded-xl bg-slate-100 text-slate-700 font-medium hover:bg-slate-200 transition-all">
+                        <i class="fa-solid fa-plug mr-2"></i>Electrical
+                    </button>
+                    <button class="filter-btn px-6 py-3 rounded-xl bg-slate-100 text-slate-700 font-medium hover:bg-slate-200 transition-all">
+                        <i class="fa-solid fa-tags mr-2"></i>By Series
+                    </button>
+                </div>
+            </div>
+            
+            <div id="all-view" class="bookshelf-view">
+                <div class="mb-6">
+                    <h3 class="text-2xl font-bold text-slate-800 mb-2">Complete Code Collection</h3>
+                    <p class="text-slate-600">Browse all available US building and safety codes</p>
+                </div>
+                <div class="bg-gradient-to-b from-indigo-50 via-purple-50 to-pink-50 rounded-2xl p-8 shadow-2xl border border-white/50">
+                    <div class="grid grid-cols-6 gap-6">
+                        <div class="book-card group cursor-pointer" onclick="openBook('IBC', '2021', 'International Building Code', 'ICC', 'red')">
+                            <div class="relative h-72 bg-gradient-to-br from-red-500 to-red-600 rounded-lg shadow-xl transform transition-all duration-300 hover:scale-105 hover:-translate-y-2 hover:shadow-2xl">
+                                <div class="absolute inset-0 p-6 flex flex-col justify-between">
+                                    <div>
+                                        <div class="text-white text-xs font-semibold mb-2 opacity-90">2021</div>
+                                        <h4 class="text-white text-2xl font-bold leading-tight mb-2">IBC</h4>
+                                        <p class="text-white text-sm opacity-90">International Building Code</p>
+                                    </div>
+                                    <div class="text-white text-xs opacity-75">ICC</div>
+                                </div>
+                                <div class="absolute bottom-0 left-0 right-0 h-2 bg-gradient-to-r from-red-400 to-red-500"></div>
+                            </div>
+                        </div>
+                        <div class="book-card group cursor-pointer" onclick="openBook('NFPA 13', '2022', 'Sprinkler Systems', 'NFPA', 'orange')">
+                            <div class="relative h-72 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg shadow-xl transform transition-all duration-300 hover:scale-105 hover:-translate-y-2 hover:shadow-2xl">
+                                <div class="absolute inset-0 p-6 flex flex-col justify-between">
+                                    <div>
+                                        <div class="text-white text-xs font-semibold mb-2 opacity-90">2022</div>
+                                        <h4 class="text-white text-2xl font-bold leading-tight mb-2">NFPA 13</h4>
+                                        <p class="text-white text-sm opacity-90">Sprinkler Systems</p>
+                                    </div>
+                                    <div class="text-white text-xs opacity-75">NFPA</div>
+                                </div>
+                                <div class="absolute bottom-0 left-0 right-0 h-2 bg-gradient-to-r from-orange-400 to-orange-500"></div>
+                            </div>
+                        </div>
+                        <div class="book-card group cursor-pointer" onclick="openBook('NFPA 14', '2022', 'Standpipe Systems', 'NFPA', 'amber')">
+                            <div class="relative h-72 bg-gradient-to-br from-amber-500 to-yellow-500 rounded-lg shadow-xl transform transition-all duration-300 hover:scale-105 hover:-translate-y-2 hover:shadow-2xl">
+                                <div class="absolute inset-0 p-6 flex flex-col justify-between">
+                                    <div>
+                                        <div class="text-white text-xs font-semibold mb-2 opacity-90">2022</div>
+                                        <h4 class="text-white text-2xl font-bold leading-tight mb-2">NFPA 14</h4>
+                                        <p class="text-white text-sm opacity-90">Standpipe Systems</p>
+                                    </div>
+                                    <div class="text-white text-xs opacity-75">NFPA</div>
+                                </div>
+                                <div class="absolute bottom-0 left-0 right-0 h-2 bg-gradient-to-r from-yellow-400 to-amber-500"></div>
+                            </div>
+                        </div>
+                        <div class="book-card group cursor-pointer" onclick="openBook('NFPA 72', '2022', 'Fire Alarm Code', 'NFPA', 'green')">
+                            <div class="relative h-72 bg-gradient-to-br from-green-500 to-green-600 rounded-lg shadow-xl transform transition-all duration-300 hover:scale-105 hover:-translate-y-2 hover:shadow-2xl">
+                                <div class="absolute inset-0 p-6 flex flex-col justify-between">
+                                    <div>
+                                        <div class="text-white text-xs font-semibold mb-2 opacity-90">2022</div>
+                                        <h4 class="text-white text-2xl font-bold leading-tight mb-2">NFPA 72</h4>
+                                        <p class="text-white text-sm opacity-90">Fire Alarm Code</p>
+                                    </div>
+                                    <div class="text-white text-xs opacity-75">NFPA</div>
+                                </div>
+                                <div class="absolute bottom-0 left-0 right-0 h-2 bg-gradient-to-r from-green-400 to-green-500"></div>
+                            </div>
+                        </div>
+                        <div class="book-card group cursor-pointer" onclick="openBook('NEC', '2023', 'National Electrical Code', 'NFPA', 'blue')">
+                            <div class="relative h-72 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg shadow-xl transform transition-all duration-300 hover:scale-105 hover:-translate-y-2 hover:shadow-2xl">
+                                <div class="absolute inset-0 p-6 flex flex-col justify-between">
+                                    <div>
+                                        <div class="text-white text-xs font-semibold mb-2 opacity-90">2023</div>
+                                        <h4 class="text-white text-2xl font-bold leading-tight mb-2">NEC</h4>
+                                        <p class="text-white text-sm opacity-90">National Electrical Code</p>
+                                    </div>
+                                    <div class="text-white text-xs opacity-75">NFPA</div>
+                                </div>
+                                <div class="absolute bottom-0 left-0 right-0 h-2 bg-gradient-to-r from-blue-400 to-blue-500"></div>
+                            </div>
+                        </div>
+                        <div class="book-card group cursor-pointer" onclick="openBook('NFPA 101', '2021', 'Life Safety Code', 'NFPA', 'indigo')">
+                            <div class="relative h-72 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-lg shadow-xl transform transition-all duration-300 hover:scale-105 hover:-translate-y-2 hover:shadow-2xl">
+                                <div class="absolute inset-0 p-6 flex flex-col justify-between">
+                                    <div>
+                                        <div class="text-white text-xs font-semibold mb-2 opacity-90">2021</div>
+                                        <h4 class="text-white text-2xl font-bold leading-tight mb-2">NFPA 101</h4>
+                                        <p class="text-white text-sm opacity-90">Life Safety Code</p>
+                                    </div>
+                                    <div class="text-white text-xs opacity-75">NFPA</div>
+                                </div>
+                                <div class="absolute bottom-0 left-0 right-0 h-2 bg-gradient-to-r from-indigo-400 to-indigo-500"></div>
+                            </div>
+                        </div>
+                        <div class="book-card group cursor-pointer" onclick="openBook('IRC', '2021', 'Residential Code', 'ICC', 'violet')">
+                            <div class="relative h-72 bg-gradient-to-br from-violet-500 to-purple-600 rounded-lg shadow-xl transform transition-all duration-300 hover:scale-105 hover:-translate-y-2 hover:shadow-2xl">
+                                <div class="absolute inset-0 p-6 flex flex-col justify-between">
+                                    <div>
+                                        <div class="text-white text-xs font-semibold mb-2 opacity-90">2021</div>
+                                        <h4 class="text-white text-2xl font-bold leading-tight mb-2">IRC</h4>
+                                        <p class="text-white text-sm opacity-90">Residential Code</p>
+                                    </div>
+                                    <div class="text-white text-xs opacity-75">ICC</div>
+                                </div>
+                                <div class="absolute bottom-0 left-0 right-0 h-2 bg-gradient-to-r from-purple-400 to-violet-500"></div>
+                            </div>
+                        </div>
+                        <div class="book-card group cursor-pointer" onclick="openBook('IMC', '2021', 'Mechanical Code', 'ICC', 'pink')">
+                            <div class="relative h-72 bg-gradient-to-br from-pink-500 to-pink-600 rounded-lg shadow-xl transform transition-all duration-300 hover:scale-105 hover:-translate-y-2 hover:shadow-2xl">
+                                <div class="absolute inset-0 p-6 flex flex-col justify-between">
+                                    <div>
+                                        <div class="text-white text-xs font-semibold mb-2 opacity-90">2021</div>
+                                        <h4 class="text-white text-2xl font-bold leading-tight mb-2">IMC</h4>
+                                        <p class="text-white text-sm opacity-90">Mechanical Code</p>
+                                    </div>
+                                    <div class="text-white text-xs opacity-75">ICC</div>
+                                </div>
+                                <div class="absolute bottom-0 left-0 right-0 h-2 bg-gradient-to-r from-pink-400 to-pink-500"></div>
+                            </div>
+                        </div>
+                        <div class="book-card group cursor-pointer" onclick="openBook('IPC', '2021', 'Plumbing Code', 'ICC', 'rose')">
+                            <div class="relative h-72 bg-gradient-to-br from-rose-500 to-red-600 rounded-lg shadow-xl transform transition-all duration-300 hover:scale-105 hover:-translate-y-2 hover:shadow-2xl">
+                                <div class="absolute inset-0 p-6 flex flex-col justify-between">
+                                    <div>
+                                        <div class="text-white text-xs font-semibold mb-2 opacity-90">2021</div>
+                                        <h4 class="text-white text-2xl font-bold leading-tight mb-2">IPC</h4>
+                                        <p class="text-white text-sm opacity-90">Plumbing Code</p>
+                                    </div>
+                                    <div class="text-white text-xs opacity-75">ICC</div>
+                                </div>
+                                <div class="absolute bottom-0 left-0 right-0 h-2 bg-gradient-to-r from-red-400 to-rose-500"></div>
+                            </div>
+                        </div>
+                        <div class="book-card group cursor-pointer" onclick="openBook('IFC', '2021', 'Fire Code', 'ICC', 'orange')">
+                            <div class="relative h-72 bg-gradient-to-br from-orange-500 to-amber-600 rounded-lg shadow-xl transform transition-all duration-300 hover:scale-105 hover:-translate-y-2 hover:shadow-2xl">
+                                <div class="absolute inset-0 p-6 flex flex-col justify-between">
+                                    <div>
+                                        <div class="text-white text-xs font-semibold mb-2 opacity-90">2021</div>
+                                        <h4 class="text-white text-2xl font-bold leading-tight mb-2">IFC</h4>
+                                        <p class="text-white text-sm opacity-90">Fire Code</p>
+                                    </div>
+                                    <div class="text-white text-xs opacity-75">ICC</div>
+                                </div>
+                                <div class="absolute bottom-0 left-0 right-0 h-2 bg-gradient-to-r from-amber-400 to-orange-500"></div>
+                            </div>
+                        </div>
+                        <div class="book-card group cursor-pointer" onclick="openBook('IECC', '2021', 'Energy Code', 'ICC', 'lime')">
+                            <div class="relative h-72 bg-gradient-to-br from-lime-500 to-green-600 rounded-lg shadow-xl transform transition-all duration-300 hover:scale-105 hover:-translate-y-2 hover:shadow-2xl">
+                                <div class="absolute inset-0 p-6 flex flex-col justify-between">
+                                    <div>
+                                        <div class="text-white text-xs font-semibold mb-2 opacity-90">2021</div>
+                                        <h4 class="text-white text-2xl font-bold leading-tight mb-2">IECC</h4>
+                                        <p class="text-white text-sm opacity-90">Energy Code</p>
+                                    </div>
+                                    <div class="text-white text-xs opacity-75">ICC</div>
+                                </div>
+                                <div class="absolute bottom-0 left-0 right-0 h-2 bg-gradient-to-r from-green-400 to-lime-500"></div>
+                            </div>
+                        </div>
+                        <div class="book-card group cursor-pointer" onclick="openBook('NFPA 20', '2022', 'Fire Pumps', 'NFPA', 'teal')">
+                            <div class="relative h-72 bg-gradient-to-br from-teal-500 to-cyan-600 rounded-lg shadow-xl transform transition-all duration-300 hover:scale-105 hover:-translate-y-2 hover:shadow-2xl">
+                                <div class="absolute inset-0 p-6 flex flex-col justify-between">
+                                    <div>
+                                        <div class="text-white text-xs font-semibold mb-2 opacity-90">2022</div>
+                                        <h4 class="text-white text-2xl font-bold leading-tight mb-2">NFPA 20</h4>
+                                        <p class="text-white text-sm opacity-90">Fire Pumps</p>
+                                    </div>
+                                    <div class="text-white text-xs opacity-75">NFPA</div>
+                                </div>
+                                <div class="absolute bottom-0 left-0 right-0 h-2 bg-gradient-to-r from-cyan-400 to-teal-500"></div>
+                            </div>
+                        </div>
+                        <div class="book-card group cursor-pointer" onclick="openBook('NFPA 25', '2022', 'Water-Based Systems', 'NFPA', 'sky')">
+                            <div class="relative h-72 bg-gradient-to-br from-sky-500 to-blue-600 rounded-lg shadow-xl transform transition-all duration-300 hover:scale-105 hover:-translate-y-2 hover:shadow-2xl">
+                                <div class="absolute inset-0 p-6 flex flex-col justify-between">
+                                    <div>
+                                        <div class="text-white text-xs font-semibold mb-2 opacity-90">2022</div>
+                                        <h4 class="text-white text-2xl font-bold leading-tight mb-2">NFPA 25</h4>
+                                        <p class="text-white text-sm opacity-90">Water-Based Systems</p>
+                                    </div>
+                                    <div class="text-white text-xs opacity-75">NFPA</div>
+                                </div>
+                                <div class="absolute bottom-0 left-0 right-0 h-2 bg-gradient-to-r from-blue-400 to-sky-500"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div id="book-popup" class="book-popup">
+        <div class="book-container">
+            <div class="close-book" onclick="closeBook()">
+                <i class="fa-solid fa-times text-xl"></i>
+            </div>
+            <div class="book-pages">
+                <div class="book-page book-page-left" id="left-page">
+                    <div class="code-badge" id="code-badge">NFPA 13 - 2022</div>
+                    <h1 class="text-4xl font-bold text-slate-900 mb-4" id="code-title">Sprinkler Systems</h1>
+                    <p class="text-slate-600 text-lg mb-6" id="code-org">National Fire Protection Association</p>
+                    
+                    <div class="section-divider"></div>
+                    
+                    <h2 class="text-2xl font-bold text-slate-800 mb-4">
+                        <i class="fa-solid fa-book-open text-blue-600 mr-3"></i>
+                        코드 개요
+                    </h2>
+                    <p class="text-slate-700 leading-relaxed mb-6">
+                        본 코드는 자동 스프링클러 시스템의 설계, 설치, 유지보수에 관한 최소 요구사항을 규정합니다. 
+                        건물 내 화재 발생 시 신속한 화재 진압과 인명 안전을 보장하기 위한 기준을 제시합니다.
+                    </p>
+                    
+                    <div class="info-card">
+                        <h3 class="text-lg font-semibold text-slate-800 mb-3 flex items-center">
+                            <i class="fa-solid fa-circle-info text-blue-600 mr-2"></i>
+                            적용 범위
+                        </h3>
+                        <ul class="space-y-2 text-slate-700">
+                            <li class="flex items-start">
+                                <i class="fa-solid fa-check text-green-600 mr-2 mt-1"></i>
+                                <span>신축 및 기존 건물의 자동 스프링클러 시스템</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fa-solid fa-check text-green-600 mr-2 mt-1"></i>
+                                <span>상업, 산업, 주거용 건물 전반</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fa-solid fa-check text-green-600 mr-2 mt-1"></i>
+                                <span>특수 위험 구역 및 고층 건물</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fa-solid fa-check text-green-600 mr-2 mt-1"></i>
+                                <span>지하 주차장 및 창고 시설</span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="highlight-box">
+                        <h3 class="text-lg font-semibold text-slate-800 mb-2 flex items-center">
+                            <i class="fa-solid fa-lightbulb text-amber-600 mr-2"></i>
+                            주요 특징
+                        </h3>
+                        <p class="text-slate-700 text-sm leading-relaxed">
+                            이 코드는 건물 용도, 면적, 높이에 따라 차별화된 스프링클러 시스템 요구사항을 제시하며, 
+                            수원, 배관, 스프링클러 헤드 배치 등 시스템의 모든 구성요소에 대한 상세한 기준을 포함합니다.
+                        </p>
+                    </div>
+                    
+                    <div class="page-number">Page 1</div>
+                </div>
+                
+                <div class="book-spine"></div>
+                
+                <div class="book-page book-page-right" id="right-page">
+                    <h2 class="text-2xl font-bold text-slate-800 mb-4">
+                        <i class="fa-solid fa-list-check text-blue-600 mr-3"></i>
+                        주요 조항 및 요구사항
+                    </h2>
+                    
+                    <div class="space-y-6 mb-6">
+                        <div class="border-l-4 border-blue-500 pl-4">
+                            <h3 class="text-lg font-semibold text-slate-800 mb-2">Chapter 8: 설계 및 설치 기준</h3>
+                            <p class="text-slate-700 text-sm leading-relaxed mb-2">
+                                스프링클러 헤드의 배치 간격, 수압 요구사항, 배관 크기 결정 방법을 규정합니다.
+                            </p>
+                            <ul class="text-slate-600 text-sm space-y-1">
+                                <li>• 표준 스프링클러: 최대 15피트 간격</li>
+                                <li>• 최소 작동 압력: 7 psi (경급 위험)</li>
+                                <li>• 배관 재질: 강관, 구리관, CPVC 등</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="border-l-4 border-green-500 pl-4">
+                            <h3 class="text-lg font-semibold text-slate-800 mb-2">Chapter 11: 수원 및 펌프</h3>
+                            <p class="text-slate-700 text-sm leading-relaxed mb-2">
+                                충분한 수원 확보와 화재 펌프 설치 요구사항을 명시합니다.
+                            </p>
+                            <ul class="text-slate-600 text-sm space-y-1">
+                                <li>• 최소 30분간 지속 가능한 수원</li>
+                                <li>• 자동 화재 펌프 설치 기준</li>
+                                <li>• 예비 수원 확보 방안</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="border-l-4 border-orange-500 pl-4">
+                            <h3 class="text-lg font-semibold text-slate-800 mb-2">Chapter 23: 특수 시스템</h3>
+                            <p class="text-slate-700 text-sm leading-relaxed mb-2">
+                                조기 억제 고속 반응(ESFR) 스프링클러 및 특수 용도 시스템 기준을 포함합니다.
+                            </p>
+                            <ul class="text-slate-600 text-sm space-y-1">
+                                <li>• ESFR 스프링클러 적용 조건</li>
+                                <li>• 창고 및 고적재 구역 특수 요구사항</li>
+                                <li>• 방수 스프링클러 시스템</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="section-divider"></div>
+                    
+                    <div class="bg-slate-50 rounded-lg p-5 border border-slate-200">
+                        <h3 class="text-lg font-semibold text-slate-800 mb-3 flex items-center">
+                            <i class="fa-solid fa-image text-purple-600 mr-2"></i>
+                            참고 다이어그램
+                        </h3>
+                        <div class="h-48 bg-gradient-to-br from-slate-100 to-slate-200 rounded-lg flex items-center justify-center border border-slate-300">
+                            <img class="w-full h-full object-cover rounded-lg" src="https://storage.googleapis.com/uxpilot-auth.appspot.com/94f92d71a1-a72cb1521bbe9faa0589.png" alt="technical diagram of fire sprinkler system layout showing pipes, sprinkler heads, water supply, and coverage areas in isometric view, blueprint style" />
+                        </div>
+                        <p class="text-xs text-slate-600 mt-2 text-center italic">
+                            스프링클러 시스템 배치도 예시 (이미지는 참고용)
+                        </p>
+                    </div>
+                    
+                    <div class="highlight-box mt-6">
+                        <p class="text-sm text-slate-700 leading-relaxed">
+                            <i class="fa-solid fa-exclamation-circle text-amber-600 mr-2"></i>
+                            <strong>중요:</strong> 실제 프로젝트 적용 시에는 반드시 최신 코드 원본과 지역 관할 당국의 
+                            추가 요구사항을 확인하시기 바랍니다.
+                        </p>
+                    </div>
+                    
+                    <div class="page-number">Page 2</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openBook(code, year, title, org, color) {
+            const popup = document.getElementById('book-popup');
+            const badge = document.getElementById('code-badge');
+            const codeTitle = document.getElementById('code-title');
+            const codeOrg = document.getElementById('code-org');
+            
+            badge.textContent = `${code} - ${year}`;
+            codeTitle.textContent = title;
+            codeOrg.textContent = org;
+            
+            popup.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeBook() {
+            const popup = document.getElementById('book-popup');
+            popup.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+        
+        document.getElementById('book-popup').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeBook();
+            }
+        });
+        
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeBook();
+            }
+        });
+    </script>
+</body>
+</html>
