@@ -2138,7 +2138,7 @@ function initAdvancedSearchFilters() {
         { id: 'D004', name: '소방전기', color: '#F8E9A1' }
     ];
 
-    // 각 discipline별로 Index 태그 수집
+    // 각 discipline별로 Index 태그와 SubIndex 계층 수집
     const filtersByDiscipline = {};
 
     targetDisciplines.forEach(disc => {
@@ -2147,13 +2147,14 @@ function initAdvancedSearchFilters() {
             .filter(mcd => mcd.DisciplineID === disc.id)
             .map(mcd => mcd.ModelCodeID);
 
-        // 해당 ModelCode들의 content에서 IndexTags 수집
+        // Index 태그 수집 (CD, SD, DD, IFR, IFC 제외)
         const indexTags = new Set();
-        const subIndexMap = {}; // parent -> [children]
+        // SubIndex 계층 구조 수집 (parent -> { child -> [grandchildren] })
+        const subIndexHierarchy = {};
 
         appData.CodeContent.forEach(content => {
             if (modelCodes.includes(content.ModelCodeID)) {
-                // IndexTags 배열에서 태그 추출 (CD, SD, DD, IFR, IFC 제외)
+                // IndexTags 배열에서 태그 추출
                 if (content.IndexTags && Array.isArray(content.IndexTags)) {
                     content.IndexTags.forEach(tag => {
                         // 약자 태그 제외
@@ -2163,23 +2164,37 @@ function initAdvancedSearchFilters() {
                     });
                 }
 
-                // SubIndex 처리 (_로 구분된 하위 카테고리)
+                // SubIndex 처리 (_로 구분된 계층 구조)
                 if (content.SubIndex) {
-                    const parts = content.SubIndex.split('_');
-                    if (parts.length >= 2) {
-                        const parent = parts[0];
-                        const child = parts.slice(1).join('_');
-                        if (!subIndexMap[parent]) subIndexMap[parent] = new Set();
-                        subIndexMap[parent].add(child);
-                    }
+                    // 세미콜론으로 여러 SubIndex가 있을 수 있음
+                    const subIndexEntries = content.SubIndex.split(';');
+                    subIndexEntries.forEach(entry => {
+                        const parts = entry.trim().split('_');
+                        if (parts.length >= 1) {
+                            const parent = parts[0];
+                            if (!subIndexHierarchy[parent]) {
+                                subIndexHierarchy[parent] = {};
+                            }
+                            if (parts.length >= 2) {
+                                const child = parts[1];
+                                if (!subIndexHierarchy[parent][child]) {
+                                    subIndexHierarchy[parent][child] = new Set();
+                                }
+                                if (parts.length >= 3) {
+                                    const grandchild = parts.slice(2).join('_');
+                                    subIndexHierarchy[parent][child].add(grandchild);
+                                }
+                            }
+                        }
+                    });
                 }
             }
         });
 
         filtersByDiscipline[disc.id] = {
             discipline: disc,
-            tags: Array.from(indexTags).sort(),
-            subIndex: subIndexMap
+            indexTags: Array.from(indexTags).sort(),
+            subIndexHierarchy: subIndexHierarchy
         };
     });
 
@@ -2191,97 +2206,143 @@ function renderAdvancedFilters(filtersByDiscipline, disciplines) {
     const container = document.getElementById('dynamicFilters');
     if (!container) return;
 
-    let html = '<div class="grid grid-cols-1 md:grid-cols-3 gap-6">';
+    let html = '<div class="grid grid-cols-1 md:grid-cols-3 gap-4">';
 
     disciplines.forEach(disc => {
         const data = filtersByDiscipline[disc.id];
         if (!data) return;
 
         const categoryName = disc.id === 'D001' ? 'arch' : disc.id === 'D005' ? 'fireMech' : 'fireElec';
+        const hasIndexTags = data.indexTags.length > 0;
+        const hasSubIndex = Object.keys(data.subIndexHierarchy).length > 0;
 
         html += `
-        <div class="border rounded-lg p-4">
-            <div class="flex items-center gap-3 mb-3 pb-2 border-b-2" style="border-color: ${disc.color};">
+        <div class="border rounded-lg p-3">
+            <div class="flex items-center gap-2 mb-2 pb-2 border-b-2" style="border-color: ${disc.color};">
                 <label class="flex items-center cursor-pointer">
                     <input class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded"
                            id="selectAll${categoryName}"
                            onchange="toggleSelectAllDynamic('${categoryName}')"
                            type="checkbox"/>
                 </label>
-                <h3 class="text-base font-bold text-[#24305E]">${disc.name}</h3>
+                <h3 class="text-sm font-bold text-[#24305E]">${disc.name}</h3>
             </div>
-            <div class="max-h-64 overflow-y-auto">
+            <div class="max-h-80 overflow-y-auto space-y-1">
         `;
 
-        // 태그들을 그룹화 (괄호 포함 태그는 같은 그룹으로)
-        const groupedTags = groupTagsByCategory(data.tags, data.subIndex);
+        // SubIndex 계층 구조 렌더링 (위계 표시)
+        if (hasSubIndex) {
+            const sortedParents = Object.keys(data.subIndexHierarchy).sort();
+            sortedParents.forEach(parent => {
+                const children = data.subIndexHierarchy[parent];
+                const childKeys = Object.keys(children).sort();
+                const hasChildren = childKeys.length > 0;
+                const parentId = `${categoryName}_${parent.replace(/[^a-zA-Z0-9가-힣]/g, '')}`;
 
-        // 3열 그리드로 표시 (태그가 많을 경우)
-        const colCount = data.tags.length > 12 ? 3 : data.tags.length > 6 ? 2 : 1;
-        html += `<div class="grid grid-cols-${colCount} gap-x-2 gap-y-1">`;
-
-        // 상위 태그 렌더링
-        groupedTags.forEach(group => {
-            const hasChildren = group.children && group.children.length > 0;
-            const groupId = `${categoryName}_${group.tag.replace(/[^a-zA-Z0-9가-힣]/g, '')}`;
-
-            if (hasChildren) {
-                // 하위 항목이 있는 경우 확장 가능하게
-                html += `
-                <div class="col-span-${colCount}">
-                    <div class="flex items-center justify-between cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors"
-                         onclick="toggleFilterGroup('${groupId}')">
-                        <div class="flex items-center">
-                            <input class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded"
-                                   name="${categoryName}Category" type="checkbox" value="${group.tag}"
-                                   onclick="event.stopPropagation()"/>
-                            <span class="ml-2 text-sm text-gray-700">${group.tag}</span>
+                if (hasChildren) {
+                    // 하위 항목이 있는 부모
+                    html += `
+                    <div class="border-l-2 border-gray-200 pl-2">
+                        <div class="flex items-center justify-between cursor-pointer hover:bg-gray-50 p-1 rounded transition-colors"
+                             onclick="toggleFilterGroup('${parentId}')">
+                            <div class="flex items-center">
+                                <input class="w-3 h-3 text-[#F76C6C] focus:ring-[#A8D0E6] rounded"
+                                       name="${categoryName}Category" type="checkbox" value="${parent}"
+                                       onclick="event.stopPropagation(); toggleParentCheckbox(this, '${parentId}')"/>
+                                <span class="ml-1.5 text-xs font-medium text-gray-800">${parent}</span>
+                                <span class="ml-1 text-[10px] text-gray-400">(${childKeys.length})</span>
+                            </div>
+                            <span class="text-xs text-gray-400" id="${parentId}Toggle">▶</span>
                         </div>
-                        <span class="text-xs text-gray-400" id="${groupId}Toggle">+</span>
-                    </div>
-                    <div class="hidden ml-4 mt-1 space-y-1" id="${groupId}">
-                        ${group.children.map(child => `
-                        <label class="flex items-center cursor-pointer hover:bg-gray-50 p-1 rounded transition-colors">
-                            <input class="w-3 h-3 text-[#F76C6C] focus:ring-[#A8D0E6] rounded"
-                                   name="${categoryName}Category" type="checkbox" value="${group.tag}_${child}"/>
-                            <span class="ml-2 text-xs text-gray-600">${child}</span>
-                        </label>
-                        `).join('')}
-                    </div>
-                </div>`;
-            } else {
-                // 단일 태그
-                html += `
-                <label class="flex items-center cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
-                    <input class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded"
-                           name="${categoryName}Category" type="checkbox" value="${group.tag}"/>
-                    <span class="ml-2 text-sm text-gray-700">${group.tag}</span>
-                </label>`;
-            }
-        });
+                        <div class="hidden ml-3 mt-1 space-y-0.5" id="${parentId}">
+                    `;
 
-        html += '</div></div></div>';
+                    // 자식 항목 렌더링
+                    childKeys.forEach(child => {
+                        const grandchildren = Array.from(children[child]).sort();
+                        const hasGrandchildren = grandchildren.length > 0;
+                        const childId = `${parentId}_${child.replace(/[^a-zA-Z0-9가-힣]/g, '')}`;
+                        const childValue = `${parent}_${child}`;
+
+                        if (hasGrandchildren) {
+                            // 손자 항목이 있는 자식
+                            html += `
+                            <div class="border-l border-gray-200 pl-2">
+                                <div class="flex items-center justify-between cursor-pointer hover:bg-gray-50 p-0.5 rounded transition-colors"
+                                     onclick="toggleFilterGroup('${childId}')">
+                                    <div class="flex items-center">
+                                        <input class="w-2.5 h-2.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded"
+                                               name="${categoryName}Category" type="checkbox" value="${childValue}"
+                                               onclick="event.stopPropagation()"/>
+                                        <span class="ml-1 text-[11px] text-gray-700">${child}</span>
+                                        <span class="ml-1 text-[9px] text-gray-400">(${grandchildren.length})</span>
+                                    </div>
+                                    <span class="text-[10px] text-gray-400" id="${childId}Toggle">▶</span>
+                                </div>
+                                <div class="hidden ml-2 mt-0.5 space-y-0.5" id="${childId}">
+                                    ${grandchildren.map(gc => `
+                                    <label class="flex items-center cursor-pointer hover:bg-gray-50 p-0.5 rounded transition-colors">
+                                        <input class="w-2 h-2 text-[#F76C6C] focus:ring-[#A8D0E6] rounded"
+                                               name="${categoryName}Category" type="checkbox" value="${parent}_${child}_${gc}"/>
+                                        <span class="ml-1 text-[10px] text-gray-600">${gc}</span>
+                                    </label>
+                                    `).join('')}
+                                </div>
+                            </div>`;
+                        } else {
+                            // 손자 없는 자식
+                            html += `
+                            <label class="flex items-center cursor-pointer hover:bg-gray-50 p-0.5 rounded transition-colors border-l border-gray-200 pl-2">
+                                <input class="w-2.5 h-2.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded"
+                                       name="${categoryName}Category" type="checkbox" value="${childValue}"/>
+                                <span class="ml-1 text-[11px] text-gray-700">${child}</span>
+                            </label>`;
+                        }
+                    });
+
+                    html += '</div></div>';
+                } else {
+                    // 하위 항목이 없는 단독 부모
+                    html += `
+                    <label class="flex items-center cursor-pointer hover:bg-gray-50 p-1 rounded transition-colors border-l-2 border-gray-200 pl-2">
+                        <input class="w-3 h-3 text-[#F76C6C] focus:ring-[#A8D0E6] rounded"
+                               name="${categoryName}Category" type="checkbox" value="${parent}"/>
+                        <span class="ml-1.5 text-xs font-medium text-gray-800">${parent}</span>
+                    </label>`;
+                }
+            });
+        }
+
+        // Index 태그 (SubIndex와 별도로 표시)
+        if (hasIndexTags && hasSubIndex) {
+            html += `<div class="border-t border-gray-200 mt-2 pt-2">
+                <div class="text-[10px] text-gray-500 mb-1">기타 태그</div>`;
+        }
+
+        if (hasIndexTags) {
+            // 태그 개수에 따라 열 수 조정
+            const colCount = data.indexTags.length > 8 ? 2 : 1;
+            html += `<div class="grid grid-cols-${colCount} gap-x-2 gap-y-0.5">`;
+            data.indexTags.forEach(tag => {
+                html += `
+                <label class="flex items-center cursor-pointer hover:bg-gray-50 p-0.5 rounded transition-colors">
+                    <input class="w-2.5 h-2.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded"
+                           name="${categoryName}Category" type="checkbox" value="${tag}"/>
+                    <span class="ml-1 text-[11px] text-gray-700">${tag}</span>
+                </label>`;
+            });
+            html += '</div>';
+        }
+
+        if (hasIndexTags && hasSubIndex) {
+            html += '</div>';
+        }
+
+        html += '</div></div>';
     });
 
     html += '</div>';
     container.innerHTML = html;
-}
-
-function groupTagsByCategory(tags, subIndexMap) {
-    const groups = [];
-    const processedParents = new Set();
-
-    tags.forEach(tag => {
-        // SubIndex에서 부모로 사용된 태그인지 확인
-        const children = subIndexMap[tag] ? Array.from(subIndexMap[tag]).sort() : [];
-
-        groups.push({
-            tag: tag,
-            children: children
-        });
-    });
-
-    return groups;
 }
 
 function toggleFilterGroup(groupId) {
@@ -2289,7 +2350,16 @@ function toggleFilterGroup(groupId) {
     const toggle = document.getElementById(groupId + 'Toggle');
     if (group && toggle) {
         group.classList.toggle('hidden');
-        toggle.textContent = group.classList.contains('hidden') ? '+' : '-';
+        toggle.textContent = group.classList.contains('hidden') ? '▶' : '▼';
+    }
+}
+
+function toggleParentCheckbox(checkbox, groupId) {
+    // 부모 체크박스 선택 시 하위 항목도 모두 선택/해제
+    const group = document.getElementById(groupId);
+    if (group) {
+        const childCheckboxes = group.querySelectorAll('input[type="checkbox"]');
+        childCheckboxes.forEach(cb => cb.checked = checkbox.checked);
     }
 }
 
