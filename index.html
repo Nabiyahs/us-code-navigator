@@ -430,8 +430,8 @@
 <body class="bg-gray-50">
 <!-- Sidebar -->
 <aside class="fixed left-0 top-0 h-full w-64 bg-[#24305E] text-white shadow-lg z-10">
-<div class="p-6 py-4 border-b border-[#374785]">
-<h1 class="text-xl font-bold text-[#F8E9A1]">US CODE NAVIGATOR</h1>
+<div class="p-6 py-4 border-b border-[#374785] cursor-pointer" onclick="showSection('home')">
+<h1 class="text-xl font-bold text-[#F8E9A1] hover:text-white transition-colors">US CODE NAVIGATOR</h1>
 </div>
 <nav class="mt-6">
 <div class="sidebar-item active flex items-center px-6 py-3 text-white" data-section="home">
@@ -1012,11 +1012,57 @@ function loadChapterContent(chapterId) {
     }
   });
 
-  // Get contents for this chapter based on OrderKey pattern
-  const chapterNum = chapter.Chapter.toString().padStart(4, '0');
-  const contents = appData.codeContents.filter(c =>
-    c.OrderKey && c.OrderKey.startsWith(chapterNum.substring(0, 4))
+  // Get all attachment IDs for this ModelCodeVersionID
+  const allVersionAttachments = appData.codeAttachments.filter(
+    att => att.ModelCodeVersionID === currentVersionId
   );
+  const allVersionAttachmentIds = new Set(allVersionAttachments.map(att => att.AttachmentID));
+
+  // Get attachments specifically for this chapter
+  const chapterAttachments = allVersionAttachments.filter(
+    att => String(att.Chapter) === String(chapter.Chapter)
+  );
+  const chapterAttachmentIds = new Set(chapterAttachments.map(att => att.AttachmentID));
+
+  // Format chapter number for OrderKey matching
+  const chapterStr = String(chapter.Chapter);
+  let chapterPrefix;
+  if (chapterStr.toLowerCase().startsWith('annex')) {
+    chapterPrefix = 'Anne';
+  } else {
+    chapterPrefix = chapterStr.padStart(4, '0').substring(0, 4);
+  }
+
+  // Filter contents using OrderKey + ChapterID + ModelCodeVersionID combination
+  // Strategy:
+  // 1. Content with AttachmentID: Check if AttachmentID belongs to this version
+  // 2. Content without AttachmentID: Only for IBC (MCV002), match by OrderKey
+  const contents = appData.codeContents.filter(c => {
+    // Check if OrderKey matches this chapter
+    const orderKeyMatches = c.OrderKey && c.OrderKey.startsWith(chapterPrefix);
+
+    // Case 1: Content has AttachmentID
+    if (c.AttachmentID) {
+      // Handle multiple AttachmentIDs (e.g., "D001;D002")
+      const attIds = c.AttachmentID.split(';').map(id => id.trim());
+      const hasVersionAttachment = attIds.some(id => allVersionAttachmentIds.has(id));
+
+      // Include if: belongs to this version AND matches chapter via OrderKey or AttachmentID chapter
+      if (hasVersionAttachment) {
+        // Check if any attachment matches this chapter directly
+        const hasChapterAttachment = attIds.some(id => chapterAttachmentIds.has(id));
+        return hasChapterAttachment || orderKeyMatches;
+      }
+      return false;
+    }
+
+    // Case 2: Content without AttachmentID (only for IBC since most IBC content lacks AttachmentID)
+    if (currentVersionId === 'MCV002' && !c.AttachmentID) {
+      return orderKeyMatches;
+    }
+
+    return false;
+  });
 
   let html = `
     <div class="mb-6">
@@ -1028,7 +1074,12 @@ function loadChapterContent(chapterId) {
   `;
 
   contents.forEach(content => {
-    const attachments = appData.codeAttachments.filter(a => a.AttachmentID === content.AttachmentID);
+    // Handle multiple AttachmentIDs (e.g., "D001;D002")
+    let attachments = [];
+    if (content.AttachmentID) {
+      const attIds = content.AttachmentID.split(';').map(id => id.trim());
+      attachments = appData.codeAttachments.filter(a => attIds.includes(a.AttachmentID));
+    }
 
     html += `
       <div class="bg-gray-50 p-4 rounded-lg">
@@ -1231,8 +1282,14 @@ function displaySearchResults(results, query) {
   results.slice(0, 50).forEach((result, index) => {
     if (result.type === 'content') {
       const content = result.data;
+      // Find which code/version this content belongs to
+      const codeInfo = getCodeInfoForContent(content);
       html += `
-        <div class="result-item p-4 border-b border-gray-200">
+        <div class="result-item p-4 border-b border-gray-200 cursor-pointer" onclick="navigateToContent('${content.OrderKey || ''}', '${content.AttachmentID || ''}')">
+          <div class="flex items-center gap-2 mb-1">
+            ${codeInfo ? `<span class="text-xs bg-[#24305E] text-white px-2 py-0.5 rounded">${codeInfo.codeName}</span>` : ''}
+            <span class="text-xs text-gray-400">${content.OrderKey || ''}</span>
+          </div>
           <h3 class="font-semibold text-[#24305E]">${highlightText(content.TitleEN || '', query)}</h3>
           <p class="text-sm text-gray-600">${highlightText(content.TitleKR || '', query)}</p>
           <p class="text-sm text-gray-500 mt-2 line-clamp-2">${highlightText((content.ContentKR || content.ContentEN || '').substring(0, 200), query)}...</p>
@@ -1240,8 +1297,14 @@ function displaySearchResults(results, query) {
       `;
     } else if (result.type === 'chapter') {
       const chapter = result.data;
+      const version = appData.modelCodeVersions.find(v => v.ModelCodeVersionID === chapter.ModelCodeVersionID);
+      const code = version ? appData.modelCodes.find(c => c.ModelCodeID === version.ModelCodeID) : null;
+      const codeName = code ? `${code.ModelCodeName} ${version.Year}` : '';
       html += `
         <div class="result-item p-4 border-b border-gray-200 cursor-pointer" onclick="loadChapterFromSearch('${chapter.ChapterID}', '${chapter.ModelCodeVersionID}')">
+          <div class="flex items-center gap-2 mb-1">
+            <span class="text-xs bg-[#374785] text-white px-2 py-0.5 rounded">${codeName}</span>
+          </div>
           <h3 class="font-semibold text-[#24305E]">Chapter ${chapter.Chapter}: ${highlightText(chapter.TitleEN || '', query)}</h3>
           <p class="text-sm text-gray-600">${highlightText(chapter.TitleKR || '', query)}</p>
         </div>
@@ -1254,6 +1317,87 @@ function displaySearchResults(results, query) {
   }
 
   resultsList.innerHTML = html;
+}
+
+// Get code info for a content item
+function getCodeInfoForContent(content) {
+  if (content.AttachmentID) {
+    // Handle multiple AttachmentIDs (e.g., "D001;D002")
+    const attIds = content.AttachmentID.split(';').map(id => id.trim());
+    const attachment = appData.codeAttachments.find(a => attIds.includes(a.AttachmentID));
+    if (attachment) {
+      const version = appData.modelCodeVersions.find(v => v.ModelCodeVersionID === attachment.ModelCodeVersionID);
+      const code = version ? appData.modelCodes.find(c => c.ModelCodeID === version.ModelCodeID) : null;
+      if (code && version) {
+        return {
+          codeName: `${code.ModelCodeName} ${version.Year}`,
+          versionId: attachment.ModelCodeVersionID,
+          codeId: code.ModelCodeID
+        };
+      }
+    }
+  }
+  return null;
+}
+
+// Navigate to content from search results
+function navigateToContent(orderKey, attachmentId) {
+  let targetVersionId = null;
+  let targetChapterId = null;
+
+  // Try to find version via AttachmentID
+  if (attachmentId) {
+    // Handle multiple AttachmentIDs (e.g., "D001;D002")
+    const attIds = attachmentId.split(';').map(id => id.trim());
+    const attachment = appData.codeAttachments.find(a => attIds.includes(a.AttachmentID));
+    if (attachment) {
+      targetVersionId = attachment.ModelCodeVersionID;
+      // Find matching chapter using OrderKey if available, or attachment chapter
+      if (orderKey) {
+        const chapterNum = orderKey.substring(0, 4);
+        const chapter = appData.codeChapters.find(ch =>
+          ch.ModelCodeVersionID === targetVersionId &&
+          String(ch.Chapter).padStart(4, '0').substring(0, 4) === chapterNum
+        );
+        if (chapter) {
+          targetChapterId = chapter.ChapterID;
+        }
+      }
+      // Fallback to attachment chapter
+      if (!targetChapterId) {
+        const chapter = appData.codeChapters.find(ch =>
+          ch.ModelCodeVersionID === targetVersionId &&
+          String(ch.Chapter) === String(attachment.Chapter)
+        );
+        if (chapter) {
+          targetChapterId = chapter.ChapterID;
+        }
+      }
+    }
+  }
+
+  // If not found via AttachmentID, try OrderKey for IBC (MCV002)
+  if (!targetVersionId && orderKey) {
+    const chapterNum = orderKey.substring(0, 4);
+    // First try IBC chapters as default for content without AttachmentID
+    const chapter = appData.codeChapters.find(ch =>
+      ch.ModelCodeVersionID === 'MCV002' &&
+      String(ch.Chapter).padStart(4, '0').substring(0, 4) === chapterNum
+    );
+    if (chapter) {
+      targetVersionId = 'MCV002';
+      targetChapterId = chapter.ChapterID;
+    }
+  }
+
+  if (targetVersionId && targetChapterId) {
+    const version = appData.modelCodeVersions.find(v => v.ModelCodeVersionID === targetVersionId);
+    const code = version ? appData.modelCodes.find(c => c.ModelCodeID === version.ModelCodeID) : null;
+    if (code) {
+      loadCodeFromSidebar(targetVersionId, code.ModelCodeID);
+      setTimeout(() => loadChapterContent(targetChapterId), 100);
+    }
+  }
 }
 
 function highlightText(text, query) {
