@@ -2475,17 +2475,46 @@ function scrollToSection(chapterId, sectionNum, versionId, event) {
     // 먼저 해당 챕터 콘텐츠 로드
     loadChapterContent(chapterId, versionId);
 
+    // 사이드바 섹션 아이템 하이라이팅 업데이트
+    document.querySelectorAll('.section-item').forEach(item => {
+        item.classList.remove('bg-[#A8D0E6]', 'text-white');
+    });
+    // 현재 선택된 섹션 하이라이트
+    const currentSectionItem = document.querySelector(`.section-item[data-section="${sectionNum}"]`);
+    if (currentSectionItem) {
+        currentSectionItem.classList.add('bg-[#A8D0E6]', 'text-white');
+    }
+
     // 약간의 지연 후 섹션으로 스크롤
     setTimeout(() => {
-        const sectionId = 'section-' + sectionNum;
-        const sectionElement = document.querySelector(`[id^="${sectionId}"]`);
+        // 섹션 ID 생성 (getSectionId 함수 사용 또는 직접 생성)
+        let sectionId;
+        if (typeof getSectionId === 'function') {
+            sectionId = getSectionId(chapterId, sectionNum);
+        } else {
+            sectionId = 'section-' + chapterId + '-' + sectionNum;
+        }
+
+        // 먼저 정확한 ID로 찾기
+        let sectionElement = document.getElementById(sectionId);
+
+        // 못 찾으면 prefix로 찾기
+        if (!sectionElement) {
+            sectionElement = document.querySelector(`[id^="section-${sectionNum}"]`);
+        }
+
         if (sectionElement) {
             // 스크롤 가능한 컨테이너 내에서 스크롤
             const contentContainer = document.querySelector('#librarySection .flex-1.overflow-y-auto');
             if (contentContainer) {
-                const elementTop = sectionElement.offsetTop;
+                // getBoundingClientRect로 정확한 위치 계산
+                const containerRect = contentContainer.getBoundingClientRect();
+                const elementRect = sectionElement.getBoundingClientRect();
+                const relativeTop = elementRect.top - containerRect.top;
+                const scrollPosition = Math.max(0, contentContainer.scrollTop + relativeTop - 100);
+
                 contentContainer.scrollTo({
-                    top: Math.max(0, elementTop - 20),
+                    top: scrollPosition,
                     behavior: 'smooth'
                 });
             } else {
@@ -2831,118 +2860,12 @@ function scrollToChapterOrSearch(chapterId, searchQuery) {
     return false; // Prevent default link behavior
 }
 
-// Navigate to section from hyperlink (with history)
+// Navigate to section from hyperlink (with history) - 현재 버전 ID를 찾아서 scrollToSection 호출
 function navigateToSection(chapterId, sectionNum) {
-    scrollToSection(chapterId, sectionNum, true);
-}
-
-// Scroll to section with header offset (returns true if found, false otherwise)
-function scrollToSection(chapterId, sectionNum, saveHistory = false) {
-    // Make sure library section is visible (hide search results if showing)
-    document.querySelectorAll('.main-section').forEach(section => {
-        section.classList.remove('active');
-    });
-    document.getElementById('librarySection').classList.add('active');
-
-    // Use unified ID generation function
-    const sectionId = getSectionId(chapterId, sectionNum);
-    console.log('Looking for section ID:', sectionId, 'Chapter:', chapterId, 'Section:', sectionNum);
-
-    // Use querySelector with CSS.escape to handle special characters like [ ]
-    const sectionElement = document.querySelector('#' + CSS.escape(sectionId));
-    console.log('Found section element:', sectionElement ? 'YES' : 'NO');
-
-    if (sectionElement) {
-        // CRITICAL: Find which code-content this section belongs to and show it
-        const codeContent = sectionElement.closest('.code-content');
-        console.log('Code content found:', codeContent ? codeContent.id : 'NONE');
-
-        if (codeContent) {
-            // Hide all code contents
-            document.querySelectorAll('.code-content').forEach(content => {
-                content.style.display = 'none';
-                console.log('Hiding:', content.id);
-            });
-            // Show the correct code content
-            codeContent.style.display = 'block';
-            console.log('Switched to code:', codeContent.id);
-        } else {
-            console.error('ERROR: Could not find parent code-content for section:', sectionId);
-        }
-
-        // Wait for browser to recalculate layout after display change
-        setTimeout(() => {
-            // Save current position to history if requested
-            if (saveHistory) {
-                const contentContainer = document.querySelector('#librarySection .flex-1.overflow-y-auto');
-                const currentScrollTop = contentContainer ? contentContainer.scrollTop : window.pageYOffset;
-
-                navigationHistory.push({
-                    scrollTop: currentScrollTop
-                });
-
-                // Show back button in target section (using section base ID)
-                // Extract base section number without subsection
-                const sectionNumBase = sectionNum.toString().split('.')[0];
-                const backBtnId = 'back-btn-' + chapterId + '-' + sectionNumBase.replace(/\./g, '-');
-                const backBtn = document.querySelector('#' + CSS.escape(backBtnId));
-                console.log('Looking for back button:', backBtnId);
-                if (backBtn) {
-                    backBtn.classList.remove('hidden');
-                } else {
-                    console.log('Back button not found:', backBtnId);
-                }
-            }
-
-            // Get the scrollable content container
-            const contentContainer = document.querySelector('#librarySection .flex-1.overflow-y-auto');
-
-        if (contentContainer) {
-            // Calculate accurate scroll position using getBoundingClientRect
-            // This works correctly even when element is in a different code-content div
-            const containerRect = contentContainer.getBoundingClientRect();
-            const elementRect = sectionElement.getBoundingClientRect();
-            const relativeTop = elementRect.top - containerRect.top;
-            const scrollPosition = Math.max(0, contentContainer.scrollTop + relativeTop - 150);
-
-            console.log('Container top:', containerRect.top, 'Element top:', elementRect.top, 'Relative:', relativeTop, 'Scroll to:', scrollPosition);
-
-            contentContainer.scrollTo({
-                top: scrollPosition,
-                behavior: 'smooth'
-            });
-        } else {
-            // Fallback to window scroll if container not found
-            const header = document.querySelector('#librarySection header');
-            const headerHeight = header ? header.offsetHeight : 80;
-            const elementPosition = sectionElement.getBoundingClientRect().top + window.pageYOffset;
-            // Show more context by adding 150px offset
-            const offsetPosition = elementPosition - headerHeight - 150;
-
-            window.scrollTo({
-                top: Math.max(0, offsetPosition),
-                behavior: 'smooth'
-            });
-        }
-
-            // Update active state for section items in sidebar
-            document.querySelectorAll('.section-item').forEach(item => {
-                item.classList.remove('bg-[#A8D0E6]', 'text-white');
-            });
-            // Find and highlight the clicked section item by matching onclick attribute
-            const sectionItems = document.querySelectorAll('.section-item');
-            const targetOnclick = `scrollToSection('${chapterId}', '${sectionNum}')`;
-            sectionItems.forEach(item => {
-                if (item.getAttribute('onclick') && item.getAttribute('onclick').includes(targetOnclick)) {
-                    item.classList.add('bg-[#A8D0E6]', 'text-white');
-                    console.log('Highlighted section item:', item.textContent.trim());
-                }
-            });
-        }, 100); // Wait 100ms for layout recalculation
-
-        return true; // Section found and scrolled
-    }
-    return false; // Section not found
+    // 현재 활성화된 버전 ID 찾기
+    const chapter = appData.CodeChapter.find(ch => ch.ChapterID === chapterId);
+    const versionId = chapter ? chapter.ModelCodeVersionID : null;
+    scrollToSection(chapterId, sectionNum, versionId, null);
 }
 
 // Go back to previous section
