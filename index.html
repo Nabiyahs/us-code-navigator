@@ -1859,9 +1859,9 @@
     const resetBtn = document.getElementById('resetBtn');
     const resultCount = document.getElementById('resultCount');
 
-    // 고급 검색 버튼 클릭 - 전역 함수 performAdvancedSearchReal 호출
+    // 고급 검색 버튼 클릭 - performSearch 사용 (displaySearchResults로 스타일 적용)
     searchBtn?.addEventListener('click', function() {
-      performAdvancedSearchReal();
+      performSearch();
     });
 
     resetBtn?.addEventListener('click', function() {
@@ -2173,9 +2173,9 @@ ${note}
       if (clearBtn) clearBtn.style.display = 'none';
     }
 
-    // performAdvancedSearch는 전역 함수 performAdvancedSearchReal로 대체됨
+    // performAdvancedSearch는 전역 함수 performSearch로 대체됨 (displaySearchResults 사용)
     function performAdvancedSearch() {
-      performAdvancedSearchReal();
+      performSearch();
     }
 
     document.addEventListener('DOMContentLoaded', function() {
@@ -2188,11 +2188,7 @@ ${note}
           }
         });
         
-        keywordInput.addEventListener('keypress', function(e) {
-          if (e.key === 'Enter') {
-            performAdvancedSearch();
-          }
-        });
+        // Enter 키 핸들러: HTML inline onkeypress에서 이미 처리됨 (line 1386)
       }
     });
   </script>
@@ -4846,6 +4842,13 @@ function toggleAdvAttachmentContent(index) {
 }
 
 function performSearch() {
+    // 데이터 로딩 확인
+    if (!dataLoaded) {
+        console.warn('Data not loaded yet for search');
+        alert('데이터를 로딩 중입니다. 잠시 후 다시 시도해주세요.');
+        return;
+    }
+
     // Get keyword from input field
     const keywordInput = document.getElementById('keywordInput');
     const keyword = keywordInput ? keywordInput.value.trim().toLowerCase() : '';
@@ -5891,11 +5894,8 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Search button click handler
-    const searchBtn = document.getElementById('searchBtn');
-    if (searchBtn) {
-        searchBtn.addEventListener('click', performSearch);
-    }
+    // Search button click handler - 중복 방지: 이미 다른 곳에서 핸들러 등록됨
+    // searchBtn 핸들러는 line 1862-1865에서 등록됨
 
     // Reset button for advanced search
     const resetBtn = document.getElementById('resetBtn');
@@ -5917,20 +5917,9 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Enter key in search inputs
-    const keywordInput = document.getElementById('keywordInput');
-    if (keywordInput) {
-        keywordInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') performSearch();
-        });
-    }
-
-    const topSearchInput = document.getElementById('topSearchInput');
-    if (topSearchInput) {
-        topSearchInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') performTopSearch();
-        });
-    }
+    // Enter key handlers - 중복 방지
+    // keywordInput: HTML inline onkeypress에서 이미 처리됨 (line 1386)
+    // topSearchInput: JS 핸들러가 이미 등록됨 (line 1852)
 });
     </script></body>
 </html>
