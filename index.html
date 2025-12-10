@@ -29097,7 +29097,7 @@ Central Station의 감시 서비스는 건물의 소유자, 재실자 또는 관
 </div>
 </div>
 <div class="bg-gray-50 rounded-lg p-6 mb-4" id="modalImageContainer" style="overflow: auto;">
-<img id="modalImage" class="w-full h-auto rounded-lg shadow-md" alt="Figure or Table" style="max-height: 70vh; object-fit: contain; background: white; transition: transform 0.2s ease;"/>
+<img id="modalImage" class="w-full h-auto rounded-lg shadow-md" alt="Figure or Table" style="min-height: 400px; max-height: 85vh; object-fit: contain; background: white; transition: transform 0.2s ease;"/>
 </div>
 <div id="modalContent" class="space-y-3">
 <!-- Attachment details will be populated here -->
@@ -31775,30 +31775,30 @@ function openImageModal(attachment) {
         modalSubtitle.textContent = '';
     }
 
-    // Construct local image URL from image folder
-    let fileName = attachment.FileName;
+    // Use ActualFileName if available, otherwise try extensions
+    let imageFileName = attachment.ActualFileName || attachment.FileName;
 
-    // Try different extensions to find the image
+    // Try different extensions to find the image (if ActualFileName not available)
     const extensions = ['.jpg', '.JPG', '.jpeg', '.JPEG', '.png', '.PNG'];
     let extensionIndex = 0;
 
     function tryLoadImage() {
         // If fileName already has an extension, use it directly
-        if (fileName.match(/\.(jpg|JPG|jpeg|JPEG|png|PNG)$/)) {
-            const encodedFileName = encodeURIComponent(fileName);
+        if (imageFileName.match(/\.(jpg|JPG|jpeg|JPEG|png|PNG)$/)) {
+            const encodedFileName = encodeURIComponent(imageFileName);
             modalImage.src = `image/${encodedFileName}`;
             return;
         }
 
         // Try extensions one by one
         if (extensionIndex < extensions.length) {
-            const testFileName = fileName + extensions[extensionIndex];
+            const testFileName = imageFileName + extensions[extensionIndex];
             const encodedFileName = encodeURIComponent(testFileName);
             modalImage.src = `image/${encodedFileName}`;
         } else {
             // All extensions failed, show error
-            console.error(`Image not found: ${fileName}`);
-            modalImage.alt = `Image not found: ${fileName}`;
+            console.error(`Image not found: ${imageFileName}`);
+            modalImage.alt = `Image not found: ${imageFileName}`;
         }
     }
 
