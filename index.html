@@ -2431,14 +2431,37 @@ function loadChapters(versionId, codeId) {
         return;
     }
 
-    // 챕터 리스트 생성
-    chapterList.innerHTML = chapters.map((ch, i) => `
-        <div class="chapter-item ${i === 0 ? 'active bg-[#F8E9A1]' : ''} px-4 py-3 rounded-lg cursor-pointer"
-             data-chapter="${ch.Chapter}" data-chapter-id="${ch.ChapterID}" onclick="loadChapterContent('${ch.ChapterID}', '${versionId}')">
-            <div class="font-semibold text-[#24305E] text-sm">Chapter ${ch.Chapter}</div>
-            <div class="text-xs text-gray-600 mt-1">${ch.TitleEN || ''}</div>
+    // 챕터 리스트 생성 (원래 디자인: 확장/접기 가능한 섹션 포함)
+    chapterList.innerHTML = chapters.map((ch, i) => {
+        // 해당 챕터의 섹션들 가져오기
+        const contents = getContents(ch.ChapterID);
+        const sectionNums = [...new Set(contents.map(c => getSectionFromOrderKey(c.OrderKey)).filter(s => s))];
+        sectionNums.sort((a, b) => a - b);
+
+        return `
+        <div class="chapter-group">
+            <div class="chapter-item px-4 py-3 rounded-lg hover:bg-[#A8D0E6] cursor-pointer flex items-center justify-between"
+                 data-chapter="${ch.Chapter}" data-chapter-id="${ch.ChapterID}"
+                 onclick="toggleChapterSections('${ch.ChapterID}', '${versionId}')">
+                <div>
+                    <div class="font-semibold text-[#24305E] text-sm">Chapter ${ch.Chapter}</div>
+                    <div class="text-sm text-gray-600 mt-1">${ch.TitleEN || ''}</div>
+                </div>
+                <svg id="chapterIcon-${ch.ChapterID}" class="w-4 h-4 text-[#24305E] transition-transform ${i === 0 ? 'rotate-180' : ''}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+            </div>
+            <div id="chapterSections-${ch.ChapterID}" class="pl-6 mt-1 space-y-1 ${i === 0 ? '' : 'hidden'}">
+                ${sectionNums.map(sec => `
+                <div class="section-item px-3 py-2 text-sm text-gray-700 hover:bg-[#A8D0E6] rounded cursor-pointer"
+                     data-section="${sec}" onclick="scrollToSection('${ch.ChapterID}', '${sec}', '${versionId}')">
+                    Section ${sec}
+                </div>
+                `).join('')}
+            </div>
         </div>
-    `).join('');
+        `;
+    }).join('');
 
     // 코드 제목 업데이트
     const modelCode = getModelCode(codeId);
@@ -2455,6 +2478,35 @@ function loadChapters(versionId, codeId) {
     if (chapters.length > 0) {
         loadChapterContent(chapters[0].ChapterID, versionId);
     }
+}
+
+// 챕터 섹션 토글 (확장/접기)
+function toggleChapterSections(chapterId, versionId) {
+    const sectionsDiv = document.getElementById('chapterSections-' + chapterId);
+    const icon = document.getElementById('chapterIcon-' + chapterId);
+
+    if (sectionsDiv && icon) {
+        sectionsDiv.classList.toggle('hidden');
+        icon.classList.toggle('rotate-180');
+    }
+
+    // 챕터 콘텐츠 로드
+    loadChapterContent(chapterId, versionId);
+}
+
+// 섹션으로 스크롤
+function scrollToSection(chapterId, sectionNum, versionId) {
+    // 먼저 해당 챕터 콘텐츠 로드
+    loadChapterContent(chapterId, versionId);
+
+    // 약간의 지연 후 섹션으로 스크롤
+    setTimeout(() => {
+        const sectionId = 'section-' + sectionNum;
+        const sectionElement = document.querySelector(`[id^="${sectionId}"]`);
+        if (sectionElement) {
+            sectionElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }, 100);
 }
 
 function loadChapterContent(chapterId, versionId) {
