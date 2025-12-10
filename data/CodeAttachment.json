@@ -12,7 +12,8 @@
     "AttachTitleKR": "제어 구역에서 물리적 위험을 가하는 위험 물질의 최대 허용량(a, c, i, l, m)",
     "AttachContentEN": "For SI: 1 cubic foot = 0.028 m3, 1 pound = 0.454  kg, 1 gallon = 3.785 L\n\nNL = Not Limited; NA = Not Applicable; UD = Unclassifeid Detonable.\n\na. For use of control areas, see Section 414.2.\nb. The aggregate quantity in use and storage shall not exceed the maximum allowable quantity for storage, including applicable increases.\nc. For hazardous materials in Group B higher education laboratory occupancies, see Section 428 of this code and Chapter 38 of the International Fire Code.\nd. Maximum allowable quantities shall be increased 100 percent in buildings equipped throughout with an automatic sprinkler system in accordance with Section 903.3.1.1. Where Note e also applies, the increase for both notes shall be applied accumulatively.\ne. Maximum allowable quantities shall be increased 100 percent when stored in approved storage cabinets, day boxex, gas cabinets, gas rooms or exhausted enclosures or in listed safety cans in accordance with Section 5003.9.10 of the International Fire Code. Where Note d also applies, the increase for both notes shall be applied accumulatively.\nf. Quantities shall not be limited in a building equipped throughout with an automatic sprinkler system in accordance with Section 903.3.1.1.\ng. Allowed only in buildings equipped throughout with an automatic sprinkler system in accordance with Section 903.3.1.1.\nh. Containing not more than the maximum allowable quantity per control area of Class IA, IB or IC flammable liquids.\ni. Quantities in parentheses indicate quantity units in parentheses at the head of each column.\nj. A maximum quantity of 220 pounds of solid or 22 gallons of liquid Class 3 oxidizers is allowed when such materials are necessary for maintenance purposes, operation or sanitation of equipment when the storage containers and the manner of storage are approved.\nk. Net weight of the pyrotechnic composition of the fireworks. Where the net weight of the pyrotechnic composition of the fireworks is not known, 25 percent of the gross weight of the fireworks, including packaging, shall be used.\nl. For gallons of liquids, divide the amount in pounds by 10 in accordance with Section 5003.1.2 of the International Fire Code.\nm. For oxidizers, unstable (reactive) materials, and water-reactive materials stored of displaed in  Group M occupancies or stored in Group S occupancies, see Section 414.2.5.1\nn. For flammable and combustible liquid storage in Group M occupancy wholesale and retail sales uses, see Section 414.2.5.2.\no. Where manufactured, generated or used in such a manner that the concentration and conditions create a fire or explosion hazard based on information prepared in accordance with Section 414.1.3.\np. \"High BV\" Category 1B flammable gas has a burning velocity greater than 3.9 inches per second (10 cm/s). \"Low BV\" Category 1B flammable gas has a burning velocity of 3.9 inches per second (10 cm/s) or less.\n\n",
     "AttachContentKR": "NL = Not Limited (제한 없음), NA = Not Applicable (해당 없음), UD = Unclassified Detonable (미분류 폭굉물질)\n\na. 관리구역의 사용에 대해서는 Section 414.2를 참조한다.\nb. 사용 및 저장 중인 총량은 해당 중량을 포함하여 최대 저장 허용량을 초과할 수 없다.\nc. Group B 고등교육 실험실 용도의 위험물질은 본 규정의 Section 428 및 IFC Chapter 38을 참조한다.\nd. Section 903.3.1.1에 따른 자동스프링클러설비가 전체에 설치된 건물에서는 최대 허용량을 100% 증량한다. 주석 e도 적용되는 경우, 두 주석의 증량분을 누적 적용한다.\ne. IFC Section 5003.9.10에 따라 승인된 저장캐비닛, 데이박스, 가스캐비닛, 가스실 또는 배기밀폐구조에 저장되거나 인증된 안전용기에 저장되는 경우 최대 허용량을 100% 증량한다. 주석 d도 적용되는 경우, 두 주석의 증량분을 누적 적용한다.\nf. Section 903.3.1에 따른 자동스프링클러 설비가 전체에 설치된 건물에서는 수량을 제한하지 않는다.\ng. Section 903.3.1에 따른 자동스프링클러설비가 전체에 설치된 건물에서만 허용된다.\nh. 관리구역 당 최대 허용량 이하의 Class IA, IB 또는 IC 인화성액체를 포함하는 것.\ni. 괄호 안의 수량은 각 열 상단의 괄호 안에 표시된 수량 단위를 나타낸다.\nj. 저장용기와 저장방식이 승인된 경우, 장비의 유지보수, 운전 또는 위생목적에 필요한 3급 산화제는 최대 220파운드(고체) 또는 최대 22갤런(액체)까지 허용된다.\nk. 불꽃놀이용품의 폭죽 조성물의 순중량, 불꽃놀이용품의 폭죽 조성물의 순중량을 알 수 없는 경우, 포장을 포함한 불꽃놀이용품 총중량의 25%를 사용한다.\nl. 액체의 갤런 환산은 IFC Section 5003.1.2에 따라 파운드 단위 양을 10으로 나눈다.\nm. Group M 용도에 저장 또는 진열되거나 Group S 용도에 저장되는 산화제, 불안정(반응성) 물질 및 수반응성 물질은 Section 414.2.5.1을 참조한다.\nn. Group M 용도의 도매 및 소매판매업에서의 인화성 및 가연성액체 저장은 Section 414.2.5.2를 참조한다.\no. Section 414.1.3에 따라 준비된 정보에 기반하여 농도와 조건이 화재 또는 폭발 위험을 조성하는 방식으로 제조, 생성 또는 사용되는 경우.\np. \"High BV\" Category 1B 인화성가스의 연소속도는 초당 3.9인치(10cm/s)를 초과한다. \"Low BV\" Category 1B 인화성가스의 연소속도는 초당 3.9인치(10cm/s) 이하이다.",
-    "AttachComment": "참고: IBC Section 414.2, IBC Section 428, IFC Chapter 38, IBC Section 903.3.1.1, IFC Section 5003.9.10, IFC Section 5003.1.2, IBC Section 414.2.5.1, IBC Section 414.2.5.2, IBC Section 414.1.3"
+    "AttachComment": "참고: IBC Section 414.2, IBC Section 428, IFC Chapter 38, IBC Section 903.3.1.1, IFC Section 5003.9.10, IFC Section 5003.1.2, IBC Section 414.2.5.1, IBC Section 414.2.5.2, IBC Section 414.1.3",
+    "ActualFileName": "IBC_3_307.1.1_T(1).jpg"
   },
   {
     "AttachmentID": "D002",
@@ -27,7 +28,8 @@
     "AttachTitleKR": "제어 구역에서 건강 위험을 가하는 위험 물질의 최대 허용량 (a, c, h, l)",
     "AttachContentEN": "For SI: 1 cubic foot = 0.028 m3, 1 pound = 0.454 kg, 1 gallon = 3.785 L.\n\na. For use of control areas, see Section 414.2.\nThe aggregate quantity in use and storage shall not exceed the maximum allowable quantity for storage, including applicable increases.\nb. For hazardous materials in Group B higher education laboratory occupancies, see Section 428 of this code and Chapter 38 of the International Fire Code.\nc. Maximum allowable quantities shall be increased 100 percent in buildings equipped throughout with an approved automatic sprinkler system in accordance with Section 903.3.1.1. Where Note e also applies, the increase for both notes shall be applied accumulatively.\nd. Maximum allowable quantities shall be increased 100 percent where stored in approved storage cabinets, gas cabinets or exhausted enclosures as specified in the International Fire Code. Where Note d also applies, the increase for both notes shall be applied accumulatively.\ne. For corrosive, highly toxic and toxic materials stored or displayed in Group M occupancies or stored in Group S occupancies, see Section 414.2.5.1.\nf. Allowed only where stored in approved exhausted gas cabinets or exhausted enclosures as specified in the International Fire Code.\ng. Quantities in parentheses indicate quantity units in parentheses at the head of each column.\nFor gallons of liquids, divide the amount in pounds by 10 in accordance with Section 5003.1.2 of the International Fire Code.",
     "AttachContentKR": "NL = Not Limited (제한 없음), NA = Not Applicable (해당 없음), UD = Unclassified Detonable (미분류 폭굉물질)\n\na. 관리구역의 사용에 대해서는 Section 414.2를 참조한다.\nb. 사용 및 저장 중인 총량은 해당 중량을 포함하여 최대 저장 허용량을 초과할 수 없다.\nc. Group B 고등교육 실험실 용도의 위험물질은 본 규정의 Section 428 및 IFC Chapter 38을 참조한다.\nd. Section 903.3.1.1에 따라 승인된 자동스프링클러설비가 전체에 설치된 건물에서는 최대 허용량을 100% 증량한다. 주석 e도 적용되는 경우, 두 주석의 증량분을 누적 적용한다.\ne. IFC에서 규정한 승인된 저장캐비닛, 가스캐비닛 또는 배기밀폐구조에 저장되는 경우 최대 허용량을 100% 증량한다. 주석 d도 적용되는 경우, 두 주석의 증량분을 누적 적용한다.\nf. Group M 용도에 저장 또는 진열되거나 Group S 용도에 저장되는 부식성, 고독성 및 독성 물질은 Section 414.2.4.1을 참조한다.\ng. IFC에서 규정한 승인된 배기가스캐비닛 또는 배기밀폐구조에 저장되는 경우에만 허용된다.\nh. 괄호 안의 수량은 각 열 상단의 괄호 안에 표시된 수량 단위를 나타낸다.\ni. 액체의 갤런 환산은 IFC Section 5003.1.2에 따라 파운드 단위 양을 10으로 나눈다.",
-    "AttachComment": "참고: IBC Section 414.2, IBC Section 428, IFC Chapter 38, IBC Section 903.3.1.1, IBC Section 414.2.5.1, IFC Section 5003.1.2"
+    "AttachComment": "참고: IBC Section 414.2, IBC Section 428, IFC Chapter 38, IBC Section 903.3.1.1, IBC Section 414.2.5.1, IFC Section 5003.1.2",
+    "ActualFileName": "IBC_3_307.1.1_T(2).jpg"
   },
   {
     "AttachmentID": "D003",
@@ -42,7 +44,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "IBC_3_307.8_T.jpg"
   },
   {
     "AttachmentID": "D004",
@@ -57,7 +60,8 @@
     "AttachTitleKR": "고층의 정의",
     "AttachContentEN": "High-Rise Building: A building with an occupied floor located more than 75 feet above the lowest level of fire department vehicle access.",
     "AttachContentKR": "고층 건물: 소방차량 접근이 가능한 최하층으로부터 75 ft (22,860mm) 초과 지점에 거주층 또는 거주 지붕(재실자들이 상시 존재하는)이 위치한 건물.",
-    "AttachComment": "일반적으로 미국 소방 사다리차가 사다리를 펼쳐 호스에서 물을 뿌려 닿을 수 있는 최대 높이."
+    "AttachComment": "일반적으로 미국 소방 사다리차가 사다리를 펼쳐 호스에서 물을 뿌려 닿을 수 있는 최대 높이.",
+    "ActualFileName": "IBC_4_403_F.jpeg"
   },
   {
     "AttachmentID": "D005",
@@ -72,7 +76,8 @@
     "AttachTitleKR": "고층 건물의 계단 이격",
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "IBC_4_[BE]403.5.1_F.JPG"
   },
   {
     "AttachmentID": "D006",
@@ -87,7 +92,8 @@
     "AttachTitleKR": "제어 구역",
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "IBC_4_[F]414.2_F.jpg"
   },
   {
     "AttachmentID": "D007",
@@ -102,7 +108,8 @@
     "AttachTitleKR": "제어 구역의 설계와 개수",
     "AttachContentEN": "The percentage of maximum allowable quantities of hazardous materials per control area permitted at each floor level within a building shall be in accordance with Table 414.2.2.\n\na. Percentages shall be of the maximum allowable quantity per control area shown in Tables 307.1(1) and 307.1(2), with all increases allowed in the notes to those tables.\nb. Separation shall include fire barriers and horizontal assemblies as necessary to provide separation from other portions of the building.",
     "AttachContentKR": "건축물 각 층에서 허용되는 제어 구역당 최대 허용 위험물 수량의 비율은 Table 414.2.2에 따라야 한다.\n\na. 백분율은 Table 307.1(1) 및 Table 307.1(2)에 제시된 제어 구역당 최대 허용 수량에 대해 계산해야 하며, 해당 표의 주석에서 허용되는 모든 증가분을 포함해야 한다. \nb. 구획은 건물의 다른 부분과 분리하기 위해 필요한 방화벽 및 수평 구획을 포함해야 한다.",
-    "AttachComment": "Table 414.2.2의 코드 의도는 위험물을 취급하는 건물을 H Occupancy 로 구분 하지 않고 Control Area를 이용해 건물에서 위험물질을 취급 저장하게 하는데 있습니다.  위험물을 Table 414.2.2 에 따라 Control Area로 구획하면 건물을 H Occupancy로 구분하지 않아도 된다는 장점이 있습니다.   \n\nExample: 10,000 평방 피트의 스프링클러가 설치 되 있지 않은 1층의 F-1 Occupancy 공장에서 Class IB Flammable liquid를 H-2 Occupancy  로 구분하지 않고 저장 및 취급 할수 있는 최대의 양.\n1. Table 307.1(1)에서 Class IB Flammable liquid 물질은 120 Gallons 을 저장 할 수 있음.\n2. Table 414.2.2에서 1층 건물은 Table 307.1(1) 에서 허용하는 양의 100% 인 120 gallon을 4개의 1-hr 방화벽의 (fire barrier) Control Area로 구획할수 있음, 전체 양은 480 gallon.\n3. Table 307.1(1)의 주석 노트 (d) 와 (e)에 의해, 건물에 스프링클러 설치하거나 인허가청에서 허용하는 캐비넷에 저장 하면 그 허용량을 Control area 별로 2배 (100%) 까지 증가 시킬수 있음.  \n4. 이에, 건물에 스프링클러 설치시 240 gallon을 4개의 control area로 구획해 토탈 960 gallon까지 저장 할 수 있음.\n5. 또한 여기에 더해 위험물질을 승인된 케비넷에 저장하면 다시 2배까지 증가된 물질을 저장할수 있어, 480 gallon/control area, 합계 1,920 gallon의 Class IB Flammable liquid 물질을 저장 할 수 있음.\n\n**결론**\n건물을 방화벽으로 구획(Control area) 함으로 \n1. H Occupancy 로 규정되지 않고\n2. 스프링클러로 100% 증가 크레딧을 받고\n3. 승인된 케비넷으로 다시 100% 크레딧을 받음."
+    "AttachComment": "Table 414.2.2의 코드 의도는 위험물을 취급하는 건물을 H Occupancy 로 구분 하지 않고 Control Area를 이용해 건물에서 위험물질을 취급 저장하게 하는데 있습니다.  위험물을 Table 414.2.2 에 따라 Control Area로 구획하면 건물을 H Occupancy로 구분하지 않아도 된다는 장점이 있습니다.   \n\nExample: 10,000 평방 피트의 스프링클러가 설치 되 있지 않은 1층의 F-1 Occupancy 공장에서 Class IB Flammable liquid를 H-2 Occupancy  로 구분하지 않고 저장 및 취급 할수 있는 최대의 양.\n1. Table 307.1(1)에서 Class IB Flammable liquid 물질은 120 Gallons 을 저장 할 수 있음.\n2. Table 414.2.2에서 1층 건물은 Table 307.1(1) 에서 허용하는 양의 100% 인 120 gallon을 4개의 1-hr 방화벽의 (fire barrier) Control Area로 구획할수 있음, 전체 양은 480 gallon.\n3. Table 307.1(1)의 주석 노트 (d) 와 (e)에 의해, 건물에 스프링클러 설치하거나 인허가청에서 허용하는 캐비넷에 저장 하면 그 허용량을 Control area 별로 2배 (100%) 까지 증가 시킬수 있음.  \n4. 이에, 건물에 스프링클러 설치시 240 gallon을 4개의 control area로 구획해 토탈 960 gallon까지 저장 할 수 있음.\n5. 또한 여기에 더해 위험물질을 승인된 케비넷에 저장하면 다시 2배까지 증가된 물질을 저장할수 있어, 480 gallon/control area, 합계 1,920 gallon의 Class IB Flammable liquid 물질을 저장 할 수 있음.\n\n**결론**\n건물을 방화벽으로 구획(Control area) 함으로 \n1. H Occupancy 로 규정되지 않고\n2. 스프링클러로 100% 증가 크레딧을 받고\n3. 승인된 케비넷으로 다시 100% 크레딧을 받음.",
+    "ActualFileName": "IBC_4_[F]414.2.2_T(1).jpg"
   },
   {
     "AttachmentID": "D008",
@@ -117,7 +124,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "IBC_4_[F]414.2.2_F.jpg"
   },
   {
     "AttachmentID": "D009",
@@ -132,7 +140,8 @@
     "AttachTitleKR": "폭발 제어 요구 사항",
     "AttachContentEN": "a. See Section 414.1.3.\nb. See the International Fire Code.\nc. Combustible dusts where manufactured, generated or used in such a manner that the concentration and conditions create a fire or explosion hazard based on information prepared in accordance with Section 104.2.2 of the International Fire Code. See definition of \"Combustible dust\" in Chapter 2.\nd. Storage or use.\ne. In open use or dispensing.\nf. Rooms containing dispensing and use of hazardous materials where an explosive environment can occur because of the characteristics or nature of the hazardous materials or as a result of the dispensing or use process.\ng. A method of explosion control shall be provided where Class 2 water-reactive materials can form potentially explosive mixtures.\nh. Explosion venting is not required for Group H-5 fabrication areas complying with Section 415.11.1 and the International Fire Code.\ni. Where explosion control is required in Section 1207 of the International Fire Code.\nj. Does not apply to consumer fireworks, Division 1.4G.\nk. Not required for Category 1B Flammable Gases having a burning velocity not exceeding 3.9 inches per second (10 cm/s).",
     "AttachContentKR": "a. Section 414.1.3을 참조한다.\nb. IFC를 참조한다.\nc. IFC Section 104.8.2에 따라 준비된 정보에 기반하여 화재 또는 폭발 위험을 조성하는 농도와 조건에서 제조, 생성 또는 사용되는 가연성분진은 IFC Section 104.2.2의 정보에 따라 준비해야 한다. Chapter 2 \"가연성 분진\" 정의 참조.\nd. 저장 또는 사용.\ne. 개방 사용 또는 분배 중.\nf. 위험물질의 특성이나 성질 또는 분배나 사용 공정의 결과로 폭발 환경이 발생할 수 있는 위험물질의 분배 및 사용을 포함하는 실.\ng. 2급 수반응성 물질이 잠재적으로 폭발성 혼합물을 형성할 수 있는 경우 폭발 제어 방법을 마련해야 한다.\nh. Section 415.11.1 및 IFC를 준수하는 Group H-5 제조 구역에는 폭발 배출이 요구되지 않는다.\ni. IFC Section 1207에서 폭발 제어가 요구되는 경우.",
-    "AttachComment": "참고: IBC Section 414.1.3, IFC Section 104.8.2, \nIBC Section 415.11.1, IFC Section 1207"
+    "AttachComment": "참고: IBC Section 414.1.3, IFC Section 104.8.2, \nIBC Section 415.11.1, IFC Section 1207",
+    "ActualFileName": "IBC_4_[F]414.5.1_T.JPG"
   },
   {
     "AttachmentID": "D010",
@@ -147,7 +156,8 @@
     "AttachTitleKR": "건물 분리가 요구되는 경우",
     "AttachContentEN": "For SI: 1 ton = 906 kg, 1 cubic foot = 0.02832 m3, 1 pound = 0.454 kg.\n\na. For materials that are detonable, the distance to other buildings or lot lines shall be in accordance with Section 415.6 of this code or Chapter 56 of the International Fire Code based on trinitrotoluene (TNT) equivalence of the material, whichever is greater.\nb. \"Maximum Allowable Quantity\" means the maximum allowable quantity per control area set forth in Table 307.1(1).\nc. Limited to Division 1.4 materials and articles, including articles packaged for shipment, that are not regulated as an explosive under Bureau of Alcohol, Tobacco, Firearms and Explosives (BATF) regulations or unpackaged articles used in process operations that do not propagate a detonation or deflagration between articles, provided that the net explosive weight of individual articles does not exceed 1 pound.\nd. Detached buildings are not required, for gases in gas rooms that support H-5 fabrication facilities where the gas room is separated from other areas by a fire barrier with a fire-resistance rating of not less than 2 hours and the gas is located in a gas cabinet that is internally sprinklered, equipped with continuous leak detection, automatic shutdown and is not manifolded upstream of pressure controls. Additionally, the gas supply is limited to cylinders that do not exceed 125 pounds (57 kg) water capacity in accordance with 49 CFR 173.192  for Hazard Zone A toxic gases. \ne. Does not apply to consumer fireworks, Division 1.4G.",
     "AttachContentKR": "a. 폭굉 가능한 물질의 경우, 다른 건물 또는 대지경계선까지의 거리는 물질의 트리니트로톨루엔(TNT) 등가량에 기반하여 본 규정 Section 415.6 또는 IFC Chapter 56 중 더 큰 값에 따라야 한다.\nb. \"최대 허용량\"은 Table 307.1(1)에 명시된 제어구역 당 최대 허용량을 의미한다.\nc. 개별 물품의 순화약중량(Net explosive weight)이 1파운드를 초과하지 않는 조건으로, 주류담배 화기 및 폭발물 관리국(BATF) 규정에서 폭발물로 규제되지 않는 운송포장된 물품을 포함한 Division 1.4 물질 및 물품, 또는 물품 간에 폭굉이나 폭연을 전파하지 않는 공정작업에 사용되는 포장되지 않은 물품으로 제한한다.\nd. H-5 제조시설을 지원하는 가스실의 가스에 대해서는 단독 건물이 요구되지 않는다. 단, 가스실이 2시간 이상의 내화등급을 갖춘 방화구획에 의해 다른 구역과 분리되고, 내부 스프링클러를 갖추고 연속누출탐지, 자동차단장치를 구비하며 압력제어장치 상류에서 매니폴드화되지 않은 가스캐비닛에 가스를 보관해야 한다. 또한 위험구역 A 독성가스는 49 CFR 173.192에 따라 125파운드(57 kg) 용적용량을 초과하지 않는 용기로 공급이 제한되어야 한다.",
-    "AttachComment": "참고: IBC Section 415.6, IFC Chapter 56, IBC Table 307.1(1), 49 CFR 173.192"
+    "AttachComment": "참고: IBC Section 415.6, IFC Chapter 56, IBC Table 307.1(1), 49 CFR 173.192",
+    "ActualFileName": "IBC_4_[F]415.6.5_T.JPG"
   },
   {
     "AttachmentID": "D011",
@@ -162,7 +172,8 @@
     "AttachTitleKR": "Group H-5 내 단일 제조 구역에서의 위험물 수량 제한",
     "AttachContentEN": "For SI: 1 pound = 0.454 kg, 1 pound per square foot = 4.882 kg/m2, 1 gallon per square foot = 40.7 L/m2, 1 cubic foot @ NTP/square foot = 0.305 m3 @ NTP/m2, 1 cubic foot = 0.02832 m3.\n\na. Hazardous materials within piping shall not be included in the calculated quantities.\nb. Quantity of hazardous materials in a single fabrication shall not exceed the maximum allowable quantities per control area in Tables 307.1(1) and 307.1(2).\nc. Densely packed baled cotton that complies with the packing requirements of ISO 8115 shall not be included in this material class.\nd. The aggregate quantity of flammable, pyrophoric, toxic and highly toxic gases shall not exceed the greater of 0.2 cubic feet at NTP/square foot or 9,000 cubic feet at NTP.\ne. The aggregate quantity of pyrophoric gases in the building shall not exceed the amounts set forth in Table 415.6.5.\nf. Quantity of Class 3 water-reactive solids in a single tool shall not exceed 1 pound.",
     "AttachContentKR": "a. 배관 내 위험물질은 계산 양에 포함되지 않는다.\nb. 단일제조구역의 위험물질 양은 Table 307.1(1) 및 Table 307.1(2)의 제어구역 당 최대 허용량을 초과해서는 안 된다.\nc. ISO 8115의 포장 요구사항을 준수하는 조밀하게 포장된 면포(Baled cotton)은 이 물질 분류에 포함되지 않는다.\nd. 인화성, 자연발화성, 독성 및 고독성 가스의 총량은 NTP에서 0.2 cuft./sqft 또는 NTP에서 9,000 cuft 중 큰 값을 초과해서는 안 된다.\ne. 건물 내 자연발화성 가스의 총량은 Table 415.6.5에 명시된 양을 초과해서는 안 된다.\nf. 단일 도구의 3급 수반응성 고체의 양은 1파운드를 초과해서는 안 된다.",
-    "AttachComment": "참고: Tables 307.1(1), Table 307.1(2), Table 415.6.5"
+    "AttachComment": "참고: Tables 307.1(1), Table 307.1(2), Table 415.6.5",
+    "ActualFileName": "IBC_4_[F]415.11.1.1_T.JPG"
   },
   {
     "AttachmentID": "D012",
@@ -177,7 +188,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "IBC_5_503.1.2_F(1).jpg"
   },
   {
     "AttachmentID": "D013",
@@ -192,7 +204,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "IBC_5_503.1.2_F(2).jpg"
   },
   {
     "AttachmentID": "D014",
@@ -207,7 +220,8 @@
     "AttachTitleKR": "지표면 상부 허용 건물 높이(ft) (a)",
     "AttachContentEN": "For SI: 1 foot = 304.8 mm.\nUL = Unlimited; NS = Buildings not equipped throughout with an automatic sprinkler system; S = Buildings equipped throughout with an automatic sprinkler system installed in accordance with Section 903.3.1.1; S13R = Buildings equipped throughout with an automatic sprinkler system installed in accordance with Section 903.3.1.2; S13D = Buildings equipped throughout with an automatic sprinkler system installed in accordance with Section 903.3.1.3.\n\na. See Chapters 4 and 5 for specific exceptions to the allowable height in this chapter.\nb. See Section 903.2 for the minimum thresholds for protection by an automatic sprinkler system for specific occupancies.\nc. New Group H occupancies are required to be protected by an automatic sprinkler system in accordance with Section 903.2.5.\nd. The NS value is only for use in evaluation of existing building height in accordance with the International Existing Building Code.\ne. New Group I-1 and I-3 occupancies are required to be protected by an automatic sprinkler system in accordance with Section 903.2.6. For new Group I-1 occupancies Condition 1, see Exception 1 of Section 903.2.6.\nf. New and existing Group I-2 occupancies are required to be protected by an automatic sprinkler system in accordance with Section 903.2.6 and with Section 1103.5 of the International Fire Code.\ng. For new Group I-4 occupancies, see Exceptions 2 and 3 of Section 903.2.6.\nh. New Group R occupancies are required to be protected by an automatic sprinkler system in accordance with Section 903.2.8.",
     "AttachContentKR": "UL = 제한 없음; NS = 자동 스프링클러설비가 전체적으로 설치되지 않은 건물; S = Section 903.3.1.1에 따라 자동 스프링클러설비가 전체적으로 설치된 건물; S13R = Section 903.3.1.2에 따라 자동 스프링클러설비가 전체적으로 설치된 건물; S13D = Section 903.3.1.3에 따라 자동 스프링클러설비가 전체적으로 설치된 건물.\n\na. 본 Chapter의 허용 높이에 대한 특정 예외사항은 Chapter 4 및 Chapter 5를 참조한다.\nb. 특정 용도에 대한 자동 스프링클러설비 보호의 최소 기준은 Section 903.2를 참조한다.\nc. 신축 Group H 용도는 Section 903.2.5에 따라 자동 스프링클러설비로 보호되어야 한다.\nd. NS 값은 국제기존건물법규(International Existing Building Code)에 따른 기존 건물 높이 평가에만 사용된다.\ne. 신축 Group I-1 및 I-3 용도는 Section 903.2.6에 따라 자동 스프링클러설비로 보호되어야 한다. 신축 Group I-1 용도 Condition 1의 경우는 Section 903.2.6의 Exception 1을 참조한다.\nf. 신축 및 기존 Group I-2 용도는 Section 903.2.6 및 IFC Section 1103.5에 따라 자동 스프링클러설비로 보호되어야 한다.\ng. 신축 Group I-4 용도의 경우는 Section 903.2.6의 Exception 2 및 3을 참조한다.\nh. 신축 Group R 용도는 Section 903.2.8에 따라 자동 스프링클러설비로 보호되어야 한다.",
-    "AttachComment": "참고: IBC Section 903.3.1.1, IBC Section 903.3.1.2, IBC Section 903.3.1.3, IBC Chapters 4, IBC Chapter 5, IBC Section 903.2, IBC Section 903.2.5, IBC Section 903.2.6 - Exception 1, IBC Section 903.2.6, IFC Section 1103.5, IBC Section 903.2.6 - Exceptions 2 and 3,IBC Section 903.2.8"
+    "AttachComment": "참고: IBC Section 903.3.1.1, IBC Section 903.3.1.2, IBC Section 903.3.1.3, IBC Chapters 4, IBC Chapter 5, IBC Section 903.2, IBC Section 903.2.5, IBC Section 903.2.6 - Exception 1, IBC Section 903.2.6, IFC Section 1103.5, IBC Section 903.2.6 - Exceptions 2 and 3,IBC Section 903.2.8",
+    "ActualFileName": "IBC_5_504.3_T.JPG"
   },
   {
     "AttachmentID": "D015",
@@ -222,7 +236,8 @@
     "AttachTitleKR": "지표면 상부 허용 층수 (a, b)",
     "AttachContentEN": "UL = Unlimited; NP = Not Permitted; NS = Buildings not equipped throughout with an automatic sprinkler system; S = Buildings equipped throughout with an automatic sprinkler system installed in accordance with Section 903.3.1.1; S13R = Buildings equipped throughout with an automatic sprinkler system installed in accordance with Section 903.3.1.2; S13D = Buildings equipped throughout with an automatic sprinkler system installed in accordance with Section 903.3.1.3.\n\na. See Chapters 4 and 5 for specific exceptions to the allowable height in this chapter.\nSee Section 903.2 for the minimum thresholds for protection by an automatic sprinkler system for specific occupancies.\nb. New Group H occupancies are required to be protected by an automatic sprinkler system in accordance with Section 903.2.5.\nc. The NS value is only for use in evaluation of existing building height in accordance with the International Existing Building Code.\nd. New Group I-1 and I-3 occupancies are required to be protected by an automatic sprinkler system in accordance with Section 903.2.6. For new Group I-1 occupancies, Condition 1, see Exception 1 of Section 903.2.6.\nf. New and existing Group I-2 occupancies are required to be protected by an automatic sprinkler system in accordance with Section 903.2.6 and Section 1103.5 of the International Fire Code.\ng. For new Group I-4 occupancies, see Exceptions 2 and 3 of Section 903.2.6.\nh. New Group R occupancies are required to be protected by an automatic sprinkler system in accordance with Section 903.2.8.\ni. For all I-1 Condition 2, the building shall be protected throughout with an approved automatic sprinkler system, installed in accordance with NFPA 13 as adopted by the Rules and Regulations of the Safety Fire Commissioner. No increase in story height shall be permitted.",
     "AttachContentKR": "UL = 제한 없음; NP = 허용되지 않음; NS = 자동 스프링클러설비가 전체적으로 설치되지 않은 건물; S = Section 903.3.1.1에 따라 자동 스프링클러설비가 전체적으로 설치된 건물; S13R = Section 903.3.1.2에 따라 자동 스프링클러설비가 전체적으로 설치된 건물; S13D = Section 903.3.1.3에 따라 자동 스프링클러설비가 전체적으로 설치된 건물.\n\na. 본 Chapter의 허용 높이에 대한 특정 예외사항은 Chapter 4 및 Chapter 5를 참조한다.\n특정 용도에 대한 자동 스프링클러설비 보호의 최소 기준은 Section 903.2를 참조한다.\nb. 신축 Group H 용도는 Section 903.2.5에 따라 자동 스프링클러설비로 보호되어야 한다.\nc. NS 값은 International Existing Building Code에 따른 기존 건물 높이 평가에만 사용된다.\nd. 신축 Group I-1 및 I-3 용도는 Section 903.2.6에 따라 자동 스프링클러설비로 보호되어야 한다. 신축 Group I-1 용도, Condition 1의 경우엔 Section 903.2.6의 Exception 1을 참조한다.\nf. 신축 및 기존 Group I-2 용도는 Section 903.2.6 및 IFC Section 1103.5에 따라 자동 스프링클러설비로 보호되어야 한다.\ng. 신축 Group I-4 용도의 경우, Section 903.2.6의 Exception 2 및 3을 참조한다.\nh. 신축 Group R 용도는 Section 903.2.8에 따라 자동 스프링클러설비로 보호되어야 한다.\ni.  I-1 Condition 2에 해당하는 모든 경우에 건물은 Safety Fire Commissioner의 Rules and Regulations에서 채택한 NFPA 13에 따라 설치된 승인된 자동 스프링클러설비로 전체적으로 보호되어야 한다. 층수 높이의 증가는 허용되지 않는다.",
-    "AttachComment": "참고: IBC Section 903.3.1.1, IBC Section 903.3.1.2, IBC Section 903.3.1.3, IBC Chapter 4, IBC Chapter 5, IBC Section 903.2, IBC Section 903.2.5, IBC Section 903.2.6, IBC Section 903.2.6 - Exception 1, IFC Section 1103.5, IBC Section 903.2.6 - Exceptions 2 and 3, IBC Section 903.2.8"
+    "AttachComment": "참고: IBC Section 903.3.1.1, IBC Section 903.3.1.2, IBC Section 903.3.1.3, IBC Chapter 4, IBC Chapter 5, IBC Section 903.2, IBC Section 903.2.5, IBC Section 903.2.6, IBC Section 903.2.6 - Exception 1, IFC Section 1103.5, IBC Section 903.2.6 - Exceptions 2 and 3, IBC Section 903.2.8",
+    "ActualFileName": "IBC_5_504.4_T.JPG"
   },
   {
     "AttachmentID": "D016",
@@ -237,7 +252,8 @@
     "AttachTitleKR": "허용 면적 계수 (At = NS, S1, S13R, S13D 또는 SM, 해당되는 경우) 제곱피트 단위 (a, b)",
     "AttachContentEN": "For SI: 1 square foot = 0.0929 m2.\n\nUL = Unlimited; NP = Not Permitted; NS = Buildings not equipped throughout with an automatic sprinkler system; S1 = Buildings a maximum of one story above grade plane equipped throughout with an automatic sprinkler system installed in accordance with Section 903.3.1.1; SM = Buildings two or more stories above grade plane equipped throughout with an automatic sprinkler system installed in accordance with Section 903.3.1.1; S13R = Buildings equipped throughout with an automatic sprinkler system installed in accordance with Section 903.3.1.2; S13D = Buildings equipped throughout with an automatic sprinkler system installed in accordance with Section 903.3.1.3.\n\na. See Chapters 4 and 5 for specific exceptions to the allowable area in this chapter.\nb. See Section 903.2 for the minimum thresholds for protection by an automatic sprinkler system for specific occupancies.\nc. New Group H occupancies are required to be protected by an automatic sprinkler system in accordance with Section 903.2.5.\nd. The NS value is only for use in evaluation of existing building area in accordance with the International Existing Building Code.\ne. New Group I-1 and I-3 occupancies are required to be protected by an automatic sprinkler system in accordance with Section 903.2.6. For new Group I-1 occupancies, Condition 1, see Exception 1 of Section 903.2.6.\nf. New and existing Group I-2 occupancies are required to be protected by an automatic sprinkler system in accordance with Section 903.2.6 and with Section 1103.5 of the International Fire Code.\ng. New Group I-4 occupancies see Exceptions 2 and 3 of Section 903.2.6.\nh. New Group R occupancies are required to be protected by an automatic sprinkler system in accordance with Section 903.2.8.\ni. The maximum allowable area for a single-story nonsprinklered Group U greenhouse is permitted to be 9,000 square feet, or the allowable area shall be permitted to comply with Table C102.1 of Appendix C.",
     "AttachContentKR": "UL = 제한 없음; NP = 허용되지 않음; NS = 자동 스프링클러설비가 전체적으로 설치되지 않은 건물; S1 = Section 903.3.1.1에 따라 자동 스프링클러설비가 전체적으로 설치된 지표면 상부 최대 1개 층 건물; SM = Section 903.3.1.1에 따라 자동 스프링클러설비가 전체적으로 설치된 지표면 상부 2개 층 이상 건물; S13R = Section 903.3.1.2에 따라 자동 스프링클러설비가 전체적으로 설치된 건물; S13D = Section 903.3.1.3에 따라 자동 스프링클러설비가 전체적으로 설치된 건물.\n\na. 본 Chapter의 허용 면적에 대한 특정 예외사항은 Chapter 4 및 Chapter 5를 참조한다.\nb. 특정 용도에 대한 자동 스프링클러설비 보호의 최소 기준은 Section 903.2를 참조한다.\nc. 신축 Group H 용도는 Section 903.2.5에 따라 자동 스프링클러설비로 보호되어야 한다.\nd. NS 값은 International Existing Building Code에 따른 기존 건물 면적 평가에만 사용된다.\ne. 신축 Group I-1 및 I-3 용도는 Section 903.2.6에 따라 자동 스프링클러설비로 보호되어야 한다. 신축 Group I-1 용도, Condition 1의 경우엔 Section 903.2.6의 Exception 1을 참조한다.\nf. 신축 및 기존 Group I-2 용도는 Section 903.2.6 및 IFC Section 1103.5에 따라 자동 스프링클러설비로 보호되어야 한다.\ng. 신축 Group I-4 용도의 경우엔 Section 903.2.6의 Exception 2 및 3을 참조한다.\nh. 신축 Group R 용도는 Section 903.2.8에 따라 자동 스프링클러설비로 보호되어야 한다.\ni. 단층 스프링클러 미설치 Group U 온실의 최대 허용 면적은 9,000 제곱피트까지 또는 Appendix C의 Table C102.1을 준수하도록 허용된다.",
-    "AttachComment": "참고: IBC Section 903.3.1.1, IBC Section 903.3.1.1, IBC Section 903.3.1.2, IBC Section 903.3.1.3, IBC Chapter 4, IBC Chapter 5, IBC Section 903.2, IBC Section 903.2.5, IBC Section 903.2.6, IBC Section 903.2.6 - Exception 1, IFC Section 1103.5, IBC Section 903.2.6 - Exceptions 2 and 3, IBC Section 903.2.8, IBC Appendix C - Table C102.1"
+    "AttachComment": "참고: IBC Section 903.3.1.1, IBC Section 903.3.1.1, IBC Section 903.3.1.2, IBC Section 903.3.1.3, IBC Chapter 4, IBC Chapter 5, IBC Section 903.2, IBC Section 903.2.5, IBC Section 903.2.6, IBC Section 903.2.6 - Exception 1, IFC Section 1103.5, IBC Section 903.2.6 - Exceptions 2 and 3, IBC Section 903.2.8, IBC Appendix C - Table C102.1",
+    "ActualFileName": "IBC_5_506.2_T.jpg"
   },
   {
     "AttachmentID": "D017",
@@ -252,7 +268,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": "전면(Frontage)을 기준으로 한 면적계수 증가를 적용받으려면, 건물 외주에 인접한 공공 통행로(Public Way) 또는 개방공간(Open Space)은 건물 외벽에서 직각으로 측정했을 때 최소 20피트(6096mm) 이상이어야 하며, 그 거리는 건물 외벽부터 다음 중 어느 하나까지 측정된다."
+    "AttachComment": "전면(Frontage)을 기준으로 한 면적계수 증가를 적용받으려면, 건물 외주에 인접한 공공 통행로(Public Way) 또는 개방공간(Open Space)은 건물 외벽에서 직각으로 측정했을 때 최소 20피트(6096mm) 이상이어야 하며, 그 거리는 건물 외벽부터 다음 중 어느 하나까지 측정된다.",
+    "ActualFileName": "IBC_5_506.3.2_F.jpg"
   },
   {
     "AttachmentID": "D018",
@@ -267,7 +284,8 @@
     "AttachTitleKR": "전면 증가 계수 (a)",
     "AttachContentEN": "a. Interpolation is permitted.",
     "AttachContentKR": "a. 보간법이 허용된다.",
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "IBC_5_506.3.3_T.JPG"
   },
   {
     "AttachmentID": "D019",
@@ -282,7 +300,8 @@
     "AttachTitleKR": "용도 간 요구 구획 (시간) (f)",
     "AttachContentEN": "S = Buildings equipped throughout with an automatic sprinkler system installed in accordance with Section 903.3.1.1.\nNS = Buildings not equipped throughout with an automatic sprinkler system installed in accordance with Section 903.3.1.1.\nN = No separation requirement.\nNP = Not Permitted.\n\na. See Section 420.\nb. The required separation from areas used only for private or pleasure vehicles shall be reduced by 1 hour but not to less than 1 hour.\nc. See Sections 406.3.2 and 406.6.4.\nd. Separation is not required between occupancies of the same classification.\ne. See Section 422.2 for ambulatory care facilities.\nf. Occupancy separations that serve to define fire area limits established in Chapter 9 for requiring fire protection systems shall also comply with Section 707.3.10 and Table 707.3.10 in accordance with Section 901.7.",
     "AttachContentKR": "S = Section 903.3.1.1에 따라 자동 스프링클러설비가 전체적으로 설치된 건물.\nNS = Section 903.3.1.1에 따라 자동 스프링클러설비가 전체적으로 설치되지 않은 건물.\nN = 구획 요건 없음.\nNP = 허용되지 않음.\n\na. Section 420을 참조한다.\nb. 개인용 또는 여가용 차량 전용 구역으로부터 요구되는 구획은 1시간 감소될 수 있으나 최소 1시간 이상이어야 함.\nc. Section 406.3.2 및 Section 406.6.4를 참조한다.\nd. 동일 용도 간에는 구획이 요구되지 않는다.\ne. 외래 진료시설은 Section 422.2를 참조한다.\nf. Chapter 9에서 소방설비 요건에 따라 설정된 방화구역 경계를 정의하는 용도 구획은 Section 901.7에 따라 Section 707.3.10 및 Table 707.3.10을 준수해야 한다.",
-    "AttachComment": "참고: Section 903.3.1.1, Section 420, Sections 406.3.2, Section 406.6.4, Section 422.2, Section 707.3.10, Table 707.3.10, Section 901.7"
+    "AttachComment": "참고: Section 903.3.1.1, Section 420, Sections 406.3.2, Section 406.6.4, Section 422.2, Section 707.3.10, Table 707.3.10, Section 901.7",
+    "ActualFileName": "IBC_5_508.4_T.JPG"
   },
   {
     "AttachmentID": "D020",
@@ -297,7 +316,8 @@
     "AttachTitleKR": "부수적 용도",
     "AttachContentEN": "For SI: 1 square foot = 0.0929 m2, 1 pound per square inch (psi) = 6.9 kPa, 1 British thermal unit (Btu) per hour = 0.293 watts, 1 horsepower = 746 watts, 1 gallon = 3.785 L, 1 cubic foot = 0.0283 m3.",
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "IBC_5_509.1_T.JPG"
   },
   {
     "AttachmentID": "D021",
@@ -312,7 +332,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "IBC_5_510.2_F.jpg"
   },
   {
     "AttachmentID": "D022",
@@ -327,7 +348,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "IBC_6_601_T.jpg"
   },
   {
     "AttachmentID": "D023",
@@ -342,7 +364,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "IBC_6_602.2_F.jpg"
   },
   {
     "AttachmentID": "D024",
@@ -357,7 +380,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "IBC_6_602.3_F.jpg"
   },
   {
     "AttachmentID": "D025",
@@ -372,7 +396,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "IBC_6_602.5_F.jpg"
   },
   {
     "AttachmentID": "D026",
@@ -387,7 +412,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "IBC_7_703.2.1_F.jpg"
   },
   {
     "AttachmentID": "D027",
@@ -402,7 +428,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": "For SI: 1 foot = 304.8 mm.\na. Load-bearing exterior walls shall also comply with the fire-resistance rating requirements of Table 601.\nb. See Section 706.1.1 for party walls.\nC. Open parking garages complying with Section 406 shall not be required to have a fire-resistance rating.\nd. The fire-resistance rating of an exterior wall is determined based upon the fire separation distance of the exterior wall and the story in which the wall is located.\ne. For special requirements for Group H occupancies, see Section 415.6.\nf. For special requirements for Group S aircraft hangars, see Section 412.3.1.\ng. Where Section 705.9.1 permits nonbearing exterior walls with unlimited area of unprotected openings, the required fire-resistnace rating for the exterior walls is 0 hours.\nh. For a building containing only a Group U occupancy private garage or carport, the exterior wall shall not be required to have a fire-resistance rating where the fire separation distance is 5 feet (1523 mm) or greater.\ni. For a Group R-3 building Type II-B or Type V-B construction, the exterior wall shall not be required to have a fire-resistance rating where the fire separation distance is 5 feet (1523 mm) or greater.",
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "IBC_7_705.5_T.jpg"
   },
   {
     "AttachmentID": "D028",
@@ -417,7 +444,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": "a. In Type II or V construction, walls shall be permitted to have a 2-hour fire-resistance rating.\nb. For Group H-1, H-2 or H-3 buildings, also see Sections 415.7 and 415.8.",
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "IBC_7_706.4_T.jpg"
   },
   {
     "AttachmentID": "D029",
@@ -432,7 +460,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "IBC_7_706.6_F.jpg"
   },
   {
     "AttachmentID": "D030",
@@ -447,7 +476,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "IBC_7_707.3.1_T.jpg"
   },
   {
     "AttachmentID": "D031",
@@ -462,7 +492,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "IBC_7_708.4_F(1).jpg"
   },
   {
     "AttachmentID": "D032",
@@ -477,7 +508,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "IBC_7_708.4_F(2).jpg"
   },
   {
     "AttachmentID": "D033",
@@ -492,7 +524,8 @@
     "AttachTitleKR": "내화벽체 비교표",
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "IBC_7_708.4_T.jpg"
   },
   {
     "AttachmentID": "D034",
@@ -507,7 +540,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "IBC_7_711.2.5_F.jpg"
   },
   {
     "AttachmentID": "D035",
@@ -522,7 +556,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "IBC_7_713.4_F.jpg"
   },
   {
     "AttachmentID": "D036",
@@ -537,7 +572,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "IBC_7_714.4.1_F(1).jpg"
   },
   {
     "AttachmentID": "D037",
@@ -552,7 +588,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "IBC_7_714.4.1_F(2).jpg"
   },
   {
     "AttachmentID": "D038",
@@ -567,7 +604,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "IBC_7_714.5.1_F(1).jpg"
   },
   {
     "AttachmentID": "D039",
@@ -582,7 +620,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "IBC_7_714.5.1_F(2).jpg"
   },
   {
     "AttachmentID": "D040",
@@ -597,7 +636,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "IBC_7_714.5.1.2_F.jpg"
   },
   {
     "AttachmentID": "D041",
@@ -612,7 +652,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": "방화문 및 방호등급 유리의 경우, 구성된 조립체 전체가 대상이 됩니다. 즉, 방화문인 경우 손잡이, 자동 폐쇄장치(Automatic closing device), 방화창의 경우 프레임(Frame), 유리(Glazing material), 설치 부품(Mounting components)으로 구성된 전체 조립체(Assembly)를 의미합니다. 조립체 중 어느 하나라도 훼손되면 방화문이나 방화유리의 기능을 상실합니다. 예를 들어 방화문의 자동 폐쇄 기능이 작동하지 않아 문이 완전히 닫히지 않는 경우 그 문은 방화문으로 간주할 수 없습니다. \n\n또한, 모든 개구부 보호장치는 반드시 라벨(Label)이 부착되어야 합니다. 라벨이 떨어져도 그 보호장치는 내화 성능의 기능이 있다고 인정하지 않습니다. 일반적으로 개구부 보호장치(Opening protective)에 요구되는 방호등급은 벽체 자체의 내화등급보다 낮습니다(Table 716.1(2) 및 Table 716.1(3) 참조). 이는 벽체가 직접 가연물(Fuel package)이나 재료가 접촉한 상태에서도 내화 성능을 유지해야 하는 반면, 방화문이나 방화창은 가연물이 일정 거리 떨어진 위치에 있다고 가정하기 때문입니다."
+    "AttachComment": "방화문 및 방호등급 유리의 경우, 구성된 조립체 전체가 대상이 됩니다. 즉, 방화문인 경우 손잡이, 자동 폐쇄장치(Automatic closing device), 방화창의 경우 프레임(Frame), 유리(Glazing material), 설치 부품(Mounting components)으로 구성된 전체 조립체(Assembly)를 의미합니다. 조립체 중 어느 하나라도 훼손되면 방화문이나 방화유리의 기능을 상실합니다. 예를 들어 방화문의 자동 폐쇄 기능이 작동하지 않아 문이 완전히 닫히지 않는 경우 그 문은 방화문으로 간주할 수 없습니다. \n\n또한, 모든 개구부 보호장치는 반드시 라벨(Label)이 부착되어야 합니다. 라벨이 떨어져도 그 보호장치는 내화 성능의 기능이 있다고 인정하지 않습니다. 일반적으로 개구부 보호장치(Opening protective)에 요구되는 방호등급은 벽체 자체의 내화등급보다 낮습니다(Table 716.1(2) 및 Table 716.1(3) 참조). 이는 벽체가 직접 가연물(Fuel package)이나 재료가 접촉한 상태에서도 내화 성능을 유지해야 하는 반면, 방화문이나 방화창은 가연물이 일정 거리 떨어진 위치에 있다고 가정하기 때문입니다.",
+    "ActualFileName": "IBC_7_715.1_F.jpg"
   },
   {
     "AttachmentID": "D042",
@@ -627,7 +668,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "IBC_7_716.1_T(1).jpg"
   },
   {
     "AttachmentID": "D043",
@@ -642,7 +684,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": "For SI: 1 square inch = 645.2 mm.\n\na. Fire-resistance-rated glazing tested to ASTM E119 in accordance with Section 716.1.2.3 shall be permitted, in the maximum size tested.\n\nb. Under the column heading \"Fire-rated glazing marking door vision panel,\" W refers to the fire-resistance rating of the glazing, not the frame.\n\nc. See Section 716.1.2.2.1 and Table 716.1(1) for additional permitted markings.\n\nd. Two doors, each with a fire protection rating of 11/2 hours, installed on opposite sides of the same opening in a fire wall, shall be deemed equivalent in fire protection rating to one 3-hour fire door.\n\ne. As required in Section 706.4.\n\nf. As allowed in Section 4.6 of NFPA 221.\n\ng. See Section 716.2.5.1.2.\n\nh. Fire-protection-rated glazing is not permitted for fire barriers required by Section 1207 of the California Fire Code to enclose energy storage systems. Fire-resistance-rated glazing assemblies tested to ASTM E119 or UL 263, as specified in Section 716.1.2.3, shall be permitted.\n\ni. Two doors, each with a fire rating of 20 minutes, installed on opposite sides of the same opening in a fire partition, shall be deemed equivalent in fire protection rating to one 45-minute fire door.",
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "IBC_7_716.1_T(2).jpg"
   },
   {
     "AttachmentID": "D044",
@@ -657,7 +700,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": "NP = Not Permitted.\n\na. Not permitted except fire-resistance-rated glazing assemblies tested to ASTM E119 or UL 263, as specified in Section 716.1.2.3.\n\nb. XXX = The fire rating duration period in minutes, which shall be equal to the fire-resistance rating required for the wall assembly.\n\nc. Fire-protection-rated glazing is not permitted for fire barriers required by Section 1207 of the California Fire Code to enclose energy storage systems. Fire-resistance-rated glazing assemblies tested to ASTM E119 or UL 263, as specified in Section 716.1.2.3, shall be permitted.",
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "IBC_7_716.1_T(3).jpg"
   },
   {
     "AttachmentID": "D045",
@@ -672,7 +716,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "IBC_7_717.5_F.jpg"
   },
   {
     "AttachmentID": "D046",
@@ -687,7 +732,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "IBC_7_717.5.2_F.jpg"
   },
   {
     "AttachmentID": "D047",
@@ -702,7 +748,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "IBC_7_717.5.3_F(1).jpg"
   },
   {
     "AttachmentID": "D048",
@@ -717,7 +764,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "IBC_7_717.5.3_F(1.4).jpg"
   },
   {
     "AttachmentID": "D049",
@@ -732,7 +780,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "IBC_7_717.5.4_F(1).jpg"
   },
   {
     "AttachmentID": "D050",
@@ -747,7 +796,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "IBC_7_717.5.4_F(3).jpg"
   },
   {
     "AttachmentID": "D051",
@@ -762,7 +812,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": "For SI: 1 inch = 25.4 mm, 1 square foot = 0.0929 m2.\n\nNP = Not permitted [SFM]\n\na. Class C interior finish materials shall be permitted for wainscotting or paneling of not more than 1,000 square feet of applied surface area in the grade lobby where applied directly to a noncombustible base or over furring strips applied to a noncombustible base and fireblocked as required by Section 803.15.1.\n\nb. In other than Group I-3 occupancies in buildings less than three stories above grade plane, Class B interior finish for nonsprinklered buildings and Class C interior finish for sprinklered buildings shall be permitted in interior exit stairways and ramps.\n\nc. Requirements for rooms and enclosed spaces shall be based on spaces enclosed by partitions. Where a fire-resistance rating is required for structural elements, the enclosing partitions shall extend from the floor to the ceiling. Partitions that do not comply with this shall be considered to be enclosing spaces and the rooms or spaces on both sides shall be considered to be one room or space. In determining the applicable requirements for rooms and enclosed spaces, the specific occupancy thereof shall be the governing factor regardless of the group classification of the building or structure.\n\nd. Lobby areas in Group A-1, A-2 and A-3 occupancies shall be not less than Class B materials.\n\ne. Class C interior finish materials shall be permitted in places of assembly with an occupant load of 300 persons or less.\n \nf, For places of religious worship, wood used for ornamental purposes, trusses, paneling or chancel furnishing shall be permitted.\n\ng. Class B material is required where the building exceeds two stories.\n\nh. Class C interior finish materials shall be permitted in administrative spaces.\n\ni. Class C interior finish materials shall be permitted in rooms with a capacity of four persons or less.\n\nj. Class B materials shall be permitted as wainscotting extending not more than 48 inches above the finished floor in corridors and exit access stairways and ramps.\n\nk. Finish materials as provided for in other sections of this code.\n\nl. Applies when protected by an automatic sprinkler system installed in accordance with Section 903.3.1.1 or 903.3.1.2.\n\nm. Corridors in ambulatory care facilities shall be provided with Class A or B materials.\n\nn. Where Group R-3 and R-4 occupancies are permitted in Section 903.2.8 to be protected by an automatic sprinkler system installed in accordance with Section 903.3.1.3, the requirements for a non-sprinklered building shall apply.\n\no. Where patients are restrained in psychiatric treatment areas of Group I-2, finishes shall comply with the requirements of a Group I-3.",
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "IBC_8_803.13_T.jpg"
   },
   {
     "AttachmentID": "D052",
@@ -777,7 +828,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "IBC_9_903.2.1_T.jpg"
   },
   {
     "AttachmentID": "D053",
@@ -792,7 +844,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "IBC_9_903.2.2_T.jpg"
   },
   {
     "AttachmentID": "D054",
@@ -807,7 +860,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "IBC_9_903.2.3_T.jpg"
   },
   {
     "AttachmentID": "D055",
@@ -822,7 +876,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "IBC_9_903.2.4_T.jpg"
   },
   {
     "AttachmentID": "D056",
@@ -837,7 +892,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "IBC_9_903.2.5_T.jpg"
   },
   {
     "AttachmentID": "D057",
@@ -852,7 +908,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "IBC_9_903.2.6_T.jpg"
   },
   {
     "AttachmentID": "D058",
@@ -867,7 +924,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "IBC_9_903.2.7_T.jpg"
   },
   {
     "AttachmentID": "D059",
@@ -882,7 +940,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "IBC_9_903.2.8_T.jpg"
   },
   {
     "AttachmentID": "D060",
@@ -897,7 +956,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "IBC_9_903.2.9_T.jpg"
   },
   {
     "AttachmentID": "D061",
@@ -912,7 +972,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "IBC_9_903.2.10_T.jpg"
   },
   {
     "AttachmentID": "D062",
@@ -927,7 +988,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "IBC_9_903.2.11.6_T.jpg"
   },
   {
     "AttachmentID": "D063",
@@ -942,7 +1004,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "IBC_9_904.2.1_T.jpg"
   },
   {
     "AttachmentID": "D064",
@@ -957,7 +1020,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": "For SI: 1 foot = 304.8 mm, 1 square foot = 0.0929 m2, 1 gallon = 3.785 L.\n\na. Two 21/2-gallon water-type extinguishers shall be deemed the equivalent of one 4-A rated extinguisher.\n\nb. Annex E.3.3 of NFPA 10 provides more details concerning application of the maximum floor area criteria.\n\nc. Two water-type extinguishers each with a 1-A rating shall be deemed the equivalent of one 2-A rated extinguisher for Light (Low) Hazard Occupancies.",
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "IBC_9_906.3_T(1).jpg"
   },
   {
     "AttachmentID": "D065",
@@ -972,7 +1036,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": "For SI: 1 inch = 25.4 mm, 1 foot = 304.8 mm.\n\na. For requirements on water-soluble flammable liquids and alternative sizing criteria, see Section 5.5 of NFPA 10.",
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "IBC_9_906.3_T(2).jpg"
   },
   {
     "AttachmentID": "D066",
@@ -987,7 +1052,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "IBC_9_907.2.1_T.jpg"
   },
   {
     "AttachmentID": "D067",
@@ -1002,7 +1068,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "IBC_9_907.2.2_T.jpg"
   },
   {
     "AttachmentID": "D068",
@@ -1017,7 +1084,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "IBC_9_907.2.3_T.jpg"
   },
   {
     "AttachmentID": "D069",
@@ -1032,7 +1100,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "IBC_9_907.2.4_T.jpg"
   },
   {
     "AttachmentID": "D070",
@@ -1047,7 +1116,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "IBC_9_907.2.5_T.jpg"
   },
   {
     "AttachmentID": "D071",
@@ -1062,7 +1132,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "IBC_9_907.2.6_T.jpg"
   },
   {
     "AttachmentID": "D072",
@@ -1077,7 +1148,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "IBC_9_907.2.7_T.jpg"
   },
   {
     "AttachmentID": "D073",
@@ -1092,7 +1164,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "IBC_9_907.2.8_T.jpg"
   },
   {
     "AttachmentID": "D074",
@@ -1107,7 +1180,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "IBC_9_907.2.9_T.jpg"
   },
   {
     "AttachmentID": "D075",
@@ -1122,7 +1196,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "IBC_9_907.2.10_T.jpg"
   },
   {
     "AttachmentID": "D076",
@@ -1137,7 +1212,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "IBC_9_909.15_F.jpg"
   },
   {
     "AttachmentID": "D077",
@@ -1152,7 +1228,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": "문 개구부(Door Opening) 내에는 도어 스톱(Stop), 도어 클로저(Closer), 자동 개폐장치(Operator), 잠금장치(Lock) 등의 상부 장치가 설치되므로, 이러한 부품의 기능상 개구부 내부에 위치할 수밖에 없습니다. 따라서 도어 클로저 및 도어 스톱의 최소 유효 높이는 78인치(1981mm)까지 허용됩니다."
+    "AttachComment": "문 개구부(Door Opening) 내에는 도어 스톱(Stop), 도어 클로저(Closer), 자동 개폐장치(Operator), 잠금장치(Lock) 등의 상부 장치가 설치되므로, 이러한 부품의 기능상 개구부 내부에 위치할 수밖에 없습니다. 따라서 도어 클로저 및 도어 스톱의 최소 유효 높이는 78인치(1981mm)까지 허용됩니다.",
+    "ActualFileName": "IBC_10_1003.3.1_F.jpg"
   },
   {
     "AttachmentID": "D078",
@@ -1167,7 +1244,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": "표지판(Signs), 일부 식수대(Drinking Fountains), 전화 박스(Phone Boxes) 등과 같은 기둥 설치형 물체(Post-Mounted Objects)는, 하단 모서리(Bottom Edge)가 완성된 바닥면(Finished Floor)으로부터 27인치(686mm) 이상 높이에 있을 경우, 기둥 면(Post Face)으로부터 4인치(102mm) 이상 돌출(Overhang)되어서는 안 됩니다.\n\n피난 경로(Means of Egress)에 포함된 문, 계단, 경사로의 최소 유효 높이(Headroom Clearance)가 80인치(2032mm)로 규정되어 있으므로, 바닥면으로부터 80인치(2032mm)보다 높은 위치에 있는 돌출물은 규제 대상이 아닙니다.\n\n반대로, 27인치(686mm) 이하 높이에 위치한 돌출물은 지팡이를 사용하는 시각 장애인(Long Cane Users)이 쉽게 감지할 수 있으므로 허용됩니다. 단, 이 경우에도 피난 경로의 최소 폭(Minimum Required Width)은 유지되어야 합니다."
+    "AttachComment": "표지판(Signs), 일부 식수대(Drinking Fountains), 전화 박스(Phone Boxes) 등과 같은 기둥 설치형 물체(Post-Mounted Objects)는, 하단 모서리(Bottom Edge)가 완성된 바닥면(Finished Floor)으로부터 27인치(686mm) 이상 높이에 있을 경우, 기둥 면(Post Face)으로부터 4인치(102mm) 이상 돌출(Overhang)되어서는 안 됩니다.\n\n피난 경로(Means of Egress)에 포함된 문, 계단, 경사로의 최소 유효 높이(Headroom Clearance)가 80인치(2032mm)로 규정되어 있으므로, 바닥면으로부터 80인치(2032mm)보다 높은 위치에 있는 돌출물은 규제 대상이 아닙니다.\n\n반대로, 27인치(686mm) 이하 높이에 위치한 돌출물은 지팡이를 사용하는 시각 장애인(Long Cane Users)이 쉽게 감지할 수 있으므로 허용됩니다. 단, 이 경우에도 피난 경로의 최소 폭(Minimum Required Width)은 유지되어야 합니다.",
+    "ActualFileName": "IBC_10_1003.3.2_F.jpg"
   },
   {
     "AttachmentID": "D079",
@@ -1182,7 +1260,8 @@
     "AttachTitleKR": "수용인원 당 최대 허용 바닥 면적",
     "AttachContentEN": "For SI: 1 foot = 304.8 mm, 1 square foot = 0.0929 m2.\n\na. Floor area in square feet per occupant.",
     "AttachContentKR": null,
-    "AttachComment": "IBC에서 피난 분석의 시작은 재실자 산정입니다. 재실자 산정은 Table 1004.5에 따라 산정됩니다.\n\nGross Area는 일반적으로 바닥 전체 면적으로 인테리어 내벽을 기준으로 합니다. Net Area는 실제 재실자가 거주하는 공간으로 코어나 샤프트 등은 제외됩니다.\n\n재실자 하중 계수(Occupant Load Factor, OLF)는 각 용도에서 한 사람이 차지하는 면적을 의미합니다. 예를 들어 사무실인 B 용도에서 OLF가 150 gross라는 의미는 사무실에서 한 사람이 차지하는 면적이 150 sf라는 의미입니다. 만일 한 층이 1,500 sf인 사무실이 있다면 이 사무실의 재실자는 10명입니다(1,500/150)."
+    "AttachComment": "IBC에서 피난 분석의 시작은 재실자 산정입니다. 재실자 산정은 Table 1004.5에 따라 산정됩니다.\n\nGross Area는 일반적으로 바닥 전체 면적으로 인테리어 내벽을 기준으로 합니다. Net Area는 실제 재실자가 거주하는 공간으로 코어나 샤프트 등은 제외됩니다.\n\n재실자 하중 계수(Occupant Load Factor, OLF)는 각 용도에서 한 사람이 차지하는 면적을 의미합니다. 예를 들어 사무실인 B 용도에서 OLF가 150 gross라는 의미는 사무실에서 한 사람이 차지하는 면적이 150 sf라는 의미입니다. 만일 한 층이 1,500 sf인 사무실이 있다면 이 사무실의 재실자는 10명입니다(1,500/150).",
+    "ActualFileName": "IBC_10_1004.5_T.jpg"
   },
   {
     "AttachmentID": "D080",
@@ -1197,7 +1276,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": "집회용 용도(Assembly Occupancy)로 사용되는 각 실(Room) 또는 공간(Space)에는 승인된 수용인원(Approved Occupant Load)을 표시해야 합니다. 해당 표지판(Placard)은 주출입구(Main Entrance) 근처의 눈에 잘 띄는 위치(Visible Location)에 게시되어야 합니다.\n\n이러한 게시(Posting)는 승인된 최대 수용인원이 초과되지 않도록 확인할 수 있는 수단을 제공하기 위한 것입니다."
+    "AttachComment": "집회용 용도(Assembly Occupancy)로 사용되는 각 실(Room) 또는 공간(Space)에는 승인된 수용인원(Approved Occupant Load)을 표시해야 합니다. 해당 표지판(Placard)은 주출입구(Main Entrance) 근처의 눈에 잘 띄는 위치(Visible Location)에 게시되어야 합니다.\n\n이러한 게시(Posting)는 승인된 최대 수용인원이 초과되지 않도록 확인할 수 있는 수단을 제공하기 위한 것입니다.",
+    "ActualFileName": "IBC_10_1004.9_F.jpg"
   },
   {
     "AttachmentID": "D081",
@@ -1212,7 +1292,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": "출입문의 개폐(Swinging of a Door), 예를 들어 방에서 복도(Corridor)로 열리는 문, 또는 손잡이(Handrail)와 같은 일부 요소는 허용된 돌출(Permitted Projections)로 간주됩니다.\n\n문이 완전히 열렸을 때, 요구 폭 내로의 돌출(Door Projection)은 7인치(178mm)를 초과할 수 없습니다. 이 7인치는 문 두께(Door Leaf Thickness) 기준이며, 손잡이 등 하드웨어(Hardware)는 제외됩니다.\n\n단, 예외 1에 따르면, 출입문이 완전히 열렸을 때 복도 방향으로 돌출되는 Hardware는, Hardware의 설치 높이가 34~48인치(865~1219mm) 범위 내일 때, 7인치(178mm) 최대 침범 허용치를 계산할 때 포함하지 않아도 됩니다.\n\n패닉 바(Panic Hardware)처럼 문 전체 폭을 가로지르는 Hardware의 경우, 문 개구부에서 4인치(102mm) 이내의 돌출은 Section 1010.1.1.1에 따라 별도로 규정됩니다."
+    "AttachComment": "출입문의 개폐(Swinging of a Door), 예를 들어 방에서 복도(Corridor)로 열리는 문, 또는 손잡이(Handrail)와 같은 일부 요소는 허용된 돌출(Permitted Projections)로 간주됩니다.\n\n문이 완전히 열렸을 때, 요구 폭 내로의 돌출(Door Projection)은 7인치(178mm)를 초과할 수 없습니다. 이 7인치는 문 두께(Door Leaf Thickness) 기준이며, 손잡이 등 하드웨어(Hardware)는 제외됩니다.\n\n단, 예외 1에 따르면, 출입문이 완전히 열렸을 때 복도 방향으로 돌출되는 Hardware는, Hardware의 설치 높이가 34~48인치(865~1219mm) 범위 내일 때, 7인치(178mm) 최대 침범 허용치를 계산할 때 포함하지 않아도 됩니다.\n\n패닉 바(Panic Hardware)처럼 문 전체 폭을 가로지르는 Hardware의 경우, 문 개구부에서 4인치(102mm) 이내의 돌출은 Section 1010.1.1.1에 따라 별도로 규정됩니다.",
+    "ActualFileName": "IBC_10_1005.7.1_F.jpg"
   },
   {
     "AttachmentID": "D082",
@@ -1227,7 +1308,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": "공용 피난 경로(Common Path of Travel)란, 공간 내에서 가장 먼 지점(The Most Remote Point)으로부터 시작하여 두 개의 독립된 피난 방향(Two Required Exits in Separate Directions) 중 하나를 선택할 수 있는 지점까지의 거리를 말합니다.\n\n기계실(Mechanical Rooms) 및 펜트하우스(Penthouses)는 상시거주가 아닌 일반적으로 정기 점검이나 장비 교체 시에만 사용됨으로, 상주 인원이 매우 적습니다. 따라서 이러한 공간은 일반적인 실과 달리, 동일한 공용 피난 이동 거리 요건(Common Path of Egress Travel Requirements)을 적용받지 않습니다."
+    "AttachComment": "공용 피난 경로(Common Path of Travel)란, 공간 내에서 가장 먼 지점(The Most Remote Point)으로부터 시작하여 두 개의 독립된 피난 방향(Two Required Exits in Separate Directions) 중 하나를 선택할 수 있는 지점까지의 거리를 말합니다.\n\n기계실(Mechanical Rooms) 및 펜트하우스(Penthouses)는 상시거주가 아닌 일반적으로 정기 점검이나 장비 교체 시에만 사용됨으로, 상주 인원이 매우 적습니다. 따라서 이러한 공간은 일반적인 실과 달리, 동일한 공용 피난 이동 거리 요건(Common Path of Egress Travel Requirements)을 적용받지 않습니다.",
+    "ActualFileName": "IBC_10_1006.2.1_F.jpg"
   },
   {
     "AttachmentID": "D083",
@@ -1242,7 +1324,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": "For SI: 1 foot = 304.8 mm.\nNP = Not Permitted.\n\na. Buildings equipped throughout with an automatic sprinkler system in accordance with Section 903.3.1.1 or 903.3.1.2. See Section 903 for occupancies where automatic sprinkler systems are permitted in accordance with Section 903.3.1.2.\n\nb. Group H occupancies equipped throughout with an automatic sprinkler system in accordance with Section 903.2.5.\n\nc. For a room or space used for assembly purposes having fixed seating, see Section 1029.8.\n\nd. For the travel distance limitations in Group I-2, see Section 407.4.\n\ne. The common path of egress travel distance shall only apply in a Group R-3 occupancy located in a mixed occupancy building.\n\nf. The length of common path of egress travel distance in a Group S-2 open parking garage shall be not more than 100 feet.\n\ng. For the travel distance limitations in Groups R-3 and R-4 equipped throughout with an automatic sprinkler system in accordance with Section 903.3.1.3, see Section 1006.2.2.6.",
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "IBC_10_1006.2.1_T.jpg"
   },
   {
     "AttachmentID": "D084",
@@ -1257,7 +1340,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": "직사각형 공간에서는 대각선 거리(Diagonal Distance), 원형 공간에서는 지름(Diameter)을 구합니다. 그 거리의 최소 절반 이상 만큼 출구가 이격되어야 합니다.\n\n이격 거리를 산정하는 이 방법(Remoteness Calculation Method)에 대한 기술적 입증(Technical Proof)은 존재하지 않지만, 대부분의 건물 설계에서 현실적이고 실용적인(Realistic and Practical) 방식으로 측정합니다."
+    "AttachComment": "직사각형 공간에서는 대각선 거리(Diagonal Distance), 원형 공간에서는 지름(Diameter)을 구합니다. 그 거리의 최소 절반 이상 만큼 출구가 이격되어야 합니다.\n\n이격 거리를 산정하는 이 방법(Remoteness Calculation Method)에 대한 기술적 입증(Technical Proof)은 존재하지 않지만, 대부분의 건물 설계에서 현실적이고 실용적인(Realistic and Practical) 방식으로 측정합니다.",
+    "ActualFileName": "IBC_10_1007.1.1_F(1).jpg"
   },
   {
     "AttachmentID": "D085",
@@ -1272,7 +1356,8 @@
     "AttachTitleKR": "출구가 1시간 내화 성능 복도로 연결된 경우",
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "IBC_10_1007.1.1_F(2).jpg"
   },
   {
     "AttachmentID": "D086",
@@ -1287,7 +1372,8 @@
     "AttachTitleKR": "스프링클러가 설치된 경우",
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "IBC_10_1007.1.1_F(3).jpg"
   },
   {
     "AttachmentID": "D087",
@@ -1302,7 +1388,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "IBC_10_1009.3.3_F.jpg"
   },
   {
     "AttachmentID": "D088",
@@ -1317,7 +1404,8 @@
     "AttachTitleKR": "일반적인 유효폭",
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": "유효폭은 대부분의 피난 관련 조항에 적용되므로 정확하게 이해해야 합니다."
+    "AttachComment": "유효폭은 대부분의 피난 관련 조항에 적용되므로 정확하게 이해해야 합니다.",
+    "ActualFileName": "IBC_10_1010.1.1_F.jpg"
   },
   {
     "AttachmentID": "D089",
@@ -1332,7 +1420,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "IBC_10_1010.1.7_F(1).jpg"
   },
   {
     "AttachmentID": "D090",
@@ -1347,7 +1436,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "IBC_10_1010.1.7_F(2).jpg"
   },
   {
     "AttachmentID": "D091",
@@ -1362,7 +1452,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": "모든 회전문(공기막 구조물용 포함)은 비상 시 문날(Leaves)이 서로 평행하게 접혀 피난 방향과 일직선이 되는 브레이크아웃 기능을 반드시 갖추어야 합니다. 이 작동을 통해 두 개의 개구부가 형성되며, 두 개의 개구부 너비 합계는 최소 36인치(914 mm) 이상이어야 합니다.\n\n회전문이 고장 나거나 막혔을 경우를 대비해, 그 인접한 위치에는 일반 여닫이문(Side-Hinged Door)을 반드시 설치해야 합니다.\n이 문은 회전문을 기다리던 사람이나 신체적 제약 등으로 회전문을 이용하기 어려운 사람이 즉시 대체 출구로 사용할 수 있도록 해야 합니다."
+    "AttachComment": "모든 회전문(공기막 구조물용 포함)은 비상 시 문날(Leaves)이 서로 평행하게 접혀 피난 방향과 일직선이 되는 브레이크아웃 기능을 반드시 갖추어야 합니다. 이 작동을 통해 두 개의 개구부가 형성되며, 두 개의 개구부 너비 합계는 최소 36인치(914 mm) 이상이어야 합니다.\n\n회전문이 고장 나거나 막혔을 경우를 대비해, 그 인접한 위치에는 일반 여닫이문(Side-Hinged Door)을 반드시 설치해야 합니다.\n이 문은 회전문을 기다리던 사람이나 신체적 제약 등으로 회전문을 이용하기 어려운 사람이 즉시 대체 출구로 사용할 수 있도록 해야 합니다.",
+    "ActualFileName": "IBC_10_1010.3.1_F.jpg"
   },
   {
     "AttachmentID": "D092",
@@ -1377,7 +1468,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": "이 유효 천장고(Headroom) 기준은 사용자의 이동 흐름이 방해받지 않도록 하고, 통행자가 진행 방향을 명확히 인식하고 안전하게 이동할 수 있도록 시야를 확보하기 위한 것입니다.\n\n높이(Height)는 계단의 디딤판(Tread)이나 보행면(Walking Surface) 전체를 따라 수직으로 측정되며, 최소 높이는 각 디딤판의 돌출부(Nosing) 또는 계단참(Landing)이나 플랫폼 상부면에서 천장까지의 수직 거리로 측정됩니다."
+    "AttachComment": "이 유효 천장고(Headroom) 기준은 사용자의 이동 흐름이 방해받지 않도록 하고, 통행자가 진행 방향을 명확히 인식하고 안전하게 이동할 수 있도록 시야를 확보하기 위한 것입니다.\n\n높이(Height)는 계단의 디딤판(Tread)이나 보행면(Walking Surface) 전체를 따라 수직으로 측정되며, 최소 높이는 각 디딤판의 돌출부(Nosing) 또는 계단참(Landing)이나 플랫폼 상부면에서 천장까지의 수직 거리로 측정됩니다.",
+    "ActualFileName": "IBC_10_1011.3_F.jpg"
   },
   {
     "AttachmentID": "D093",
@@ -1392,7 +1484,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "IBC_10_1011.5.2_F.jpg"
   },
   {
     "AttachmentID": "D094",
@@ -1407,7 +1500,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "IBC_10_1011.6_F.jpg"
   },
   {
     "AttachmentID": "D095",
@@ -1422,7 +1516,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": "계단의 수직 높이(Vertical Rise)는 계단참(Landing)이나 플랫폼(Platform) 사이의 수직 거리로 측정되며, 이는 한 계단참의 보행면(Walking Surface)에서 다음 계단참의 보행면까지의 높이를 의미합니다.\n\n이 수직 상승 높이에 제한을 두는 이유는, 신체적 제약이 있는 사용자가 일정 구간마다 수평면에서 휴식할 수 있도록 하기 위함이며, 또한 긴 계단을 끊김 없이 연속적으로 오르내릴 때 발생할 수 있는 심리적 부담(폐쇄감, 피로감 등)을 줄이기 위한 것입니다."
+    "AttachComment": "계단의 수직 높이(Vertical Rise)는 계단참(Landing)이나 플랫폼(Platform) 사이의 수직 거리로 측정되며, 이는 한 계단참의 보행면(Walking Surface)에서 다음 계단참의 보행면까지의 높이를 의미합니다.\n\n이 수직 상승 높이에 제한을 두는 이유는, 신체적 제약이 있는 사용자가 일정 구간마다 수평면에서 휴식할 수 있도록 하기 위함이며, 또한 긴 계단을 끊김 없이 연속적으로 오르내릴 때 발생할 수 있는 심리적 부담(폐쇄감, 피로감 등)을 줄이기 위한 것입니다.",
+    "ActualFileName": "IBC_10_1011.8_F.jpg"
   },
   {
     "AttachmentID": "D096",
@@ -1437,7 +1532,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": "출구 접근 구역(Exit Access) 또는 피난 경로(Exit Route)에 설치되는 모든 출구 표지(Exit Sign) 및 방향 표지(Direction Sign)는, 조명이 꺼져 있는 경우에도 식별이 용이할 만큼 충분한 색상 대비(Color Contrast)를 가져야 합니다.\n\n문자의 높이는 최소 6인치(152mm) 이상이어야 하며, 획의 두께(Stroke Width)는 최소 3/4인치(19.1mm) 이상이어야 합니다. 이러한 문자 크기 기준은 약 100피트(30,480mm) 거리에서도 문구를 명확히 읽을 수 있도록 하기 위한 것입니다.\n\n가장 중요한 것은 표지가 배경(Background) 대비 뚜렷하게 보일 것입니다. 표지는 규정된 최소 크기보다 더 크게 제작할 수 있으나, 문자 비율(Proportion)은 표준 형태를 유지해야 합니다."
+    "AttachComment": "출구 접근 구역(Exit Access) 또는 피난 경로(Exit Route)에 설치되는 모든 출구 표지(Exit Sign) 및 방향 표지(Direction Sign)는, 조명이 꺼져 있는 경우에도 식별이 용이할 만큼 충분한 색상 대비(Color Contrast)를 가져야 합니다.\n\n문자의 높이는 최소 6인치(152mm) 이상이어야 하며, 획의 두께(Stroke Width)는 최소 3/4인치(19.1mm) 이상이어야 합니다. 이러한 문자 크기 기준은 약 100피트(30,480mm) 거리에서도 문구를 명확히 읽을 수 있도록 하기 위한 것입니다.\n\n가장 중요한 것은 표지가 배경(Background) 대비 뚜렷하게 보일 것입니다. 표지는 규정된 최소 크기보다 더 크게 제작할 수 있으나, 문자 비율(Proportion)은 표준 형태를 유지해야 합니다.",
+    "ActualFileName": "IBC_10_1013.6.1_F.jpg"
   },
   {
     "AttachmentID": "D097",
@@ -1452,7 +1548,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": "손잡이는 보행면의 가장자리로부터 6인치(152 mm) 이내에 위치해야 하며, 이는 보행면의 외측 모서리로부터 손잡이 면 중 보행면에서 가장 먼 지점까지의 거리를 기준으로 측정합니다.\n\n일반적으로 손잡이는 보행면의 측면에 설치되거나, 중앙부(Intermediate Handrail)의 경우 보행면 위로 일부 겹쳐 설치되는 경우가 많습니다. 이때 손잡이가 계단의 필요 유효 폭(Required Width) 안쪽으로 돌출될 수 있는 최대 범위는 Section 1014.9에서 규제하고 있습니다. 또한, 경사로의 경우 Section 1012.5.1에 따라 손잡이 사이의 최소 유효 폭은 36인치(914 mm) 이상이어야 합니다."
+    "AttachComment": "손잡이는 보행면의 가장자리로부터 6인치(152 mm) 이내에 위치해야 하며, 이는 보행면의 외측 모서리로부터 손잡이 면 중 보행면에서 가장 먼 지점까지의 거리를 기준으로 측정합니다.\n\n일반적으로 손잡이는 보행면의 측면에 설치되거나, 중앙부(Intermediate Handrail)의 경우 보행면 위로 일부 겹쳐 설치되는 경우가 많습니다. 이때 손잡이가 계단의 필요 유효 폭(Required Width) 안쪽으로 돌출될 수 있는 최대 범위는 Section 1014.9에서 규제하고 있습니다. 또한, 경사로의 경우 Section 1012.5.1에 따라 손잡이 사이의 최소 유효 폭은 36인치(914 mm) 이상이어야 합니다.",
+    "ActualFileName": "IBC_10_1014.3_F.jpg"
   },
   {
     "AttachmentID": "D098",
@@ -1467,7 +1564,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": "Handrail은 계단의 필요 유효 폭(Required Width) 안쪽으로 최대 4½인치(114 mm) 이상 돌출(Projection)되어서는 안 됩니다.\n이 기준은 보행 통로의 실질적인 폭이 과도하게 줄어드는 것을 방지하기 위한 것입니다. 이 규정은 Section 1003.3.3의 내용과 일치하며, 손잡이의 돌출부는 손잡이 높이 이하 부분에서도 동일하게 적용됩니다.\n\n다만, 계단이나 경사로(Ramp)가 최소 폭 요건을 초과하는 경우, 손잡이의 돌출 허용 범위는 더 넓게 적용될 수 있습니다.\n\n또한 Section 1014.10에 따라 일부 계단에서는 중앙 손잡이(Intermediate Handrail) 설치가 요구될 수 있습니다. 이 경우, 계단 중앙에 하나 또는 두 개의 손잡이가 설치될 수 있습니다. 이러한 계단은 폭이 60인치(1525 mm) 이상이므로, 중앙 손잡이는 일반적으로 통행에 방해가 되지 않으며 계단의 수용능력(Capacity)을 저해하지 않습니다.\n\n핸드레일에 의한 계단 유효폭 계산에는 여러 가지 의견이 많습니다. 일반적으로는 계단 유효폭을 측정할 때는 계단 벽체부터 계단 중간에 있는 핸드레일의 중앙까지의 거리를 측정합니다. 다만, 이 사항은 인허가청으로부터 컨펌을 받는 것을 권장합니다."
+    "AttachComment": "Handrail은 계단의 필요 유효 폭(Required Width) 안쪽으로 최대 4½인치(114 mm) 이상 돌출(Projection)되어서는 안 됩니다.\n이 기준은 보행 통로의 실질적인 폭이 과도하게 줄어드는 것을 방지하기 위한 것입니다. 이 규정은 Section 1003.3.3의 내용과 일치하며, 손잡이의 돌출부는 손잡이 높이 이하 부분에서도 동일하게 적용됩니다.\n\n다만, 계단이나 경사로(Ramp)가 최소 폭 요건을 초과하는 경우, 손잡이의 돌출 허용 범위는 더 넓게 적용될 수 있습니다.\n\n또한 Section 1014.10에 따라 일부 계단에서는 중앙 손잡이(Intermediate Handrail) 설치가 요구될 수 있습니다. 이 경우, 계단 중앙에 하나 또는 두 개의 손잡이가 설치될 수 있습니다. 이러한 계단은 폭이 60인치(1525 mm) 이상이므로, 중앙 손잡이는 일반적으로 통행에 방해가 되지 않으며 계단의 수용능력(Capacity)을 저해하지 않습니다.\n\n핸드레일에 의한 계단 유효폭 계산에는 여러 가지 의견이 많습니다. 일반적으로는 계단 유효폭을 측정할 때는 계단 벽체부터 계단 중간에 있는 핸드레일의 중앙까지의 거리를 측정합니다. 다만, 이 사항은 인허가청으로부터 컨펌을 받는 것을 권장합니다.",
+    "ActualFileName": "IBC_10_1014.9_F(1).jpg"
   },
   {
     "AttachmentID": "D099",
@@ -1482,7 +1580,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": "Handrail은 계단의 필요 유효 폭(Required Width) 안쪽으로 최대 4½인치(114 mm) 이상 돌출(Projection)되어서는 안 됩니다.\n이 기준은 보행 통로의 실질적인 폭이 과도하게 줄어드는 것을 방지하기 위한 것입니다. 이 규정은 Section 1003.3.3의 내용과 일치하며, 손잡이의 돌출부는 손잡이 높이 이하 부분에서도 동일하게 적용됩니다.\n\n다만, 계단이나 경사로(Ramp)가 최소 폭 요건을 초과하는 경우, 손잡이의 돌출 허용 범위는 더 넓게 적용될 수 있습니다.\n\n또한 Section 1014.10에 따라 일부 계단에서는 중앙 손잡이(Intermediate Handrail) 설치가 요구될 수 있습니다. 이 경우, 계단 중앙에 하나 또는 두 개의 손잡이가 설치될 수 있습니다. 이러한 계단은 폭이 60인치(1525 mm) 이상이므로, 중앙 손잡이는 일반적으로 통행에 방해가 되지 않으며 계단의 수용능력(Capacity)을 저해하지 않습니다.\n\n핸드레일에 의한 계단 유효폭 계산에는 여러 가지 의견이 많습니다. 일반적으로는 계단 유효폭을 측정할 때는 계단 벽체부터 계단 중간에 있는 핸드레일의 중앙까지의 거리를 측정합니다. 다만, 이 사항은 인허가청으로부터 컨펌을 받는 것을 권장합니다."
+    "AttachComment": "Handrail은 계단의 필요 유효 폭(Required Width) 안쪽으로 최대 4½인치(114 mm) 이상 돌출(Projection)되어서는 안 됩니다.\n이 기준은 보행 통로의 실질적인 폭이 과도하게 줄어드는 것을 방지하기 위한 것입니다. 이 규정은 Section 1003.3.3의 내용과 일치하며, 손잡이의 돌출부는 손잡이 높이 이하 부분에서도 동일하게 적용됩니다.\n\n다만, 계단이나 경사로(Ramp)가 최소 폭 요건을 초과하는 경우, 손잡이의 돌출 허용 범위는 더 넓게 적용될 수 있습니다.\n\n또한 Section 1014.10에 따라 일부 계단에서는 중앙 손잡이(Intermediate Handrail) 설치가 요구될 수 있습니다. 이 경우, 계단 중앙에 하나 또는 두 개의 손잡이가 설치될 수 있습니다. 이러한 계단은 폭이 60인치(1525 mm) 이상이므로, 중앙 손잡이는 일반적으로 통행에 방해가 되지 않으며 계단의 수용능력(Capacity)을 저해하지 않습니다.\n\n핸드레일에 의한 계단 유효폭 계산에는 여러 가지 의견이 많습니다. 일반적으로는 계단 유효폭을 측정할 때는 계단 벽체부터 계단 중간에 있는 핸드레일의 중앙까지의 거리를 측정합니다. 다만, 이 사항은 인허가청으로부터 컨펌을 받는 것을 권장합니다.",
+    "ActualFileName": "IBC_10_1014.9_F(2).jpg"
   },
   {
     "AttachmentID": "D100",
@@ -1497,7 +1596,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": "코드는 피난이 여러 개의 인접 공간(Intervening or Adjoining Rooms)을 통과하는 것을 제한하지 않습니다.\n\n항목 1 의도는 복도 연속성(Corridor Continuity)에 관한 규정(Section 1020.7)과 엘리베이터 로비(Elevator Lobby) 간의 연계를 명확히 하는 것입니다. 특히 화재 서비스용 엘리베이터(Fire Service Access Elevator)의 경우, 피난 계단(Stairway)과 직접 연결되어야 하므로 중요합니다. 따라서 점유자가 피난 계단으로 이동하기 위해 엘리베이터 로비를 통과해야 할 수 있습니다.\n\n2개의 출구를 가진 건물에서는 오직 하나의 출구만 엘리베이터 로비를 통과할 수 있으며, 이 경우 해당 로비는 중간 공간(Intervening Room)으로 간주되지 않습니다."
+    "AttachComment": "코드는 피난이 여러 개의 인접 공간(Intervening or Adjoining Rooms)을 통과하는 것을 제한하지 않습니다.\n\n항목 1 의도는 복도 연속성(Corridor Continuity)에 관한 규정(Section 1020.7)과 엘리베이터 로비(Elevator Lobby) 간의 연계를 명확히 하는 것입니다. 특히 화재 서비스용 엘리베이터(Fire Service Access Elevator)의 경우, 피난 계단(Stairway)과 직접 연결되어야 하므로 중요합니다. 따라서 점유자가 피난 계단으로 이동하기 위해 엘리베이터 로비를 통과해야 할 수 있습니다.\n\n2개의 출구를 가진 건물에서는 오직 하나의 출구만 엘리베이터 로비를 통과할 수 있으며, 이 경우 해당 로비는 중간 공간(Intervening Room)으로 간주되지 않습니다.",
+    "ActualFileName": "IBC_10_1016.2_F(1).jpg"
   },
   {
     "AttachmentID": "D101",
@@ -1512,7 +1612,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": "코드는 피난이 여러 개의 인접 공간(Intervening or Adjoining Rooms)을 통과하는 것을 제한하지 않습니다.\n\n항목 2, 3, 및 6의 예는, 회의실과 관리자의 사무실이 비서실을 통과하여 출입 복도에 연결될 수 있으며, 여러 개의 사무실이 공용 로비나 접수실(Reception Area)을 통해 피난하는 것도 가능합니다.\n\n그러나 점유자가 Group H(위험물 공간)을 통과해야만 피난할 수 있는 구조는 허용되지 않습니다. 재실자는 낮은 위험지역(예: 사무실)에서 높은 위험 지역(창고)을 통과해서 피난할 수 없습니다.\n\n단, 이동 거리(Travel Distance), 출입문 수(Number of Doorways) 등 다른 요구사항이 충족되어야 합니다."
+    "AttachComment": "코드는 피난이 여러 개의 인접 공간(Intervening or Adjoining Rooms)을 통과하는 것을 제한하지 않습니다.\n\n항목 2, 3, 및 6의 예는, 회의실과 관리자의 사무실이 비서실을 통과하여 출입 복도에 연결될 수 있으며, 여러 개의 사무실이 공용 로비나 접수실(Reception Area)을 통해 피난하는 것도 가능합니다.\n\n그러나 점유자가 Group H(위험물 공간)을 통과해야만 피난할 수 있는 구조는 허용되지 않습니다. 재실자는 낮은 위험지역(예: 사무실)에서 높은 위험 지역(창고)을 통과해서 피난할 수 없습니다.\n\n단, 이동 거리(Travel Distance), 출입문 수(Number of Doorways) 등 다른 요구사항이 충족되어야 합니다.",
+    "ActualFileName": "IBC_10_1016.2_F(2).jpg"
   },
   {
     "AttachmentID": "D102",
@@ -1527,7 +1628,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": "For SI: 1 foot = 304.8 mm.\n\nA. See the following sections for modifications to exit access travel distance requirements:\n\nSection 402.8: For the distance limitation in malls.\n\nSection 404.9: For the distance limitation through an atrium space.\n\nSection 407.4: For the distance limitation in Group I-2.\n\nSections 408.6.1 and 408.8.1: For the distance limitations in Group I-3.\n\nSection 411.3: For the distance limitation in special amusement buildings.\n\nSection 412.6: For the distance limitations in aircraft manufacturing facilities.\n\nSection 1006.2.2.2: For the distance limitation in refrigeration machinery rooms.\n\nSection 1006.2.2.3: For the distance limitation in refrigerated rooms and spaces.\n\nSection 1006.3.3: For buildings with one exit.\n\nSection 1017.2.2: For increased distance limitation in Groups F-1 and S-1.\n\nSection 1029.7: For increased limitation in assembly seating.\n\nSection 3103.4: For temporary structures.\n\nSection 3104.9: For pedestrian walkways.\n\nb. Buildings equipped throughout with an automatic sprinkler system in accordance with Section 903.3.1.1 or 903.3.1.2. See Section 903 for occupancies where automatic sprinkler systems are permitted in accordance with Section 903.3.1.2.\n\nc. Buildings equipped throughout with an automatic sprinkler system in accordance with Section 903.3.1.1.\n\nd. Group H occupancies equipped throughout with an automatic sprinkler system in accordance with Section 903.2.5.1.\n\ne. Group R-3 and R-4 buildings equipped throughout with an automatic sprinkler system in accordance with Section 903.3.1.3. See Section 903.2.8 for occupancies where automatic sprinkler systems are permitted in accordance with Section 903.3.1.3.",
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "IBC_10_1017.2_T.jpg"
   },
   {
     "AttachmentID": "D103",
@@ -1542,7 +1644,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": "이동 거리의 측정 원칙\n\n피난 이동 거리는 각 층의 모든 점유 가능한 지점(Occupiable Point)으로부터 가장 가까운 출구(Exit)까지의 거리로 측정합니다.\n\n각 점유자는 2개 이상의 출구에 접근할 수 있어야 하지만, 이동 거리 제한은 가장 가까운 출구까지의 거리에만 적용됩니다."
+    "AttachComment": "이동 거리의 측정 원칙\n\n피난 이동 거리는 각 층의 모든 점유 가능한 지점(Occupiable Point)으로부터 가장 가까운 출구(Exit)까지의 거리로 측정합니다.\n\n각 점유자는 2개 이상의 출구에 접근할 수 있어야 하지만, 이동 거리 제한은 가장 가까운 출구까지의 거리에만 적용됩니다.",
+    "ActualFileName": "IBC_10_1017.3_F.jpg"
   },
   {
     "AttachmentID": "D104",
@@ -1557,7 +1660,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": "a. For requirements for occupancies in Group I-2, see Sections 407.2 and 407.3.\n\nb. For a reduction in the fire-resistance rating for occupancies in Group I-3, see Section 408.8.\n\nc. Buildings equipped throughout with an automatic sprinkler system in accordance with Section 903.3.1.1 or 903.3.1.2 where allowed.\n\nd. Group R-3 and R-4 buildings equipped throughout with an automatic sprinkler system in accordance with Section 903.3.1.3. See Section 903.2.8 for occupancies where automatic sprinkler systems are permitted in accordance with Section 903.3.1.3.",
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "IBC_10_1020.2_T.jpg"
   },
   {
     "AttachmentID": "D105",
@@ -1572,7 +1676,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": "For SI: 1 inch = 25.4 mm.",
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "IBC_10_1020.3_T.jpg"
   },
   {
     "AttachmentID": "D106",
@@ -1587,7 +1692,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "IBC_10_1020.5_F(1).jpg"
   },
   {
     "AttachmentID": "D107",
@@ -1602,7 +1708,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "IBC_10_1020.5_F(2).jpg"
   },
   {
     "AttachmentID": "D108",
@@ -1617,7 +1724,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": "Exit Passageway는 계단의 연속성이 건축적으로 불가능할 때 복도를 계단과 같은 내화성능의 구조로 만들어 재실자들이 피난 계단에 있는 것과 같은 지속적으로 보호받을 수 있는 경로(Protected Path of Travel)를 확보하는 피난의 한 수단입니다.\n\n일반적인 사무용 건물이나 이와 유사한 구조물의 경우, 출구 계단(Exit Stairway)은 중앙 코어(Core) 부분이나 중앙에 위치한 출구 접근 복도(Exit Access Corridor)와 일직선상에 배치되는 경우가 많습니다. 이때 출구 통로(Exit Passageway)는 다음과 같은 연결 목적으로 사용될 수 있습니다.\n\n출구 통로(Exit Passageway)의 폭(Width)은 Section 1005.1에 따라 산정되어야 하며, 이는 복도(Corridor)의 폭을 결정하는 방식과 동일하게 해당 구간을 이용하는 점유 인원 수(Occupant Load)에 근거합니다."
+    "AttachComment": "Exit Passageway는 계단의 연속성이 건축적으로 불가능할 때 복도를 계단과 같은 내화성능의 구조로 만들어 재실자들이 피난 계단에 있는 것과 같은 지속적으로 보호받을 수 있는 경로(Protected Path of Travel)를 확보하는 피난의 한 수단입니다.\n\n일반적인 사무용 건물이나 이와 유사한 구조물의 경우, 출구 계단(Exit Stairway)은 중앙 코어(Core) 부분이나 중앙에 위치한 출구 접근 복도(Exit Access Corridor)와 일직선상에 배치되는 경우가 많습니다. 이때 출구 통로(Exit Passageway)는 다음과 같은 연결 목적으로 사용될 수 있습니다.\n\n출구 통로(Exit Passageway)의 폭(Width)은 Section 1005.1에 따라 산정되어야 하며, 이는 복도(Corridor)의 폭을 결정하는 방식과 동일하게 해당 구간을 이용하는 점유 인원 수(Occupant Load)에 근거합니다.",
+    "ActualFileName": "IBC_10_1024.2_F.jpg"
   },
   {
     "AttachmentID": "D109",
@@ -1632,7 +1740,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "IBC_10_1026.1_F(1).jpg"
   },
   {
     "AttachmentID": "D110",
@@ -1647,7 +1756,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "IBC_10_1026.1_F(2).jpg"
   },
   {
     "AttachmentID": "D111",
@@ -1662,7 +1772,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 72_12_12.3_T.jpg"
   },
   {
     "AttachmentID": "D112",
@@ -1677,7 +1788,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 72_12_12.3.1_T.jpg"
   },
   {
     "AttachmentID": "D113",
@@ -1692,7 +1804,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 72_12_12.3.2_T.jpg"
   },
   {
     "AttachmentID": "D114",
@@ -1707,7 +1820,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 72_12_12.3.3_T.jpg"
   },
   {
     "AttachmentID": "D115",
@@ -1722,7 +1836,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 72_12_12.3.4_T.jpg"
   },
   {
     "AttachmentID": "D116",
@@ -1737,7 +1852,8 @@
     "AttachTitleKR": "열 감지 화재 감지기의 온도 분류 및 색상 코드",
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 72_17_17.6.2.1_T.jpg"
   },
   {
     "AttachmentID": "D117",
@@ -1752,7 +1868,8 @@
     "AttachTitleKR": "수평면 천장 위치",
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 72_17_17.6.3.1.3.1_F.jpg"
   },
   {
     "AttachmentID": "D118",
@@ -1767,7 +1884,8 @@
     "AttachTitleKR": "바닥-천장 높이의 85%보다 높게 연장되는 칸막이, 각 구획된 구역에 연기 감지기 추가 요구",
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 72_17_17.6.3.1.3.2_F.jpg"
   },
   {
     "AttachmentID": "D119",
@@ -1782,7 +1900,8 @@
     "AttachTitleKR": "천장 제트의 지연 효과",
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 72_17_17.6.3.3.1.3_F.jpg"
   },
   {
     "AttachmentID": "D120",
@@ -1797,7 +1916,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 72_17_17.6.3.5_T.jpg"
   },
   {
     "AttachmentID": "D121",
@@ -1812,7 +1932,8 @@
     "AttachTitleKR": "연기 감지기 위치: 보의 깊이가 0.1H 미만인 경우",
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 72_17_17.7.4.2.4.2_F(1).jpg"
   },
   {
     "AttachmentID": "D122",
@@ -1827,7 +1948,8 @@
     "AttachTitleKR": "연기 감지기 위치: 보의 깊이가 0.1H 초과, 이격거리가 0.4H 초과인 경우",
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 72_17_17.7.4.2.4.2_F(2).jpg"
   },
   {
     "AttachmentID": "D123",
@@ -1842,7 +1964,8 @@
     "AttachTitleKR": "연기 감지기 위치: 보의 깊이가 0.1H 초과, 이격거리가 0.4H 미만인 경우",
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 72_17_17.7.4.2.4.2_F(3).jpg"
   },
   {
     "AttachmentID": "D124",
@@ -1857,7 +1980,8 @@
     "AttachTitleKR": "연기 또는 열 탐지기 이격거리 배치, 경사 천장(박공형)",
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 72_17_17.7.4.3_F.jpg"
   },
   {
     "AttachmentID": "D125",
@@ -1872,7 +1996,8 @@
     "AttachTitleKR": "연기 또는 열 탐지기 이격거리 배치, 경사 천장(외쪽 지붕형)",
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 72_17_17.7.4.4_F.jpg"
   },
   {
     "AttachmentID": "D126",
@@ -1887,7 +2012,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 72_17_17.7.4.6_F.jpg"
   },
   {
     "AttachmentID": "D127",
@@ -1902,7 +2028,8 @@
     "AttachTitleKR": "공기 흐름이 많은 구역(이중 바닥 아래 또는 천장 상부 공간에 사용 금지)",
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 72_17_17.7.7.3.3.2_T(1).jpg"
   },
   {
     "AttachmentID": "D128",
@@ -1917,7 +2044,8 @@
     "AttachTitleKR": "공기 흐름에 기반한 스폿형 연기 감지기 이격거리(이중 바닥 아래 또는 천장 상부 공간에 사용 금지)",
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 72_17_17.7.7.3.3.2_T(2).jpg"
   },
   {
     "AttachmentID": "D129",
@@ -1932,7 +2060,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 72_17_17.7.8_F.jpg"
   },
   {
     "AttachmentID": "D130",
@@ -1947,7 +2076,8 @@
     "AttachTitleKR": "베인형 유수 스위치",
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 72_17_17.15_F(1).jpg"
   },
   {
     "AttachmentID": "D131",
@@ -1962,7 +2092,8 @@
     "AttachTitleKR": "고/저압 감시 스위치",
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 72_17_17.15_F(2).jpg"
   },
   {
     "AttachmentID": "D132",
@@ -1977,7 +2108,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 72_17_17.19.1.1_F.jpg"
   },
   {
     "AttachmentID": "D133",
@@ -1992,7 +2124,8 @@
     "AttachTitleKR": "압력 감시 스튀치",
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": "두 개의 별도 신호가 요구된다고 해서 반드시 두 개의 스위치가 필요한 것은 아닙니다. 압력이 허용 범위를 벗어나면 작동(전환)되고, 압력이 정상으로 복귀하면 리셋되는 하나의 스위치만으로도 이 요구사항을 충족할 수 있습니다. 즉, 최초 작동(비정상 상태로의 전환)이 첫 번째 신호이고, 정상으로 복귀할 때가 두 번째 신호입니다."
+    "AttachComment": "두 개의 별도 신호가 요구된다고 해서 반드시 두 개의 스위치가 필요한 것은 아닙니다. 압력이 허용 범위를 벗어나면 작동(전환)되고, 압력이 정상으로 복귀하면 리셋되는 하나의 스위치만으로도 이 요구사항을 충족할 수 있습니다. 즉, 최초 작동(비정상 상태로의 전환)이 첫 번째 신호이고, 정상으로 복귀할 때가 두 번째 신호입니다.",
+    "ActualFileName": "NFPA 72_17_17.19.2_F.jpg"
   },
   {
     "AttachmentID": "D134",
@@ -2007,7 +2140,8 @@
     "AttachTitleKR": "위치에 따른 평균 주변 소음 수준",
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 72_18_A.18.4.4_T.jpg"
   },
   {
     "AttachmentID": "D135",
@@ -2022,7 +2156,8 @@
     "AttachTitleKR": "단일 천장에 설치하는 시각적 장치",
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 72_18_18.5.5.7_F.jpg"
   },
   {
     "AttachmentID": "D136",
@@ -2037,7 +2172,8 @@
     "AttachTitleKR": "벽에 설치되는 시각 경보 장치의 실내 이격거리",
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 72_18_18.5.5.7.1_T(a).jpg"
   },
   {
     "AttachmentID": "D137",
@@ -2052,7 +2188,8 @@
     "AttachTitleKR": "천장에 설치되는 시각 경보 장치의 실내 이격거리",
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 72_18_18.5.5.7.1_T(b).jpg"
   },
   {
     "AttachmentID": "D138",
@@ -2067,7 +2204,8 @@
     "AttachTitleKR": "벽에 설치되는 시각 경보 장치의 실내 이격거리",
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 72_18_18.5.5.7.1_F.jpg"
   },
   {
     "AttachmentID": "D139",
@@ -2082,7 +2220,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 72_21_21.3.5.1_F.jpg"
   },
   {
     "AttachmentID": "D140",
@@ -2097,7 +2236,8 @@
     "AttachTitleKR": "엘리베이터 제어 감지기",
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 72_21_21.3.14_F.jpg"
   },
   {
     "AttachmentID": "D141",
@@ -2112,7 +2252,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 72_23_23.8.1.2.1_F.jpg"
   },
   {
     "AttachmentID": "D142",
@@ -2127,7 +2268,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": "Initiating Device Circuit (IDC, 발신 회로) 배선 시 Trouble 접점을 잘못 연결했다면 IDC 전체가 비활성(Disable)되어버릴 수 있습니다.\n→ 즉 단일 장치의 Trouble 때문에 회로 전체가 마비되는 심각한 문제가 발생합니다."
+    "AttachComment": "Initiating Device Circuit (IDC, 발신 회로) 배선 시 Trouble 접점을 잘못 연결했다면 IDC 전체가 비활성(Disable)되어버릴 수 있습니다.\n→ 즉 단일 장치의 Trouble 때문에 회로 전체가 마비되는 심각한 문제가 발생합니다.",
+    "ActualFileName": "NFPA 72_23_23.8.5.4.1_F(1).jpg"
   },
   {
     "AttachmentID": "D143",
@@ -2142,7 +2284,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": "올바른 배선 원리\n\n먼저 IDC는 모든 \"Alarm 접점(발신기, 감지기의 화재 신호 접점)\"을 직렬로 연결합니다.\nTrouble 접점 위치\n그 후 IDC 회로가 각 장치의 Trouble 접점을 지나도록 배선해야 합니다."
+    "AttachComment": "올바른 배선 원리\n\n먼저 IDC는 모든 \"Alarm 접점(발신기, 감지기의 화재 신호 접점)\"을 직렬로 연결합니다.\nTrouble 접점 위치\n그 후 IDC 회로가 각 장치의 Trouble 접점을 지나도록 배선해야 합니다.",
+    "ActualFileName": "NFPA 72_23_23.8.5.4.1_F(2).jpg"
   },
   {
     "AttachmentID": "D144",
@@ -2157,7 +2300,8 @@
     "AttachTitleKR": "소화시스템 차단 스위치",
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": "Supervised Disconnect Switch (감시형 차단 스위치):\n감시 기능(Supervision):\nDisconnect Switch가 \"OFF(차단)\" 상태가 되면 반드시 감시신호(Supervisory Signal)가 발생합니다\n이를 통해 점검 후에 다시 \"ON(정상 연결)\" 상태로 되돌리지 않고 방치되는 사고를 예방할 수 있습니다"
+    "AttachComment": "Supervised Disconnect Switch (감시형 차단 스위치):\n감시 기능(Supervision):\nDisconnect Switch가 \"OFF(차단)\" 상태가 되면 반드시 감시신호(Supervisory Signal)가 발생합니다\n이를 통해 점검 후에 다시 \"ON(정상 연결)\" 상태로 되돌리지 않고 방치되는 사고를 예방할 수 있습니다",
+    "ActualFileName": "NFPA 72_23_23.11.5_F.jpg"
   },
   {
     "AttachmentID": "D145",
@@ -2172,7 +2316,8 @@
     "AttachTitleKR": "무선 시스템",
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 72_23_23.16.4.9.1_F.jpg"
   },
   {
     "AttachmentID": "D146",
@@ -2187,7 +2332,8 @@
     "AttachTitleKR": "대규모경보시스템의 범위",
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 72_24_24.3.8_F.jpg"
   },
   {
     "AttachmentID": "D147",
@@ -2202,7 +2348,8 @@
     "AttachTitleKR": "대규모경보시스템의 위험 분석",
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 72_24_3.12_F.jpg"
   },
   {
     "AttachmentID": "D148",
@@ -2217,7 +2364,8 @@
     "AttachTitleKR": "비상 통신 시스템",
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 72_24_24.3.7_F.jpg"
   },
   {
     "AttachmentID": "D149",
@@ -2247,7 +2395,8 @@
     "AttachTitleKR": "건물 내 화재 비상 음성/경보 통신시스템",
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": "계단실 스피커 설치 요구사항:\n\n계단실에 스피커를 설치해야 한다는 요구가 현지 건축법, NFPA 101, 또는 프로젝트 시방서에 의해 적용되는 경우, 해당 스피커는 별도의 통보 구역(Notification Zone)으로 설정되어야 합니다."
+    "AttachComment": "계단실 스피커 설치 요구사항:\n\n계단실에 스피커를 설치해야 한다는 요구가 현지 건축법, NFPA 101, 또는 프로젝트 시방서에 의해 적용되는 경우, 해당 스피커는 별도의 통보 구역(Notification Zone)으로 설정되어야 합니다.",
+    "ActualFileName": "NFPA 72_24_24.4.6.1_F.jpg"
   },
   {
     "AttachmentID": "D151",
@@ -2262,7 +2411,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": "통보의 우선순위 결정 기준:\n통보(Notification)의 우선순위 수준은 여러 요소의 평가에 따라 결정됩니다. 여기에는 다음 사항들이 포함됩니다:\n\n건물의 용도(점유 유형, Occupancy Type)\n개인 안전에 미치는 영향\n인명에 대한 위험\n지역사회에 대한 위험\n국가적 차원의 위험 및 영향\n\n우선순위 적용:\n이러한 우선순위는 Section 24.5.1.8에서 명시한 바와 같이, 어떤 대량 통보(Mass Notification) 메시지가 화재경보 메시지보다 우선해야 하는지를 판단하는 기준으로 사용됩니다.\n\n예시:\n건물 내에서 테러 사건이나 총기 난사(Active Shooter) 상황이 발생하는 경우, 해당 메시지가 화재경보 메시지보다 더 높은 우선순위를 가지게 됩니다."
+    "AttachComment": "통보의 우선순위 결정 기준:\n통보(Notification)의 우선순위 수준은 여러 요소의 평가에 따라 결정됩니다. 여기에는 다음 사항들이 포함됩니다:\n\n건물의 용도(점유 유형, Occupancy Type)\n개인 안전에 미치는 영향\n인명에 대한 위험\n지역사회에 대한 위험\n국가적 차원의 위험 및 영향\n\n우선순위 적용:\n이러한 우선순위는 Section 24.5.1.8에서 명시한 바와 같이, 어떤 대량 통보(Mass Notification) 메시지가 화재경보 메시지보다 우선해야 하는지를 판단하는 기준으로 사용됩니다.\n\n예시:\n건물 내에서 테러 사건이나 총기 난사(Active Shooter) 상황이 발생하는 경우, 해당 메시지가 화재경보 메시지보다 더 높은 우선순위를 가지게 됩니다.",
+    "ActualFileName": "NFPA 72_24_24.5_F.jpg"
   },
   {
     "AttachmentID": "D152",
@@ -2277,7 +2427,8 @@
     "AttachTitleKR": "로컬 작동 콘솔",
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 72_24_24.5.12.1_F.jpg"
   },
   {
     "AttachmentID": "D153",
@@ -2292,7 +2443,8 @@
     "AttachTitleKR": "복합 화재/경보 시각 경보장치",
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 72_24_24.5.17.3_F.jpg"
   },
   {
     "AttachmentID": "D154",
@@ -2307,7 +2459,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 72_24_24.6.6.1_F.jpg"
   },
   {
     "AttachmentID": "D155",
@@ -2322,7 +2475,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": "\n건물 내 양방향 통신설비(Two-Way Communications Service)는 화재 발생 시 소방대원과 기타 비상 대응 인력이 서로 신뢰성 있게 통신할 수 있는 수단을 제공합니다. 본 규정에서는 두 가지 방법을 인정합니다:\n\n1. 양방향 유선 전화/핸드셋\n2. 양방향 무선 통신 보강 시스템"
+    "AttachComment": "\n건물 내 양방향 통신설비(Two-Way Communications Service)는 화재 발생 시 소방대원과 기타 비상 대응 인력이 서로 신뢰성 있게 통신할 수 있는 수단을 제공합니다. 본 규정에서는 두 가지 방법을 인정합니다:\n\n1. 양방향 유선 전화/핸드셋\n2. 양방향 무선 통신 보강 시스템",
+    "ActualFileName": "NFPA 72_24_24.8.1_F.jpg"
   },
   {
     "AttachmentID": "D156",
@@ -2337,7 +2491,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": "2022년 개정판부터 ECC(비상 통신 센터, Emergency Communications Center)에 포함되어야 할 항목이 추가되었습니다. 여기에는 건물 내 MNS(대량 통보설비) 장비 제어부, 건물 내 유선 비상 통신설비 장비, 그리고 승강기 착륙층 또는 OEE(재실자 피난용 승강기) 로비 비상 통신 장비가 포함됩니다. 단, 제시된 목록이 전부를 의미하는 것은 아니며, 이해관계자의 요구, 시설의 위험 분석 및 비상 대응 계획에 따라 평가되어야 합니다."
+    "AttachComment": "2022년 개정판부터 ECC(비상 통신 센터, Emergency Communications Center)에 포함되어야 할 항목이 추가되었습니다. 여기에는 건물 내 MNS(대량 통보설비) 장비 제어부, 건물 내 유선 비상 통신설비 장비, 그리고 승강기 착륙층 또는 OEE(재실자 피난용 승강기) 로비 비상 통신 장비가 포함됩니다. 단, 제시된 목록이 전부를 의미하는 것은 아니며, 이해관계자의 요구, 시설의 위험 분석 및 비상 대응 계획에 따라 평가되어야 합니다.",
+    "ActualFileName": "NFPA 72_24_24.11.1.2_F.jpg"
   },
   {
     "AttachmentID": "D157",
@@ -2352,7 +2507,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": "한국과 달리, 미국에서는 Central Station이라는 곳에서 경보설비를 관리합니다. 중앙 감시 서비스 경보설비(Central Station Service Alarm System)를 규정하는 요구사항은 Section 26.3에서 다루고 있습니다. \n\n단순히 인증된 중앙 감시소에 신호를 전송하는 행위만으로는 중앙 감시 서비스 경보설비로 인정되지 않으며, 해당 자격을 충족하기 위해서는 다수의 요구사항을 따라야 합니다. \n\n이러한 Section 26.3의 세부 요구사항들로 인해, 일부에서는 이 시스템이 전용 감시소 시스템이나 원격 감시소 경보설비보다 더 높은 수준의 서비스를 제공한다고 평가되기도 합니다.\n\n건물의 스프링클러설비를 점검하기 위해서는 유수 흐름으로 인해 경보 신호가 발신되기 때문에 Central Station에 미리 고지해야 합니다."
+    "AttachComment": "한국과 달리, 미국에서는 Central Station이라는 곳에서 경보설비를 관리합니다. 중앙 감시 서비스 경보설비(Central Station Service Alarm System)를 규정하는 요구사항은 Section 26.3에서 다루고 있습니다. \n\n단순히 인증된 중앙 감시소에 신호를 전송하는 행위만으로는 중앙 감시 서비스 경보설비로 인정되지 않으며, 해당 자격을 충족하기 위해서는 다수의 요구사항을 따라야 합니다. \n\n이러한 Section 26.3의 세부 요구사항들로 인해, 일부에서는 이 시스템이 전용 감시소 시스템이나 원격 감시소 경보설비보다 더 높은 수준의 서비스를 제공한다고 평가되기도 합니다.\n\n건물의 스프링클러설비를 점검하기 위해서는 유수 흐름으로 인해 경보 신호가 발신되기 때문에 Central Station에 미리 고지해야 합니다.",
+    "ActualFileName": "NFPA 72_26_26.3.5.1_F.jpg"
   },
   {
     "AttachmentID": "D158",
@@ -2367,7 +2523,8 @@
     "AttachTitleKR": "SEPSS 유형",
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": "NFPA 111 (Standard on Stored Electrical Energy Emergency and Standby Power Systems, 2025)"
+    "AttachComment": "NFPA 111 (Standard on Stored Electrical Energy Emergency and Standby Power Systems, 2025)",
+    "ActualFileName": "NFPA 72_10_10.6.4.1_T(1).jpg"
   },
   {
     "AttachmentID": "D159",
@@ -2382,7 +2539,8 @@
     "AttachTitleKR": "SEPSS 등급",
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 72_10_10.6.4.1_T(2).jpg"
   },
   {
     "AttachmentID": "D160",
@@ -2412,7 +2570,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 13_3_3.3.89_F.jpg"
   },
   {
     "AttachmentID": "D162",
@@ -2427,7 +2586,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 13_16_16.12.2.1_F.jpg"
   },
   {
     "AttachmentID": "D163",
@@ -2442,7 +2602,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 13_17_17.4_F.jpg"
   },
   {
     "AttachmentID": "D164",
@@ -2457,7 +2618,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": "도면에 쓰이는 Hanger Type과 파이프 크기에 따라 시공되는 Hanger 위치를 표기해야 합니다."
+    "AttachComment": "도면에 쓰이는 Hanger Type과 파이프 크기에 따라 시공되는 Hanger 위치를 표기해야 합니다.",
+    "ActualFileName": "NFPA 13_17_17.4.2.1_T(a).jpg"
   },
   {
     "AttachmentID": "D165",
@@ -2472,7 +2634,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": "도면에 쓰이는 Hanger Type과 파이프 크기에 따라 시공되는 Hanger 위치를 표기해야 합니다."
+    "AttachComment": "도면에 쓰이는 Hanger Type과 파이프 크기에 따라 시공되는 Hanger 위치를 표기해야 합니다.",
+    "ActualFileName": "NFPA 13_17_17.4.2.1_T(b).jpg"
   },
   {
     "AttachmentID": "D166",
@@ -2487,7 +2650,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 13_19_19.2.3.1.1_T.jpg"
   },
   {
     "AttachmentID": "D167",
@@ -2502,7 +2666,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 13_19_19.2.3.1.1_F.jpg"
   },
   {
     "AttachmentID": "D168",
@@ -2517,7 +2682,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 13_19_19.2.3.1.2_T.jpg"
   },
   {
     "AttachmentID": "D169",
@@ -2532,7 +2698,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 13_19_19.2.3.2.3.1_F.jpg"
   },
   {
     "AttachmentID": "D170",
@@ -2547,7 +2714,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 13_7_7.2.2_F.jpg"
   },
   {
     "AttachmentID": "D171",
@@ -2562,7 +2730,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": "Note: The nominal K-factor for dry-type sprinklers are used for sprinkler selection. See Section 28.2.4.10.3 for use of adjusted dry-type sprinkler K-factors for hydraulic calculation purposes.",
     "AttachContentKR": "참고: 건식 스프링클러헤드의 공칭 K계수는 스프링클러 선택에 사용된다. 수리 계산 목적의 조정된 건식 스프링클러헤드 K계수 사용에 대해서는 Section 28.2.4.10.3을 참조한다.",
-    "AttachComment": "K계수(K-Factor)는 스프링클러를 통한 물의 양을 정하는 중요한 계수입니다. K값이 클수록 물의 양은 많아집니다. 일반적인 K계수는 5.6이고 창고나 위험도가 높은 용도의 건물은 K계수가 큰 스프링클러가 사용됩니다. K계수는 제조사마다 크기가 다를 수 있습니다.\n\nCMSA 스프링클러는 Control Mode Specific Application Sprinkler의 약자로 일반적인 표준형 스프링클러(Standard Spray Sprinkler)와 달리 특정 위험물 저장이나 공정 조건에 맞추어 성능이 설계된 특수 스프링클러를 의미합니다. NFPA 13에서 CMSA 스프링클러는 ESFR(Early Suppression Fast Response)과 마찬가지로 \"저장용 스프링클러(Storage Sprinklers)\"로 분류됩니다.\n\nESFR이 조기 소화(Suppression)를 목표로 하는 반면 CMSA는 화재 크기를 제한하고 제어(Control)하는 데 초점이 있습니다."
+    "AttachComment": "K계수(K-Factor)는 스프링클러를 통한 물의 양을 정하는 중요한 계수입니다. K값이 클수록 물의 양은 많아집니다. 일반적인 K계수는 5.6이고 창고나 위험도가 높은 용도의 건물은 K계수가 큰 스프링클러가 사용됩니다. K계수는 제조사마다 크기가 다를 수 있습니다.\n\nCMSA 스프링클러는 Control Mode Specific Application Sprinkler의 약자로 일반적인 표준형 스프링클러(Standard Spray Sprinkler)와 달리 특정 위험물 저장이나 공정 조건에 맞추어 성능이 설계된 특수 스프링클러를 의미합니다. NFPA 13에서 CMSA 스프링클러는 ESFR(Early Suppression Fast Response)과 마찬가지로 \"저장용 스프링클러(Storage Sprinklers)\"로 분류됩니다.\n\nESFR이 조기 소화(Suppression)를 목표로 하는 반면 CMSA는 화재 크기를 제한하고 제어(Control)하는 데 초점이 있습니다.",
+    "ActualFileName": "NFPA 13_7_7.2.2.1_T.jpg"
   },
   {
     "AttachmentID": "D172",
@@ -2577,7 +2746,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 13_7_7.2.4.1_T(a).jpg"
   },
   {
     "AttachmentID": "D173",
@@ -2592,7 +2762,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 13_7_7.2.4.1_T(b).jpg"
   },
   {
     "AttachmentID": "D174",
@@ -2607,7 +2778,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": "NFPA에서는 지상에 설치되는 스프링클러 시스템의 파이핑 재질에 제한을 두지 않습니다. 다만 시스템의 특성에 따라 건식 시스템(Dry Pipe System)에 아연도금강관(Galvanized Steel Pipe)을 요구하는 인허가청도 있습니다."
+    "AttachComment": "NFPA에서는 지상에 설치되는 스프링클러 시스템의 파이핑 재질에 제한을 두지 않습니다. 다만 시스템의 특성에 따라 건식 시스템(Dry Pipe System)에 아연도금강관(Galvanized Steel Pipe)을 요구하는 인허가청도 있습니다.",
+    "ActualFileName": "NFPA 13_7_7.3.1.1_T.jpg"
   },
   {
     "AttachmentID": "D175",
@@ -2622,7 +2794,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 13_7_7.4.1_T.jpg"
   },
   {
     "AttachmentID": "D176",
@@ -2637,7 +2810,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 13_8_8.1.1.1_F.jpg"
   },
   {
     "AttachmentID": "D177",
@@ -2652,7 +2826,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 13_8_8.2_F.jpg"
   },
   {
     "AttachmentID": "D178",
@@ -2667,7 +2842,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 13_8_8.2.4.3.2_T.jpg"
   },
   {
     "AttachmentID": "D179",
@@ -2682,7 +2858,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 13_Annex A_Annex A.9.3.14.3_F.jpg"
   },
   {
     "AttachmentID": "D180",
@@ -2697,7 +2874,8 @@
     "AttachTitleKR": "일반용도 건물의 불연성 은폐공간",
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 13_9_9.3.17.1.2_F.jpg"
   },
   {
     "AttachmentID": "D181",
@@ -2712,7 +2890,8 @@
     "AttachTitleKR": "곡선 천장을 따라 설치된 스프링클러",
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 13_9_9.5.3.1.2_F.jpg"
   },
   {
     "AttachmentID": "D182",
@@ -2727,7 +2906,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": "대부분의 경우에는 일반적으로 수리 계산 방식을 적용합니다. \n\n- Light Hazard (경급위험용도): 225 ft²\n- Ordinary (중급위험용도): 130 ft²\n- Extra Hazard (특급위험용도): 130/100 ft²\n\n그 이외는 Storage (저장) 적용이나 각 제조사별 Data Sheet에 따라 적용합니다."
+    "AttachComment": "대부분의 경우에는 일반적으로 수리 계산 방식을 적용합니다. \n\n- Light Hazard (경급위험용도): 225 ft²\n- Ordinary (중급위험용도): 130 ft²\n- Extra Hazard (특급위험용도): 130/100 ft²\n\n그 이외는 Storage (저장) 적용이나 각 제조사별 Data Sheet에 따라 적용합니다.",
+    "ActualFileName": "NFPA 13_10_10.2.4.2.1_T(a).jpg"
   },
   {
     "AttachmentID": "D183",
@@ -2742,7 +2922,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": "대부분의 경우에는 일반적으로 수리 계산 방식을 적용합니다. \n\n- Light Hazard (경급위험용도): 225 ft²\n- Ordinary (중급위험용도): 130 ft²\n- Extra Hazard (특급위험용도): 130/100 ft²\n\n그 이외는 Storage (저장) 적용이나 각 제조사별 Data Sheet에 따라 적용합니다."
+    "AttachComment": "대부분의 경우에는 일반적으로 수리 계산 방식을 적용합니다. \n\n- Light Hazard (경급위험용도): 225 ft²\n- Ordinary (중급위험용도): 130 ft²\n- Extra Hazard (특급위험용도): 130/100 ft²\n\n그 이외는 Storage (저장) 적용이나 각 제조사별 Data Sheet에 따라 적용합니다.",
+    "ActualFileName": "NFPA 13_10_10.2.4.2.1_T(b).jpg"
   },
   {
     "AttachmentID": "D184",
@@ -2757,7 +2938,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": "*In buildings where solid structural members create bays up to 25 ft (7.6 m) wide, maximum spacing between sprinklers is permitted up to 12 ft 6 in. (3.8 m).",
     "AttachContentKR": null,
-    "AttachComment": "대부분의 경우에는 일반적으로 수리 계산 방식을 적용합니다. \n\n- Light Hazard (경급위험용도): 225 ft²\n- Ordinary (중급위험용도): 130 ft²\n- Extra Hazard (특급위험용도): 130/100 ft²\n\n그 이외는 Storage (저장) 적용이나 각 제조사별 Data Sheet에 따라 적용합니다."
+    "AttachComment": "대부분의 경우에는 일반적으로 수리 계산 방식을 적용합니다. \n\n- Light Hazard (경급위험용도): 225 ft²\n- Ordinary (중급위험용도): 130 ft²\n- Extra Hazard (특급위험용도): 130/100 ft²\n\n그 이외는 Storage (저장) 적용이나 각 제조사별 Data Sheet에 따라 적용합니다.",
+    "ActualFileName": "NFPA 13_10_10.2.4.2.1_T(c).jpg"
   },
   {
     "AttachmentID": "D185",
@@ -2772,7 +2954,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": "*In buildings where solid structural members create bays up to 25 ft (7.6 m) wide, maximum spacing between sprinklers is permitted up to 12 ft 6 in. (3.8 m).",
     "AttachContentKR": null,
-    "AttachComment": "대부분의 경우에는 일반적으로 수리 계산 방식을 적용합니다. \n\n- Light Hazard (경급위험용도): 225 ft²\n- Ordinary (중급위험용도): 130 ft²\n- Extra Hazard (특급위험용도): 130/100 ft²\n\n그 이외는 Storage (저장) 적용이나 각 제조사별 Data Sheet에 따라 적용합니다."
+    "AttachComment": "대부분의 경우에는 일반적으로 수리 계산 방식을 적용합니다. \n\n- Light Hazard (경급위험용도): 225 ft²\n- Ordinary (중급위험용도): 130 ft²\n- Extra Hazard (특급위험용도): 130/100 ft²\n\n그 이외는 Storage (저장) 적용이나 각 제조사별 Data Sheet에 따라 적용합니다.",
+    "ActualFileName": "NFPA 13_10_10.2.4.2.1_T(d).jpg"
   },
   {
     "AttachmentID": "D186",
@@ -2787,7 +2970,8 @@
     "AttachTitleKR": "중급위험용도의 평슬래브 콘크리트 천장하부 표준형 스프레이 스프링클러 설치",
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 13_10_10.2.6.1_F.jpg"
   },
   {
     "AttachmentID": "D187",
@@ -2802,7 +2986,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": "건물 구조에 따라 Deflector 위치가 달라집니다."
+    "AttachComment": "건물 구조에 따라 Deflector 위치가 달라집니다.",
+    "ActualFileName": "NFPA 13_10_10.2.7.1.2_F(1).jpg"
   },
   {
     "AttachmentID": "D188",
@@ -2817,7 +3002,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": "건물 구조에 따라 Deflector 위치가 달라집니다."
+    "AttachComment": "건물 구조에 따라 Deflector 위치가 달라집니다.",
+    "ActualFileName": "NFPA 13_10_10.2.7.1.2_F(4).jpg"
   },
   {
     "AttachmentID": "D189",
@@ -2832,7 +3018,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": "건물 구조에 따라 Deflector 위치가 달라집니다."
+    "AttachComment": "건물 구조에 따라 Deflector 위치가 달라집니다.",
+    "ActualFileName": "NFPA 13_10_10.2.7.1.2_F(2).jpg"
   },
   {
     "AttachmentID": "D190",
@@ -2847,7 +3034,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": "건물 구조에 따라 Deflector 위치가 달라집니다."
+    "AttachComment": "건물 구조에 따라 Deflector 위치가 달라집니다.",
+    "ActualFileName": "NFPA 13_10_10.2.7.1.2_F(3).jpg"
   },
   {
     "AttachmentID": "D191",
@@ -2862,7 +3050,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 13_10_10.2.8.1_F.jpg"
   },
   {
     "AttachmentID": "D192",
@@ -2877,7 +3066,8 @@
     "AttachTitleKR": "살수 장애물을 피하기 위한 스프링클러 위치[표준 스프레이 상향식/표준 스프레이 하향식(SSU/SSP)]",
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 13_10_10.2.8.2_T(a).jpg"
   },
   {
     "AttachmentID": "D193",
@@ -2892,7 +3082,8 @@
     "AttachTitleKR": "살수 장애물을 피하기 위한 스프링클러 위치[표준 스프레이 상향식/표준 스프레이 하향식(SSU/SSP)]",
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 13_10_10.2.8.2_T(b).jpg"
   },
   {
     "AttachmentID": "D194",
@@ -2907,7 +3098,8 @@
     "AttachTitleKR": "살수 장애물을 피하기 위한 스프링클러 위치(SSU/SSP)",
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 13_10_10.2.8.2_F(a).jpg"
   },
   {
     "AttachmentID": "D195",
@@ -2922,7 +3114,8 @@
     "AttachTitleKR": "벽에 인접한 장애물(SSU/SSP)",
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 13_10_10.2.8.2_F(b).jpg"
   },
   {
     "AttachmentID": "D196",
@@ -2937,7 +3130,8 @@
     "AttachTitleKR": "벽에 인접한 장애물(SSU/SSP)",
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 13_10_10.2.8.2_F(c).jpg"
   },
   {
     "AttachmentID": "D197",
@@ -2952,7 +3146,8 @@
     "AttachTitleKR": "복도의 장애물",
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 13_10_10.2.8.2_F(d).jpg"
   },
   {
     "AttachmentID": "D198",
@@ -2967,7 +3162,8 @@
     "AttachTitleKR": "수직방향 장애물로부터의 최소 거리(SSU/SSP)",
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 13_10_10.2.8.3.1.4_F(a).jpg"
   },
   {
     "AttachmentID": "D199",
@@ -2982,7 +3178,8 @@
     "AttachTitleKR": "수평 방향 장애물로부터의 최소 거리(SSU/SSP)",
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 13_10_10.2.8.3.1.4_F(b).jpg"
   },
   {
     "AttachmentID": "D200",
@@ -2997,7 +3194,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": "Section 20.4.1부터 20.4.4에서 상품(Commodity)의 정의를 파악하고, Section 20.4.5.1부터 20.4.7까지 참조하여 그룹(Group)을 구분한 후, Figure 20.4.8의 판정도(Decision Tree)를 적용하여 물질의 위험도를 결정합니다."
+    "AttachComment": "Section 20.4.1부터 20.4.4에서 상품(Commodity)의 정의를 파악하고, Section 20.4.5.1부터 20.4.7까지 참조하여 그룹(Group)을 구분한 후, Figure 20.4.8의 판정도(Decision Tree)를 적용하여 물질의 위험도를 결정합니다.",
+    "ActualFileName": "NFPA 13_20_20.4.8_F.jpg"
   },
   {
     "AttachmentID": "D201",
@@ -3012,7 +3210,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 13_20_20.5.3_F(1).jpg"
   },
   {
     "AttachmentID": "D202",
@@ -3027,7 +3226,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 13_20_20.5.3_F(2).jpg"
   },
   {
     "AttachmentID": "D203",
@@ -3042,7 +3242,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 13_20_20.6.2.1_F(1).jpg"
   },
   {
     "AttachmentID": "D204",
@@ -3057,7 +3258,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 13_20_20.6.2.1_F(2).jpg"
   },
   {
     "AttachmentID": "D205",
@@ -3072,7 +3274,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 13_20_20.6.2.2_F(1).jpg"
   },
   {
     "AttachmentID": "D206",
@@ -3087,7 +3290,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 13_20_20.6.2.2_F(2).jpg"
   },
   {
     "AttachmentID": "D207",
@@ -3102,7 +3306,8 @@
     "AttachTitleKR": "호스 허용 방출량 및 급수 지속시간",
     "AttachContentEN": "NA: Not applicable.\n\na. For CMSA and ESFR sprinklers, the additional sprinklers included in the design area for obstructions do not need to be considered in determining the total number of sprinklers in this column.\n\nb. Limited to a maximum of 144 ft2 (13 m2) per sprinkler.\n\nc. For storage on-tread, on-side, and laced tires in open portable steel racks or palletized portable racks, with pile height up to 25 ft (7.6 m) and building height up to 30 ft (9.1 m) with K-14.0 (K-200) or K-16.8 (K-240) ESFR sprinklers, the water supply duration is 180 minutes.",
     "AttachContentKR": "NA: Not applicable.\n\na. CMSA 및 ESFR 스프링클러헤드의 경우 장애물로 인해 설계 면적에 포함된 추가 스프링클러헤드는 본 열의 총 스프링클러헤드 개수를 결정하는 데 고려할 필요가 없다.\n\nb. 스프링클러헤드당 최대 144 ft² (13 m²)로 제한된다.\n\nc. 개방형 이동식 강철 랙 또는 팔레트형 이동식 랙에 온트레드(On-tread), 온사이드(On-side) 및 레이스드(Laced) 타이어를 저장하는 경우 적재 높이가 최대 25 ft (7.6 m)이고 건물 높이가 최대 30 ft (9.1 m)일 때 K-14.0 (K-200) 또는 K-16.8 (K-240) ESFR 스프링클러헤드를 사용하면 급수 지속 시간은 180분이다.",
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 13_20_20.15.2.6_T.jpg"
   },
   {
     "AttachmentID": "D208",
@@ -3117,7 +3322,8 @@
     "AttachTitleKR": "CMDA 보호 기준용 저장 상부에서 천장까지의 최소 거리",
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 13_21_21.1.9_T.jpg"
   },
   {
     "AttachmentID": "D209",
@@ -3132,7 +3338,8 @@
     "AttachTitleKR": "Class I - Class IV 물품",
     "AttachContentEN": "* When applying the supplemental in-rack spriknler option, the ceiling density is based upon the given stroage height with an assumed acceptable clearance to ceiling. Provide one level of supplemental, quick response in-rack sprinklers located directly below the top tier of storage and at every flue space intersection.",
     "AttachContentKR": "* 보조 인랙 스프링클러 옵션을 적용할 때 천장 밀도는 주어진 저장 높이를 기준으로 천장까지 허용 가능한 이격거리를 가정하여 산정된다. 저장물 최상단 직하부 및 모든 플루 공간 교차점에 1개 층의 보조 속동형 인랙 스프링클러를 설치한다.",
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 13_21_21.1.9.1_T.jpg"
   },
   {
     "AttachmentID": "D210",
@@ -3147,7 +3354,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": "* In-rack sprinklers are required for the actual storage height with an acceptable clearance to ceiling, in-rack sprinklers are installed as indicated by that criteria. Provide one level of supplemental, quick response in-rack sprinklers located directly below the top tier of storage and at every flue space intersection.",
     "AttachContentKR": "* 인랙 스프링클러는 실제 저장 높이에서 천장까지의 이격거리가 허용 가능한 경우에 요구되며 해당 기준에 따라 설치된다. 저장물 최상단 직하부 및 모든 플루 공간 교차점에 1개 층의 보조 속동형 인랙 스프링클러를 설치한다.",
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 13_21_21.1.9.2_T.jpg"
   },
   {
     "AttachmentID": "D211",
@@ -3162,7 +3370,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 13_21_21.3.1_F.jpg"
   },
   {
     "AttachmentID": "D212",
@@ -3177,7 +3386,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": "a. See 20.3.2 for information regarding protection of lower hazard commodities with higher hazard criteria.\n\nb. These options apply when all requirements in Section 27.4 are applied including vertical barriers.\n\nc. This option applies to palletized and solid pile storage in a closed array.",
     "AttachContentKR": "a. 높은 위험 기준으로 낮은 위험 저장물을 방호하는 것에 관한 정보는 Section 20.3.2를 참조한다.\n\nb. 이러한 옵션은 수직 배리어를 포함하여 Section 27.4의 모든 요구사항이 적용될 때 적용된다.\n\nc. 이 옵션은 밀폐형 배열(Closed array)의 팔레트 적재 및 솔리드 파일 저장에 적용된다.",
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 13_23_23.3.1_T.jpg"
   },
   {
     "AttachmentID": "D213",
@@ -3192,7 +3402,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": "Note: This table is applicable to wet systems only.\n\na. The shape of the design area is in accordance with 23.2.2.\n\nb. Where used in this application, ESFR protection is expected to control rather than suppress the fire.\n\nc. The design area consists of the most hydraulically demanding 20 sprinklers, with five sprinklers on each of four branch lines. The design includes a minimum operating area of 1600 ft2 (150 m2).",
     "AttachContentKR": "**참고:** 본 표는 습식 시스템에만 적용된다.\n\na. 설계 면적의 형상은 Section 23.2.2에 따른다.\n\nb. 본 적용에 사용되는 경우 ESFR 방호는 화재를 진압(Suppress)하기보다는 제어(Control)할 것으로 예상된다.\n\nc. 설계 면적은 수리학적으로 가장 요구가 높은 20개 스프링클러헤드로 구성되며 4개 가지배관 각각에 5개의 스프링클러헤드가 있다. 설계는 최소 작동 면적 1,600 ft² (150 m²)를 포함한다.",
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 13_23_23.5_T.jpg"
   },
   {
     "AttachmentID": "D214",
@@ -3207,7 +3418,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 13_23_23.6_T.jpg"
   },
   {
     "AttachmentID": "D215",
@@ -3222,7 +3434,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 13_28_28.2.2.5_F.jpg"
   },
   {
     "AttachmentID": "D216",
@@ -3237,7 +3450,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 13_Annex A_Annex A.28.2.4_F.jpg"
   },
   {
     "AttachmentID": "D217",
@@ -3252,7 +3466,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 13_Annex A_Annex A.28.2.4.1_F(a).jpg"
   },
   {
     "AttachmentID": "D218",
@@ -3267,7 +3482,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": "수리 계산을 통해 파이프 사이즈를 정하면 시스템 설계는 완성됩니다.\n\n수리계산에서 반드시 체크해야 할 사항:\n\n1. 말단에서의 스프링클러 압력이 Min Pressure 이상\n2. Water Flow 가 설계 기준에 맞게 확보되는지\n3. 유속이 30 ft/sec(일반적)이면 물이 흐를 때 파이프가 심하게 흔들려서 유속이 30 ft/sec 이하가 되도록 배관 사이즈를 조정하는게 필요함."
+    "AttachComment": "수리 계산을 통해 파이프 사이즈를 정하면 시스템 설계는 완성됩니다.\n\n수리계산에서 반드시 체크해야 할 사항:\n\n1. 말단에서의 스프링클러 압력이 Min Pressure 이상\n2. Water Flow 가 설계 기준에 맞게 확보되는지\n3. 유속이 30 ft/sec(일반적)이면 물이 흐를 때 파이프가 심하게 흔들려서 유속이 30 ft/sec 이하가 되도록 배관 사이즈를 조정하는게 필요함.",
+    "ActualFileName": "NFPA 13_28_28.2.4.7.2_T.jpg"
   },
   {
     "AttachmentID": "D219",
@@ -3282,7 +3498,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": "*The authority having jurisdiction is permitted to allow other C values.\n\n†Nitrogen supply shall be installed in accordance with 8.2.6.9.",
     "AttachContentKR": "*관할 당국은 다른 C값을 허용할 수 있다.\n\n†질소 공급은 Section 8.2.6.9에 따라 설치되어야 한다.",
-    "AttachComment": "수리 계산을 통해 파이프 사이즈를 정하면 시스템 설계는 완성됩니다.\n\n수리계산에서 반드시 체크해야 할 사항:\n\n1. 말단에서의 스프링클러 압력이 Min Pressure 이상\n2. Water Flow 가 설계 기준에 맞게 확보되는지\n3. 유속이 30 ft/sec(일반적)이면 물이 흐를 때 파이프가 심하게 흔들려서 유속이 30 ft/sec 이하가 되도록 배관 사이즈를 조정하는게 필요함."
+    "AttachComment": "수리 계산을 통해 파이프 사이즈를 정하면 시스템 설계는 완성됩니다.\n\n수리계산에서 반드시 체크해야 할 사항:\n\n1. 말단에서의 스프링클러 압력이 Min Pressure 이상\n2. Water Flow 가 설계 기준에 맞게 확보되는지\n3. 유속이 30 ft/sec(일반적)이면 물이 흐를 때 파이프가 심하게 흔들려서 유속이 30 ft/sec 이하가 되도록 배관 사이즈를 조정하는게 필요함.",
+    "ActualFileName": "NFPA 13_28_28.2.4.8.1_T.jpg"
   },
   {
     "AttachmentID": "D220",
@@ -3297,7 +3514,8 @@
     "AttachTitleKR": "연결송수관 설비 등급",
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 14_8_8.2_F.jpg"
   },
   {
     "AttachmentID": "D221",
@@ -3312,7 +3530,8 @@
     "AttachTitleKR": "소방연결구",
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 14_9_9_F.jpg"
   },
   {
     "AttachmentID": "D222",
@@ -3327,7 +3546,8 @@
     "AttachTitleKR": "수평 피난구",
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 14_9_9.5.2.2_F.jpg"
   },
   {
     "AttachmentID": "D223",
@@ -3342,7 +3562,8 @@
     "AttachTitleKR": "피난통로",
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 14_9_9.5.2.3_F.jpg"
   },
   {
     "AttachmentID": "D224",
@@ -3357,7 +3578,8 @@
     "AttachTitleKR": "계단참",
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 14_9_9.5.2.1.1_F.jpg"
   },
   {
     "AttachmentID": "D225",
@@ -3372,7 +3594,8 @@
     "AttachTitleKR": "일반적인 소방 펌프 레이아웃",
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": "NFPA 20은 소방펌프 설치 요구사항을 규정하지 않는다는 점이 중요합니다. 소방펌프의 필요성은 진압 시스템의 수리학적 요구량과 이용 가능한 급수원에서 제공되는 유량 및 압력을 기준으로 결정됩니다.\n\n이용 가능한 급수원이 적절한 유량을 제공하지만 압력이 부족한 경우, 소방펌프를 사용하여 압력을 증가시킬 수 있습니다. 이용 가능한 급수원이 필요한 유량을 공급할 수 없는 경우에는 보조 급수원이 필요합니다.\n\n소방펌프 구동 형식\n\n1. 전동 모터 구동(Electric Motor Driven Pump)\n   - 가장 보편적, 전원 신뢰성이 확보된 건물에서 사용\n2. 디젤 엔진 구동(Diesel Engine Driven Pump)\n   - 대형 건물, 전력 공급 불안정 지역에서 사용\n   - 연료 저장탱크, 배기, 환기 시스템 필요\n3. 스팀 터빈 구동(Steam Turbine Pump)\n   - 산업 플랜트, 발전소 등 특수 현장\n\n펌프 형식\nEnd-suction, Horizontal split-case, Vertical turbine, Vertical inline 등\n\n용량 및 압력\n설계에서 요구하는 유량과 압력을 확보해야 하며(스탠드파이프 100 psi 이상 등), 흡입 측(Suction)의 안정적인 급수원 확보 및 토출 측(Discharge)에서 체크밸브, OS&Y 게이트밸브, 압력계 설치가 필수적입니다.\n\n펌프실 요구사항\n방수·배수·환기 확보, 화재 시 펌프 보호 가능 구조\n\nController & Power Supply\n1. 펌프 컨트롤러는 UL/FM 승인 제품 사용\n2. 자동 기동(Automatic Start): 압력 스위치 또는 감지 신호에 의해 자동 기동\n3. 수동 기동(Manual Start) 가능\n4. 비상 전원: 전기 펌프의 경우 신뢰성 있는 전원 필요, 디젤 펌프는 자체 비상전원 기능 요구"
+    "AttachComment": "NFPA 20은 소방펌프 설치 요구사항을 규정하지 않는다는 점이 중요합니다. 소방펌프의 필요성은 진압 시스템의 수리학적 요구량과 이용 가능한 급수원에서 제공되는 유량 및 압력을 기준으로 결정됩니다.\n\n이용 가능한 급수원이 적절한 유량을 제공하지만 압력이 부족한 경우, 소방펌프를 사용하여 압력을 증가시킬 수 있습니다. 이용 가능한 급수원이 필요한 유량을 공급할 수 없는 경우에는 보조 급수원이 필요합니다.\n\n소방펌프 구동 형식\n\n1. 전동 모터 구동(Electric Motor Driven Pump)\n   - 가장 보편적, 전원 신뢰성이 확보된 건물에서 사용\n2. 디젤 엔진 구동(Diesel Engine Driven Pump)\n   - 대형 건물, 전력 공급 불안정 지역에서 사용\n   - 연료 저장탱크, 배기, 환기 시스템 필요\n3. 스팀 터빈 구동(Steam Turbine Pump)\n   - 산업 플랜트, 발전소 등 특수 현장\n\n펌프 형식\nEnd-suction, Horizontal split-case, Vertical turbine, Vertical inline 등\n\n용량 및 압력\n설계에서 요구하는 유량과 압력을 확보해야 하며(스탠드파이프 100 psi 이상 등), 흡입 측(Suction)의 안정적인 급수원 확보 및 토출 측(Discharge)에서 체크밸브, OS&Y 게이트밸브, 압력계 설치가 필수적입니다.\n\n펌프실 요구사항\n방수·배수·환기 확보, 화재 시 펌프 보호 가능 구조\n\nController & Power Supply\n1. 펌프 컨트롤러는 UL/FM 승인 제품 사용\n2. 자동 기동(Automatic Start): 압력 스위치 또는 감지 신호에 의해 자동 기동\n3. 수동 기동(Manual Start) 가능\n4. 비상 전원: 전기 펌프의 경우 신뢰성 있는 전원 필요, 디젤 펌프는 자체 비상전원 기능 요구",
+    "ActualFileName": "NFPA 20_4_F.jpg"
   },
   {
     "AttachmentID": "D226",
@@ -3387,7 +3610,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": "Chapter 4는 소방펌프에 대한 일반 요구사항을 포함하고 있습니다. NFPA 20은 소방펌프 설치 요구사항을 규정하지 않는다는 점이 중요합니다. 소방펌프의 필요성은 진압 시스템의 수리학적 요구량과 이용 가능한 급수원에서 제공되는 유량 및 압력을 기준으로 결정됩니다.\n\n이용 가능한 급수원이 적절한 유량을 제공하지만 압력이 부족한 경우, 소방펌프를 사용하여 압력을 증가시킬 수 있습니다. 이용 가능한 급수원이 필요한 유량을 공급할 수 없는 경우에는 보조 급수원이 필요합니다."
+    "AttachComment": "Chapter 4는 소방펌프에 대한 일반 요구사항을 포함하고 있습니다. NFPA 20은 소방펌프 설치 요구사항을 규정하지 않는다는 점이 중요합니다. 소방펌프의 필요성은 진압 시스템의 수리학적 요구량과 이용 가능한 급수원에서 제공되는 유량 및 압력을 기준으로 결정됩니다.\n\n이용 가능한 급수원이 적절한 유량을 제공하지만 압력이 부족한 경우, 소방펌프를 사용하여 압력을 증가시킬 수 있습니다. 이용 가능한 급수원이 필요한 유량을 공급할 수 없는 경우에는 보조 급수원이 필요합니다.",
+    "ActualFileName": "NFPA 20_4_4.1_F.jpg"
   },
   {
     "AttachmentID": "D227",
@@ -3402,7 +3626,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 20_4_4.2_F.jpg"
   },
   {
     "AttachmentID": "D228",
@@ -3417,7 +3642,8 @@
     "AttachTitleKR": "엔드석션 펌프",
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": "엔드석션 펌프는 임펠러 평면에 수직으로 펌프 끝단에서 물이 유입되는 펌프입니다."
+    "AttachComment": "엔드석션 펌프는 임펠러 평면에 수직으로 펌프 끝단에서 물이 유입되는 펌프입니다.",
+    "ActualFileName": "NFPA 20_6_6.1.1.2_F(1).jpg"
   },
   {
     "AttachmentID": "D229",
@@ -3432,7 +3658,8 @@
     "AttachTitleKR": "인라인 펌프",
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": "인라인 펌프는 구동부가 펌프에 의해 지지되고 흡입 및 토출 플랜지가 거의 동일한 중심선상에 있는 펌프입니다."
+    "AttachComment": "인라인 펌프는 구동부가 펌프에 의해 지지되고 흡입 및 토출 플랜지가 거의 동일한 중심선상에 있는 펌프입니다.",
+    "ActualFileName": "NFPA 20_6_6.1.1.2_F(2).jpg"
   },
   {
     "AttachmentID": "D230",
@@ -3447,7 +3674,8 @@
     "AttachTitleKR": "편심 리듀서의 올바른 설치",
     "AttachContentEN": "When the pump suction pipe is larger than the pump suction flange, an eccentric tapered reducer is required to minimize the possibility of air pockets forming at the pump suction. Where the suction supply pipe approaches the suction flange horizontally or vertically from below the pump, the flat portion of the reducer must be on top, with the actual reduction in pipe diameter taking place on the bottom of the fitting. Where the suction supply pipe approaches vertically from above the fire pump, the flat portion of the reducer must be on the bottom, with the actual reduction in pipe diameter taking place on the top of the fitting.",
     "AttachContentKR": "펌프 흡입관이 펌프 흡입 플랜지보다 큰 경우, 펌프 흡입부에서 에어 포켓 형성 가능성을 최소화하기 위해 편심 테이퍼 리듀서가 필요하다. 흡입 급수관이 펌프 하부에서 수평 또는 수직으로 흡입 플랜지에 연결된 경우, 리듀서의 평면 부분은 상부에 있어야 하며, 부속품의 하부에서 관경을 줄여야 한다. 흡입 급수관이 소방펌프 상부에서 수직으로 연결된 경우, 리듀서 평면 부분은 하부에 있어야 하며, 부속품의 상부에서 관경을 줄여야 한다.",
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 20_6_6.3.2_F.jpg"
   },
   {
     "AttachmentID": "D231",
@@ -3462,7 +3690,8 @@
     "AttachTitleKR": "테스트 헤더",
     "AttachContentEN": "Pressure maintenance (jockey or make-up) pumps are generally low-flow, high-pressure pumps. For sprinkler systems, jockey pumps are usually sized to flow a quantity of water less than or equal to that required by a single sprinkler. When sized in this manner, if a sprinkler opens on the system, the jockey pump will not be able to keep up with system demand, the pressure will continue to fall, and the fire pump will start, usually after an additional 5 psi (0.3 bar) has been lost to friction following the start of the jockey pump. See Chapter 14 and A.14.2.6 for recommendations on starting pressures for jockey pumps and fire pumps. The pressure differential between the pressure maintenance pump and the fire pump should be a minimum of 10 psi (0.68 bar) to avoid false starting of the fire pump due to pressure fluctuations in the system piping.\n\nA rule of thumb for sizing jockey pumps supplying underground piping is to use 1 percent of the fire pump rated capacity and add 10 psi (0.68 bar) to the pressure rating of the fire pump.",
     "AttachContentKR": "압력유지(Jockey 또는 Make up) 펌프는 일반적으로 저유량, 고압력 펌프이다. 스프링클러 시스템에서 충압 펌프는 일반적으로 단일 스프링클러의 요구량 이하를 공급하도록 크기가 결정된다. 이런 방식으로 크기를 결정하면 시스템에서 스프링클러가 작동하는 경우 충압 펌프는 시스템 요구량을 따라갈 수 없고 압력은 계속 떨어지며 일반적으로 충압 펌프 시동 후 마찰로 인해 추가로 5 psi (0.3 bar)가 손실된 후 소방펌프가 작동된다. 충압 펌프 및 소방 펌프의 시동압력 권장사항은 제14장 및 A.14.2.6을 참조한다. 시스템 배관의 압력변동으로 인한 소방 펌프의 오시동을 방지하기 위해 압력유지 펌프와 소방 펌프 간의 압력차는 최소 10 psi (0.68 bar)이어야 한다. \n\n경험으로 미루어볼 때 지하배관에 공급하는 충압 펌프의 크기를 결정하기 위해 소방 펌프 정격용량의 1%를 사용하고 소방펌프 압력정격에 10 psi (0.68 bar)를 추가하는 것이 권장된다.",
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 20_4_4.22.1.5_F.jpg"
   },
   {
     "AttachmentID": "D232",
@@ -3477,7 +3706,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": "Notes:\n\n1. Check valve with 3/32 in. (2 mm) hole in clapper not required if prime water not used.\n2. Supply air to be connected to top or side of system pipe.\n3. Each removable air line to be a minimum of 1 in. (25 mm) diameter and a minimum of 6 ft (1.8 m) long.",
     "AttachContentKR": "참고: \n\n1. 마중물을 사용하지 않는 경우 클래퍼에 3/32 in. (2 mm) 구멍이 있는 체크 밸브는 요구되지 않는다.\n2. 공급 공기는 시스템 배관의 상단 또는 측면에 연결되어야 한다.\n3. 각 탈착식 공기 라인은 최소 1 in. (25 mm) 직경이어야 하고 최소 6 ft (1.8 m) 길이여야 한다.",
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 13_8_8.8.2.7.1.1_F(a).jpg"
   },
   {
     "AttachmentID": "D233",
@@ -3492,7 +3722,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": "Notes:\n\n1. Check valve with 3/32 in. (2 mm) hole in clapper not required if prime water not used.\n2. Each removable air line to be a minimum of 1 in. (25 mm) diameter and a minimum of 6 ft (1.8 m) long.",
     "AttachContentKR": "참고: \n\n1. 마중물을 사용하지 않는 경우 클래퍼에 3/32 in. (2 mm) 구멍이 있는 체크 밸브는 요구되지 않는다.\n2. 각 탈착식 공기 라인은 최소 1 in. (25 mm) 직경이어야 하고 최소 6 ft (1.8 m) 길이여야 한다.",
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 13_8_8.8.2.7.1.1_F(b).jpg"
   },
   {
     "AttachmentID": "D234",
@@ -3507,7 +3738,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 13_9_9.2.7.1_T.jpg"
   },
   {
     "AttachmentID": "D235",
@@ -3522,7 +3754,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 13_9_9.3.4.2.4_T.jpg"
   },
   {
     "AttachmentID": "D236",
@@ -3537,7 +3770,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 13_9_9.3.7_F(a).jpg"
   },
   {
     "AttachmentID": "D237",
@@ -3552,7 +3786,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 13_9_9.3.7_F(b).jpg"
   },
   {
     "AttachmentID": "D238",
@@ -3567,7 +3802,8 @@
     "AttachTitleKR": "인랙 스크링클러의 적용",
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 13_25_25.1.2_T.jpg"
   },
   {
     "AttachmentID": "D239",
@@ -3582,7 +3818,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": "Storage Sprinkler System Design Checklist는 NFPA 13의 각 저장 설계 장(Chapters 21~26)을 검토하기 전에 활용해야 하는 체크리스트입니다. 이 양식에 필요한 정보를 먼저 파악해 두면 적용 가능한 설계 방식을 훨씬 쉽게 찾을 수 있습니다.\n\n많은 설계자들이 단순히 저장물 등급(Commodity Class)과 저장 형태(Rack, piled 등)만 확인한 뒤 곧바로 저장 설계 장으로 들어가 지침을 찾는 경우가 있습니다. 물론 그 방법도 가능하지만 저장 설계에서도 필요한 정보를 미리 파악하지 않으면 결국 설계를 다시 검토해야 하는 문제가 생깁니다.\n\n저장 높이, 천장과 저장물 사이의 이격(Clearance), 저장 배열(Storage arrangement), 천장 높이와 같은 중요한 정보를 설계 초기에 확인하지 않으면 이후 설계 과정에서 여러 복잡한 문제가 발생할 수 있습니다.\n\n체크리스트에 포함된 모든 정보는 허용 가능한 설계 옵션을 결정하기 위해 반드시 필요한 요소이므로 설계를 시작할 때 이 체크리스트를 먼저 작성하는 것이 매우 유용합니다.",
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 13_20_20.4.8_F(1).jpg"
   },
   {
     "AttachmentID": "D240",
@@ -3597,7 +3834,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": "위의 체크리스트 양식을 작성한 후에는 설계자가 해당 프로젝트에 적용되는 설계 장(Chapter)을 찾아 설계 과정을 보다 체계적으로 진행할 수 있습니다.\n\n이때 도움이 되는 도구로 아래 세 개의 워크플로(Flowchart)가 있습니다.\n\n이 도표들은 일련의 질문과 답변 형식으로 구성되어 있어 설계자가 어떤 저장 장(Chapter)과 세부 조항(Section)을 참조해야 하는지를 판단할 수 있도록 안내합니다.\n\n또한 이 워크플로는 NFPA 13의 적용 범위를 벗어나는 경우에 대한 지침도 제공합니다.\n\n예를 들어 천장의 경사각이 지나치게 급하거나 개방형 상부(Open-top) 용기를 사용하는 경우 등은 NFPA 13의 범위 밖에 해당하므로 동등 설계(Equivalency) 승인을 받아야 할 수 있음을 경고합니다.\n\n이러한 흐름도를 올바르게 사용하려면 체크리스트를 먼저 완성하거나 그와 동일한 방식으로 필요한 정보를 정리해 두어야 합니다.\n\n플로우차트의 첫 단계(Branch)는 설계자가 저장물 등급(Commodity Class)을 식별하는 것입니다.\n\n체크리스트에서 파악한 저장물 등급과 팔레트의 수정 요인(Pallet modifiers) 등을 포함하여 설계자는 이후 단계의 질문에 순서대로 답해 나가면서 자신이 적용해야 할 설계 장과 조항을 결정할 수 있습니다.",
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 13_20_20.4.8_F(2).jpg"
   },
   {
     "AttachmentID": "D241",
@@ -3612,7 +3850,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 13_20_20.4.8_F(3).jpg"
   },
   {
     "AttachmentID": "D242",
@@ -3627,7 +3866,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 13_20_20.4.8_F(4).jpg"
   },
   {
     "AttachmentID": "D243",
@@ -3642,7 +3882,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 13_Annex A_A.20.3_T.jpg"
   },
   {
     "AttachmentID": "D244",
@@ -3657,7 +3898,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 13_Annex A_A.20.4_T(a).jpg"
   },
   {
     "AttachmentID": "D245",
@@ -3672,7 +3914,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 13_Annex A_A.20.4_T(b).jpg"
   },
   {
     "AttachmentID": "D246",
@@ -3687,7 +3930,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 214_5_5.2.4.1_F.jpg"
   },
   {
     "AttachmentID": "D247",
@@ -3702,7 +3946,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 214_5_5.2.4.2_F.jpg"
   },
   {
     "AttachmentID": "D248",
@@ -3717,7 +3962,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 214_Annex A_A.5.2.4.1_F(a).jpg"
   },
   {
     "AttachmentID": "D249",
@@ -3732,7 +3978,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 214_Annex A_A.5.2.4.1_F(b).jpg"
   },
   {
     "AttachmentID": "D250",
@@ -3747,7 +3994,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 214_Annex A_A.5.2.4.1_F(c).jpg"
   },
   {
     "AttachmentID": "D251",
@@ -3762,7 +4010,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 214_Annex A_A.5.2.4.1_F(d).jpg"
   },
   {
     "AttachmentID": "D252",
@@ -3777,7 +4026,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 214_Annex A_A.5.6.1.1_F.jpg"
   },
   {
     "AttachmentID": "D253",
@@ -3792,7 +4042,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 14_10_10.2.4_F(a).jpg"
   },
   {
     "AttachmentID": "D254",
@@ -3807,7 +4058,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 14_10_10.2.4_F(b).jpg"
   },
   {
     "AttachmentID": "D255",
@@ -3822,7 +4074,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 14_10_10.2.6_F(a).jpg"
   },
   {
     "AttachmentID": "D256",
@@ -3837,7 +4090,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 14_10_10.2.6_F(b).jpg"
   },
   {
     "AttachmentID": "D257",
@@ -3852,7 +4106,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 14_9_9.3.3_F.jpg"
   },
   {
     "AttachmentID": "D258",
@@ -3867,7 +4122,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 14_9_9.5.2.3_F.jpg"
   },
   {
     "AttachmentID": "D259",
@@ -3882,7 +4138,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 214_9_9.5.2.2_F.jpg"
   },
   {
     "AttachmentID": "D260",
@@ -3897,7 +4154,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 214_9_9.5.2.1.1_F.jpg"
   },
   {
     "AttachmentID": "D261",
@@ -3912,7 +4170,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 214_12_12.4.9.1_F.jpg"
   },
   {
     "AttachmentID": "D262",
@@ -3927,7 +4186,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 214_12_12.6.1.2_F.jpg"
   },
   {
     "AttachmentID": "D263",
@@ -3942,7 +4202,8 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": "NFPA 24에서는 배관의 최소 유량을 수치로 지정하지 않고 해당 배관이 공급하는 NFPA 13(스프링클러), NFPA 14(옥내소화전), NFPA 20(펌프) 등의 설계 유량을 만족하도록 해야 한다고 규정합니다. 본 보고서 NFPA 13 Table 19.2.3.1.2 참조\n\n다만 NFPA 1 Fire Code에서는 아래와 같이 최소 유량과 압력을 요구합니다.\n\nNFPA 1, Section 18.5.1.1\nFire hydrants shall not be required where the water distribution system is not capable of providing a fire flow of greater than 500 gpm (1893 L/min) at a residual pressure of 20 psi (139.9 kPa).\n\n급수 배급 시스템이 잔류 압력 20 psi (139.9 kPa)에서 500 gpm (1,893 L/min)을 초과하는 소화 용수량을 제공할 수 없는 경우 소화전은 요구되지 않는다."
+    "AttachComment": "NFPA 24에서는 배관의 최소 유량을 수치로 지정하지 않고 해당 배관이 공급하는 NFPA 13(스프링클러), NFPA 14(옥내소화전), NFPA 20(펌프) 등의 설계 유량을 만족하도록 해야 한다고 규정합니다. 본 보고서 NFPA 13 Table 19.2.3.1.2 참조\n\n다만 NFPA 1 Fire Code에서는 아래와 같이 최소 유량과 압력을 요구합니다.\n\nNFPA 1, Section 18.5.1.1\nFire hydrants shall not be required where the water distribution system is not capable of providing a fire flow of greater than 500 gpm (1893 L/min) at a residual pressure of 20 psi (139.9 kPa).\n\n급수 배급 시스템이 잔류 압력 20 psi (139.9 kPa)에서 500 gpm (1,893 L/min)을 초과하는 소화 용수량을 제공할 수 없는 경우 소화전은 요구되지 않는다.",
+    "ActualFileName": "NFPA 24_10_10.10.2.1.3_T.jpg"
   },
   {
     "AttachmentID": "D264",
@@ -3957,6 +4218,7 @@
     "AttachTitleKR": null,
     "AttachContentEN": null,
     "AttachContentKR": null,
-    "AttachComment": null
+    "AttachComment": null,
+    "ActualFileName": "NFPA 92_4_4.4.2.1.1_T.jpg"
   }
 ]
