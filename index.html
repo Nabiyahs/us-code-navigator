@@ -573,9 +573,9 @@
     .book-container {
       position: relative;
       width: 90%;
-      max-width: 1200px;
-      height: 80vh;
-      max-height: 800px;
+      max-width: 1100px;
+      height: 75vh;
+      max-height: 650px;
       perspective: 2000px;
       transform: scale(0.8) rotateX(10deg);
       opacity: 0;
@@ -619,7 +619,7 @@
 
     .book-page {
       flex: 1;
-      padding: 40px 50px;
+      padding: 20px 28px;
       overflow-y: auto;
       background: linear-gradient(to bottom, #ffffff 0%, #fefefe 100%);
       position: relative;
@@ -670,7 +670,29 @@
       color: white;
     }
 
-    /* Book card in bookshelf - real book proportions (2:3 ratio) */
+    /* Bookshelf container - magazine rack style */
+    .bookshelf-container {
+      background: linear-gradient(180deg, #e8ddd4 0%, #d4c8bc 100%);
+      border-radius: 12px;
+      padding: 32px 48px 24px 48px;
+      box-shadow:
+        inset 0 2px 8px rgba(0,0,0,0.1),
+        0 4px 20px rgba(0,0,0,0.15);
+      position: relative;
+    }
+    .bookshelf-container::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 24px;
+      right: 24px;
+      height: 12px;
+      background: linear-gradient(180deg, #a89080 0%, #8b7565 100%);
+      border-radius: 0 0 8px 8px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+
+    /* Book card in bookshelf - smaller size with readable fonts */
     .book-item {
       aspect-ratio: 2 / 3;
       transition: all 0.3s ease;
@@ -678,17 +700,18 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      border-radius: 4px 8px 8px 4px;
+      border-radius: 3px 6px 6px 3px;
       box-shadow:
-        4px 4px 10px rgba(0,0,0,0.3),
-        inset -2px 0 4px rgba(255,255,255,0.2);
+        3px 3px 8px rgba(0,0,0,0.3),
+        inset -2px 0 3px rgba(255,255,255,0.2);
+      max-width: 130px;
     }
 
     .book-item:hover {
-      transform: translateY(-10px) rotateY(-5deg);
+      transform: translateY(-8px) rotateY(-3deg);
       box-shadow:
-        8px 12px 20px rgba(0,0,0,0.35),
-        inset -2px 0 4px rgba(255,255,255,0.2);
+        6px 10px 16px rgba(0,0,0,0.35),
+        inset -2px 0 3px rgba(255,255,255,0.2);
     }
 
     .book-spine-effect {
@@ -696,24 +719,24 @@
       left: 0;
       top: 0;
       bottom: 0;
-      width: 12px;
+      width: 8px;
       background: linear-gradient(to right,
         rgba(0,0,0,0.4) 0%,
         rgba(0,0,0,0.2) 30%,
         rgba(255,255,255,0.1) 50%,
         rgba(0,0,0,0.15) 100%);
-      border-radius: 4px 0 0 4px;
+      border-radius: 3px 0 0 3px;
     }
 
     .book-cover-top {
-      padding: 12px 14px 8px 20px;
+      padding: 10px 10px 6px 14px;
       flex: 1;
       display: flex;
       flex-direction: column;
     }
 
     .book-cover-bottom {
-      padding: 8px 14px 12px 20px;
+      padding: 6px 10px 8px 14px;
       border-top: 1px solid rgba(255,255,255,0.15);
     }
 
@@ -910,24 +933,14 @@
 <div class="p-8">
 <div class="max-w-7xl mx-auto">
 <!-- Section 1: Disclaimer (교체됨: Quick Actions → Disclaimer) -->
-<section class="mb-4">
-<div class="bg-gradient-to-r from-amber-50 to-orange-50 rounded-lg shadow-sm p-4 border-l-4 border-[#F76C6C]">
-  <div class="flex items-start space-x-3">
-    <div class="flex-shrink-0">
-      <div class="w-8 h-8 bg-[#F76C6C] bg-opacity-20 rounded-full flex items-center justify-center">
-        <svg class="w-4 h-4 text-[#F76C6C]" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-          <path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-        </svg>
-      </div>
-    </div>
-    <div class="flex-1">
-      <h2 class="text-base font-bold text-[#24305E] mb-1">DISCLAIMER</h2>
-      <div class="space-y-1 text-gray-700 text-sm font-medium leading-relaxed">
-        <p>본 웹페이지에 수록된 코드 내용은 관련 법규 및 기준의 일부 발췌본이며, 이해를 돕기 위해 해설, 주석 및 참고 이미지를 포함하고 있습니다.</p>
-        <p>정확하고 전체적인 내용을 확인하기 위해서는 반드시 <span class="text-[#F76C6C]">구매한 코드 원본을 열람 및 참고</span>해주시기 바랍니다.</p>
-        <p>댓글 기능을 통해 각 조항에 관련된 프로젝트 적용 사례나 해석을 공유할 수 있도록 지원할 예정입니다.</p>
-      </div>
-    </div>
+<section class="mb-10">
+<div class="inline-flex items-start space-x-2 bg-gradient-to-r from-amber-50 to-orange-50 rounded-lg shadow-sm px-4 py-3 border-l-4 border-[#F76C6C]">
+  <svg class="w-4 h-4 text-[#F76C6C] flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+    <path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+  </svg>
+  <div>
+    <span class="text-sm font-bold text-[#24305E]">DISCLAIMER</span>
+    <span class="text-xs text-gray-600 ml-2">본 웹페이지의 코드 내용은 일부 발췌본이며, 정확한 내용은 반드시 <span class="text-[#F76C6C] font-medium">구매한 코드 원본</span>을 참고해주세요.</span>
   </div>
 </div>
 </section>
@@ -984,211 +997,212 @@
     </div>
   </div>
 </div>
-<!-- 책장 그리드 - 5 columns -->
-<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5" id="bookshelfGrid">
+<!-- 책장 그리드 - 책장 컨테이너 추가 -->
+<div class="bookshelf-container mx-8">
+<div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 gap-4 justify-items-center pb-4" id="bookshelfGrid">
 <!-- 1. IBC 2024 - 빨강 -->
 <div class="book-item bg-gradient-to-b from-[#E74C3C] to-[#C0392B] relative overflow-hidden" data-code-id="MC001" data-version-id="MCV002" data-org="icc" data-discipline="arch" data-year="2024" onclick="openBookPopup('IBC')">
   <div class="book-spine-effect"></div>
   <div class="book-cover-top">
-    <span class="text-[9px] font-semibold text-white/80 uppercase tracking-wider">ICC</span>
-    <h3 class="text-xl font-black text-white leading-tight mt-2">IBC</h3>
-    <p class="text-[10px] text-white/90 font-medium mt-1 leading-snug">International Building Code</p>
-    <p class="text-[9px] text-white/70 mt-1 leading-snug">국제건축법규</p>
+    <span class="text-[8px] font-semibold text-white/80 uppercase tracking-wider">ICC</span>
+    <h3 class="text-lg font-black text-white leading-tight mt-1">IBC</h3>
+    <p class="text-[11px] text-white/95 font-semibold mt-1 leading-snug">International Building Code</p>
+    <p class="text-[10px] text-white/80 mt-0.5 leading-snug">국제건축법규</p>
   </div>
   <div class="book-cover-bottom">
-    <span class="text-xs font-bold text-white/90">2024</span>
+    <span class="text-[10px] font-bold text-white/90">2024</span>
   </div>
 </div>
 <!-- 2. NFPA 13 - 주황 -->
 <div class="book-item bg-gradient-to-b from-[#E67E22] to-[#D35400] relative overflow-hidden" data-code-id="MC007" data-version-id="MCV003" data-org="nfpa" data-discipline="fire-mech" data-year="2025" onclick="openBookPopup('NFPA13')">
   <div class="book-spine-effect"></div>
   <div class="book-cover-top">
-    <span class="text-[9px] font-semibold text-white/80 uppercase tracking-wider">NFPA</span>
-    <h3 class="text-xl font-black text-white leading-tight mt-2">NFPA 13</h3>
-    <p class="text-[10px] text-white/90 font-medium mt-1 leading-snug">Sprinkler Systems</p>
-    <p class="text-[9px] text-white/70 mt-1 leading-snug">스프링클러 설비 설치 기준</p>
+    <span class="text-[8px] font-semibold text-white/80 uppercase tracking-wider">NFPA</span>
+    <h3 class="text-lg font-black text-white leading-tight mt-1">NFPA 13</h3>
+    <p class="text-[11px] text-white/95 font-semibold mt-1 leading-snug">Sprinkler Systems</p>
+    <p class="text-[10px] text-white/80 mt-0.5 leading-snug">스프링클러 설비 설치 기준</p>
   </div>
   <div class="book-cover-bottom">
-    <span class="text-xs font-bold text-white/90">2025</span>
+    <span class="text-[10px] font-bold text-white/90">2025</span>
   </div>
 </div>
 <!-- 3. NFPA 14 - 노랑 -->
 <div class="book-item bg-gradient-to-b from-[#F1C40F] to-[#D4AC0D] relative overflow-hidden" data-code-id="MC008" data-version-id="MCV004" data-org="nfpa" data-discipline="fire-mech" data-year="2024" onclick="openBookPopup('NFPA14')">
   <div class="book-spine-effect"></div>
   <div class="book-cover-top">
-    <span class="text-[9px] font-semibold text-[#24305E]/80 uppercase tracking-wider">NFPA</span>
-    <h3 class="text-xl font-black text-[#24305E] leading-tight mt-2">NFPA 14</h3>
-    <p class="text-[10px] text-[#24305E]/90 font-medium mt-1 leading-snug">Standpipe & Hose Systems</p>
-    <p class="text-[9px] text-[#24305E]/70 mt-1 leading-snug">연결송수관 및 호스시스템</p>
+    <span class="text-[8px] font-semibold text-[#24305E]/80 uppercase tracking-wider">NFPA</span>
+    <h3 class="text-lg font-black text-[#24305E] leading-tight mt-1">NFPA 14</h3>
+    <p class="text-[11px] text-[#24305E]/95 font-semibold mt-1 leading-snug">Standpipe & Hose Systems</p>
+    <p class="text-[10px] text-[#24305E]/80 mt-0.5 leading-snug">연결송수관 및 호스시스템</p>
   </div>
   <div class="book-cover-bottom">
-    <span class="text-xs font-bold text-[#24305E]/90">2024</span>
+    <span class="text-[10px] font-bold text-[#24305E]/90">2024</span>
   </div>
 </div>
 <!-- 4. NFPA 20 - 초록 -->
 <div class="book-item bg-gradient-to-b from-[#27AE60] to-[#1E8449] relative overflow-hidden" data-code-id="MC009" data-version-id="MCV005" data-org="nfpa" data-discipline="fire-mech" data-year="2025" onclick="openBookPopup('NFPA20')">
   <div class="book-spine-effect"></div>
   <div class="book-cover-top">
-    <span class="text-[9px] font-semibold text-white/80 uppercase tracking-wider">NFPA</span>
-    <h3 class="text-xl font-black text-white leading-tight mt-2">NFPA 20</h3>
-    <p class="text-[10px] text-white/90 font-medium mt-1 leading-snug">Fire Pumps</p>
-    <p class="text-[9px] text-white/70 mt-1 leading-snug">소방용 고정펌프 설치 기준</p>
+    <span class="text-[8px] font-semibold text-white/80 uppercase tracking-wider">NFPA</span>
+    <h3 class="text-lg font-black text-white leading-tight mt-1">NFPA 20</h3>
+    <p class="text-[11px] text-white/95 font-semibold mt-1 leading-snug">Fire Pumps</p>
+    <p class="text-[10px] text-white/80 mt-0.5 leading-snug">소방용 고정펌프 설치 기준</p>
   </div>
   <div class="book-cover-bottom">
-    <span class="text-xs font-bold text-white/90">2025</span>
+    <span class="text-[10px] font-bold text-white/90">2025</span>
   </div>
 </div>
 <!-- 5. NFPA 72 - 파랑 -->
 <div class="book-item bg-gradient-to-b from-[#3498DB] to-[#2980B9] relative overflow-hidden" data-code-id="MC010" data-version-id="MCV006" data-org="nfpa" data-discipline="fire-elec" data-year="2025" onclick="openBookPopup('NFPA72')">
   <div class="book-spine-effect"></div>
   <div class="book-cover-top">
-    <span class="text-[9px] font-semibold text-white/80 uppercase tracking-wider">NFPA</span>
-    <h3 class="text-xl font-black text-white leading-tight mt-2">NFPA 72</h3>
-    <p class="text-[10px] text-white/90 font-medium mt-1 leading-snug">Fire Alarm & Signaling</p>
-    <p class="text-[9px] text-white/70 mt-1 leading-snug">화재경보 및 신호설비 법규</p>
+    <span class="text-[8px] font-semibold text-white/80 uppercase tracking-wider">NFPA</span>
+    <h3 class="text-lg font-black text-white leading-tight mt-1">NFPA 72</h3>
+    <p class="text-[11px] text-white/95 font-semibold mt-1 leading-snug">Fire Alarm & Signaling</p>
+    <p class="text-[10px] text-white/80 mt-0.5 leading-snug">화재경보 및 신호설비 법규</p>
   </div>
   <div class="book-cover-bottom">
-    <span class="text-xs font-bold text-white/90">2025</span>
+    <span class="text-[10px] font-bold text-white/90">2025</span>
   </div>
 </div>
 <!-- 6. NFPA 101 - 남색 -->
 <div class="book-item bg-gradient-to-b from-[#24305E] to-[#1a2342] relative overflow-hidden" data-code-id="MC024" data-version-id="MCV020" data-org="nfpa" data-discipline="arch" data-year="2024" onclick="openBookPopup('NFPA101')">
   <div class="book-spine-effect"></div>
   <div class="book-cover-top">
-    <span class="text-[9px] font-semibold text-white/80 uppercase tracking-wider">NFPA</span>
-    <h3 class="text-xl font-black text-white leading-tight mt-2">NFPA 101</h3>
-    <p class="text-[10px] text-white/90 font-medium mt-1 leading-snug">Life Safety Code</p>
-    <p class="text-[9px] text-white/70 mt-1 leading-snug">인명안전법규</p>
+    <span class="text-[8px] font-semibold text-white/80 uppercase tracking-wider">NFPA</span>
+    <h3 class="text-lg font-black text-white leading-tight mt-1">NFPA 101</h3>
+    <p class="text-[11px] text-white/95 font-semibold mt-1 leading-snug">Life Safety Code</p>
+    <p class="text-[10px] text-white/80 mt-0.5 leading-snug">인명안전법규</p>
   </div>
   <div class="book-cover-bottom">
-    <span class="text-xs font-bold text-white/90">2024</span>
+    <span class="text-[10px] font-bold text-white/90">2024</span>
   </div>
 </div>
 <!-- 7. NFPA 318 - 보라 -->
 <div class="book-item bg-gradient-to-b from-[#9B59B6] to-[#8E44AD] relative overflow-hidden" data-code-id="MC013" data-version-id="MCV009" data-org="nfpa" data-discipline="fire-mech" data-year="2025" onclick="openBookPopup('NFPA318')">
   <div class="book-spine-effect"></div>
   <div class="book-cover-top">
-    <span class="text-[9px] font-semibold text-white/80 uppercase tracking-wider">NFPA</span>
-    <h3 class="text-xl font-black text-white leading-tight mt-2">NFPA 318</h3>
-    <p class="text-[10px] text-white/90 font-medium mt-1 leading-snug">Semiconductor Facilities</p>
-    <p class="text-[9px] text-white/70 mt-1 leading-snug">반도체 제조시설 방호 기준</p>
+    <span class="text-[8px] font-semibold text-white/80 uppercase tracking-wider">NFPA</span>
+    <h3 class="text-lg font-black text-white leading-tight mt-1">NFPA 318</h3>
+    <p class="text-[11px] text-white/95 font-semibold mt-1 leading-snug">Semiconductor Facilities</p>
+    <p class="text-[10px] text-white/80 mt-0.5 leading-snug">반도체 제조시설 방호 기준</p>
   </div>
   <div class="book-cover-bottom">
-    <span class="text-xs font-bold text-white/90">2025</span>
+    <span class="text-[10px] font-bold text-white/90">2025</span>
   </div>
 </div>
 <!-- 8. NFPA 214 - 빨강 -->
 <div class="book-item bg-gradient-to-b from-[#E74C3C] to-[#C0392B] relative overflow-hidden" data-code-id="MC011" data-version-id="MCV007" data-org="nfpa" data-discipline="fire-mech" data-year="2021" onclick="openBookPopup('NFPA214')">
   <div class="book-spine-effect"></div>
   <div class="book-cover-top">
-    <span class="text-[9px] font-semibold text-white/80 uppercase tracking-wider">NFPA</span>
-    <h3 class="text-xl font-black text-white leading-tight mt-2">NFPA 214</h3>
-    <p class="text-[10px] text-white/90 font-medium mt-1 leading-snug">Water-Cooling Towers</p>
-    <p class="text-[9px] text-white/70 mt-1 leading-snug">수냉식 냉각탑 기준</p>
+    <span class="text-[8px] font-semibold text-white/80 uppercase tracking-wider">NFPA</span>
+    <h3 class="text-lg font-black text-white leading-tight mt-1">NFPA 214</h3>
+    <p class="text-[11px] text-white/95 font-semibold mt-1 leading-snug">Water-Cooling Towers</p>
+    <p class="text-[10px] text-white/80 mt-0.5 leading-snug">수냉식 냉각탑 기준</p>
   </div>
   <div class="book-cover-bottom">
-    <span class="text-xs font-bold text-white/90">2021</span>
+    <span class="text-[10px] font-bold text-white/90">2021</span>
   </div>
 </div>
 <!-- 9. NFPA 96 - 주황 -->
 <div class="book-item bg-gradient-to-b from-[#E67E22] to-[#D35400] relative overflow-hidden" data-code-id="MC012" data-version-id="MCV008" data-org="nfpa" data-discipline="fire-mech" data-year="2024" onclick="openBookPopup('NFPA96')">
   <div class="book-spine-effect"></div>
   <div class="book-cover-top">
-    <span class="text-[9px] font-semibold text-white/80 uppercase tracking-wider">NFPA</span>
-    <h3 class="text-xl font-black text-white leading-tight mt-2">NFPA 96</h3>
-    <p class="text-[10px] text-white/90 font-medium mt-1 leading-snug">Commercial Cooking</p>
-    <p class="text-[9px] text-white/70 mt-1 leading-snug">상업용 주방 환기 및 화재방호</p>
+    <span class="text-[8px] font-semibold text-white/80 uppercase tracking-wider">NFPA</span>
+    <h3 class="text-lg font-black text-white leading-tight mt-1">NFPA 96</h3>
+    <p class="text-[11px] text-white/95 font-semibold mt-1 leading-snug">Commercial Cooking</p>
+    <p class="text-[10px] text-white/80 mt-0.5 leading-snug">상업용 주방 환기 및 화재방호</p>
   </div>
   <div class="book-cover-bottom">
-    <span class="text-xs font-bold text-white/90">2024</span>
+    <span class="text-[10px] font-bold text-white/90">2024</span>
   </div>
 </div>
 <!-- 10. NFPA 24 - 노랑 -->
 <div class="book-item bg-gradient-to-b from-[#F1C40F] to-[#D4AC0D] relative overflow-hidden" data-code-id="MC014" data-version-id="MCV010" data-org="nfpa" data-discipline="fire-mech" data-year="2025" onclick="openBookPopup('NFPA24')">
   <div class="book-spine-effect"></div>
   <div class="book-cover-top">
-    <span class="text-[9px] font-semibold text-[#24305E]/80 uppercase tracking-wider">NFPA</span>
-    <h3 class="text-xl font-black text-[#24305E] leading-tight mt-2">NFPA 24</h3>
-    <p class="text-[10px] text-[#24305E]/90 font-medium mt-1 leading-snug">Private Fire Service Mains</p>
-    <p class="text-[9px] text-[#24305E]/70 mt-1 leading-snug">전용 소방배관 설치 기준</p>
+    <span class="text-[8px] font-semibold text-[#24305E]/80 uppercase tracking-wider">NFPA</span>
+    <h3 class="text-lg font-black text-[#24305E] leading-tight mt-1">NFPA 24</h3>
+    <p class="text-[11px] text-[#24305E]/95 font-semibold mt-1 leading-snug">Private Fire Service Mains</p>
+    <p class="text-[10px] text-[#24305E]/80 mt-0.5 leading-snug">전용 소방배관 설치 기준</p>
   </div>
   <div class="book-cover-bottom">
-    <span class="text-xs font-bold text-[#24305E]/90">2025</span>
+    <span class="text-[10px] font-bold text-[#24305E]/90">2025</span>
   </div>
 </div>
 <!-- 11. NFPA 12 - 초록 -->
 <div class="book-item bg-gradient-to-b from-[#27AE60] to-[#1E8449] relative overflow-hidden" data-code-id="MC016" data-version-id="MCV012" data-org="nfpa" data-discipline="fire-mech" data-year="2025" onclick="openBookPopup('NFPA12')">
   <div class="book-spine-effect"></div>
   <div class="book-cover-top">
-    <span class="text-[9px] font-semibold text-white/80 uppercase tracking-wider">NFPA</span>
-    <h3 class="text-xl font-black text-white leading-tight mt-2">NFPA 12</h3>
-    <p class="text-[10px] text-white/90 font-medium mt-1 leading-snug">CO2 Extinguishing Systems</p>
-    <p class="text-[9px] text-white/70 mt-1 leading-snug">이산화탄소 소화설비 기준</p>
+    <span class="text-[8px] font-semibold text-white/80 uppercase tracking-wider">NFPA</span>
+    <h3 class="text-lg font-black text-white leading-tight mt-1">NFPA 12</h3>
+    <p class="text-[11px] text-white/95 font-semibold mt-1 leading-snug">CO2 Extinguishing Systems</p>
+    <p class="text-[10px] text-white/80 mt-0.5 leading-snug">이산화탄소 소화설비 기준</p>
   </div>
   <div class="book-cover-bottom">
-    <span class="text-xs font-bold text-white/90">2025</span>
+    <span class="text-[10px] font-bold text-white/90">2025</span>
   </div>
 </div>
 <!-- 12. NFPA 15 - 파랑 -->
 <div class="book-item bg-gradient-to-b from-[#3498DB] to-[#2980B9] relative overflow-hidden" data-code-id="MC018" data-version-id="MCV014" data-org="nfpa" data-discipline="fire-mech" data-year="2022" onclick="openBookPopup('NFPA15')">
   <div class="book-spine-effect"></div>
   <div class="book-cover-top">
-    <span class="text-[9px] font-semibold text-white/80 uppercase tracking-wider">NFPA</span>
-    <h3 class="text-xl font-black text-white leading-tight mt-2">NFPA 15</h3>
-    <p class="text-[10px] text-white/90 font-medium mt-1 leading-snug">Water Spray Systems</p>
-    <p class="text-[9px] text-white/70 mt-1 leading-snug">소방용 물분무 고정설비 기준</p>
+    <span class="text-[8px] font-semibold text-white/80 uppercase tracking-wider">NFPA</span>
+    <h3 class="text-lg font-black text-white leading-tight mt-1">NFPA 15</h3>
+    <p class="text-[11px] text-white/95 font-semibold mt-1 leading-snug">Water Spray Systems</p>
+    <p class="text-[10px] text-white/80 mt-0.5 leading-snug">소방용 물분무 고정설비 기준</p>
   </div>
   <div class="book-cover-bottom">
-    <span class="text-xs font-bold text-white/90">2022</span>
+    <span class="text-[10px] font-bold text-white/90">2022</span>
   </div>
 </div>
 <!-- 13. NFPA 16 - 남색 -->
 <div class="book-item bg-gradient-to-b from-[#24305E] to-[#1a2342] relative overflow-hidden" data-code-id="MC019" data-version-id="MCV015" data-org="nfpa" data-discipline="fire-mech" data-year="2010" onclick="openBookPopup('NFPA16')">
   <div class="book-spine-effect"></div>
   <div class="book-cover-top">
-    <span class="text-[9px] font-semibold text-white/80 uppercase tracking-wider">NFPA</span>
-    <h3 class="text-xl font-black text-white leading-tight mt-2">NFPA 16</h3>
-    <p class="text-[10px] text-white/90 font-medium mt-1 leading-snug">Foam-Water Systems</p>
-    <p class="text-[9px] text-white/70 mt-1 leading-snug">포-물분무 스프링클러 시스템</p>
+    <span class="text-[8px] font-semibold text-white/80 uppercase tracking-wider">NFPA</span>
+    <h3 class="text-lg font-black text-white leading-tight mt-1">NFPA 16</h3>
+    <p class="text-[11px] text-white/95 font-semibold mt-1 leading-snug">Foam-Water Systems</p>
+    <p class="text-[10px] text-white/80 mt-0.5 leading-snug">포-물분무 스프링클러 시스템</p>
   </div>
   <div class="book-cover-bottom">
-    <span class="text-xs font-bold text-white/90">2010</span>
+    <span class="text-[10px] font-bold text-white/90">2010</span>
   </div>
 </div>
 <!-- 14. NFPA 92 - 보라 -->
 <div class="book-item bg-gradient-to-b from-[#9B59B6] to-[#8E44AD] relative overflow-hidden" data-code-id="MC020" data-version-id="MCV016" data-org="nfpa" data-discipline="fire-mech" data-year="2024" onclick="openBookPopup('NFPA92')">
   <div class="book-spine-effect"></div>
   <div class="book-cover-top">
-    <span class="text-[9px] font-semibold text-white/80 uppercase tracking-wider">NFPA</span>
-    <h3 class="text-xl font-black text-white leading-tight mt-2">NFPA 92</h3>
-    <p class="text-[10px] text-white/90 font-medium mt-1 leading-snug">Smoke Control Systems</p>
-    <p class="text-[9px] text-white/70 mt-1 leading-snug">제연설비 기준</p>
+    <span class="text-[8px] font-semibold text-white/80 uppercase tracking-wider">NFPA</span>
+    <h3 class="text-lg font-black text-white leading-tight mt-1">NFPA 92</h3>
+    <p class="text-[11px] text-white/95 font-semibold mt-1 leading-snug">Smoke Control Systems</p>
+    <p class="text-[10px] text-white/80 mt-0.5 leading-snug">제연설비 기준</p>
   </div>
   <div class="book-cover-bottom">
-    <span class="text-xs font-bold text-white/90">2024</span>
+    <span class="text-[10px] font-bold text-white/90">2024</span>
   </div>
 </div>
 <!-- 15. NFPA 1 - 빨강 -->
 <div class="book-item bg-gradient-to-b from-[#E74C3C] to-[#C0392B] relative overflow-hidden" data-code-id="MC015" data-version-id="MCV011" data-org="nfpa" data-discipline="fire-mech" data-year="2024" onclick="openBookPopup('NFPA1')">
   <div class="book-spine-effect"></div>
   <div class="book-cover-top">
-    <span class="text-[9px] font-semibold text-white/80 uppercase tracking-wider">NFPA</span>
-    <h3 class="text-xl font-black text-white leading-tight mt-2">NFPA 1</h3>
-    <p class="text-[10px] text-white/90 font-medium mt-1 leading-snug">Fire Code</p>
-    <p class="text-[9px] text-white/70 mt-1 leading-snug">화재 법규</p>
+    <span class="text-[8px] font-semibold text-white/80 uppercase tracking-wider">NFPA</span>
+    <h3 class="text-lg font-black text-white leading-tight mt-1">NFPA 1</h3>
+    <p class="text-[11px] text-white/95 font-semibold mt-1 leading-snug">Fire Code</p>
+    <p class="text-[10px] text-white/80 mt-0.5 leading-snug">화재 법규</p>
   </div>
   <div class="book-cover-bottom">
-    <span class="text-xs font-bold text-white/90">2024</span>
+    <span class="text-[10px] font-bold text-white/90">2024</span>
   </div>
 </div>
 <!-- 미지원 코드들 - 회색 -->
 <div class="book-item bg-gradient-to-b from-gray-400 to-gray-500 relative overflow-hidden opacity-50 cursor-not-allowed" data-org="other" data-discipline="arch" data-year="2024">
   <div class="book-spine-effect"></div>
   <div class="book-cover-top">
-    <span class="text-[9px] font-semibold text-white/60 uppercase tracking-wider">준비중</span>
-    <h3 class="text-xl font-black text-white/80 leading-tight mt-2">ADA</h3>
-    <p class="text-[10px] text-white/70 font-medium mt-1 leading-snug">Americans with Disabilities</p>
-    <p class="text-[9px] text-white/50 mt-1 leading-snug">미국 장애인법</p>
+    <span class="text-[8px] font-semibold text-white/60 uppercase tracking-wider">준비중</span>
+    <h3 class="text-lg font-black text-white/80 leading-tight mt-1">ADA</h3>
+    <p class="text-[11px] text-white/80 font-semibold mt-1 leading-snug">Americans with Disabilities</p>
+    <p class="text-[10px] text-white/60 mt-0.5 leading-snug">미국 장애인법</p>
   </div>
   <div class="book-cover-bottom">
     <span class="text-xs font-bold text-white/60">-</span>
@@ -1197,10 +1211,10 @@
 <div class="book-item bg-gradient-to-b from-gray-400 to-gray-500 relative overflow-hidden opacity-50 cursor-not-allowed" data-org="icc" data-discipline="mep" data-year="2024">
   <div class="book-spine-effect"></div>
   <div class="book-cover-top">
-    <span class="text-[9px] font-semibold text-white/60 uppercase tracking-wider">준비중</span>
-    <h3 class="text-xl font-black text-white/80 leading-tight mt-2">IMC</h3>
-    <p class="text-[10px] text-white/70 font-medium mt-1 leading-snug">Mechanical Code</p>
-    <p class="text-[9px] text-white/50 mt-1 leading-snug">국제기계설비법규</p>
+    <span class="text-[8px] font-semibold text-white/60 uppercase tracking-wider">준비중</span>
+    <h3 class="text-lg font-black text-white/80 leading-tight mt-1">IMC</h3>
+    <p class="text-[11px] text-white/80 font-semibold mt-1 leading-snug">Mechanical Code</p>
+    <p class="text-[10px] text-white/60 mt-0.5 leading-snug">국제기계설비법규</p>
   </div>
   <div class="book-cover-bottom">
     <span class="text-xs font-bold text-white/60">-</span>
@@ -1209,10 +1223,10 @@
 <div class="book-item bg-gradient-to-b from-gray-400 to-gray-500 relative overflow-hidden opacity-50 cursor-not-allowed" data-org="icc" data-discipline="mep" data-year="2024">
   <div class="book-spine-effect"></div>
   <div class="book-cover-top">
-    <span class="text-[9px] font-semibold text-white/60 uppercase tracking-wider">준비중</span>
-    <h3 class="text-xl font-black text-white/80 leading-tight mt-2">IPC</h3>
-    <p class="text-[10px] text-white/70 font-medium mt-1 leading-snug">Plumbing Code</p>
-    <p class="text-[9px] text-white/50 mt-1 leading-snug">국제배관설비법규</p>
+    <span class="text-[8px] font-semibold text-white/60 uppercase tracking-wider">준비중</span>
+    <h3 class="text-lg font-black text-white/80 leading-tight mt-1">IPC</h3>
+    <p class="text-[11px] text-white/80 font-semibold mt-1 leading-snug">Plumbing Code</p>
+    <p class="text-[10px] text-white/60 mt-0.5 leading-snug">국제배관설비법규</p>
   </div>
   <div class="book-cover-bottom">
     <span class="text-xs font-bold text-white/60">-</span>
@@ -1221,14 +1235,15 @@
 <div class="book-item bg-gradient-to-b from-gray-400 to-gray-500 relative overflow-hidden opacity-50 cursor-not-allowed" data-org="ashrae" data-discipline="mep" data-year="2024">
   <div class="book-spine-effect"></div>
   <div class="book-cover-top">
-    <span class="text-[9px] font-semibold text-white/60 uppercase tracking-wider">준비중</span>
-    <h3 class="text-xl font-black text-white/80 leading-tight mt-2">ASHRAE</h3>
-    <p class="text-[10px] text-white/70 font-medium mt-1 leading-snug">HVAC Standards</p>
-    <p class="text-[9px] text-white/50 mt-1 leading-snug">미국냉난방공조학회(기준)</p>
+    <span class="text-[8px] font-semibold text-white/60 uppercase tracking-wider">준비중</span>
+    <h3 class="text-lg font-black text-white/80 leading-tight mt-1">ASHRAE</h3>
+    <p class="text-[11px] text-white/80 font-semibold mt-1 leading-snug">HVAC Standards</p>
+    <p class="text-[10px] text-white/60 mt-0.5 leading-snug">미국냉난방공조학회(기준)</p>
   </div>
   <div class="book-cover-bottom">
     <span class="text-xs font-bold text-white/60">-</span>
   </div>
+</div>
 </div>
 </div>
 </section>
@@ -1240,57 +1255,48 @@
 <!-- === BOOK POPUP START === -->
 <div class="book-popup" id="bookPopup">
 <div class="book-container">
-  <div class="close-book-btn" onclick="closeBookPopup()">
-    <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-      <path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-    </svg>
-  </div>
-  <!-- 좌측 페이지 넘김 버튼 -->
-  <button class="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-16 w-12 h-12 bg-white/90 rounded-full shadow-lg flex items-center justify-center hover:bg-white transition-colors z-20" id="prevPageBtn" onclick="changePage(-1)">
-    <svg class="w-6 h-6 text-[#24305E]" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M15 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-  </button>
-  <!-- 우측 페이지 넘김 버튼 -->
-  <button class="absolute right-0 top-1/2 -translate-y-1/2 translate-x-16 w-12 h-12 bg-white/90 rounded-full shadow-lg flex items-center justify-center hover:bg-white transition-colors z-20" id="nextPageBtn" onclick="changePage(1)">
-    <svg class="w-6 h-6 text-[#24305E]" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-  </button>
   <div class="book-pages">
     <div class="book-spine"></div>
     <!-- 왼쪽 페이지: 코드 기본 정보 -->
     <div class="book-page book-page-left" id="bookPageLeft">
-      <!-- 바로가기 토글 버튼 -->
-      <div class="absolute top-4 left-4">
-        <button class="px-3 py-1.5 bg-[#F76C6C] text-white text-xs font-semibold rounded-lg hover:bg-[#e55a5a] transition-colors flex items-center gap-1.5 shadow-md" onclick="openCodeContent()">
-          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-            <path d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-          </svg>
+      <!-- 상단 바: 바로가기 + 페이지 넘김 + 닫기 -->
+      <div class="flex items-center justify-between mb-3">
+        <button class="px-3 py-1 bg-[#F76C6C] text-white text-xs font-semibold rounded hover:bg-[#e55a5a] transition-colors" onclick="openCodeContent()">
           바로가기
         </button>
+        <div class="flex items-center gap-2">
+          <button class="w-7 h-7 flex items-center justify-center rounded hover:bg-gray-100 transition-colors disabled:opacity-30" id="prevPageBtn" onclick="changePage(-1)">
+            <svg class="w-4 h-4 text-[#24305E]" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M15 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+          </button>
+          <span class="text-xs text-gray-400 min-w-[40px] text-center" id="pageIndicator">1 / 2</span>
+          <button class="w-7 h-7 flex items-center justify-center rounded hover:bg-gray-100 transition-colors disabled:opacity-30" id="nextPageBtn" onclick="changePage(1)">
+            <svg class="w-4 h-4 text-[#24305E]" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+          </button>
+          <button class="w-7 h-7 flex items-center justify-center rounded hover:bg-gray-100 transition-colors ml-2" onclick="closeBookPopup()">
+            <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+          </button>
+        </div>
       </div>
-      <div class="mt-12 mb-6">
-        <span class="text-xs font-semibold text-[#F76C6C] uppercase tracking-wider" id="bookOrg">NFPA</span>
-        <h2 class="text-3xl font-black text-[#24305E] mt-1" id="bookTitle">NFPA 13</h2>
-        <p class="text-base text-gray-600 mt-2" id="bookSubtitle">Standard for the Installation of Sprinkler Systems</p>
-        <p class="text-sm text-[#374785] font-medium mt-1" id="bookSubtitleKR">스프링클러 설비 설치 기준</p>
-        <span class="inline-block text-xs bg-[#A8D0E6] text-[#24305E] px-2 py-1 rounded font-medium mt-3" id="bookDiscipline">소방기계</span>
+      <!-- 코드 기본 정보 -->
+      <div class="mb-3">
+        <span class="text-[10px] font-semibold text-[#F76C6C] uppercase tracking-wider" id="bookOrg">NFPA</span>
+        <h2 class="text-2xl font-black text-[#24305E] mt-0.5" id="bookTitle">NFPA 13</h2>
+        <p class="text-sm text-gray-600 mt-1 leading-snug" id="bookSubtitle">Standard for the Installation of Sprinkler Systems</p>
+        <p class="text-xs text-[#374785] font-medium mt-0.5" id="bookSubtitleKR">스프링클러 설비 설치 기준</p>
+        <span class="inline-block text-[10px] bg-[#A8D0E6] text-[#24305E] px-1.5 py-0.5 rounded font-medium mt-2" id="bookDiscipline">소방기계</span>
       </div>
-      <div class="space-y-4" id="bookDescriptionLeft">
+      <div class="space-y-2 text-sm" id="bookDescriptionLeft">
         <!-- 코드 설명이 여기에 동적으로 로드됨 -->
       </div>
     </div>
     <!-- 오른쪽 페이지: 코드 분석 -->
     <div class="book-page book-page-right" id="bookPageRight">
-      <div class="absolute top-4 right-4">
-        <span class="text-xs text-gray-400" id="pageIndicator">1 / 2</span>
-      </div>
-      <div class="mt-8">
-        <h3 class="text-lg font-bold text-[#24305E] mb-4 flex items-center gap-2">
-          <svg class="w-5 h-5 text-[#F76C6C]" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-            <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-          </svg>
+      <div class="mb-2">
+        <h3 class="text-base font-bold text-[#24305E] flex items-center gap-1.5">
           코드 분석
         </h3>
       </div>
-      <div class="space-y-4" id="bookDescriptionRight">
+      <div class="space-y-2 text-sm" id="bookDescriptionRight">
         <!-- 코드 분석 내용이 여기에 동적으로 로드됨 -->
       </div>
     </div>
