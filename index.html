@@ -687,161 +687,26 @@
       right: -48px;
     }
 
-    /* 페이지 인디케이터 - 하단 중앙 */
-    .book-page-indicator {
-      position: absolute;
-      bottom: 16px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      z-index: 15;
-    }
-
-    .book-page-indicator .page-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: #d1d5db;
-      transition: all 0.2s ease;
-    }
-
-    .book-page-indicator .page-dot.active {
-      background: #24305E;
-      width: 24px;
-      border-radius: 4px;
-    }
-
-    /* 브로슈어 스타일 - 대표 이미지 */
-    .book-hero-image {
-      width: 100%;
-      height: 140px;
-      object-fit: cover;
-      border-radius: 8px;
-      margin-bottom: 16px;
-      background: linear-gradient(135deg, #24305E 0%, #374785 100%);
-    }
-
-    .book-hero-placeholder {
-      width: 100%;
-      height: 140px;
-      border-radius: 8px;
-      margin-bottom: 16px;
-      background: linear-gradient(135deg, #24305E 0%, #374785 50%, #A8D0E6 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-size: 48px;
-      font-weight: 900;
-      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-    }
-
-    /* 플로팅 뒤로가기 버튼 */
-    .back-nav-btn {
-      position: fixed;
-      top: 100px;
-      left: 24px;
-      width: 40px;
-      height: 40px;
-      background: white;
-      border: none;
-      border-radius: 50%;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
-      transition: all 0.2s ease;
-      z-index: 100;
-    }
-
-    .back-nav-btn:hover {
-      background: #f3f4f6;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
-      transform: scale(1.05);
-    }
-
-    .back-nav-btn.visible {
-      display: flex;
-    }
-
-    /* 코드 레퍼런스 하이퍼링크 */
-    .code-reference {
-      color: #374785;
-      text-decoration: underline;
-      text-decoration-style: dotted;
-      text-underline-offset: 2px;
-      cursor: pointer;
-      transition: color 0.2s ease;
-    }
-
-    .code-reference:hover {
-      color: #F76C6C;
-      text-decoration-style: solid;
-    }
-
-    /* 책 표지 공종 뱃지 */
-    .book-discipline-badge {
-      position: absolute;
-      top: 6px;
-      right: 6px;
-      font-size: 7px;
-      font-weight: 600;
-      padding: 2px 5px;
-      border-radius: 3px;
-      letter-spacing: 0.3px;
-      opacity: 0.9;
-    }
-
-    .book-discipline-badge.dark {
-      background: rgba(255, 255, 255, 0.2);
-      color: rgba(255, 255, 255, 0.9);
-    }
-
-    .book-discipline-badge.light {
-      background: rgba(36, 48, 94, 0.15);
-      color: rgba(36, 48, 94, 0.8);
-    }
-
-    /* Bookshelf container - simple background */
+    /* Bookshelf container - magazine rack style */
     .bookshelf-container {
-      background: #f8f9fa;
+      background: linear-gradient(180deg, #e8ddd4 0%, #d4c8bc 100%);
       border-radius: 12px;
-      padding: 24px 32px 16px 32px;
-      position: relative;
-    }
-
-    /* Book card wrapper with individual shelf */
-    .book-item-wrapper {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    /* Individual shelf ledge under each book */
-    .book-shelf-ledge {
-      width: 100%;
-      height: 10px;
-      background: linear-gradient(180deg, #8b7355 0%, #6d5a45 50%, #5c4a38 100%);
-      border-radius: 2px 2px 4px 4px;
+      padding: 32px 48px 24px 48px;
       box-shadow:
-        0 3px 6px rgba(0,0,0,0.25),
-        inset 0 1px 2px rgba(255,255,255,0.15);
-      margin-top: -2px;
+        inset 0 2px 8px rgba(0,0,0,0.1),
+        0 4px 20px rgba(0,0,0,0.15);
       position: relative;
     }
-
-    .book-shelf-ledge::before {
+    .bookshelf-container::after {
       content: '';
       position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 2px;
-      background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.3) 50%, transparent 100%);
-      border-radius: 2px 2px 0 0;
+      bottom: 0;
+      left: 24px;
+      right: 24px;
+      height: 12px;
+      background: linear-gradient(180deg, #a89080 0%, #8b7565 100%);
+      border-radius: 0 0 8px 8px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     }
 
     /* Book card in bookshelf - smaller size with readable fonts */
@@ -857,8 +722,6 @@
         3px 3px 8px rgba(0,0,0,0.3),
         inset -2px 0 3px rgba(255,255,255,0.2);
       max-width: 130px;
-      position: relative;
-      z-index: 1;
     }
 
     .book-item:hover {
@@ -921,59 +784,6 @@
       cursor: not-allowed;
     }
     /* === BOOKSHELF STYLES END === */
-
-    /* === SEARCH RESULTS STYLES START === */
-    .search-result-item {
-      background: #ffffff;
-      border: 1px solid #e5e7eb;
-      border-left: 4px solid #24305E;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-      transition: all 0.2s ease;
-    }
-
-    .search-result-item:hover {
-      border-left-color: #F76C6C;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      transform: translateX(2px);
-    }
-
-    .search-result-item h4 {
-      font-size: 0.95rem;
-      letter-spacing: -0.01em;
-    }
-
-    .search-result-item .text-gray-700 {
-      line-height: 1.7;
-    }
-
-    .search-result-item .text-gray-600 {
-      line-height: 1.6;
-    }
-
-    /* Search keyword highlight */
-    .search-highlight {
-      background: linear-gradient(to bottom, transparent 50%, #F8E9A1 50%);
-      padding: 0 2px;
-      font-weight: 600;
-      color: #24305E;
-    }
-
-    .search-highlight-exact {
-      background: linear-gradient(to bottom, transparent 40%, #F76C6C40 40%);
-      padding: 0 2px;
-      font-weight: 700;
-      color: #24305E;
-    }
-
-    /* Search results container */
-    .search-results-container {
-      max-width: 900px;
-    }
-
-    .search-results-container .space-y-4 > div {
-      margin-bottom: 12px;
-    }
-    /* === SEARCH RESULTS STYLES END === */
 
   </style>
 </head>
@@ -1140,24 +950,22 @@
 <div class="p-8">
 <div class="max-w-7xl mx-auto">
 <!-- Section 1: Disclaimer -->
-<section class="mb-6">
-<div class="w-full bg-gradient-to-r from-amber-50 to-orange-50 rounded-lg shadow-sm p-3 border-l-4 border-[#F76C6C]">
-  <div class="flex items-start space-x-2.5">
+<section class="mb-8">
+<div class="w-full bg-gradient-to-r from-amber-50 to-orange-50 rounded-lg shadow-sm p-6 border-l-4 border-[#F76C6C]">
+  <div class="flex items-start space-x-4">
     <div class="flex-shrink-0">
-      <svg class="w-5 h-5 text-[#F76C6C]" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+      <svg class="w-7 h-7 text-[#F76C6C] mt-1" fill="none" stroke="currentColor" viewbox="0 0 24 24">
         <path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
       </svg>
     </div>
     <div class="flex-1">
-      <h2 class="text-sm font-bold text-gray-700 mb-0.5">DISCLAIMER</h2>
-      <div class="text-gray-700 text-xs leading-snug space-y-0.5">
+      <h2 class="text-lg font-bold text-gray-700 mb-2">DISCLAIMER</h2>
+      <div class="text-gray-700 text-base leading-relaxed space-y-2">
         <p class="font-medium">본 웹페이지에 수록된 코드 내용은 관련 법규 및 기준의 일부 발췌본이며, 이해를 돕기 위해 해설, 주석 및 참고 이미지를 포함하고 있습니다.</p>
         <p class="font-medium">정확하고 전체적인 내용을 확인하기 위해서는 반드시 <span class="text-[#F76C6C] font-semibold">구매한 코드 원본을 열람 및 참고</span>해주시기 바랍니다.</p>
         <p class="font-medium">댓글 기능을 통해 각 조항에 관련된 프로젝트 적용 사례나 해석을 공유할 수 있도록 지원할 예정입니다.</p>
       </div>
-      <div class="text-left mt-1.5">
-        <span class="text-[10px] font-bold text-gray-500">하이테크 1본부</span>
-      </div>
+      <p class="text-sm font-bold text-gray-700 mt-4">하이테크 1본부</p>
     </div>
   </div>
 </div>
@@ -1219,305 +1027,248 @@
 <div class="bookshelf-container mx-8">
 <div class="grid grid-cols-5 gap-4 justify-items-center pb-4" id="bookshelfGrid">
 <!-- 1. IBC 2024 - 다크블루 -->
-<div class="book-item-wrapper">
-  <div class="book-item bg-gradient-to-b from-[#24305E] to-[#1a2342] relative overflow-hidden" data-code-id="MC001" data-version-id="MCV002" data-org="icc" data-discipline="arch" data-year="2024" onclick="openBookPopup('IBC')">
-    <div class="book-spine-effect"></div>
-    <span class="book-discipline-badge dark">건축</span>
-    <div class="book-cover-top">
-      <h3 class="text-lg font-black text-white leading-tight">IBC</h3>
-      <p class="text-[11px] text-white/95 font-semibold mt-1 leading-snug">국제건축법규</p>
-      <p class="text-[10px] text-white/80 mt-0.5 leading-snug">International Building Code</p>
-    </div>
-    <div class="book-cover-bottom">
-      <span class="text-[10px] font-bold text-white/90">2024</span>
-    </div>
+<div class="book-item bg-gradient-to-b from-[#24305E] to-[#1a2342] relative overflow-hidden" data-code-id="MC001" data-version-id="MCV002" data-org="icc" data-discipline="arch" data-year="2024" onclick="openBookPopup('IBC')">
+  <div class="book-spine-effect"></div>
+  <div class="book-cover-top">
+    <span class="text-[8px] font-semibold text-white/80 uppercase tracking-wider">ICC</span>
+    <h3 class="text-lg font-black text-white leading-tight mt-1">IBC</h3>
+    <p class="text-[11px] text-white/95 font-semibold mt-1 leading-snug">International Building Code</p>
+    <p class="text-[10px] text-white/80 mt-0.5 leading-snug">국제건축법규</p>
   </div>
-  <div class="book-shelf-ledge"></div>
+  <div class="book-cover-bottom">
+    <span class="text-[10px] font-bold text-white/90">2024</span>
+  </div>
 </div>
 <!-- 2. NFPA 13 - 미디엄블루 -->
-<div class="book-item-wrapper">
-  <div class="book-item bg-gradient-to-b from-[#374785] to-[#2a3666] relative overflow-hidden" data-code-id="MC007" data-version-id="MCV003" data-org="nfpa" data-discipline="fire-mech" data-year="2025" onclick="openBookPopup('NFPA13')">
-    <div class="book-spine-effect"></div>
-    <span class="book-discipline-badge dark">소방기계</span>
-    <div class="book-cover-top">
-      <h3 class="text-lg font-black text-white leading-tight">NFPA 13</h3>
-      <p class="text-[11px] text-white/95 font-semibold mt-1 leading-snug">스프링클러설비 설치기준</p>
-      <p class="text-[10px] text-white/80 mt-0.5 leading-snug">Sprinkler Systems</p>
-    </div>
-    <div class="book-cover-bottom">
-      <span class="text-[10px] font-bold text-white/90">2025</span>
-    </div>
+<div class="book-item bg-gradient-to-b from-[#374785] to-[#2a3666] relative overflow-hidden" data-code-id="MC007" data-version-id="MCV003" data-org="nfpa" data-discipline="fire-mech" data-year="2025" onclick="openBookPopup('NFPA13')">
+  <div class="book-spine-effect"></div>
+  <div class="book-cover-top">
+    <span class="text-[8px] font-semibold text-white/80 uppercase tracking-wider">NFPA</span>
+    <h3 class="text-lg font-black text-white leading-tight mt-1">NFPA 13</h3>
+    <p class="text-[11px] text-white/95 font-semibold mt-1 leading-snug">Sprinkler Systems</p>
+    <p class="text-[10px] text-white/80 mt-0.5 leading-snug">스프링클러 설비 설치 기준</p>
   </div>
-  <div class="book-shelf-ledge"></div>
+  <div class="book-cover-bottom">
+    <span class="text-[10px] font-bold text-white/90">2025</span>
+  </div>
 </div>
 <!-- 3. NFPA 14 - 라이트블루 -->
-<div class="book-item-wrapper">
-  <div class="book-item bg-gradient-to-b from-[#A8D0E6] to-[#8bbedb] relative overflow-hidden" data-code-id="MC008" data-version-id="MCV004" data-org="nfpa" data-discipline="fire-mech" data-year="2024" onclick="openBookPopup('NFPA14')">
-    <div class="book-spine-effect"></div>
-    <span class="book-discipline-badge light">소방기계</span>
-    <div class="book-cover-top">
-      <h3 class="text-lg font-black text-[#24305E] leading-tight">NFPA 14</h3>
-      <p class="text-[11px] text-[#24305E]/95 font-semibold mt-1 leading-snug">연결송수관 및 호스시스템</p>
-      <p class="text-[10px] text-[#24305E]/80 mt-0.5 leading-snug">Standpipe & Hose Systems</p>
-    </div>
-    <div class="book-cover-bottom">
-      <span class="text-[10px] font-bold text-[#24305E]/90">2024</span>
-    </div>
+<div class="book-item bg-gradient-to-b from-[#A8D0E6] to-[#8bbedb] relative overflow-hidden" data-code-id="MC008" data-version-id="MCV004" data-org="nfpa" data-discipline="fire-mech" data-year="2024" onclick="openBookPopup('NFPA14')">
+  <div class="book-spine-effect"></div>
+  <div class="book-cover-top">
+    <span class="text-[8px] font-semibold text-[#24305E]/80 uppercase tracking-wider">NFPA</span>
+    <h3 class="text-lg font-black text-[#24305E] leading-tight mt-1">NFPA 14</h3>
+    <p class="text-[11px] text-[#24305E]/95 font-semibold mt-1 leading-snug">Standpipe & Hose Systems</p>
+    <p class="text-[10px] text-[#24305E]/80 mt-0.5 leading-snug">연결송수관 및 호스시스템</p>
   </div>
-  <div class="book-shelf-ledge"></div>
+  <div class="book-cover-bottom">
+    <span class="text-[10px] font-bold text-[#24305E]/90">2024</span>
+  </div>
 </div>
 <!-- 4. NFPA 20 - 코랄레드 -->
-<div class="book-item-wrapper">
-  <div class="book-item bg-gradient-to-b from-[#F76C6C] to-[#e55555] relative overflow-hidden" data-code-id="MC009" data-version-id="MCV005" data-org="nfpa" data-discipline="fire-mech" data-year="2025" onclick="openBookPopup('NFPA20')">
-    <div class="book-spine-effect"></div>
-    <span class="book-discipline-badge dark">소방기계</span>
-    <div class="book-cover-top">
-      <h3 class="text-lg font-black text-white leading-tight">NFPA 20</h3>
-      <p class="text-[11px] text-white/95 font-semibold mt-1 leading-snug">소방용 고정펌프 설치기준</p>
-      <p class="text-[10px] text-white/80 mt-0.5 leading-snug">Fire Pumps</p>
-    </div>
-    <div class="book-cover-bottom">
-      <span class="text-[10px] font-bold text-white/90">2025</span>
-    </div>
+<div class="book-item bg-gradient-to-b from-[#F76C6C] to-[#e55555] relative overflow-hidden" data-code-id="MC009" data-version-id="MCV005" data-org="nfpa" data-discipline="fire-mech" data-year="2025" onclick="openBookPopup('NFPA20')">
+  <div class="book-spine-effect"></div>
+  <div class="book-cover-top">
+    <span class="text-[8px] font-semibold text-white/80 uppercase tracking-wider">NFPA</span>
+    <h3 class="text-lg font-black text-white leading-tight mt-1">NFPA 20</h3>
+    <p class="text-[11px] text-white/95 font-semibold mt-1 leading-snug">Fire Pumps</p>
+    <p class="text-[10px] text-white/80 mt-0.5 leading-snug">소방용 고정펌프 설치 기준</p>
   </div>
-  <div class="book-shelf-ledge"></div>
+  <div class="book-cover-bottom">
+    <span class="text-[10px] font-bold text-white/90">2025</span>
+  </div>
 </div>
 <!-- 5. NFPA 72 - 옐로우 -->
-<div class="book-item-wrapper">
-  <div class="book-item bg-gradient-to-b from-[#F8E9A1] to-[#e5d88a] relative overflow-hidden" data-code-id="MC010" data-version-id="MCV006" data-org="nfpa" data-discipline="fire-elec" data-year="2025" onclick="openBookPopup('NFPA72')">
-    <div class="book-spine-effect"></div>
-    <span class="book-discipline-badge light">소방전기</span>
-    <div class="book-cover-top">
-      <h3 class="text-lg font-black text-[#24305E] leading-tight">NFPA 72</h3>
-      <p class="text-[11px] text-[#24305E]/95 font-semibold mt-1 leading-snug">화재경보 및 신호설비 법규</p>
-      <p class="text-[10px] text-[#24305E]/80 mt-0.5 leading-snug">Fire Alarm & Signaling</p>
-    </div>
-    <div class="book-cover-bottom">
-      <span class="text-[10px] font-bold text-[#24305E]/90">2025</span>
-    </div>
+<div class="book-item bg-gradient-to-b from-[#F8E9A1] to-[#e5d88a] relative overflow-hidden" data-code-id="MC010" data-version-id="MCV006" data-org="nfpa" data-discipline="fire-elec" data-year="2025" onclick="openBookPopup('NFPA72')">
+  <div class="book-spine-effect"></div>
+  <div class="book-cover-top">
+    <span class="text-[8px] font-semibold text-[#24305E]/80 uppercase tracking-wider">NFPA</span>
+    <h3 class="text-lg font-black text-[#24305E] leading-tight mt-1">NFPA 72</h3>
+    <p class="text-[11px] text-[#24305E]/95 font-semibold mt-1 leading-snug">Fire Alarm & Signaling</p>
+    <p class="text-[10px] text-[#24305E]/80 mt-0.5 leading-snug">화재경보 및 신호설비 법규</p>
   </div>
-  <div class="book-shelf-ledge"></div>
+  <div class="book-cover-bottom">
+    <span class="text-[10px] font-bold text-[#24305E]/90">2025</span>
+  </div>
 </div>
 <!-- 6. NFPA 101 - 남색 -->
-<div class="book-item-wrapper">
-  <div class="book-item bg-gradient-to-b from-[#24305E] to-[#1a2342] relative overflow-hidden" data-code-id="MC024" data-version-id="MCV020" data-org="nfpa" data-discipline="arch" data-year="2024" onclick="openBookPopup('NFPA101')">
-    <div class="book-spine-effect"></div>
-    <span class="book-discipline-badge dark">건축</span>
-    <div class="book-cover-top">
-      <h3 class="text-lg font-black text-white leading-tight">NFPA 101</h3>
-      <p class="text-[11px] text-white/95 font-semibold mt-1 leading-snug">인명안전법규</p>
-      <p class="text-[10px] text-white/80 mt-0.5 leading-snug">Life Safety Code</p>
-    </div>
-    <div class="book-cover-bottom">
-      <span class="text-[10px] font-bold text-white/90">2024</span>
-    </div>
+<div class="book-item bg-gradient-to-b from-[#24305E] to-[#1a2342] relative overflow-hidden" data-code-id="MC024" data-version-id="MCV020" data-org="nfpa" data-discipline="arch" data-year="2024" onclick="openBookPopup('NFPA101')">
+  <div class="book-spine-effect"></div>
+  <div class="book-cover-top">
+    <span class="text-[8px] font-semibold text-white/80 uppercase tracking-wider">NFPA</span>
+    <h3 class="text-lg font-black text-white leading-tight mt-1">NFPA 101</h3>
+    <p class="text-[11px] text-white/95 font-semibold mt-1 leading-snug">Life Safety Code</p>
+    <p class="text-[10px] text-white/80 mt-0.5 leading-snug">인명안전법규</p>
   </div>
-  <div class="book-shelf-ledge"></div>
+  <div class="book-cover-bottom">
+    <span class="text-[10px] font-bold text-white/90">2024</span>
+  </div>
 </div>
 <!-- 7. NFPA 318 - 미디엄블루 -->
-<div class="book-item-wrapper">
-  <div class="book-item bg-gradient-to-b from-[#374785] to-[#2a3666] relative overflow-hidden" data-code-id="MC013" data-version-id="MCV009" data-org="nfpa" data-discipline="fire-mech" data-year="2025" onclick="openBookPopup('NFPA318')">
-    <div class="book-spine-effect"></div>
-    <span class="book-discipline-badge dark">소방기계</span>
-    <div class="book-cover-top">
-      <h3 class="text-lg font-black text-white leading-tight">NFPA 318</h3>
-      <p class="text-[11px] text-white/95 font-semibold mt-1 leading-snug">반도체 제조시설 방호기준</p>
-      <p class="text-[10px] text-white/80 mt-0.5 leading-snug">Semiconductor Facilities</p>
-    </div>
-    <div class="book-cover-bottom">
-      <span class="text-[10px] font-bold text-white/90">2025</span>
-    </div>
+<div class="book-item bg-gradient-to-b from-[#374785] to-[#2a3666] relative overflow-hidden" data-code-id="MC013" data-version-id="MCV009" data-org="nfpa" data-discipline="fire-mech" data-year="2025" onclick="openBookPopup('NFPA318')">
+  <div class="book-spine-effect"></div>
+  <div class="book-cover-top">
+    <span class="text-[8px] font-semibold text-white/80 uppercase tracking-wider">NFPA</span>
+    <h3 class="text-lg font-black text-white leading-tight mt-1">NFPA 318</h3>
+    <p class="text-[11px] text-white/95 font-semibold mt-1 leading-snug">Semiconductor Facilities</p>
+    <p class="text-[10px] text-white/80 mt-0.5 leading-snug">반도체 제조시설 방호 기준</p>
   </div>
-  <div class="book-shelf-ledge"></div>
+  <div class="book-cover-bottom">
+    <span class="text-[10px] font-bold text-white/90">2025</span>
+  </div>
 </div>
 <!-- 8. NFPA 214 - 라이트블루 -->
-<div class="book-item-wrapper">
-  <div class="book-item bg-gradient-to-b from-[#A8D0E6] to-[#8bbedb] relative overflow-hidden" data-code-id="MC011" data-version-id="MCV007" data-org="nfpa" data-discipline="fire-mech" data-year="2021" onclick="openBookPopup('NFPA214')">
-    <div class="book-spine-effect"></div>
-    <span class="book-discipline-badge light">소방기계</span>
-    <div class="book-cover-top">
-      <h3 class="text-lg font-black text-[#24305E] leading-tight">NFPA 214</h3>
-      <p class="text-[11px] text-[#24305E]/95 font-semibold mt-1 leading-snug">수냉식 냉각탑 기준</p>
-      <p class="text-[10px] text-[#24305E]/80 mt-0.5 leading-snug">Water-Cooling Towers</p>
-    </div>
-    <div class="book-cover-bottom">
-      <span class="text-[10px] font-bold text-[#24305E]/90">2021</span>
-    </div>
+<div class="book-item bg-gradient-to-b from-[#A8D0E6] to-[#8bbedb] relative overflow-hidden" data-code-id="MC011" data-version-id="MCV007" data-org="nfpa" data-discipline="fire-mech" data-year="2021" onclick="openBookPopup('NFPA214')">
+  <div class="book-spine-effect"></div>
+  <div class="book-cover-top">
+    <span class="text-[8px] font-semibold text-[#24305E]/80 uppercase tracking-wider">NFPA</span>
+    <h3 class="text-lg font-black text-[#24305E] leading-tight mt-1">NFPA 214</h3>
+    <p class="text-[11px] text-[#24305E]/95 font-semibold mt-1 leading-snug">Water-Cooling Towers</p>
+    <p class="text-[10px] text-[#24305E]/80 mt-0.5 leading-snug">수냉식 냉각탑 기준</p>
   </div>
-  <div class="book-shelf-ledge"></div>
+  <div class="book-cover-bottom">
+    <span class="text-[10px] font-bold text-[#24305E]/90">2021</span>
+  </div>
 </div>
 <!-- 9. NFPA 96 - 코랄레드 -->
-<div class="book-item-wrapper">
-  <div class="book-item bg-gradient-to-b from-[#F76C6C] to-[#e55555] relative overflow-hidden" data-code-id="MC012" data-version-id="MCV008" data-org="nfpa" data-discipline="fire-mech" data-year="2024" onclick="openBookPopup('NFPA96')">
-    <div class="book-spine-effect"></div>
-    <span class="book-discipline-badge dark">소방기계</span>
-    <div class="book-cover-top">
-      <h3 class="text-lg font-black text-white leading-tight">NFPA 96</h3>
-      <p class="text-[11px] text-white/95 font-semibold mt-1 leading-snug">상업용 주방환기 및 화재방호</p>
-      <p class="text-[10px] text-white/80 mt-0.5 leading-snug">Commercial Cooking</p>
-    </div>
-    <div class="book-cover-bottom">
-      <span class="text-[10px] font-bold text-white/90">2024</span>
-    </div>
+<div class="book-item bg-gradient-to-b from-[#F76C6C] to-[#e55555] relative overflow-hidden" data-code-id="MC012" data-version-id="MCV008" data-org="nfpa" data-discipline="fire-mech" data-year="2024" onclick="openBookPopup('NFPA96')">
+  <div class="book-spine-effect"></div>
+  <div class="book-cover-top">
+    <span class="text-[8px] font-semibold text-white/80 uppercase tracking-wider">NFPA</span>
+    <h3 class="text-lg font-black text-white leading-tight mt-1">NFPA 96</h3>
+    <p class="text-[11px] text-white/95 font-semibold mt-1 leading-snug">Commercial Cooking</p>
+    <p class="text-[10px] text-white/80 mt-0.5 leading-snug">상업용 주방 환기 및 화재방호</p>
   </div>
-  <div class="book-shelf-ledge"></div>
+  <div class="book-cover-bottom">
+    <span class="text-[10px] font-bold text-white/90">2024</span>
+  </div>
 </div>
 <!-- 10. NFPA 24 - 옐로우 -->
-<div class="book-item-wrapper">
-  <div class="book-item bg-gradient-to-b from-[#F8E9A1] to-[#e5d88a] relative overflow-hidden" data-code-id="MC014" data-version-id="MCV010" data-org="nfpa" data-discipline="fire-mech" data-year="2025" onclick="openBookPopup('NFPA24')">
-    <div class="book-spine-effect"></div>
-    <span class="book-discipline-badge light">소방기계</span>
-    <div class="book-cover-top">
-      <h3 class="text-lg font-black text-[#24305E] leading-tight">NFPA 24</h3>
-      <p class="text-[11px] text-[#24305E]/95 font-semibold mt-1 leading-snug">소방전용배관 설치기준</p>
-      <p class="text-[10px] text-[#24305E]/80 mt-0.5 leading-snug">Private Fire Service Mains</p>
-    </div>
-    <div class="book-cover-bottom">
-      <span class="text-[10px] font-bold text-[#24305E]/90">2025</span>
-    </div>
+<div class="book-item bg-gradient-to-b from-[#F8E9A1] to-[#e5d88a] relative overflow-hidden" data-code-id="MC014" data-version-id="MCV010" data-org="nfpa" data-discipline="fire-mech" data-year="2025" onclick="openBookPopup('NFPA24')">
+  <div class="book-spine-effect"></div>
+  <div class="book-cover-top">
+    <span class="text-[8px] font-semibold text-[#24305E]/80 uppercase tracking-wider">NFPA</span>
+    <h3 class="text-lg font-black text-[#24305E] leading-tight mt-1">NFPA 24</h3>
+    <p class="text-[11px] text-[#24305E]/95 font-semibold mt-1 leading-snug">Private Fire Service Mains</p>
+    <p class="text-[10px] text-[#24305E]/80 mt-0.5 leading-snug">전용 소방배관 설치 기준</p>
   </div>
-  <div class="book-shelf-ledge"></div>
+  <div class="book-cover-bottom">
+    <span class="text-[10px] font-bold text-[#24305E]/90">2025</span>
+  </div>
 </div>
 <!-- 11. NFPA 12 - 다크블루 -->
-<div class="book-item-wrapper">
-  <div class="book-item bg-gradient-to-b from-[#24305E] to-[#1a2342] relative overflow-hidden" data-code-id="MC016" data-version-id="MCV012" data-org="nfpa" data-discipline="fire-mech" data-year="2025" onclick="openBookPopup('NFPA12')">
-    <div class="book-spine-effect"></div>
-    <span class="book-discipline-badge dark">소방기계</span>
-    <div class="book-cover-top">
-      <h3 class="text-lg font-black text-white leading-tight">NFPA 12</h3>
-      <p class="text-[11px] text-white/95 font-semibold mt-1 leading-snug">이산화탄소 소화설비기준</p>
-      <p class="text-[10px] text-white/80 mt-0.5 leading-snug">CO2 Extinguishing Systems</p>
-    </div>
-    <div class="book-cover-bottom">
-      <span class="text-[10px] font-bold text-white/90">2025</span>
-    </div>
+<div class="book-item bg-gradient-to-b from-[#24305E] to-[#1a2342] relative overflow-hidden" data-code-id="MC016" data-version-id="MCV012" data-org="nfpa" data-discipline="fire-mech" data-year="2025" onclick="openBookPopup('NFPA12')">
+  <div class="book-spine-effect"></div>
+  <div class="book-cover-top">
+    <span class="text-[8px] font-semibold text-white/80 uppercase tracking-wider">NFPA</span>
+    <h3 class="text-lg font-black text-white leading-tight mt-1">NFPA 12</h3>
+    <p class="text-[11px] text-white/95 font-semibold mt-1 leading-snug">CO2 Extinguishing Systems</p>
+    <p class="text-[10px] text-white/80 mt-0.5 leading-snug">이산화탄소 소화설비 기준</p>
   </div>
-  <div class="book-shelf-ledge"></div>
+  <div class="book-cover-bottom">
+    <span class="text-[10px] font-bold text-white/90">2025</span>
+  </div>
 </div>
 <!-- 12. NFPA 15 - 미디엄블루 -->
-<div class="book-item-wrapper">
-  <div class="book-item bg-gradient-to-b from-[#374785] to-[#2a3666] relative overflow-hidden" data-code-id="MC018" data-version-id="MCV014" data-org="nfpa" data-discipline="fire-mech" data-year="2022" onclick="openBookPopup('NFPA15')">
-    <div class="book-spine-effect"></div>
-    <span class="book-discipline-badge dark">소방기계</span>
-    <div class="book-cover-top">
-      <h3 class="text-lg font-black text-white leading-tight">NFPA 15</h3>
-      <p class="text-[11px] text-white/95 font-semibold mt-1 leading-snug">소방용 물분무 고정설비기준</p>
-      <p class="text-[10px] text-white/80 mt-0.5 leading-snug">Water Spray Systems</p>
-    </div>
-    <div class="book-cover-bottom">
-      <span class="text-[10px] font-bold text-white/90">2022</span>
-    </div>
+<div class="book-item bg-gradient-to-b from-[#374785] to-[#2a3666] relative overflow-hidden" data-code-id="MC018" data-version-id="MCV014" data-org="nfpa" data-discipline="fire-mech" data-year="2022" onclick="openBookPopup('NFPA15')">
+  <div class="book-spine-effect"></div>
+  <div class="book-cover-top">
+    <span class="text-[8px] font-semibold text-white/80 uppercase tracking-wider">NFPA</span>
+    <h3 class="text-lg font-black text-white leading-tight mt-1">NFPA 15</h3>
+    <p class="text-[11px] text-white/95 font-semibold mt-1 leading-snug">Water Spray Systems</p>
+    <p class="text-[10px] text-white/80 mt-0.5 leading-snug">소방용 물분무 고정설비 기준</p>
   </div>
-  <div class="book-shelf-ledge"></div>
+  <div class="book-cover-bottom">
+    <span class="text-[10px] font-bold text-white/90">2022</span>
+  </div>
 </div>
 <!-- 13. NFPA 16 - 라이트블루 -->
-<div class="book-item-wrapper">
-  <div class="book-item bg-gradient-to-b from-[#A8D0E6] to-[#8bbedb] relative overflow-hidden" data-code-id="MC019" data-version-id="MCV015" data-org="nfpa" data-discipline="fire-mech" data-year="2010" onclick="openBookPopup('NFPA16')">
-    <div class="book-spine-effect"></div>
-    <span class="book-discipline-badge light">소방기계</span>
-    <div class="book-cover-top">
-      <h3 class="text-lg font-black text-[#24305E] leading-tight">NFPA 16</h3>
-      <p class="text-[11px] text-[#24305E]/95 font-semibold mt-1 leading-snug">포-물분무 스프링클러설비</p>
-      <p class="text-[10px] text-[#24305E]/80 mt-0.5 leading-snug">Foam-Water Systems</p>
-    </div>
-    <div class="book-cover-bottom">
-      <span class="text-[10px] font-bold text-[#24305E]/90">2010</span>
-    </div>
+<div class="book-item bg-gradient-to-b from-[#A8D0E6] to-[#8bbedb] relative overflow-hidden" data-code-id="MC019" data-version-id="MCV015" data-org="nfpa" data-discipline="fire-mech" data-year="2010" onclick="openBookPopup('NFPA16')">
+  <div class="book-spine-effect"></div>
+  <div class="book-cover-top">
+    <span class="text-[8px] font-semibold text-[#24305E]/80 uppercase tracking-wider">NFPA</span>
+    <h3 class="text-lg font-black text-[#24305E] leading-tight mt-1">NFPA 16</h3>
+    <p class="text-[11px] text-[#24305E]/95 font-semibold mt-1 leading-snug">Foam-Water Systems</p>
+    <p class="text-[10px] text-[#24305E]/80 mt-0.5 leading-snug">포-물분무 스프링클러 시스템</p>
   </div>
-  <div class="book-shelf-ledge"></div>
+  <div class="book-cover-bottom">
+    <span class="text-[10px] font-bold text-[#24305E]/90">2010</span>
+  </div>
 </div>
 <!-- 14. NFPA 92 - 코랄레드 -->
-<div class="book-item-wrapper">
-  <div class="book-item bg-gradient-to-b from-[#F76C6C] to-[#e55555] relative overflow-hidden" data-code-id="MC020" data-version-id="MCV016" data-org="nfpa" data-discipline="fire-mech" data-year="2024" onclick="openBookPopup('NFPA92')">
-    <div class="book-spine-effect"></div>
-    <span class="book-discipline-badge dark">소방기계</span>
-    <div class="book-cover-top">
-      <h3 class="text-lg font-black text-white leading-tight">NFPA 92</h3>
-      <p class="text-[11px] text-white/95 font-semibold mt-1 leading-snug">제연설비기준</p>
-      <p class="text-[10px] text-white/80 mt-0.5 leading-snug">Smoke Control Systems</p>
-    </div>
-    <div class="book-cover-bottom">
-      <span class="text-[10px] font-bold text-white/90">2024</span>
-    </div>
+<div class="book-item bg-gradient-to-b from-[#F76C6C] to-[#e55555] relative overflow-hidden" data-code-id="MC020" data-version-id="MCV016" data-org="nfpa" data-discipline="fire-mech" data-year="2024" onclick="openBookPopup('NFPA92')">
+  <div class="book-spine-effect"></div>
+  <div class="book-cover-top">
+    <span class="text-[8px] font-semibold text-white/80 uppercase tracking-wider">NFPA</span>
+    <h3 class="text-lg font-black text-white leading-tight mt-1">NFPA 92</h3>
+    <p class="text-[11px] text-white/95 font-semibold mt-1 leading-snug">Smoke Control Systems</p>
+    <p class="text-[10px] text-white/80 mt-0.5 leading-snug">제연설비 기준</p>
   </div>
-  <div class="book-shelf-ledge"></div>
+  <div class="book-cover-bottom">
+    <span class="text-[10px] font-bold text-white/90">2024</span>
+  </div>
 </div>
 <!-- 15. NFPA 1 - 옐로우 -->
-<div class="book-item-wrapper">
-  <div class="book-item bg-gradient-to-b from-[#F8E9A1] to-[#e5d88a] relative overflow-hidden" data-code-id="MC015" data-version-id="MCV011" data-org="nfpa" data-discipline="fire-mech" data-year="2024" onclick="openBookPopup('NFPA1')">
-    <div class="book-spine-effect"></div>
-    <span class="book-discipline-badge light">소방기계</span>
-    <div class="book-cover-top">
-      <h3 class="text-lg font-black text-[#24305E] leading-tight">NFPA 1</h3>
-      <p class="text-[11px] text-[#24305E]/95 font-semibold mt-1 leading-snug">화재법규</p>
-      <p class="text-[10px] text-[#24305E]/80 mt-0.5 leading-snug">Fire Code</p>
-    </div>
-    <div class="book-cover-bottom">
-      <span class="text-[10px] font-bold text-[#24305E]/90">2024</span>
-    </div>
+<div class="book-item bg-gradient-to-b from-[#F8E9A1] to-[#e5d88a] relative overflow-hidden" data-code-id="MC015" data-version-id="MCV011" data-org="nfpa" data-discipline="fire-mech" data-year="2024" onclick="openBookPopup('NFPA1')">
+  <div class="book-spine-effect"></div>
+  <div class="book-cover-top">
+    <span class="text-[8px] font-semibold text-[#24305E]/80 uppercase tracking-wider">NFPA</span>
+    <h3 class="text-lg font-black text-[#24305E] leading-tight mt-1">NFPA 1</h3>
+    <p class="text-[11px] text-[#24305E]/95 font-semibold mt-1 leading-snug">Fire Code</p>
+    <p class="text-[10px] text-[#24305E]/80 mt-0.5 leading-snug">화재 법규</p>
   </div>
-  <div class="book-shelf-ledge"></div>
+  <div class="book-cover-bottom">
+    <span class="text-[10px] font-bold text-[#24305E]/90">2024</span>
+  </div>
 </div>
 <!-- 미지원 코드들 - 회색 -->
-<div class="book-item-wrapper">
-  <div class="book-item bg-gradient-to-b from-gray-400 to-gray-500 relative overflow-hidden opacity-50 cursor-not-allowed" data-org="other" data-discipline="arch" data-year="2024">
-    <div class="book-spine-effect"></div>
-    <div class="book-cover-top">
-      <span class="text-[8px] font-semibold text-white/60 uppercase tracking-wider">준비중</span>
-      <h3 class="text-lg font-black text-white/80 leading-tight mt-1">ADA</h3>
-      <p class="text-[11px] text-white/80 font-semibold mt-1 leading-snug">미국 장애인법</p>
-      <p class="text-[10px] text-white/60 mt-0.5 leading-snug">Americans with Disabilities</p>
-    </div>
-    <div class="book-cover-bottom">
-      <span class="text-xs font-bold text-white/60">-</span>
-    </div>
+<div class="book-item bg-gradient-to-b from-gray-400 to-gray-500 relative overflow-hidden opacity-50 cursor-not-allowed" data-org="other" data-discipline="arch" data-year="2024">
+  <div class="book-spine-effect"></div>
+  <div class="book-cover-top">
+    <span class="text-[8px] font-semibold text-white/60 uppercase tracking-wider">준비중</span>
+    <h3 class="text-lg font-black text-white/80 leading-tight mt-1">ADA</h3>
+    <p class="text-[11px] text-white/80 font-semibold mt-1 leading-snug">Americans with Disabilities</p>
+    <p class="text-[10px] text-white/60 mt-0.5 leading-snug">미국 장애인법</p>
   </div>
-  <div class="book-shelf-ledge"></div>
+  <div class="book-cover-bottom">
+    <span class="text-xs font-bold text-white/60">-</span>
+  </div>
 </div>
-<div class="book-item-wrapper">
-  <div class="book-item bg-gradient-to-b from-gray-400 to-gray-500 relative overflow-hidden opacity-50 cursor-not-allowed" data-org="icc" data-discipline="mep" data-year="2024">
-    <div class="book-spine-effect"></div>
-    <div class="book-cover-top">
-      <span class="text-[8px] font-semibold text-white/60 uppercase tracking-wider">준비중</span>
-      <h3 class="text-lg font-black text-white/80 leading-tight mt-1">IMC</h3>
-      <p class="text-[11px] text-white/80 font-semibold mt-1 leading-snug">국제기계설비법규</p>
-      <p class="text-[10px] text-white/60 mt-0.5 leading-snug">Mechanical Code</p>
-    </div>
-    <div class="book-cover-bottom">
-      <span class="text-xs font-bold text-white/60">-</span>
-    </div>
+<div class="book-item bg-gradient-to-b from-gray-400 to-gray-500 relative overflow-hidden opacity-50 cursor-not-allowed" data-org="icc" data-discipline="mep" data-year="2024">
+  <div class="book-spine-effect"></div>
+  <div class="book-cover-top">
+    <span class="text-[8px] font-semibold text-white/60 uppercase tracking-wider">준비중</span>
+    <h3 class="text-lg font-black text-white/80 leading-tight mt-1">IMC</h3>
+    <p class="text-[11px] text-white/80 font-semibold mt-1 leading-snug">Mechanical Code</p>
+    <p class="text-[10px] text-white/60 mt-0.5 leading-snug">국제기계설비법규</p>
   </div>
-  <div class="book-shelf-ledge"></div>
+  <div class="book-cover-bottom">
+    <span class="text-xs font-bold text-white/60">-</span>
+  </div>
 </div>
-<div class="book-item-wrapper">
-  <div class="book-item bg-gradient-to-b from-gray-400 to-gray-500 relative overflow-hidden opacity-50 cursor-not-allowed" data-org="icc" data-discipline="mep" data-year="2024">
-    <div class="book-spine-effect"></div>
-    <div class="book-cover-top">
-      <span class="text-[8px] font-semibold text-white/60 uppercase tracking-wider">준비중</span>
-      <h3 class="text-lg font-black text-white/80 leading-tight mt-1">IPC</h3>
-      <p class="text-[11px] text-white/80 font-semibold mt-1 leading-snug">국제배관설비법규</p>
-      <p class="text-[10px] text-white/60 mt-0.5 leading-snug">Plumbing Code</p>
-    </div>
-    <div class="book-cover-bottom">
-      <span class="text-xs font-bold text-white/60">-</span>
-    </div>
+<div class="book-item bg-gradient-to-b from-gray-400 to-gray-500 relative overflow-hidden opacity-50 cursor-not-allowed" data-org="icc" data-discipline="mep" data-year="2024">
+  <div class="book-spine-effect"></div>
+  <div class="book-cover-top">
+    <span class="text-[8px] font-semibold text-white/60 uppercase tracking-wider">준비중</span>
+    <h3 class="text-lg font-black text-white/80 leading-tight mt-1">IPC</h3>
+    <p class="text-[11px] text-white/80 font-semibold mt-1 leading-snug">Plumbing Code</p>
+    <p class="text-[10px] text-white/60 mt-0.5 leading-snug">국제배관설비법규</p>
   </div>
-  <div class="book-shelf-ledge"></div>
+  <div class="book-cover-bottom">
+    <span class="text-xs font-bold text-white/60">-</span>
+  </div>
 </div>
-<div class="book-item-wrapper">
-  <div class="book-item bg-gradient-to-b from-gray-400 to-gray-500 relative overflow-hidden opacity-50 cursor-not-allowed" data-org="ashrae" data-discipline="mep" data-year="2024">
-    <div class="book-spine-effect"></div>
-    <div class="book-cover-top">
-      <span class="text-[8px] font-semibold text-white/60 uppercase tracking-wider">준비중</span>
-      <h3 class="text-lg font-black text-white/80 leading-tight mt-1">ASHRAE</h3>
-      <p class="text-[11px] text-white/80 font-semibold mt-1 leading-snug">미국냉난방공조학회(기준)</p>
-      <p class="text-[10px] text-white/60 mt-0.5 leading-snug">HVAC Standards</p>
-    </div>
-    <div class="book-cover-bottom">
-      <span class="text-xs font-bold text-white/60">-</span>
-    </div>
+<div class="book-item bg-gradient-to-b from-gray-400 to-gray-500 relative overflow-hidden opacity-50 cursor-not-allowed" data-org="ashrae" data-discipline="mep" data-year="2024">
+  <div class="book-spine-effect"></div>
+  <div class="book-cover-top">
+    <span class="text-[8px] font-semibold text-white/60 uppercase tracking-wider">준비중</span>
+    <h3 class="text-lg font-black text-white/80 leading-tight mt-1">ASHRAE</h3>
+    <p class="text-[11px] text-white/80 font-semibold mt-1 leading-snug">HVAC Standards</p>
+    <p class="text-[10px] text-white/60 mt-0.5 leading-snug">미국냉난방공조학회(기준)</p>
   </div>
-  <div class="book-shelf-ledge"></div>
+  <div class="book-cover-bottom">
+    <span class="text-xs font-bold text-white/60">-</span>
+  </div>
 </div>
 </div>
 </div>
@@ -1540,24 +1291,19 @@
     <!-- 왼쪽 페이지: 코드 기본 정보 -->
     <div class="book-page book-page-left" id="bookPageLeft">
       <!-- 상단 바: 바로가기 -->
-      <div class="flex items-center justify-between mb-3">
-        <button class="px-3 py-1.5 bg-[#F76C6C] text-white text-xs font-semibold rounded hover:bg-[#e55a5a] transition-colors flex items-center gap-1" onclick="openCodeContent()">
-          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+      <div class="flex items-center justify-between mb-4">
+        <button class="px-3 py-1 bg-[#F76C6C] text-white text-xs font-semibold rounded hover:bg-[#e55a5a] transition-colors" onclick="openCodeContent()">
           바로가기
         </button>
-        <button class="px-3 py-1.5 bg-gray-100 text-gray-600 text-xs font-semibold rounded hover:bg-gray-200 transition-colors" onclick="closeBookPopup()">
-          닫기
-        </button>
-      </div>
-      <!-- 대표 이미지 (Hero) -->
-      <div class="book-hero-placeholder" id="bookHeroImage">
-        <span id="bookHeroText">IBC</span>
+        <span class="text-xs text-gray-400" id="pageIndicator">1 / 2</span>
       </div>
       <!-- 코드 기본 정보 -->
       <div class="mb-4">
-        <h2 class="text-2xl font-black text-[#24305E]" id="bookTitle">NFPA 13</h2>
-        <p class="text-sm text-gray-700 mt-2 leading-relaxed font-medium" id="bookSubtitleKR">스프링클러 설비 설치 기준</p>
-        <p class="text-xs text-[#374785] mt-1 italic" id="bookSubtitle">Standard for the Installation of Sprinkler Systems</p>
+        <span class="text-[10px] font-semibold text-[#F76C6C] uppercase tracking-wider" id="bookOrg">NFPA</span>
+        <h2 class="text-2xl font-black text-[#24305E] mt-1" id="bookTitle">NFPA 13</h2>
+        <p class="text-sm text-gray-600 mt-2 leading-relaxed font-medium" id="bookSubtitleKR">스프링클러 설비 설치 기준</p>
+        <p class="text-xs text-[#374785] mt-1" id="bookSubtitle">Standard for the Installation of Sprinkler Systems</p>
+        <span class="inline-block text-[10px] bg-[#A8D0E6] text-[#24305E] px-2 py-0.5 rounded font-medium mt-3" id="bookDiscipline">소방기계</span>
       </div>
       <div class="space-y-3 text-sm" id="bookDescriptionLeft">
         <!-- 코드 설명이 여기에 동적으로 로드됨 -->
@@ -1565,19 +1311,20 @@
     </div>
     <!-- 오른쪽 페이지: 코드 분석 -->
     <div class="book-page book-page-right" id="bookPageRight">
-      <div class="mb-4">
-        <h3 class="text-base font-bold text-[#24305E] flex items-center gap-2 pb-2 border-b border-gray-200">
-          <svg class="w-4 h-4 text-[#374785]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
+      <!-- 상단 바: 덮기 버튼 -->
+      <div class="flex items-center justify-end mb-4">
+        <button class="px-3 py-1 bg-gray-200 text-gray-700 text-xs font-semibold rounded hover:bg-gray-300 transition-colors" onclick="closeBookPopup()">
+          덮기
+        </button>
+      </div>
+      <div class="mb-3">
+        <h3 class="text-base font-bold text-[#24305E] flex items-center gap-1.5">
           코드 분석
         </h3>
       </div>
       <div class="space-y-3 text-sm" id="bookDescriptionRight">
         <!-- 코드 분석 내용이 여기에 동적으로 로드됨 -->
       </div>
-    </div>
-    <!-- 페이지 인디케이터 - 하단 중앙 -->
-    <div class="book-page-indicator" id="pageIndicator">
-      <!-- 동적으로 페이지 dots 생성 -->
     </div>
   </div>
   <!-- 오른쪽 페이지 넘김 버튼 (책 외부 오른쪽 가장자리) -->
@@ -1608,13 +1355,6 @@
   </div>
 </div>
 <!-- === TAG SECTIONS POPUP END === -->
-
-<!-- === FLOATING BACK BUTTON === -->
-<button class="back-nav-btn" id="backNavBtn" onclick="navigateBack()" title="이전 위치로 돌아가기">
-  <svg class="w-5 h-5 text-[#24305E]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-  </svg>
-</button>
 
 <!-- Library Section -->
 <!-- Removed PDF download button, made notes read-only, added hierarchical keywords -->
@@ -3207,118 +2947,6 @@ let currentBook = null;
 let currentPage = 0;
 let totalPages = 0;
 
-// 네비게이션 히스토리 스택
-let navigationHistory = [];
-
-// 이전 위치로 돌아가기
-function navigateBack() {
-  if (navigationHistory.length === 0) return;
-
-  const lastPosition = navigationHistory.pop();
-
-  // 히스토리가 비었으면 버튼 숨기기
-  if (navigationHistory.length === 0) {
-    document.getElementById('backNavBtn').classList.remove('visible');
-  }
-
-  // 이전 위치로 스크롤
-  const contentContainer = document.querySelector('#librarySection .overflow-y-auto');
-  if (contentContainer && lastPosition.scrollTop !== undefined) {
-    contentContainer.scrollTo({ top: lastPosition.scrollTop, behavior: 'smooth' });
-  }
-}
-
-// 현재 위치 저장 및 뒤로가기 버튼 표시
-function saveCurrentPosition() {
-  const contentContainer = document.querySelector('#librarySection .overflow-y-auto');
-  if (contentContainer) {
-    navigationHistory.push({
-      scrollTop: contentContainer.scrollTop
-    });
-    document.getElementById('backNavBtn').classList.add('visible');
-  }
-}
-
-// 코드 레퍼런스 하이퍼링크 처리 함수
-function processCodeReferences(text, currentVersionId) {
-  if (!text) return text;
-
-  // Section, Chapter, Table, Figure 패턴 매칭
-  // 예: Section 503.1, Chapter 9, Table 1004.5, Figure 1006.2.1
-  const patterns = [
-    { regex: /\b(Section)\s+(\d+(?:\.\d+)*(?:\.\d+)*)/gi, type: 'section' },
-    { regex: /\b(Chapter)\s+(\d+)/gi, type: 'chapter' },
-    { regex: /\b(Table)\s+(\d+(?:\.\d+)*(?:\.\d+)*)/gi, type: 'table' },
-    { regex: /\b(Figure)\s+(\d+(?:\.\d+)*(?:\.\d+)*)/gi, type: 'figure' }
-  ];
-
-  let result = text;
-
-  patterns.forEach(({ regex, type }) => {
-    result = result.replace(regex, (match, label, number) => {
-      return `<span class="code-reference" onclick="navigateToReference('${type}', '${number}', '${currentVersionId}')">${match}</span>`;
-    });
-  });
-
-  return result;
-}
-
-// 레퍼런스로 이동
-function navigateToReference(type, number, versionId) {
-  // 현재 위치 저장
-  saveCurrentPosition();
-
-  if (type === 'section') {
-    // Section으로 이동
-    const sectionId = 'section-' + number.replace(/\./g, '-');
-    const element = document.getElementById(sectionId);
-
-    if (element) {
-      const contentContainer = element.closest('.overflow-y-auto');
-      if (contentContainer) {
-        const scrollTarget = element.offsetTop - 20;
-        contentContainer.scrollTo({ top: scrollTarget, behavior: 'smooth' });
-      } else {
-        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
-      // 하이라이트 효과
-      element.classList.add('ring-2', 'ring-[#374785]', 'ring-opacity-70');
-      setTimeout(() => {
-        element.classList.remove('ring-2', 'ring-[#374785]', 'ring-opacity-70');
-      }, 2000);
-    } else {
-      console.log('Section not found:', sectionId);
-    }
-  } else if (type === 'chapter') {
-    // Chapter로 이동
-    const chapterElement = document.getElementById('chapter-heading-' + number);
-    if (chapterElement) {
-      const contentContainer = chapterElement.closest('.overflow-y-auto');
-      if (contentContainer) {
-        const scrollTarget = chapterElement.offsetTop - 20;
-        contentContainer.scrollTo({ top: scrollTarget, behavior: 'smooth' });
-      } else {
-        chapterElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
-      chapterElement.classList.add('ring-2', 'ring-[#374785]', 'ring-opacity-70');
-      setTimeout(() => {
-        chapterElement.classList.remove('ring-2', 'ring-[#374785]', 'ring-opacity-70');
-      }, 2000);
-    }
-  } else if (type === 'table' || type === 'figure') {
-    // Table/Figure 찾기 - 첨부파일에서 검색
-    const attachType = type === 'table' ? 'T' : 'F';
-    const attachment = appData.CodeAttachment.find(att =>
-      att.Type === attachType && att.Number === number
-    );
-    if (attachment) {
-      openAttachmentModal(attachment.AttachmentID);
-    } else {
-      console.log(`${type} not found:`, number);
-    }
-  }
-}
-
 // 책 팝업 열기
 // openBookPopup: 책장에서 책을 클릭하면 상세 정보 팝업을 표시
 function openBookPopup(codeKey) {
@@ -3336,25 +2964,8 @@ function openBookPopup(codeKey) {
   document.getElementById('bookTitle').textContent = bookData.title;
   document.getElementById('bookSubtitle').textContent = bookData.subtitle;
   document.getElementById('bookSubtitleKR').textContent = bookData.subtitleKR || '';
-
-  // Hero 이미지/텍스트 업데이트
-  document.getElementById('bookHeroText').textContent = bookData.title;
-
-  // Hero 배경 그라디언트 (코드별 색상)
-  const heroEl = document.getElementById('bookHeroImage');
-  const gradients = {
-    'IBC': 'linear-gradient(135deg, #24305E 0%, #374785 50%, #4a5a99 100%)',
-    'NFPA': 'linear-gradient(135deg, #F76C6C 0%, #e55555 50%, #374785 100%)',
-    'default': 'linear-gradient(135deg, #24305E 0%, #374785 50%, #A8D0E6 100%)'
-  };
-  const gradientKey = bookData.org || 'default';
-  heroEl.style.background = gradients[gradientKey] || gradients['default'];
-
-  // 페이지 인디케이터 dots 생성
-  const indicatorEl = document.getElementById('pageIndicator');
-  indicatorEl.innerHTML = Array.from({length: totalPages}, (_, i) =>
-    `<span class="page-dot ${i === 0 ? 'active' : ''}" onclick="loadBookPage(${i})"></span>`
-  ).join('');
+  document.getElementById('bookOrg').textContent = bookData.org;
+  document.getElementById('bookDiscipline').textContent = bookData.discipline;
 
   // 페이지 내용 로드
   loadBookPage(0);
@@ -3475,11 +3086,8 @@ function loadBookPage(pageIndex) {
   document.getElementById('bookDescriptionLeft').innerHTML = page.left;
   document.getElementById('bookDescriptionRight').innerHTML = page.right;
 
-  // 페이지 인디케이터 dots 업데이트
-  const dots = document.querySelectorAll('#pageIndicator .page-dot');
-  dots.forEach((dot, i) => {
-    dot.classList.toggle('active', i === pageIndex);
-  });
+  // 페이지 인디케이터 업데이트
+  document.getElementById('pageIndicator').textContent = `${pageIndex + 1} / ${totalPages}`;
 
   // 버튼 상태 업데이트
   document.getElementById('prevPageBtn').disabled = pageIndex === 0;
@@ -4146,7 +3754,7 @@ function scrollToSection(chapterId, sectionNum, versionId, event) {
         console.warn('Section item not found for highlighting:', sectionNum);
     }
 
-    // 콘텐츠 로드 완료 후 섹션으로 스크롤
+    // 콘텐츠 로드 완료 후 섹션으로 스크롤 (timeout 증가)
     setTimeout(() => {
         // 섹션 ID 생성
         const sectionId = getSectionId(chapterId, sectionNum);
@@ -4157,31 +3765,34 @@ function scrollToSection(chapterId, sectionNum, versionId, event) {
 
         // 못 찾으면 data-section 속성으로 찾기
         if (!sectionElement) {
-            sectionElement = document.querySelector(`#contentArea [data-section="${sectionNum}"]`);
+            sectionElement = document.querySelector(`[data-section="${sectionNum}"]`);
             console.log('Fallback to data-section:', sectionElement ? 'found' : 'not found');
         }
 
         if (sectionElement) {
             console.log('Found section element:', sectionElement.id);
-            // 스크롤 가능한 컨테이너 찾기
-            const contentContainer = sectionElement.closest('.overflow-y-auto');
+            // 스크롤 가능한 컨테이너 내에서 스크롤
+            const contentContainer = document.querySelector('#librarySection .flex-1.overflow-y-auto');
             if (contentContainer) {
-                // 요소의 offsetTop 사용하여 정확한 위치 계산
-                const scrollTarget = sectionElement.offsetTop - 20;
+                // getBoundingClientRect로 정확한 위치 계산
+                const containerRect = contentContainer.getBoundingClientRect();
+                const elementRect = sectionElement.getBoundingClientRect();
+                const relativeTop = elementRect.top - containerRect.top;
+                const scrollPosition = Math.max(0, contentContainer.scrollTop + relativeTop - 100);
+
                 contentContainer.scrollTo({
-                    top: scrollTarget,
+                    top: scrollPosition,
                     behavior: 'smooth'
                 });
-                console.log('Scrolled to position:', scrollTarget);
+                console.log('Scrolled to position:', scrollPosition);
             } else {
-                // fallback: scrollIntoView 사용
                 sectionElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 console.log('Used scrollIntoView fallback');
             }
         } else {
             console.error('Section element not found:', sectionId);
         }
-    }, 400);
+    }, 300);
 }
 
 function loadChapterContent(chapterId, versionId) {
@@ -4330,27 +3941,27 @@ function loadChapterContent(chapterId, versionId) {
                             </button>
                         </div>
 
-                        <!-- 타이틀 + 키워드 태그 -->
-                        <div class="flex items-center gap-2 mb-2 flex-wrap">
+                        <!-- 타이틀 -->
+                        <div class="flex items-center gap-2 mb-2">
                             <h4 class="font-semibold text-[#24305E]">${sectionNumber}${content.TitleEN ? ' ' + content.TitleEN : ''}</h4>
-                            ${uniqueTags.length > 0 ? uniqueTags.map(tag => `<span class="text-xs bg-[#F8E9A1] text-[#24305E] px-2 py-0.5 rounded cursor-pointer hover:bg-[#F5DC7D] transition-colors" onclick="showTagSectionsPopup('${tag.replace(/'/g, "\\'")}', '${versionId}')">${tag}</span>`).join('') : ''}
                         </div>
 
-                        <!-- 콘텐츠 (가독성 개선 + 하이퍼링크) -->
-                        ${content.ContentEN ? `<p class="text-gray-700 leading-relaxed mb-3 tracking-wide">${processCodeReferences(content.ContentEN, versionId)}</p>` : ''}
-                        ${content.ContentKR ? `<p class="text-gray-500 text-sm leading-loose mb-3 pl-3 border-l-2 border-gray-200">${processCodeReferences(content.ContentKR, versionId)}</p>` : ''}
+                        <!-- 콘텐츠 -->
+                        ${content.ContentEN ? `<p class="text-gray-700 leading-relaxed mb-2">${content.ContentEN}</p>` : ''}
+                        ${content.ContentKR ? `<p class="text-gray-600 text-sm leading-relaxed mb-3">${content.ContentKR}</p>` : ''}
 
-                        <!-- Note (가독성 개선) -->
+                        <!-- 키워드 태그 (Index/SubIndex) -->
+                        ${uniqueTags.length > 0 ? `
+                        <div class="flex items-center gap-2 flex-wrap mb-3">
+                            ${uniqueTags.map(tag => `<span class="text-xs bg-[#F8E9A1] text-[#24305E] px-2 py-0.5 rounded cursor-pointer hover:bg-[#F5DC7D] transition-colors" onclick="showTagSectionsPopup('${tag.replace(/'/g, "\\'")}', '${versionId}')">${tag}</span>`).join('')}
+                        </div>` : ''}
+
+                        <!-- Note -->
                         ${content.Comment ? `
-                        <div class="mt-4 pt-3 border-t border-gray-200">
-                            <div class="bg-gradient-to-r from-[#FEE9EC] to-[#FFF5F6] p-3 rounded-lg border-l-3 border-[#F76C6C]">
-                                <label class="text-xs font-bold text-[#F76C6C] mb-1.5 block uppercase tracking-wider flex items-center gap-1">
-                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
-                                    Note
-                                </label>
-                                <div class="text-sm text-gray-600 leading-relaxed whitespace-pre-line italic">
-                                    ${processCodeReferences(content.Comment, versionId)}
-                                </div>
+                        <div class="mt-3 pt-3 border-t border-gray-200 bg-[#FEE9EC] bg-opacity-30 p-3 rounded-lg">
+                            <label class="text-xs font-semibold text-[#F76C6C] mb-1 block">Note</label>
+                            <div class="w-full text-sm p-2 bg-white border border-[#F76C6C] border-opacity-20 rounded text-gray-700 whitespace-pre-line">
+                                ${content.Comment}
                             </div>
                         </div>` : ''}
 
@@ -4863,7 +4474,7 @@ function displayTopSearchResults(exactMatches, partialMatches, keyword, attachme
         return;
     }
 
-    let html = '<div class="space-y-4">';
+    let html = '<div class="space-y-6">';
 
     allResults.forEach((result, index) => {
         // Fix "Section General" to just "General"
@@ -4884,88 +4495,93 @@ function displayTopSearchResults(exactMatches, partialMatches, keyword, attachme
 
         // Check if this is an attachment result (Table/Figure)
         if (result.type === 'attachment') {
-            // Display attachment using code content display style
+            // Display attachment using library-style figure display
             const imagePath = result.fileName || '';
             const badgeText = result.attachment?.Type === 'T' ? '표' : '그림';
             html += `
-                <div class="p-4 rounded-lg relative search-result-item" id="search-result-${index}">
-                    <!-- 복사 버튼 (우상단) -->
-                    <div class="absolute top-3 right-3 flex items-center gap-1">
-                        <button class="p-1.5 hover:bg-gray-100 rounded transition-colors" title="Go to section" onclick="openSearchResult('${result.codeId}', '${result.versionId}', '${result.chapterId}', '${sectionNum}')">
-                            <svg class="w-4 h-4 text-[#F76C6C]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
-                            </svg>
-                        </button>
-                        <button class="p-1.5 hover:bg-gray-100 rounded transition-colors" title="Copy content" onclick="copySearchResultContent(event, this)">
+                <div class="bg-gray-50 p-4 rounded-lg relative search-result-item" id="search-result-${index}">
+                    <!-- Copy button -->
+                    <div class="absolute top-3 right-3 flex gap-2">
+                        <button class="p-1.5 hover:bg-gray-200 rounded transition-colors" title="Copy content" onclick="copySearchResultContent(event, this)">
                             <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
                             </svg>
                         </button>
                     </div>
 
-                    <!-- 타이틀 + 배지 -->
-                    <div class="flex items-center gap-2 mb-2 flex-wrap">
-                        <h4 class="font-semibold text-[#24305E]">${sectionNum}${result.titleEN ? ' ' + highlightedTitleEN : ''}</h4>
-                        <span class="text-xs bg-[#A8D0E6] text-[#24305E] font-semibold px-2 py-0.5 rounded">${result.code} ${result.year}</span>
+                    <!-- Badge and Title -->
+                    <div class="flex items-center gap-2 mb-3 flex-wrap">
+                        <span class="text-xs bg-[#A8D0E6] text-[#24305E] font-semibold px-2 py-0.5 rounded">${result.code} ${result.year}: Ch.${result.chapter} - ${sectionNum}</span>
                         <span class="text-xs bg-[#F76C6C] text-white px-2 py-0.5 rounded">${badgeText}</span>
                     </div>
+                    <h4 class="font-semibold text-[#24305E] text-sm mb-2">${highlightedTitleEN}</h4>
+                    ${result.titleKR ? `<p class="text-gray-600 text-sm mb-3">${highlightedTitleKR}</p>` : ''}
 
-                    <!-- 이미지 -->
-                    <div class="mt-3">
+                    <!-- Image display in smaller size (90px x 90px) -->
+                    <div class="mt-3 pt-3 border-t border-gray-200">
                         <div class="figures-scroll">
-                            <div class="figure-thumbnail" onclick="openImageModalById('${result.attachmentId}')">
-                                <img class="figure-thumbnail-image" alt="${result.titleEN}" src="${imagePath}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"/>
-                                <div class="bg-gray-100 rounded flex items-center justify-center" style="display: none; height: 140px;">
-                                    <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                                    </svg>
-                                </div>
-                                <p class="figure-thumbnail-label">${result.titleEN}</p>
+                            <div style="width: 90px; height: 90px; flex-shrink: 0; border: 2px solid #e5e7eb; border-radius: 8px; overflow: hidden; cursor: pointer; display: flex; flex-direction: column;" onclick="openImageModalById('${result.attachmentId}')">
+                                <img alt="${result.titleEN}" style="width: 100%; height: calc(100% - 24px); object-fit: contain; background-color: white;" src="${imagePath}"/>
+                                <p style="padding: 2px 4px; font-size: 9px; text-align: center; background-color: #f3f4f6; color: #374151; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${result.titleEN}</p>
                             </div>
                         </div>
                     </div>
 
-                    <!-- 내용 -->
+                    <!-- Content text if available (collapsed by default, 3 lines) -->
                     ${result.contentEN || result.contentKR ? `
-                        <div class="mt-3 pt-3 border-t border-gray-200">
-                            ${result.contentEN ? `<p class="text-gray-700 leading-relaxed mb-2">${highlightedContentEN}</p>` : ''}
-                            ${result.contentKR ? `<p class="text-gray-600 text-sm leading-relaxed">${highlightedContentKR}</p>` : ''}
+                        <div class="mt-3 pt-3 border-t border-gray-200 text-sm text-gray-600">
+                            <div id="attachment-content-${index}" class="line-clamp-3">
+                                ${result.contentEN ? `<p class="mb-2">${highlightedContentEN}</p>` : ''}
+                                ${result.contentKR ? `<p>${highlightedContentKR}</p>` : ''}
+                            </div>
+                            <button onclick="toggleAttachmentContent(${index})" class="text-[#F76C6C] hover:underline text-xs mt-2" id="toggle-btn-${index}">
+                                더보기 ▼
+                            </button>
                         </div>
                     ` : ''}
                 </div>
             `;
         } else {
-            // code content display 스타일 적용
+            // Use reference.txt design with collapse/expand functionality for regular content
             html += `
-                <div class="p-4 rounded-lg relative search-result-item" id="search-result-${index}">
-                    <!-- 복사 버튼 (우상단) -->
-                    <div class="absolute top-3 right-3 flex items-center gap-1">
-                        <button class="p-1.5 hover:bg-gray-100 rounded transition-colors" title="Go to section" onclick="openSearchResult('${result.codeId}', '${result.versionId}', '${result.chapterId}', '${sectionNum}')">
+                <div class="bg-gray-50 p-4 rounded-lg relative search-result-item" id="search-result-${index}">
+                    <!-- Expand/Collapse Toggle -->
+                    <button class="absolute top-3 left-3 p-1 hover:bg-gray-200 rounded transition-colors"
+                            onclick="toggleSearchResult(${index})"
+                            title="Expand/Collapse">
+                        <span class="result-toggle-icon">▼</span>
+                    </button>
+
+                    <!-- Copy and Navigate buttons -->
+                    <div class="absolute top-3 right-3 flex gap-2">
+                        <button class="p-1.5 hover:bg-gray-200 rounded transition-colors"
+                                title="Go to section"
+                                onclick="openSearchResult('${result.codeId}', '${result.versionId}', '${result.chapterId}', '${sectionNum}')">
                             <svg class="w-4 h-4 text-[#F76C6C]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
                             </svg>
                         </button>
-                        <button class="p-1.5 hover:bg-gray-100 rounded transition-colors" title="Copy link" onclick="copySearchResultLink('${result.codeId}', '${result.chapterId}', '${sectionNum}')">
-                            <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path>
-                            </svg>
-                        </button>
-                        <button class="p-1.5 hover:bg-gray-100 rounded transition-colors" title="Copy content" onclick="copySearchResultContent(event, this)">
+                        <button class="p-1.5 hover:bg-gray-200 rounded transition-colors" title="Copy content" onclick="copySearchResultContent(event, this)">
                             <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
                             </svg>
                         </button>
                     </div>
 
-                    <!-- 타이틀 + 코드 배지 -->
-                    <div class="flex items-center gap-2 mb-3 flex-wrap pr-20">
-                        <h4 class="font-semibold text-[#24305E]">${sectionNum}${result.titleEN ? ' ' + highlightedTitleEN : ''}</h4>
-                        <span class="text-xs bg-[#A8D0E6] text-[#24305E] font-semibold px-2 py-0.5 rounded">${result.code} ${result.year}</span>
+                    <!-- Summary (always visible) -->
+                    <div class="ml-12 pr-20">
+                        <div class="flex items-center gap-2 mb-2 flex-wrap">
+                            <span class="text-xs bg-[#A8D0E6] text-[#24305E] font-semibold px-2 py-0.5 rounded">${result.code} ${result.year}: Ch.${result.chapter} - ${sectionNum}</span>
+                        </div>
+                        <h4 class="font-semibold text-[#24305E] text-sm cursor-pointer" onclick="toggleSearchResult(${index})">${sectionNum}${result.titleEN ? ' ' + highlightedTitleEN : ''}</h4>
                     </div>
 
-                    <!-- 콘텐츠 -->
-                    ${result.contentEN ? `<p class="text-gray-700 leading-relaxed mb-2">${highlightedContentEN}</p>` : ''}
-                    ${result.contentKR ? `<p class="text-gray-600 text-sm leading-relaxed">${highlightedContentKR}</p>` : ''}
+                    <!-- Details (collapsible) -->
+                    <div class="result-details hidden ml-12 pr-20 mt-2 border-t border-gray-200 pt-2">
+                        ${result.titleKR ? `<p class="text-gray-600 text-sm leading-relaxed mb-2">${highlightedTitleKR}</p>` : ''}
+                        ${result.contentEN ? `<p class="text-gray-700 text-sm leading-relaxed mb-2">${highlightedContentEN}</p>` : ''}
+                        ${result.contentKR ? `<p class="text-gray-600 text-sm leading-relaxed">${highlightedContentKR}</p>` : ''}
+                    </div>
                 </div>
             `;
         }
@@ -5563,7 +5179,7 @@ function performSearch() {
     displaySearchResults(exactMatches, partialMatches, allFilteredResults, keyword, attachmentResults);
 }
 
-// Helper function to highlight keyword in text - using search-highlight class
+// Helper function to highlight keyword in text - using search-highlight class from reference.txt
 function highlightKeyword(text, keyword, isExactMatch) {
     if (!text || !keyword) return text;
 
@@ -5574,9 +5190,9 @@ function highlightKeyword(text, keyword, isExactMatch) {
     // Create regex for case-insensitive matching
     const regex = new RegExp(`(${escapedKeyword})`, 'gi');
 
-    // Use different highlight class based on match type
-    const highlightClass = isExactMatch ? 'search-highlight-exact' : 'search-highlight';
-    return text.replace(regex, `<span class="${highlightClass}">$1</span>`);
+    // Use search-highlight class consistent with reference.txt style
+    // .search-highlight { background-color: #fde047; padding: 2px 4px; border-radius: 2px; font-weight: 600; }
+    return text.replace(regex, `<mark class="search-highlight">$1</mark>`);
 }
 
 // Extract context around keyword for better search result display
@@ -5652,88 +5268,98 @@ function displaySearchResults(exactMatches, partialMatches, allFilteredResults, 
 
         // Check if this is an attachment result
         if (result.type === 'attachment') {
-            // code content display 스타일 적용 (첨부파일)
+            // Display attachment using library-style figure display
             const imagePath = result.fileName || '';
             const badgeText = result.attachment?.Type === 'T' ? '표' : '그림';
+            const uniqueId = `searchResultAttachment${index}`;
             html += `
-                <div class="p-4 rounded-lg relative search-result-item" data-result='${JSON.stringify(result).replace(/'/g, "\\'")}'>
-                    <!-- 버튼 (우상단) -->
-                    <div class="absolute top-3 right-3 flex items-center gap-1">
-                        <button class="p-1.5 hover:bg-gray-100 rounded transition-colors" title="Go to section" onclick="openSearchResult('${result.codeId}', '${result.versionId}', '${result.chapterId}', '${sectionNum}')">
-                            <svg class="w-4 h-4 text-[#F76C6C]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
-                            </svg>
-                        </button>
-                        <button class="p-1.5 hover:bg-gray-100 rounded transition-colors" title="Copy content" onclick="copySearchResultContent(event, this)">
-                            <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
-                            </svg>
-                        </button>
-                    </div>
-
-                    <!-- 타이틀 + 배지 -->
-                    <div class="flex items-center gap-2 mb-3 flex-wrap pr-20">
-                        <h4 class="font-semibold text-[#24305E]">${sectionNum}${displayTitleEN ? ' ' + displayTitleEN : ''}</h4>
-                        <span class="text-xs bg-[#A8D0E6] text-[#24305E] font-semibold px-2 py-0.5 rounded">${result.code} ${result.year}</span>
-                        <span class="text-xs bg-[#F76C6C] text-white px-2 py-0.5 rounded">${badgeText}</span>
-                    </div>
-
-                    <!-- 이미지 -->
-                    <div class="mt-3">
-                        <div class="figures-scroll">
-                            <div class="figure-thumbnail" onclick="openImageModalById('${result.attachmentId}')">
-                                <img class="figure-thumbnail-image" alt="${result.titleEN}" src="${imagePath}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"/>
-                                <div class="bg-gray-100 rounded flex items-center justify-center" style="display: none; height: 140px;">
-                                    <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                                    </svg>
+                <div class="border rounded-lg bg-white overflow-hidden search-result-item" data-result='${JSON.stringify(result).replace(/'/g, "\'")}'>
+                    <div class="result-collapsible p-4 hover:bg-gray-50 transition-colors" onclick="toggleResultItem('${uniqueId}')">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-3 flex-1">
+                                <svg id="${uniqueId}Icon" class="w-5 h-5 text-gray-600 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                                <div class="flex-1">
+                                    <!-- Badge and Title -->
+                                    <div class="flex items-center gap-2 mb-1">
+                                        <span class="bg-[#A8D0E6] text-[#24305E] text-xs font-semibold px-2 py-1 rounded">${result.code} ${result.year}</span>
+                                        <span class="text-sm text-gray-500">Chapter ${result.chapter}, Section ${sectionNum}</span>
+                                        <span class="text-xs bg-[#F76C6C] text-white px-2 py-1 rounded">${badgeText}</span>
+                                    </div>
+                                    <h3 class="font-semibold text-[#24305E]">${displayTitleEN}</h3>
+                                    ${displayTitleKR ? `<p class="text-gray-600 text-sm mt-1">${displayTitleKR}</p>` : ''}
                                 </div>
-                                <p class="figure-thumbnail-label">${result.titleEN}</p>
                             </div>
+                            <!-- Copy button -->
+                            <button class="ml-4 p-1.5 hover:bg-gray-200 rounded transition-colors" title="Copy content" onclick="event.stopPropagation(); copySearchResultContent(event, this)">
+                                <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                                </svg>
+                            </button>
                         </div>
                     </div>
 
-                    <!-- 내용 -->
-                    ${displayContentEN || displayContentKR ? `
-                        <div class="mt-3 pt-3 border-t border-gray-200">
-                            ${displayContentEN ? `<p class="text-gray-700 leading-relaxed mb-2">${displayContentEN}</p>` : ''}
-                            ${displayContentKR ? `<p class="text-gray-600 text-sm leading-relaxed">${displayContentKR}</p>` : ''}
+                    <div id="${uniqueId}" class="result-content">
+                        <div class="px-4 pb-4 border-t pt-3">
+                            <!-- Image display in smaller size (90px x 90px) -->
+                            <div class="figures-scroll">
+                                <div style="width: 90px; height: 90px; flex-shrink: 0; border: 2px solid #e5e7eb; border-radius: 8px; overflow: hidden; cursor: pointer; display: flex; flex-direction: column;" onclick="openImageModalById('${result.attachmentId}')">
+                                    <img alt="${result.titleEN}" style="width: 100%; height: calc(100% - 24px); object-fit: contain; background-color: white;" src="${imagePath}"/>
+                                    <p style="padding: 2px 4px; font-size: 9px; text-align: center; background-color: #f3f4f6; color: #374151; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${result.titleEN}</p>
+                                </div>
+                            </div>
+
+                            <!-- Content text if available -->
+                            ${displayContentEN || displayContentKR ? `
+                                <div class="mt-3 pt-3 border-t border-gray-200 text-sm text-gray-600 leading-relaxed space-y-1">
+                                    ${displayContentEN ? `<p class="text-gray-700 leading-relaxed">${displayContentEN}</p>` : ''}
+                                    ${displayContentKR ? `<p class="text-gray-600 leading-relaxed">${displayContentKR}</p>` : ''}
+                                </div>
+                            ` : ''}
                         </div>
-                    ` : ''}
+                    </div>
                 </div>
             `;
         } else {
-            // code content display 스타일 적용 (일반 콘텐츠)
+            // Display regular content result
+            const uniqueId = `searchResult${index}`;
             html += `
-                <div class="p-4 rounded-lg relative search-result-item" data-result='${JSON.stringify(result).replace(/'/g, "\\'")}'>
-                    <!-- 버튼 (우상단) -->
-                    <div class="absolute top-3 right-3 flex items-center gap-1">
-                        <button class="p-1.5 hover:bg-gray-100 rounded transition-colors" title="Go to section" onclick="openSearchResult('${result.codeId}', '${result.versionId}', '${result.chapterId}', '${sectionNum}')">
-                            <svg class="w-4 h-4 text-[#F76C6C]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
-                            </svg>
-                        </button>
-                        <button class="p-1.5 hover:bg-gray-100 rounded transition-colors" title="Copy link" onclick="copySearchResultLink('${result.codeId}', '${result.chapterId}', '${sectionNum}')">
-                            <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path>
-                            </svg>
-                        </button>
-                        <button class="p-1.5 hover:bg-gray-100 rounded transition-colors" title="Copy content" onclick="copySearchResultContent(event, this)">
-                            <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
-                            </svg>
-                        </button>
+                <div class="border rounded-lg bg-white overflow-hidden search-result-item" data-result='${JSON.stringify(result).replace(/'/g, "\'")}'>
+                    <div class="result-collapsible p-4 hover:bg-gray-50 transition-colors" onclick="toggleResultItem('${uniqueId}')"
+                         onmousedown="handleResultMouseDown(event)"
+                         onmouseup="handleResultMouseUp(event)">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-3 flex-1">
+                                <svg id="${uniqueId}Icon" class="w-5 h-5 text-gray-600 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                                <div class="flex-1">
+                                    <!-- Location and Index tags -->
+                                    <div class="flex items-center gap-2 mb-1">
+                                        <span class="bg-[#F76C6C] text-white text-xs font-semibold px-2 py-1 rounded">${result.code} ${result.year}</span>
+                                        <span class="text-sm text-gray-500">Chapter ${result.chapter}, Section ${sectionNum}</span>
+                                    </div>
+                                    <h3 class="font-semibold text-[#24305E]">${sectionNum}${result.titleEN ? ' ' + result.titleEN : ''}</h3>
+                                </div>
+                            </div>
+                            <!-- Copy button -->
+                            <button class="ml-4 p-1.5 hover:bg-gray-200 rounded transition-colors" title="Copy content" onclick="event.stopPropagation(); copySearchResultContent(event, this)">
+                                <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                                </svg>
+                            </button>
+                        </div>
                     </div>
-
-                    <!-- 타이틀 + 코드 배지 -->
-                    <div class="flex items-center gap-2 mb-3 flex-wrap pr-20">
-                        <h4 class="font-semibold text-[#24305E]">${sectionNum}${displayTitleEN ? ' ' + displayTitleEN : ''}</h4>
-                        <span class="text-xs bg-[#A8D0E6] text-[#24305E] font-semibold px-2 py-0.5 rounded">${result.code} ${result.year}</span>
+                    ${displayTitleKR || displayContentEN || displayContentKR ? `
+                    <div id="${uniqueId}" class="result-content">
+                        <div class="px-4 pb-4 text-sm text-gray-600 leading-relaxed space-y-1 border-t pt-3">
+                            ${displayTitleKR ? `<p class="text-gray-600 leading-relaxed">${displayTitleKR}</p>` : ''}
+                            ${displayContentEN ? `<p class="text-gray-700 leading-relaxed">${displayContentEN}</p>` : ''}
+                            ${displayContentKR ? `<p class="text-gray-600 leading-relaxed">${displayContentKR}</p>` : ''}
+                        </div>
                     </div>
-
-                    <!-- 콘텐츠 -->
-                    ${displayContentEN ? `<p class="text-gray-700 leading-relaxed mb-2">${displayContentEN}</p>` : ''}
-                    ${displayContentKR ? `<p class="text-gray-600 text-sm leading-relaxed">${displayContentKR}</p>` : ''}
+                    ` : ''}
                 </div>
             `;
         }
@@ -5930,14 +5556,6 @@ function scrollToChapter(chapterId) {
 }
 
 // === Copy Functions ===
-function copySearchResultLink(codeId, chapterId, sectionNum) {
-    const sectionId = getSectionId(chapterId, sectionNum);
-    const url = window.location.href.split('#')[0] + '#' + sectionId;
-    navigator.clipboard.writeText(url).then(() => {
-        alert('Link copied to clipboard!');
-    });
-}
-
 function copySearchResultContent(event, button) {
     event.stopPropagation(); // Prevent modal from opening
     const resultCard = button.closest('.search-result-item');
