@@ -574,13 +574,15 @@
     .book-container {
       position: relative;
       width: 90%;
-      max-width: 1100px;
-      height: 75vh;
-      max-height: 650px;
+      max-width: 1000px;
+      height: 70vh;
+      max-height: 600px;
       perspective: 2000px;
       transform: scale(0.8) rotateX(10deg);
       opacity: 0;
       transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      align-items: center;
     }
 
     .book-popup.active .book-container {
@@ -590,7 +592,7 @@
 
     .book-pages {
       position: relative;
-      width: 100%;
+      flex: 1;
       height: 100%;
       display: flex;
       background: linear-gradient(to right, #f8f9fa 0%, #ffffff 50%, #f8f9fa 100%);
@@ -620,7 +622,7 @@
 
     .book-page {
       flex: 1;
-      padding: 20px 28px;
+      padding: 32px 40px;
       overflow-y: auto;
       background: linear-gradient(to bottom, #ffffff 0%, #fefefe 100%);
       position: relative;
@@ -648,27 +650,41 @@
       border-left: 1px solid rgba(0, 0, 0, 0.08);
     }
 
-    .close-book-btn {
+    /* 책 페이지 넘김 버튼 */
+    .book-nav-btn {
       position: absolute;
-      top: -50px;
-      right: 0;
-      width: 44px;
-      height: 44px;
-      background: white;
-      border-radius: 50%;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 36px;
+      height: 60px;
+      background: rgba(255, 255, 255, 0.9);
+      border: none;
+      border-radius: 4px;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-      transition: all 0.3s ease;
-      z-index: 100;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+      transition: all 0.2s ease;
+      z-index: 20;
     }
 
-    .close-book-btn:hover {
-      transform: scale(1.1) rotate(90deg);
-      background: #F76C6C;
-      color: white;
+    .book-nav-btn:hover:not(:disabled) {
+      background: white;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .book-nav-btn:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+
+    .book-nav-left {
+      left: -48px;
+    }
+
+    .book-nav-right {
+      right: -48px;
     }
 
     /* Bookshelf container - magazine rack style */
@@ -933,24 +949,17 @@
 <div class="content-area-height overflow-y-auto">
 <div class="p-8">
 <div class="max-w-7xl mx-auto">
-<!-- Section 1: Disclaimer (교체됨: Quick Actions → Disclaimer) -->
+<!-- Section 1: Disclaimer -->
 <section class="mb-6">
-<div class="bg-gradient-to-r from-amber-50 to-orange-50 rounded-xl shadow-md p-6 border-l-4 border-[#F76C6C]">
-  <div class="flex items-start space-x-4">
-    <div class="flex-shrink-0">
-      <div class="w-10 h-10 bg-[#F76C6C] bg-opacity-20 rounded-full flex items-center justify-center">
-        <svg class="w-5 h-5 text-[#F76C6C]" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-          <path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-        </svg>
-      </div>
-    </div>
+<div class="bg-gray-50 rounded-lg p-4 border border-gray-200">
+  <div class="flex items-start gap-3">
+    <svg class="w-5 h-5 text-[#F76C6C] flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+      <path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+    </svg>
     <div>
-      <h2 class="text-lg font-bold text-[#24305E] mb-2">Disclaimer</h2>
-      <div class="space-y-2 text-gray-700 text-sm leading-relaxed">
-        <p>본 웹페이지에 수록된 코드 내용은 관련 법규 및 기준의 일부 발췌본이며, 이해를 돕기 위해 해설, 주석 및 참고 이미지를 포함하고 있습니다.</p>
-        <p class="font-medium">정확하고 전체적인 내용을 확인하기 위해서는 반드시 <span class="text-[#F76C6C]">구매한 코드 원본을 열람 및 참고</span>해주시기 바랍니다.</p>
-        <p class="text-xs text-gray-500 pt-1 border-t border-orange-200 mt-2">댓글 기능을 통해 각 조항에 관련된 프로젝트 적용 사례나 해석을 공유할 수 있도록 지원할 예정입니다.</p>
-      </div>
+      <h2 class="text-sm font-bold text-[#24305E] mb-1">DISCLAIMER</h2>
+      <p class="text-xs text-gray-600 leading-relaxed">본 웹페이지에 수록된 코드 내용은 관련 법규 및 기준의 일부 발췌본입니다. 정확한 내용은 반드시 <span class="text-[#F76C6C] font-medium">구매한 코드 원본</span>을 참고해주시기 바랍니다.</p>
+      <p class="text-xs text-gray-400 mt-2">하이테크 1본부</p>
     </div>
   </div>
 </div>
@@ -1264,55 +1273,57 @@
 </div>
 
 <!-- === BOOK POPUP START === -->
-<div class="book-popup" id="bookPopup">
+<div class="book-popup" id="bookPopup" onclick="if(event.target === this) closeBookPopup()">
 <div class="book-container">
+  <!-- 왼쪽 페이지 넘김 버튼 (책 외부 왼쪽 가장자리) -->
+  <button class="book-nav-btn book-nav-left disabled:opacity-30" id="prevPageBtn" onclick="changePage(-1)">
+    <svg class="w-5 h-5 text-[#24305E]" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M15 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+  </button>
   <div class="book-pages">
     <div class="book-spine"></div>
     <!-- 왼쪽 페이지: 코드 기본 정보 -->
     <div class="book-page book-page-left" id="bookPageLeft">
-      <!-- 상단 바: 바로가기 + 페이지 넘김 + 닫기 -->
-      <div class="flex items-center justify-between mb-3">
+      <!-- 상단 바: 바로가기 -->
+      <div class="flex items-center justify-between mb-4">
         <button class="px-3 py-1 bg-[#F76C6C] text-white text-xs font-semibold rounded hover:bg-[#e55a5a] transition-colors" onclick="openCodeContent()">
           바로가기
         </button>
-        <div class="flex items-center gap-2">
-          <button class="w-7 h-7 flex items-center justify-center rounded hover:bg-gray-100 transition-colors disabled:opacity-30" id="prevPageBtn" onclick="changePage(-1)">
-            <svg class="w-4 h-4 text-[#24305E]" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M15 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-          </button>
-          <span class="text-xs text-gray-400 min-w-[40px] text-center" id="pageIndicator">1 / 2</span>
-          <button class="w-7 h-7 flex items-center justify-center rounded hover:bg-gray-100 transition-colors disabled:opacity-30" id="nextPageBtn" onclick="changePage(1)">
-            <svg class="w-4 h-4 text-[#24305E]" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-          </button>
-          <button class="w-7 h-7 flex items-center justify-center rounded hover:bg-gray-100 transition-colors ml-2" onclick="closeBookPopup()">
-            <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-          </button>
-        </div>
+        <span class="text-xs text-gray-400" id="pageIndicator">1 / 2</span>
       </div>
       <!-- 코드 기본 정보 -->
-      <div class="mb-3">
+      <div class="mb-4">
         <span class="text-[10px] font-semibold text-[#F76C6C] uppercase tracking-wider" id="bookOrg">NFPA</span>
-        <h2 class="text-2xl font-black text-[#24305E] mt-0.5" id="bookTitle">NFPA 13</h2>
-        <p class="text-sm text-gray-600 mt-1 leading-snug" id="bookSubtitle">Standard for the Installation of Sprinkler Systems</p>
-        <p class="text-xs text-[#374785] font-medium mt-0.5" id="bookSubtitleKR">스프링클러 설비 설치 기준</p>
-        <span class="inline-block text-[10px] bg-[#A8D0E6] text-[#24305E] px-1.5 py-0.5 rounded font-medium mt-2" id="bookDiscipline">소방기계</span>
+        <h2 class="text-2xl font-black text-[#24305E] mt-1" id="bookTitle">NFPA 13</h2>
+        <p class="text-sm text-gray-600 mt-2 leading-relaxed" id="bookSubtitle">Standard for the Installation of Sprinkler Systems</p>
+        <p class="text-xs text-[#374785] font-medium mt-1" id="bookSubtitleKR">스프링클러 설비 설치 기준</p>
+        <span class="inline-block text-[10px] bg-[#A8D0E6] text-[#24305E] px-2 py-0.5 rounded font-medium mt-3" id="bookDiscipline">소방기계</span>
       </div>
-      <div class="space-y-2 text-sm" id="bookDescriptionLeft">
+      <div class="space-y-3 text-sm" id="bookDescriptionLeft">
         <!-- 코드 설명이 여기에 동적으로 로드됨 -->
       </div>
     </div>
     <!-- 오른쪽 페이지: 코드 분석 -->
     <div class="book-page book-page-right" id="bookPageRight">
-      <div class="mb-2">
+      <!-- 상단 바: 덮기 버튼 -->
+      <div class="flex items-center justify-end mb-4">
+        <button class="px-3 py-1 bg-gray-200 text-gray-700 text-xs font-semibold rounded hover:bg-gray-300 transition-colors" onclick="closeBookPopup()">
+          덮기
+        </button>
+      </div>
+      <div class="mb-3">
         <h3 class="text-base font-bold text-[#24305E] flex items-center gap-1.5">
           코드 분석
         </h3>
       </div>
-      <div class="space-y-2 text-sm" id="bookDescriptionRight">
+      <div class="space-y-3 text-sm" id="bookDescriptionRight">
         <!-- 코드 분석 내용이 여기에 동적으로 로드됨 -->
       </div>
     </div>
   </div>
-</div>
+  <!-- 오른쪽 페이지 넘김 버튼 (책 외부 오른쪽 가장자리) -->
+  <button class="book-nav-btn book-nav-right disabled:opacity-30" id="nextPageBtn" onclick="changePage(1)">
+    <svg class="w-5 h-5 text-[#24305E]" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+  </button>
 </div>
 </div>
 <!-- === BOOK POPUP END === -->
