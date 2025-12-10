@@ -478,6 +478,23 @@
       overflow: hidden;
     }
 
+    /* Filter checkbox sizes - smaller to match text */
+    .filter-checkbox {
+      width: 11px;
+      height: 11px;
+      flex-shrink: 0;
+    }
+    .filter-checkbox-sm {
+      width: 10px;
+      height: 10px;
+      flex-shrink: 0;
+    }
+    .filter-checkbox-xs {
+      width: 9px;
+      height: 9px;
+      flex-shrink: 0;
+    }
+
   </style>
 </head>
 <body class="bg-gray-50">
@@ -2166,130 +2183,139 @@ function renderAdvancedFilters(filtersByDiscipline, disciplines) {
         if (!data) return;
 
         const categoryName = disc.id === 'D001' ? 'arch' : disc.id === 'D005' ? 'fireMech' : 'fireElec';
-        const hasIndexTags = data.indexTags.length > 0;
-        const hasSubIndex = Object.keys(data.subIndexHierarchy).length > 0;
+
+        // 모든 필터 항목 통합 (SubIndex + IndexTags)
+        const allItems = [];
+
+        // SubIndex 계층 구조 추가
+        const sortedParents = Object.keys(data.subIndexHierarchy).sort();
+        sortedParents.forEach(parent => {
+            const children = data.subIndexHierarchy[parent];
+            const childKeys = Object.keys(children).sort();
+            allItems.push({
+                type: 'parent',
+                value: parent,
+                children: childKeys.map(child => ({
+                    value: child,
+                    fullValue: `${parent}_${child}`,
+                    grandchildren: Array.from(children[child]).sort()
+                }))
+            });
+        });
+
+        // IndexTags도 최상위 항목으로 추가
+        data.indexTags.forEach(tag => {
+            allItems.push({
+                type: 'tag',
+                value: tag,
+                children: []
+            });
+        });
+
+        // 총 항목 수 계산 (다단 레이아웃 결정용)
+        const totalItems = allItems.length;
+        const useMultiColumn = totalItems > 12;
 
         html += `
-        <div class="border rounded-lg p-3">
-            <div class="flex items-center gap-2 mb-2 pb-2 border-b-2" style="border-color: ${disc.color};">
-                <label class="flex items-center cursor-pointer">
-                    <input class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded"
-                           id="selectAll${categoryName}"
-                           onchange="toggleSelectAllDynamic('${categoryName}')"
-                           type="checkbox"/>
-                </label>
-                <h3 class="text-sm font-bold text-[#24305E]">${disc.name}</h3>
+        <div class="border rounded-lg p-3 relative" id="filterBox${categoryName}">
+            <div class="flex items-center justify-between mb-2 pb-2 border-b-2" style="border-color: ${disc.color};">
+                <div class="flex items-center gap-2">
+                    <label class="flex items-center cursor-pointer">
+                        <input class="filter-checkbox text-[#F76C6C] focus:ring-[#A8D0E6] rounded"
+                               id="selectAll${categoryName}"
+                               onchange="toggleSelectAllDynamic('${categoryName}')"
+                               type="checkbox"/>
+                    </label>
+                    <h3 class="text-sm font-bold text-[#24305E]">${disc.name}</h3>
+                </div>
+                <button class="hidden text-gray-400 hover:text-red-500 p-1 transition-colors"
+                        id="clearBtn${categoryName}"
+                        onclick="clearCategoryFilters('${categoryName}')"
+                        title="필터 전체 해제">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
             </div>
-            <div class="max-h-80 overflow-y-auto space-y-1">
+            <div class="max-h-80 overflow-y-auto ${useMultiColumn ? 'columns-2 gap-2' : 'space-y-0.5'}">
         `;
 
-        // SubIndex 계층 구조 렌더링 (위계 표시)
-        if (hasSubIndex) {
-            const sortedParents = Object.keys(data.subIndexHierarchy).sort();
-            sortedParents.forEach(parent => {
-                const children = data.subIndexHierarchy[parent];
-                const childKeys = Object.keys(children).sort();
-                const hasChildren = childKeys.length > 0;
-                const parentId = `${categoryName}_${parent.replace(/[^a-zA-Z0-9가-힣]/g, '')}`;
+        // 모든 항목 렌더링
+        allItems.forEach(item => {
+            const parentId = `${categoryName}_${item.value.replace(/[^a-zA-Z0-9가-힣]/g, '')}`;
+            const hasChildren = item.children && item.children.length > 0;
 
-                if (hasChildren) {
-                    // 하위 항목이 있는 부모
-                    html += `
-                    <div class="border-l-2 border-gray-200 pl-2">
-                        <div class="flex items-center justify-between cursor-pointer hover:bg-gray-50 p-1 rounded transition-colors"
-                             onclick="toggleFilterGroup('${parentId}')">
-                            <div class="flex items-center">
-                                <input class="w-3 h-3 text-[#F76C6C] focus:ring-[#A8D0E6] rounded"
-                                       name="${categoryName}Category" type="checkbox" value="${parent}"
-                                       onclick="event.stopPropagation(); toggleParentCheckbox(this, '${parentId}')"/>
-                                <span class="ml-1.5 text-xs font-medium text-gray-800">${parent}</span>
-                                <span class="ml-1 text-[10px] text-gray-400">(${childKeys.length})</span>
-                            </div>
-                            <span class="text-xs text-gray-400" id="${parentId}Toggle">▶</span>
-                        </div>
-                        <div class="hidden ml-3 mt-1 space-y-0.5" id="${parentId}">
-                    `;
-
-                    // 자식 항목 렌더링
-                    childKeys.forEach(child => {
-                        const grandchildren = Array.from(children[child]).sort();
-                        const hasGrandchildren = grandchildren.length > 0;
-                        const childId = `${parentId}_${child.replace(/[^a-zA-Z0-9가-힣]/g, '')}`;
-                        const childValue = `${parent}_${child}`;
-
-                        if (hasGrandchildren) {
-                            // 손자 항목이 있는 자식
-                            html += `
-                            <div class="border-l border-gray-200 pl-2">
-                                <div class="flex items-center justify-between cursor-pointer hover:bg-gray-50 p-0.5 rounded transition-colors"
-                                     onclick="toggleFilterGroup('${childId}')">
-                                    <div class="flex items-center">
-                                        <input class="w-2.5 h-2.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded"
-                                               name="${categoryName}Category" type="checkbox" value="${childValue}"
-                                               onclick="event.stopPropagation()"/>
-                                        <span class="ml-1 text-[11px] text-gray-700">${child}</span>
-                                        <span class="ml-1 text-[9px] text-gray-400">(${grandchildren.length})</span>
-                                    </div>
-                                    <span class="text-[10px] text-gray-400" id="${childId}Toggle">▶</span>
-                                </div>
-                                <div class="hidden ml-2 mt-0.5 space-y-0.5" id="${childId}">
-                                    ${grandchildren.map(gc => `
-                                    <label class="flex items-center cursor-pointer hover:bg-gray-50 p-0.5 rounded transition-colors">
-                                        <input class="w-2 h-2 text-[#F76C6C] focus:ring-[#A8D0E6] rounded"
-                                               name="${categoryName}Category" type="checkbox" value="${parent}_${child}_${gc}"/>
-                                        <span class="ml-1 text-[10px] text-gray-600">${gc}</span>
-                                    </label>
-                                    `).join('')}
-                                </div>
-                            </div>`;
-                        } else {
-                            // 손자 없는 자식
-                            html += `
-                            <label class="flex items-center cursor-pointer hover:bg-gray-50 p-0.5 rounded transition-colors border-l border-gray-200 pl-2">
-                                <input class="w-2.5 h-2.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded"
-                                       name="${categoryName}Category" type="checkbox" value="${childValue}"/>
-                                <span class="ml-1 text-[11px] text-gray-700">${child}</span>
-                            </label>`;
-                        }
-                    });
-
-                    html += '</div></div>';
-                } else {
-                    // 하위 항목이 없는 단독 부모
-                    html += `
-                    <label class="flex items-center cursor-pointer hover:bg-gray-50 p-1 rounded transition-colors border-l-2 border-gray-200 pl-2">
-                        <input class="w-3 h-3 text-[#F76C6C] focus:ring-[#A8D0E6] rounded"
-                               name="${categoryName}Category" type="checkbox" value="${parent}"/>
-                        <span class="ml-1.5 text-xs font-medium text-gray-800">${parent}</span>
-                    </label>`;
-                }
-            });
-        }
-
-        // Index 태그 (SubIndex와 별도로 표시)
-        if (hasIndexTags && hasSubIndex) {
-            html += `<div class="border-t border-gray-200 mt-2 pt-2">
-                <div class="text-[10px] text-gray-500 mb-1">기타 태그</div>`;
-        }
-
-        if (hasIndexTags) {
-            // 태그 개수에 따라 열 수 조정
-            const colCount = data.indexTags.length > 8 ? 2 : 1;
-            html += `<div class="grid grid-cols-${colCount} gap-x-2 gap-y-0.5">`;
-            data.indexTags.forEach(tag => {
+            if (hasChildren) {
+                // 하위 항목이 있는 부모
                 html += `
-                <label class="flex items-center cursor-pointer hover:bg-gray-50 p-0.5 rounded transition-colors">
-                    <input class="w-2.5 h-2.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded"
-                           name="${categoryName}Category" type="checkbox" value="${tag}"/>
-                    <span class="ml-1 text-[11px] text-gray-700">${tag}</span>
-                </label>`;
-            });
-            html += '</div>';
-        }
+                <div class="mb-0.5 ${useMultiColumn ? 'break-inside-avoid' : ''}">
+                    <div class="flex items-center justify-between cursor-pointer hover:bg-gray-50 py-0.5 px-1 rounded transition-colors"
+                         onclick="toggleFilterGroup('${parentId}')">
+                        <label class="flex items-center" onclick="event.stopPropagation()">
+                            <input class="filter-checkbox text-[#F76C6C] focus:ring-[#A8D0E6] rounded"
+                                   name="${categoryName}Category" type="checkbox" value="${item.value}"
+                                   onchange="toggleParentCheckbox(this, '${parentId}'); updateClearButton('${categoryName}')"/>
+                            <span class="ml-1.5 text-xs text-gray-800">${item.value}</span>
+                        </label>
+                        <span class="text-[10px] text-gray-400 font-mono" id="${parentId}Toggle">+</span>
+                    </div>
+                    <div class="hidden mt-0.5 ml-3 space-y-0.5" id="${parentId}">
+                `;
 
-        if (hasIndexTags && hasSubIndex) {
-            html += '</div>';
-        }
+                // 자식 항목 렌더링
+                item.children.forEach(child => {
+                    const childId = `${parentId}_${child.value.replace(/[^a-zA-Z0-9가-힣]/g, '')}`;
+                    const hasGrandchildren = child.grandchildren && child.grandchildren.length > 0;
+
+                    if (hasGrandchildren) {
+                        // 손자 항목이 있는 자식
+                        html += `
+                        <div class="mb-0.5">
+                            <div class="flex items-center justify-between cursor-pointer hover:bg-gray-50 py-0.5 px-1 rounded transition-colors"
+                                 onclick="toggleFilterGroup('${childId}')">
+                                <label class="flex items-center" onclick="event.stopPropagation()">
+                                    <input class="filter-checkbox-sm text-[#F76C6C] focus:ring-[#A8D0E6] rounded"
+                                           name="${categoryName}Category" type="checkbox" value="${child.fullValue}"
+                                           onchange="updateClearButton('${categoryName}')"/>
+                                    <span class="ml-1 text-[11px] text-gray-700">${child.value}</span>
+                                </label>
+                                <span class="text-[10px] text-gray-400 font-mono" id="${childId}Toggle">+</span>
+                            </div>
+                            <div class="hidden mt-0.5 ml-3 space-y-0.5" id="${childId}">
+                                ${child.grandchildren.map(gc => `
+                                <label class="flex items-center cursor-pointer hover:bg-gray-50 py-0.5 px-1 rounded transition-colors">
+                                    <input class="filter-checkbox-xs text-[#F76C6C] focus:ring-[#A8D0E6] rounded"
+                                           name="${categoryName}Category" type="checkbox" value="${item.value}_${child.value}_${gc}"
+                                           onchange="updateClearButton('${categoryName}')"/>
+                                    <span class="ml-1 text-[10px] text-gray-600">${gc}</span>
+                                </label>
+                                `).join('')}
+                            </div>
+                        </div>`;
+                    } else {
+                        // 손자 없는 자식
+                        html += `
+                        <label class="flex items-center cursor-pointer hover:bg-gray-50 py-0.5 px-1 rounded transition-colors">
+                            <input class="filter-checkbox-sm text-[#F76C6C] focus:ring-[#A8D0E6] rounded"
+                                   name="${categoryName}Category" type="checkbox" value="${child.fullValue}"
+                                   onchange="updateClearButton('${categoryName}')"/>
+                            <span class="ml-1 text-[11px] text-gray-700">${child.value}</span>
+                        </label>`;
+                    }
+                });
+
+                html += '</div></div>';
+            } else {
+                // 하위 항목이 없는 단독 항목 (태그 또는 단독 부모)
+                html += `
+                <label class="flex items-center cursor-pointer hover:bg-gray-50 py-0.5 px-1 rounded transition-colors ${useMultiColumn ? 'break-inside-avoid' : ''}">
+                    <input class="filter-checkbox text-[#F76C6C] focus:ring-[#A8D0E6] rounded"
+                           name="${categoryName}Category" type="checkbox" value="${item.value}"
+                           onchange="updateClearButton('${categoryName}')"/>
+                    <span class="ml-1.5 text-xs text-gray-800">${item.value}</span>
+                </label>`;
+            }
+        });
 
         html += '</div></div>';
     });
@@ -2303,7 +2329,7 @@ function toggleFilterGroup(groupId) {
     const toggle = document.getElementById(groupId + 'Toggle');
     if (group && toggle) {
         group.classList.toggle('hidden');
-        toggle.textContent = group.classList.contains('hidden') ? '▶' : '▼';
+        toggle.textContent = group.classList.contains('hidden') ? '+' : '−';
     }
 }
 
@@ -2320,6 +2346,37 @@ function toggleSelectAllDynamic(category) {
     const selectAll = document.getElementById('selectAll' + category);
     const checkboxes = document.querySelectorAll(`input[name="${category}Category"]`);
     checkboxes.forEach(cb => cb.checked = selectAll.checked);
+    updateClearButton(category);
+}
+
+function updateClearButton(category) {
+    const checkboxes = document.querySelectorAll(`input[name="${category}Category"]`);
+    const clearBtn = document.getElementById('clearBtn' + category);
+    const selectAll = document.getElementById('selectAll' + category);
+
+    if (!clearBtn) return;
+
+    // 체크된 항목이 있으면 X 버튼 표시
+    const hasChecked = Array.from(checkboxes).some(cb => cb.checked);
+    clearBtn.classList.toggle('hidden', !hasChecked);
+
+    // 전체선택 체크박스 상태 업데이트
+    if (selectAll) {
+        const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+        const someChecked = Array.from(checkboxes).some(cb => cb.checked);
+        selectAll.checked = allChecked;
+        selectAll.indeterminate = someChecked && !allChecked;
+    }
+}
+
+function clearCategoryFilters(category) {
+    const checkboxes = document.querySelectorAll(`input[name="${category}Category"]`);
+    const selectAll = document.getElementById('selectAll' + category);
+    const clearBtn = document.getElementById('clearBtn' + category);
+
+    checkboxes.forEach(cb => cb.checked = false);
+    if (selectAll) selectAll.checked = false;
+    if (clearBtn) clearBtn.classList.add('hidden');
 }
 
 // === Navigation Functions ===
