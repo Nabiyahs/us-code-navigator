@@ -236,42 +236,8 @@
       background: #8fc0d9;
     }
 
-    .figure-thumbnail {
-      width: 180px;
-      height: 180px;
-      flex-shrink: 0;
-      border: 2px solid #e5e7eb;
-      border-radius: 8px;
-      padding: 8px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      background: white;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .figure-thumbnail:hover {
-      border-color: #A8D0E6;
-      box-shadow: 0 4px 12px rgba(168, 208, 230, 0.3);
-      transform: translateY(-2px);
-    }
-
-    .figure-thumbnail-image {
-      width: 100%;
-      height: 140px;
-      object-fit: contain;
-      border-radius: 4px;
-      background: #f9fafb;
-    }
-
-    .figure-thumbnail-label {
-      margin-top: auto;
-      padding-top: 8px;
-      text-align: center;
-      font-size: 0.75rem;
-      font-weight: 500;
-      color: #374151;
-      border-top: 1px solid #e5e7eb;
+    .input-wrapper {
+      position: relative;
     }
 
     .clear-button {
@@ -288,6 +254,10 @@
 
     .clear-button:hover {
       background-color: #f3f4f6;
+    }
+
+    .input-wrapper input:not(:placeholder-shown) ~ .clear-button {
+      display: block;
     }
 
     .diff-label {
@@ -410,21 +380,6 @@
       overflow: hidden;
     }
 
-    .loading-spinner {
-      border: 3px solid #f3f3f3;
-      border-top: 3px solid #F76C6C;
-      border-radius: 50%;
-      width: 40px;
-      height: 40px;
-      animation: spin 1s linear infinite;
-      margin: 20px auto;
-    }
-
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
   </style>
 </head>
 <body class="bg-gray-50">
@@ -539,7 +494,7 @@
 <h2 class="text-2xl font-bold text-[#24305E] mb-6">Available Codes</h2>
 <div class="grid grid-cols-3 gap-6" id="homeCodeCards">
   <!-- Populated dynamically from JSON -->
-  <div class="loading-spinner"></div>
+  <p class="text-gray-500 text-center py-4">Loading...</p>
 </div>
 </section>
 </div>
@@ -569,7 +524,7 @@
 <h3 class="font-semibold text-[#24305E] mb-4">Chapters</h3>
 <div class="space-y-1" id="chapterList">
   <!-- Populated dynamically from JSON -->
-  <div class="loading-spinner"></div>
+  <p class="text-gray-500 text-sm text-center py-4">Loading...</p>
 </div>
 </div>
 </div>
@@ -1117,9 +1072,9 @@ function renderAttachments(attachments) {
     const label = att.Type === 'T' ? `Table ${att.Number || ''}` : `Figure ${att.Number || ''}`;
 
     html += `
-      <div class="figure-thumbnail" onclick="openImageModal('${att.AttachmentID}')">
-        <img alt="${label}" class="figure-thumbnail-image" src="${imageFile}" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22><rect fill=%22%23f0f0f0%22 width=%22100%22 height=%22100%22/><text x=%2250%22 y=%2250%22 text-anchor=%22middle%22 fill=%22%23999%22>No Image</text></svg>'"/>
-        <p class="figure-thumbnail-label">${label}</p>
+      <div class="flex-shrink-0 w-32 h-32 border-2 border-gray-200 rounded-lg p-2 cursor-pointer bg-white hover:border-[#A8D0E6] transition-all" onclick="openImageModal('${att.AttachmentID}')">
+        <img alt="${label}" class="w-full h-20 object-contain rounded bg-gray-50" src="${imageFile}" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22><rect fill=%22%23f0f0f0%22 width=%22100%22 height=%22100%22/><text x=%2250%22 y=%2250%22 text-anchor=%22middle%22 fill=%22%23999%22>No Image</text></svg>'"/>
+        <p class="mt-auto pt-1 text-center text-xs font-medium text-gray-700 border-t border-gray-200">${label}</p>
       </div>
     `;
   });
