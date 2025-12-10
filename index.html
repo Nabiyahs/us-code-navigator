@@ -3621,6 +3621,7 @@ function loadChapters(versionId, codeId) {
         }
 
         // 챕터 리스트 생성 (원래 디자인: 확장/접기 가능한 섹션 포함)
+        // TitleEN과 TitleKR 모두 표시하여 일관성 유지
         chapterList.innerHTML = chapters.map((ch, i) => {
             // 해당 챕터의 섹션들 가져오기
             const contents = getContents(ch.ChapterID);
@@ -3632,11 +3633,12 @@ function loadChapters(versionId, codeId) {
                 <div class="chapter-item px-4 py-2 rounded-lg hover:bg-[#A8D0E6] cursor-pointer flex items-center justify-between"
                      data-chapter="${ch.Chapter}" data-chapter-id="${ch.ChapterID}"
                      onclick="toggleChapterSections('${ch.ChapterID}', '${versionId}', event)">
-                    <div>
+                    <div class="flex-1 min-w-0">
                         <div class="font-semibold text-[#24305E] text-sm">Chapter ${ch.Chapter}</div>
-                        <div class="text-sm text-gray-600 mt-1">${ch.TitleEN || ''}</div>
+                        <div class="text-sm text-gray-700 mt-1 line-clamp-2">${ch.TitleEN || ''}</div>
+                        ${ch.TitleKR ? `<div class="text-xs text-gray-500 mt-0.5 line-clamp-1">${ch.TitleKR}</div>` : ''}
                     </div>
-                    <svg id="chapterIcon-${ch.ChapterID}" class="w-4 h-4 text-[#24305E] transition-transform ${i === 0 ? 'rotate-180' : ''}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg id="chapterIcon-${ch.ChapterID}" class="w-4 h-4 text-[#24305E] transition-transform flex-shrink-0 ml-2 ${i === 0 ? 'rotate-180' : ''}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                     </svg>
                 </div>
@@ -4258,8 +4260,9 @@ function performTopSearch() {
     // Update sidebar
     document.querySelectorAll('.sidebar-item').forEach(item => item.classList.remove('active'));
 
-    // Perform search across all codes with the keyword
-    const modelCodeIds = new Set(['MC001', 'MC007', 'MC008', 'MC009']);
+    // Perform search across ALL codes with the keyword (동적으로 모든 ModelCode 포함)
+    // 기존: MC001, MC007, MC008, MC009만 검색 -> 수정: 모든 코드 검색
+    const modelCodeIds = new Set(appData.ModelCode.map(mc => mc.ModelCodeID));
     const exactMatches = [];
     const partialMatches = [];
     const keyword = query.toLowerCase();
@@ -5137,7 +5140,7 @@ function performSearch() {
     displaySearchResults(exactMatches, partialMatches, allFilteredResults, keyword, attachmentResults);
 }
 
-// Helper function to highlight keyword in text - with different colors for exact vs partial
+// Helper function to highlight keyword in text - using search-highlight class from reference.txt
 function highlightKeyword(text, keyword, isExactMatch) {
     if (!text || !keyword) return text;
 
@@ -5148,11 +5151,9 @@ function highlightKeyword(text, keyword, isExactMatch) {
     // Create regex for case-insensitive matching
     const regex = new RegExp(`(${escapedKeyword})`, 'gi');
 
-    // Yellow highlight for all matches
-    const highlightClass = 'bg-yellow-200 font-medium';
-
-    // Replace matches with highlighted spans
-    return text.replace(regex, `<mark class="${highlightClass}">$1</mark>`);
+    // Use search-highlight class consistent with reference.txt style
+    // .search-highlight { background-color: #fde047; padding: 2px 4px; border-radius: 2px; font-weight: 600; }
+    return text.replace(regex, `<mark class="search-highlight">$1</mark>`);
 }
 
 // Extract context around keyword for better search result display
