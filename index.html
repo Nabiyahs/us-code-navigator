@@ -3754,7 +3754,7 @@ function scrollToSection(chapterId, sectionNum, versionId, event) {
         console.warn('Section item not found for highlighting:', sectionNum);
     }
 
-    // 콘텐츠 로드 완료 후 섹션으로 스크롤 (timeout 증가)
+    // 콘텐츠 로드 완료 후 섹션으로 스크롤
     setTimeout(() => {
         // 섹션 ID 생성
         const sectionId = getSectionId(chapterId, sectionNum);
@@ -3765,34 +3765,31 @@ function scrollToSection(chapterId, sectionNum, versionId, event) {
 
         // 못 찾으면 data-section 속성으로 찾기
         if (!sectionElement) {
-            sectionElement = document.querySelector(`[data-section="${sectionNum}"]`);
+            sectionElement = document.querySelector(`#contentArea [data-section="${sectionNum}"]`);
             console.log('Fallback to data-section:', sectionElement ? 'found' : 'not found');
         }
 
         if (sectionElement) {
             console.log('Found section element:', sectionElement.id);
-            // 스크롤 가능한 컨테이너 내에서 스크롤
-            const contentContainer = document.querySelector('#librarySection .flex-1.overflow-y-auto');
+            // 스크롤 가능한 컨테이너 찾기
+            const contentContainer = sectionElement.closest('.overflow-y-auto');
             if (contentContainer) {
-                // getBoundingClientRect로 정확한 위치 계산
-                const containerRect = contentContainer.getBoundingClientRect();
-                const elementRect = sectionElement.getBoundingClientRect();
-                const relativeTop = elementRect.top - containerRect.top;
-                const scrollPosition = Math.max(0, contentContainer.scrollTop + relativeTop - 100);
-
+                // 요소의 offsetTop 사용하여 정확한 위치 계산
+                const scrollTarget = sectionElement.offsetTop - 20;
                 contentContainer.scrollTo({
-                    top: scrollPosition,
+                    top: scrollTarget,
                     behavior: 'smooth'
                 });
-                console.log('Scrolled to position:', scrollPosition);
+                console.log('Scrolled to position:', scrollTarget);
             } else {
+                // fallback: scrollIntoView 사용
                 sectionElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 console.log('Used scrollIntoView fallback');
             }
         } else {
             console.error('Section element not found:', sectionId);
         }
-    }, 300);
+    }, 400);
 }
 
 function loadChapterContent(chapterId, versionId) {
@@ -3941,20 +3938,15 @@ function loadChapterContent(chapterId, versionId) {
                             </button>
                         </div>
 
-                        <!-- 타이틀 -->
-                        <div class="flex items-center gap-2 mb-2">
+                        <!-- 타이틀 + 키워드 태그 -->
+                        <div class="flex items-center gap-2 mb-2 flex-wrap">
                             <h4 class="font-semibold text-[#24305E]">${sectionNumber}${content.TitleEN ? ' ' + content.TitleEN : ''}</h4>
+                            ${uniqueTags.length > 0 ? uniqueTags.map(tag => `<span class="text-xs bg-[#F8E9A1] text-[#24305E] px-2 py-0.5 rounded cursor-pointer hover:bg-[#F5DC7D] transition-colors" onclick="showTagSectionsPopup('${tag.replace(/'/g, "\\'")}', '${versionId}')">${tag}</span>`).join('') : ''}
                         </div>
 
                         <!-- 콘텐츠 -->
                         ${content.ContentEN ? `<p class="text-gray-700 leading-relaxed mb-2">${content.ContentEN}</p>` : ''}
                         ${content.ContentKR ? `<p class="text-gray-600 text-sm leading-relaxed mb-3">${content.ContentKR}</p>` : ''}
-
-                        <!-- 키워드 태그 (Index/SubIndex) -->
-                        ${uniqueTags.length > 0 ? `
-                        <div class="flex items-center gap-2 flex-wrap mb-3">
-                            ${uniqueTags.map(tag => `<span class="text-xs bg-[#F8E9A1] text-[#24305E] px-2 py-0.5 rounded cursor-pointer hover:bg-[#F5DC7D] transition-colors" onclick="showTagSectionsPopup('${tag.replace(/'/g, "\\'")}', '${versionId}')">${tag}</span>`).join('')}
-                        </div>` : ''}
 
                         <!-- Note -->
                         ${content.Comment ? `
@@ -4474,7 +4466,7 @@ function displayTopSearchResults(exactMatches, partialMatches, keyword, attachme
         return;
     }
 
-    let html = '<div class="space-y-6">';
+    let html = '<div class="space-y-4">';
 
     allResults.forEach((result, index) => {
         // Fix "Section General" to just "General"
@@ -4495,68 +4487,14 @@ function displayTopSearchResults(exactMatches, partialMatches, keyword, attachme
 
         // Check if this is an attachment result (Table/Figure)
         if (result.type === 'attachment') {
-            // Display attachment using library-style figure display
+            // Display attachment using code content display style
             const imagePath = result.fileName || '';
             const badgeText = result.attachment?.Type === 'T' ? '표' : '그림';
             html += `
                 <div class="bg-gray-50 p-4 rounded-lg relative search-result-item" id="search-result-${index}">
-                    <!-- Copy button -->
-                    <div class="absolute top-3 right-3 flex gap-2">
-                        <button class="p-1.5 hover:bg-gray-200 rounded transition-colors" title="Copy content" onclick="copySearchResultContent(event, this)">
-                            <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
-                            </svg>
-                        </button>
-                    </div>
-
-                    <!-- Badge and Title -->
-                    <div class="flex items-center gap-2 mb-3 flex-wrap">
-                        <span class="text-xs bg-[#A8D0E6] text-[#24305E] font-semibold px-2 py-0.5 rounded">${result.code} ${result.year}: Ch.${result.chapter} - ${sectionNum}</span>
-                        <span class="text-xs bg-[#F76C6C] text-white px-2 py-0.5 rounded">${badgeText}</span>
-                    </div>
-                    <h4 class="font-semibold text-[#24305E] text-sm mb-2">${highlightedTitleEN}</h4>
-                    ${result.titleKR ? `<p class="text-gray-600 text-sm mb-3">${highlightedTitleKR}</p>` : ''}
-
-                    <!-- Image display in smaller size (90px x 90px) -->
-                    <div class="mt-3 pt-3 border-t border-gray-200">
-                        <div class="figures-scroll">
-                            <div style="width: 90px; height: 90px; flex-shrink: 0; border: 2px solid #e5e7eb; border-radius: 8px; overflow: hidden; cursor: pointer; display: flex; flex-direction: column;" onclick="openImageModalById('${result.attachmentId}')">
-                                <img alt="${result.titleEN}" style="width: 100%; height: calc(100% - 24px); object-fit: contain; background-color: white;" src="${imagePath}"/>
-                                <p style="padding: 2px 4px; font-size: 9px; text-align: center; background-color: #f3f4f6; color: #374151; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${result.titleEN}</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Content text if available (collapsed by default, 3 lines) -->
-                    ${result.contentEN || result.contentKR ? `
-                        <div class="mt-3 pt-3 border-t border-gray-200 text-sm text-gray-600">
-                            <div id="attachment-content-${index}" class="line-clamp-3">
-                                ${result.contentEN ? `<p class="mb-2">${highlightedContentEN}</p>` : ''}
-                                ${result.contentKR ? `<p>${highlightedContentKR}</p>` : ''}
-                            </div>
-                            <button onclick="toggleAttachmentContent(${index})" class="text-[#F76C6C] hover:underline text-xs mt-2" id="toggle-btn-${index}">
-                                더보기 ▼
-                            </button>
-                        </div>
-                    ` : ''}
-                </div>
-            `;
-        } else {
-            // Use reference.txt design with collapse/expand functionality for regular content
-            html += `
-                <div class="bg-gray-50 p-4 rounded-lg relative search-result-item" id="search-result-${index}">
-                    <!-- Expand/Collapse Toggle -->
-                    <button class="absolute top-3 left-3 p-1 hover:bg-gray-200 rounded transition-colors"
-                            onclick="toggleSearchResult(${index})"
-                            title="Expand/Collapse">
-                        <span class="result-toggle-icon">▼</span>
-                    </button>
-
-                    <!-- Copy and Navigate buttons -->
-                    <div class="absolute top-3 right-3 flex gap-2">
-                        <button class="p-1.5 hover:bg-gray-200 rounded transition-colors"
-                                title="Go to section"
-                                onclick="openSearchResult('${result.codeId}', '${result.versionId}', '${result.chapterId}', '${sectionNum}')">
+                    <!-- 복사 버튼 (우상단) -->
+                    <div class="absolute top-3 right-3 flex items-center gap-1">
+                        <button class="p-1.5 hover:bg-gray-200 rounded transition-colors" title="Go to section" onclick="openSearchResult('${result.codeId}', '${result.versionId}', '${result.chapterId}', '${sectionNum}')">
                             <svg class="w-4 h-4 text-[#F76C6C]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
                             </svg>
@@ -4568,20 +4506,69 @@ function displayTopSearchResults(exactMatches, partialMatches, keyword, attachme
                         </button>
                     </div>
 
-                    <!-- Summary (always visible) -->
-                    <div class="ml-12 pr-20">
-                        <div class="flex items-center gap-2 mb-2 flex-wrap">
-                            <span class="text-xs bg-[#A8D0E6] text-[#24305E] font-semibold px-2 py-0.5 rounded">${result.code} ${result.year}: Ch.${result.chapter} - ${sectionNum}</span>
-                        </div>
-                        <h4 class="font-semibold text-[#24305E] text-sm cursor-pointer" onclick="toggleSearchResult(${index})">${sectionNum}${result.titleEN ? ' ' + highlightedTitleEN : ''}</h4>
+                    <!-- 타이틀 + 배지 -->
+                    <div class="flex items-center gap-2 mb-2 flex-wrap">
+                        <h4 class="font-semibold text-[#24305E]">${sectionNum}${result.titleEN ? ' ' + highlightedTitleEN : ''}</h4>
+                        <span class="text-xs bg-[#A8D0E6] text-[#24305E] font-semibold px-2 py-0.5 rounded">${result.code} ${result.year}</span>
+                        <span class="text-xs bg-[#F76C6C] text-white px-2 py-0.5 rounded">${badgeText}</span>
                     </div>
 
-                    <!-- Details (collapsible) -->
-                    <div class="result-details hidden ml-12 pr-20 mt-2 border-t border-gray-200 pt-2">
-                        ${result.titleKR ? `<p class="text-gray-600 text-sm leading-relaxed mb-2">${highlightedTitleKR}</p>` : ''}
-                        ${result.contentEN ? `<p class="text-gray-700 text-sm leading-relaxed mb-2">${highlightedContentEN}</p>` : ''}
-                        ${result.contentKR ? `<p class="text-gray-600 text-sm leading-relaxed">${highlightedContentKR}</p>` : ''}
+                    <!-- 이미지 -->
+                    <div class="mt-3">
+                        <div class="figures-scroll">
+                            <div class="figure-thumbnail" onclick="openImageModalById('${result.attachmentId}')">
+                                <img class="figure-thumbnail-image" alt="${result.titleEN}" src="${imagePath}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"/>
+                                <div class="bg-gray-100 rounded flex items-center justify-center" style="display: none; height: 140px;">
+                                    <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                    </svg>
+                                </div>
+                                <p class="figure-thumbnail-label">${result.titleEN}</p>
+                            </div>
+                        </div>
                     </div>
+
+                    <!-- 내용 -->
+                    ${result.contentEN || result.contentKR ? `
+                        <div class="mt-3 pt-3 border-t border-gray-200">
+                            ${result.contentEN ? `<p class="text-gray-700 leading-relaxed mb-2">${highlightedContentEN}</p>` : ''}
+                            ${result.contentKR ? `<p class="text-gray-600 text-sm leading-relaxed">${highlightedContentKR}</p>` : ''}
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+        } else {
+            // code content display 스타일 적용
+            html += `
+                <div class="bg-gray-50 p-4 rounded-lg relative search-result-item" id="search-result-${index}">
+                    <!-- 복사 버튼 (우상단) -->
+                    <div class="absolute top-3 right-3 flex items-center gap-1">
+                        <button class="p-1.5 hover:bg-gray-200 rounded transition-colors" title="Go to section" onclick="openSearchResult('${result.codeId}', '${result.versionId}', '${result.chapterId}', '${sectionNum}')">
+                            <svg class="w-4 h-4 text-[#F76C6C]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                            </svg>
+                        </button>
+                        <button class="p-1.5 hover:bg-gray-200 rounded transition-colors" title="Copy link" onclick="copySearchResultLink('${result.codeId}', '${result.chapterId}', '${sectionNum}')">
+                            <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path>
+                            </svg>
+                        </button>
+                        <button class="p-1.5 hover:bg-gray-200 rounded transition-colors" title="Copy content" onclick="copySearchResultContent(event, this)">
+                            <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <!-- 타이틀 + 코드 배지 -->
+                    <div class="flex items-center gap-2 mb-2 flex-wrap">
+                        <h4 class="font-semibold text-[#24305E]">${sectionNum}${result.titleEN ? ' ' + highlightedTitleEN : ''}</h4>
+                        <span class="text-xs bg-[#A8D0E6] text-[#24305E] font-semibold px-2 py-0.5 rounded">${result.code} ${result.year}</span>
+                    </div>
+
+                    <!-- 콘텐츠 -->
+                    ${result.contentEN ? `<p class="text-gray-700 leading-relaxed mb-2">${highlightedContentEN}</p>` : ''}
+                    ${result.contentKR ? `<p class="text-gray-600 text-sm leading-relaxed mb-3">${highlightedContentKR}</p>` : ''}
                 </div>
             `;
         }
@@ -5268,98 +5255,88 @@ function displaySearchResults(exactMatches, partialMatches, allFilteredResults, 
 
         // Check if this is an attachment result
         if (result.type === 'attachment') {
-            // Display attachment using library-style figure display
+            // code content display 스타일 적용 (첨부파일)
             const imagePath = result.fileName || '';
             const badgeText = result.attachment?.Type === 'T' ? '표' : '그림';
-            const uniqueId = `searchResultAttachment${index}`;
             html += `
-                <div class="border rounded-lg bg-white overflow-hidden search-result-item" data-result='${JSON.stringify(result).replace(/'/g, "\'")}'>
-                    <div class="result-collapsible p-4 hover:bg-gray-50 transition-colors" onclick="toggleResultItem('${uniqueId}')">
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center gap-3 flex-1">
-                                <svg id="${uniqueId}Icon" class="w-5 h-5 text-gray-600 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                                </svg>
-                                <div class="flex-1">
-                                    <!-- Badge and Title -->
-                                    <div class="flex items-center gap-2 mb-1">
-                                        <span class="bg-[#A8D0E6] text-[#24305E] text-xs font-semibold px-2 py-1 rounded">${result.code} ${result.year}</span>
-                                        <span class="text-sm text-gray-500">Chapter ${result.chapter}, Section ${sectionNum}</span>
-                                        <span class="text-xs bg-[#F76C6C] text-white px-2 py-1 rounded">${badgeText}</span>
-                                    </div>
-                                    <h3 class="font-semibold text-[#24305E]">${displayTitleEN}</h3>
-                                    ${displayTitleKR ? `<p class="text-gray-600 text-sm mt-1">${displayTitleKR}</p>` : ''}
+                <div class="bg-gray-50 p-4 rounded-lg relative search-result-item" data-result='${JSON.stringify(result).replace(/'/g, "\\'")}'>
+                    <!-- 버튼 (우상단) -->
+                    <div class="absolute top-3 right-3 flex items-center gap-1">
+                        <button class="p-1.5 hover:bg-gray-200 rounded transition-colors" title="Go to section" onclick="openSearchResult('${result.codeId}', '${result.versionId}', '${result.chapterId}', '${sectionNum}')">
+                            <svg class="w-4 h-4 text-[#F76C6C]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                            </svg>
+                        </button>
+                        <button class="p-1.5 hover:bg-gray-200 rounded transition-colors" title="Copy content" onclick="copySearchResultContent(event, this)">
+                            <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <!-- 타이틀 + 배지 -->
+                    <div class="flex items-center gap-2 mb-2 flex-wrap">
+                        <h4 class="font-semibold text-[#24305E]">${sectionNum}${displayTitleEN ? ' ' + displayTitleEN : ''}</h4>
+                        <span class="text-xs bg-[#A8D0E6] text-[#24305E] font-semibold px-2 py-0.5 rounded">${result.code} ${result.year}</span>
+                        <span class="text-xs bg-[#F76C6C] text-white px-2 py-0.5 rounded">${badgeText}</span>
+                    </div>
+
+                    <!-- 이미지 -->
+                    <div class="mt-3">
+                        <div class="figures-scroll">
+                            <div class="figure-thumbnail" onclick="openImageModalById('${result.attachmentId}')">
+                                <img class="figure-thumbnail-image" alt="${result.titleEN}" src="${imagePath}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"/>
+                                <div class="bg-gray-100 rounded flex items-center justify-center" style="display: none; height: 140px;">
+                                    <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                    </svg>
                                 </div>
+                                <p class="figure-thumbnail-label">${result.titleEN}</p>
                             </div>
-                            <!-- Copy button -->
-                            <button class="ml-4 p-1.5 hover:bg-gray-200 rounded transition-colors" title="Copy content" onclick="event.stopPropagation(); copySearchResultContent(event, this)">
-                                <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
-                                </svg>
-                            </button>
                         </div>
                     </div>
 
-                    <div id="${uniqueId}" class="result-content">
-                        <div class="px-4 pb-4 border-t pt-3">
-                            <!-- Image display in smaller size (90px x 90px) -->
-                            <div class="figures-scroll">
-                                <div style="width: 90px; height: 90px; flex-shrink: 0; border: 2px solid #e5e7eb; border-radius: 8px; overflow: hidden; cursor: pointer; display: flex; flex-direction: column;" onclick="openImageModalById('${result.attachmentId}')">
-                                    <img alt="${result.titleEN}" style="width: 100%; height: calc(100% - 24px); object-fit: contain; background-color: white;" src="${imagePath}"/>
-                                    <p style="padding: 2px 4px; font-size: 9px; text-align: center; background-color: #f3f4f6; color: #374151; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${result.titleEN}</p>
-                                </div>
-                            </div>
-
-                            <!-- Content text if available -->
-                            ${displayContentEN || displayContentKR ? `
-                                <div class="mt-3 pt-3 border-t border-gray-200 text-sm text-gray-600 leading-relaxed space-y-1">
-                                    ${displayContentEN ? `<p class="text-gray-700 leading-relaxed">${displayContentEN}</p>` : ''}
-                                    ${displayContentKR ? `<p class="text-gray-600 leading-relaxed">${displayContentKR}</p>` : ''}
-                                </div>
-                            ` : ''}
+                    <!-- 내용 -->
+                    ${displayContentEN || displayContentKR ? `
+                        <div class="mt-3 pt-3 border-t border-gray-200">
+                            ${displayContentEN ? `<p class="text-gray-700 leading-relaxed mb-2">${displayContentEN}</p>` : ''}
+                            ${displayContentKR ? `<p class="text-gray-600 text-sm leading-relaxed">${displayContentKR}</p>` : ''}
                         </div>
-                    </div>
+                    ` : ''}
                 </div>
             `;
         } else {
-            // Display regular content result
-            const uniqueId = `searchResult${index}`;
+            // code content display 스타일 적용 (일반 콘텐츠)
             html += `
-                <div class="border rounded-lg bg-white overflow-hidden search-result-item" data-result='${JSON.stringify(result).replace(/'/g, "\'")}'>
-                    <div class="result-collapsible p-4 hover:bg-gray-50 transition-colors" onclick="toggleResultItem('${uniqueId}')"
-                         onmousedown="handleResultMouseDown(event)"
-                         onmouseup="handleResultMouseUp(event)">
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center gap-3 flex-1">
-                                <svg id="${uniqueId}Icon" class="w-5 h-5 text-gray-600 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                                </svg>
-                                <div class="flex-1">
-                                    <!-- Location and Index tags -->
-                                    <div class="flex items-center gap-2 mb-1">
-                                        <span class="bg-[#F76C6C] text-white text-xs font-semibold px-2 py-1 rounded">${result.code} ${result.year}</span>
-                                        <span class="text-sm text-gray-500">Chapter ${result.chapter}, Section ${sectionNum}</span>
-                                    </div>
-                                    <h3 class="font-semibold text-[#24305E]">${sectionNum}${result.titleEN ? ' ' + result.titleEN : ''}</h3>
-                                </div>
-                            </div>
-                            <!-- Copy button -->
-                            <button class="ml-4 p-1.5 hover:bg-gray-200 rounded transition-colors" title="Copy content" onclick="event.stopPropagation(); copySearchResultContent(event, this)">
-                                <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
-                                </svg>
-                            </button>
-                        </div>
+                <div class="bg-gray-50 p-4 rounded-lg relative search-result-item" data-result='${JSON.stringify(result).replace(/'/g, "\\'")}'>
+                    <!-- 버튼 (우상단) -->
+                    <div class="absolute top-3 right-3 flex items-center gap-1">
+                        <button class="p-1.5 hover:bg-gray-200 rounded transition-colors" title="Go to section" onclick="openSearchResult('${result.codeId}', '${result.versionId}', '${result.chapterId}', '${sectionNum}')">
+                            <svg class="w-4 h-4 text-[#F76C6C]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                            </svg>
+                        </button>
+                        <button class="p-1.5 hover:bg-gray-200 rounded transition-colors" title="Copy link" onclick="copySearchResultLink('${result.codeId}', '${result.chapterId}', '${sectionNum}')">
+                            <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path>
+                            </svg>
+                        </button>
+                        <button class="p-1.5 hover:bg-gray-200 rounded transition-colors" title="Copy content" onclick="copySearchResultContent(event, this)">
+                            <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                            </svg>
+                        </button>
                     </div>
-                    ${displayTitleKR || displayContentEN || displayContentKR ? `
-                    <div id="${uniqueId}" class="result-content">
-                        <div class="px-4 pb-4 text-sm text-gray-600 leading-relaxed space-y-1 border-t pt-3">
-                            ${displayTitleKR ? `<p class="text-gray-600 leading-relaxed">${displayTitleKR}</p>` : ''}
-                            ${displayContentEN ? `<p class="text-gray-700 leading-relaxed">${displayContentEN}</p>` : ''}
-                            ${displayContentKR ? `<p class="text-gray-600 leading-relaxed">${displayContentKR}</p>` : ''}
-                        </div>
+
+                    <!-- 타이틀 + 코드 배지 -->
+                    <div class="flex items-center gap-2 mb-2 flex-wrap">
+                        <h4 class="font-semibold text-[#24305E]">${sectionNum}${displayTitleEN ? ' ' + displayTitleEN : ''}</h4>
+                        <span class="text-xs bg-[#A8D0E6] text-[#24305E] font-semibold px-2 py-0.5 rounded">${result.code} ${result.year}</span>
                     </div>
-                    ` : ''}
+
+                    <!-- 콘텐츠 -->
+                    ${displayContentEN ? `<p class="text-gray-700 leading-relaxed mb-2">${displayContentEN}</p>` : ''}
+                    ${displayContentKR ? `<p class="text-gray-600 text-sm leading-relaxed mb-3">${displayContentKR}</p>` : ''}
                 </div>
             `;
         }
@@ -5556,6 +5533,14 @@ function scrollToChapter(chapterId) {
 }
 
 // === Copy Functions ===
+function copySearchResultLink(codeId, chapterId, sectionNum) {
+    const sectionId = getSectionId(chapterId, sectionNum);
+    const url = window.location.href.split('#')[0] + '#' + sectionId;
+    navigator.clipboard.writeText(url).then(() => {
+        alert('Link copied to clipboard!');
+    });
+}
+
 function copySearchResultContent(event, button) {
     event.stopPropagation(); // Prevent modal from opening
     const resultCard = button.closest('.search-result-item');
