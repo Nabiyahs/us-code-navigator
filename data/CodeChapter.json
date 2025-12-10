@@ -1,0 +1,586 @@
+[
+  {
+    "ChapterID": "CH001",
+    "ModelCodeVersionID": "MCV002",
+    "Chapter": 1,
+    "TitleEN": "Area",
+    "TitleKR": "면적, 구획",
+    "ChapterComment": "IBC는 전체 34개의 Chapter로 구성되어 있으며, 참조 자료로 Appendix가 A부터 P까지 구성되어 있습니다. 건축 설계 시 필요한 Chapter는 Chapter 2 (Definition)부터 Chapter 10 (Means of Egress)입니다. Chapter 11은 장애인, Chapter 27은 Electric, Chapter 28은 Mechanical, Chapter 30은 승강기 관련을 다루고 있고, Chapter 35에서는 IBC에서 참조하고 있는 다른 규정과 기준 등을 기술하고 있습니다. 그 외의 다른 Chapter들은 주로 구조 설계와 관련된 내용을 다루고 있습니다.\n\nIBC의 방대한 분량과 본 프로젝트의 목적이 IBC 기본적 이해인 만큼, 모든 Chapter와 모든 조항들을 다루지는 않고 Chapter 2 (Definition)부터 Chapter 10 (Means of Egress), 그리고 Chapter 30 (Elevator and Conveying System) 등, 관련 주요 코드 사항에 대해 IBC 2024 Edition 및 IBC Commentary에 근거해 기술하고 설명합니다.\n특히 산업 시설 관련해서는 예를 제시하거나 추가 설명을 포함했습니다.\n\nIBC에서는 다른 조항들을 참조하라는 조항들이 많이 있습니다. 가능한 많은 상호 코드 확인(Cross check) 조항들을 포함하려고 하나, 그러지 못하는 조항들의 상호 확인은 코드 사용자가 확인을 하여야 합니다. 특히 Chapter 7과 Chapter 10에서 그러한 조항들이 많이 있습니다.\n\nIBC(International Building Code) 역사\n\n1. 배경\n미국에는 과거 지역별로 다른 3개의 모델 건축 코드(Model Building Codes)가 있었습니다.\n\n- UBC (Uniform Building Code) – ICBO(International Conference of Building Officials)에서 발행, 주로 서부 지역 사용\n- BOCA National Building Code (NBC) – BOCA(Building Officials and Code Administrators International), 주로 동북부·중서부에서 사용\n- Standard Building Code (SBC) – SBCCI(Southern Building Code Congress International), 주로 남동부에서 사용\n\n문제점: 위 세 가지 코드는 문장이나 내용들이 이해하기 어렵게 구성되었고, 무엇보다 동일한 건축물이 주마다 다른 코드를 적용받아야 했기 때문에 통일된 전국적 코드 필요성이 대두되었습니다. (특히 같은 건물들을 가지고 있는 미국의 대기업 마트들이나 창고 등)\n\n2. IBC의 탄생\n1994년, 위 세 단체(ICBO, BOCA, SBCCI)가 합쳐져 ICC (International Code Council) 설립되었습니다.\n2000년판 IBC가 최초로 발행, 초창기에는 IBC를 수용하는 주가 적었지만, 현재는 거의 모든 주에서 IBC를 모델 코드로 수용하여 통합 모델 코드로 사용되고 있습니다.\n\n3. 개정 주기\nIBC는 3년 주기로 개정됨. 최신 개정판은 2024년이고 본 프로젝트에서는 2024년 개정판을 기본으로 작성되었습니다."
+  },
+  {
+    "ChapterID": "CH002",
+    "ModelCodeVersionID": "MCV002",
+    "Chapter": 2,
+    "TitleEN": "Definition",
+    "TitleKR": "정의",
+    "ChapterComment": "Chapter 2는 용어 정의를 다루는 챕터입니다.\n\nIBC를 정확히 이해하기 위해 용어 정의의 정확한 이해가 필수적입니다.\n용어를 잘못 이해하면 코드 해석이 의도와 다르게 되어, 디자인 단계에서 코드 적용 오류로 이어질 수 있습니다.\n\n본 Chapter에서는 기본 용어와 산업시설 관련 용어를 정의하고 있습니다."
+  },
+  {
+    "ChapterID": "CH003",
+    "ModelCodeVersionID": "MCV002",
+    "Chapter": 3,
+    "TitleEN": "Occupancy Classification and Use",
+    "TitleKR": "용도 분류 및 사용",
+    "ChapterComment": "Chapter 3은 건물 및 실 용도에 대한 구분입니다.\nIBC는 공통 사항(General Requirements)을 제외한 모든 규정이 건물별 또는 실별 용도로 구성되어 있습니다. 따라서 건물 및 실의 용도를 정확히 구분하지 못하면 IBC 코드 분석이 잘못될 수 있고 설계가 잘못된 방향으로 진행될 수 있습니다. 이에 건물과 실의 용도를 명확히 구분하는 것이 IBC를 이해하고 분석하는 데 있어서 가장 먼저 선행되어야 할 중요한 사항입니다. 본 프로젝트에서 기술되는 건물 및 실의 용도는 산업 시설 건물에 주로 적용되는 용도(Occupancy)들로 제한합니다."
+  },
+  {
+    "ChapterID": "CH004",
+    "ModelCodeVersionID": "MCV002",
+    "Chapter": 4,
+    "TitleEN": "Special Detailed Requirements based on Occupancy and Use",
+    "TitleKR": "용도 및 사용에 따른 특별 세부 요건",
+    "ChapterComment": "Chapter 4에서는 Chapter 3에서 구분된 용도를 더 세분화한 특별한 용도에 관해 기술하고 있습니다. 특히 산업 시설에서 취급되는 위험물질과 H 용도(H Occupancy)는 건축 설계(면적, 높이, 구획 등)에 중대한 영향을 미칠 수 있어, 내용이 방대하고 복잡하지만 반드시 이해하고 숙지해야 할 사항입니다."
+  },
+  {
+    "ChapterID": "CH005",
+    "ModelCodeVersionID": "MCV002",
+    "Chapter": 5,
+    "TitleEN": "General Building Heights and Areas",
+    "TitleKR": "일반 건축물의 높이 및 면적",
+    "ChapterComment": null
+  },
+  {
+    "ChapterID": "CH006",
+    "ModelCodeVersionID": "MCV002",
+    "Chapter": 6,
+    "TitleEN": "Type of construction",
+    "TitleKR": "구조 유형",
+    "ChapterComment": "Chapter 6은 건물을 다섯 가지 구조 유형 중 하나로 분류하기 위한 요구사항을 포함하고 있습니다. Table 601은 건물의 구조 유형에 따라 구조 부재에 요구되는 최소 시간 단위 내화 성능 등급을 제공합니다. Section 602는 각 구조 유형을 상세히 설명하고 있으며 Section 603은 불연 건축물에서의 가연성 재료 사용 허용 범위를 규정합니다.\n\n건물을 올바른 구조 유형(Type of construction)으로 분류하는 것은 필수적입니다. 건물에 적용되는 많은 코드 요구사항들 예를 들어 허용 높이, 층수, 면적(Chapter 5, General Building Heights and Areas 참조)은 건물의 구조 유형에 따라 달라집니다. 만약 건물이 잘못된 구조 유형으로 분류된다면(예: 실제 요구보다 상위 등급으로 분류된 경우) 건물주는 불필요한 비용의 불이익을 받을 수 있습니다. 반대로 건물이 하위 등급 구조 유형으로 잘못 분류된다면 건물은 그 규모나 기능과 관련된 상대적 위험을 고려하지 못한 상태로 시공되게 됩니다.\n\n본 장의 규정은 Chapter 3 (Occupancy Classification and Use), Chapter 5 (General Building Heights and Areas), Table 601 (Fire-resistance Rating Requirements for Building Elements), Table 705.5 (Fire-Resistance Rating Requirements for Exterior Walls based on Fire Separation Distance)와 함께 검토되어야 하는 IBC의 동등 위험 이론(Equivalent risk theory)의 근거가 되는 좋은 예가 됩니다."
+  },
+  {
+    "ChapterID": "CH007",
+    "ModelCodeVersionID": "MCV002",
+    "Chapter": 7,
+    "TitleEN": "Fire and smoke protection features",
+    "TitleKR": "화재 및 연기 방호 설비",
+    "ChapterComment": "Chapter 7은 내화 성능 등급(Fire-resistance-rated)이 요구되는 구조체, 벽체, 칸막이(Partitions), 수평 구획벽(Horizontal assemblies)에 대한 상세한 요건을 제시합니다. IBC의 다른 부분들은 특정 내화 성능 등급 요소가 어디서 요구되는지를 규정하며 Chapter 7에서는 이러한 요소들이 어떻게 시공되어야 하는지, 벽과 칸막이의 개구부(Openings)가 어떻게 보호되어야 하는지 그리고 이러한 요소들을 관통하는 설비들이 어떻게 보호되어야 하는지를 명시합니다.\n\nChapter 7에서는 특히 각 조항들이 서로 참조를 많이 하고 있습니다. 본 보고서에서는 Chapter 7의 방대함에 건축에서 꼭 필요한 조항들만 기술합니다. 본 보고서에 기술되지 않은 참조 조항들은 건축 및 소방 엔지니어 스스로 찾아 보기를 권장합니다.\n\n내화 성능 등급 건축물은 건축 설계에서의 방화(Fire protection)의 한 형태로 수동적 방호(Passive protection)라고 불립니다. 내화 성능을 갖춘 건축 요소는 화재의 확산을 지연시키는 반면 자동 스프링클러 시스템과 같은 능동적 방호(Active protection) 시스템은 화재를 직접 진압하려고 작동한다는 차이가 있습니다.\n\n내화 성능 등급 건축의 핵심은 ASTM E119 시험 기준입니다. 이 시험 기준은 다양한 건축 요소를 화재 저항성(Fire resistance)에 대해 시험하는 방법을 규정하며 해당 시험에 기초하여 내화 성능 수준을 정의합니다.\n\nChapter 7은 주로 구조 엔지니어가 시공 도면을 작성할 때 요구되는 장입니다. 다만 건축에서도 벽체의 종류들에 대해서는 인지하고 있어야 하기 때문에 여기에서는 벽체들의 종류 및 그 벽체를 통과하는 장비들의 벽체가 가지고 있는 성능을 유지하기 위해 필요한 요구사항들에 집중하였습니다."
+  },
+  {
+    "ChapterID": "CH008",
+    "ModelCodeVersionID": "MCV002",
+    "Chapter": 8,
+    "TitleEN": "Interior finishes",
+    "TitleKR": "내장재",
+    "ChapterComment": "실내 마감재(Interior finish) 및 장식재(Decorative materials)는 화재의 발생과 확산에 결정적인 역할을 하는 핵심 요소(Key elements)로 작용합니다. 일반적으로 실내 장식재는 발화 원인을 제공하고 마감재료는 화재 초기 단계에서 화재의 급격한 성장과 확산에 원인이 됩니다.\n\nChapter 8 (Interior Finish)의 관련 규정 조항들은 실내 마감재 및 장식재로 사용되는 모든 재료(Materials)가 건물 용도별(Occupancy)에 따른 상대적 화재 위험도(Relative fire hazard)를 기준으로 화염 확산 지수(Flame spread index) 또는 특정 화염 전파 성능(Flame propagation criteria)을 충족하도록 요구함으로써 건물 내부에서의 화재 성장(Fire growth)을 제어하기 위해 실내 마감재(Interior finish materials) 및 장식재(Decorative materials)의 사용을 제한하는 성능 기준(Performance requirements)을 규정하고 있습니다.\n\nChapter 8의 세부 내용은 주로 시공 도면에 포함됩니다. 이에 건축에서는 DD 및 IFR 단계 도면에 포함되어야 할 용도별 화염 확산 지수(Flame Spread Index) 및 연기 발생 지수(Smoke Developed Index) 요구사항에 제한합니다."
+  },
+  {
+    "ChapterID": "CH009",
+    "ModelCodeVersionID": "MCV002",
+    "Chapter": 9,
+    "TitleEN": "Fire protection and life safety systems",
+    "TitleKR": "소방 및 인명 안전 설비",
+    "ChapterComment": "소방(Fire Protection)이라 함은 한국에서는 통상적으로 소방 설계(스프링클러, 자동화재탐지 및 제연 등)로 이해하고 있습니다. 그러나 IBC에서 의미하는 소방(Fire Protection)은 화재와 관련된 모든 시스템을 의미합니다. 이 시스템에는 건물의 면적과 층수 제한, 구조체의 내화 성능, 방화 구획, 내화 성능의 벽체 등 화재와 관련된 모든 것을 포함합니다. 그리고 화재와 관련된 모든 조항들은 서로 연결되어 있는 하나의 통합된 시스템으로 작동합니다. 이에 이 전체 시스템의 어느 한 부분이라도 불이행(Noncompliance)된다면 다른 부분의 기능 역시 연쇄적으로 실패(Failure)할 수 있고 코드 규정에 따라 시스템을 제대로 설치하지 않을 경우 제공되는 보호 수준(Level of protection)이 저하되어 인명 및 재산 손실(Loss of life and property)이 증가할 수 있습니다.\n\nChapter 9에서 요구하는 규정들은 건물 또는 구조물의 전체 소방 시스템(Fire protection system) 중 하나의 구성 요소(One aspect)입니다.\n\nChapter 9의 요구사항은 일종의 능동적 방화(Active Fire Protection) 조항으로 간주됩니다. 즉 화재가 발생한 이후에 화재를 억제(Contain) 및 진압(Abate)하기 위한 규정들입니다.\n\n또한 Chapter 9는 여러 NFPA (National Fire Protection Association) 표준을 참조(Reference)하고 채택(Adopt)하고 있습니다. IBC에서 NFPA를 참조하기 때문에 비로소 NFPA 기준이 코드의 지위를 갖습니다.\n\n코드 조항과 참조된 표준 간에 차이(Differences)가 존재할 경우에는 코드 조항(Code provisions)이 우선 적용됩니다.\n\n소방 시스템(Fire Protection Systems) 관련해서는 별도의 보고서가 작성되었기 때문에 여기에서는 건축에서 필수적으로 인지해야 할 건물 용도별로 요구되는 소방 시스템을 기술합니다."
+  },
+  {
+    "ChapterID": "CH010",
+    "ModelCodeVersionID": "MCV002",
+    "Chapter": 10,
+    "TitleEN": "Means of Egress",
+    "TitleKR": "피난 수단",
+    "ChapterComment": "Chapter 10은 건축물 내 인명 보호를 위한 피난 수단(Means of Egress)의 설계 기준을 규정하고 있으며 이는 사람들의 생명을 보호하기 위한 가장 기본적이고 1차적인 안전 수단으로 설정되어 있습니다.\n본 장에서는 모든 건물과 구조물에 적용되는 최소 피난 기준(Minimum requirements)을 제시하고 있으며 규정적(Prescriptive) 요구사항과 성능적(Performance-based) 접근 방식을 모두 사용하여 모든 용도의 건축물에 대해 안전한 피난 시스템을 설계할 수 있도록 합니다.\n\n피난의 기본은 재실자가 특정 건물에 대한 피난에 필요한 별도 지식이나 도구 없이도 신속하게 재실자를 피난시킨다는 것을 기본으로 합니다.\n\n피난 수단(Egress Components)은 다음 세 가지 주요 요소 및 세부 요건으로 구성됩니다.\n\n1. 출구 접근(Exit Access)\n\n출구 구성 요소(Exit Components)\n내부 및 외부 계단·경사로(Interior & Exterior Stairways and Ramps)\n출구 통로(Exit Passageways)\n고층 건물 내 형광 피난 경로 표시(Luminous Path Markings, Section 403 참조)\n수평 출구(Horizontal Exits)\n\n2. 출구(Exit)\n\n출구 구성 요소(Exit Components)\n내부 및 외부 계단·경사로(Interior & Exterior Stairways and Ramps)\n출구 통로(Exit Passageways)\n고층 건물 내 형광 피난 경로 표시(Luminous Path Markings, Section 403 참조)\n수평 출구(Horizontal Exits)\n\n3. 출구 방출(Exit Discharge)\n\n출구 방출(Exit Discharge)\n피난 마당(Egress Courts)"
+  },
+  {
+    "ChapterID": "CH011",
+    "ModelCodeVersionID": "MCV002",
+    "Chapter": 30,
+    "TitleEN": "Elevators and Conveying Systems",
+    "TitleKR": "엘리베이터 및 운반 설비",
+    "ChapterComment": "본 Chapter 에서는 건물 내 재실자 및 소방관의 운송 수단에 관해 다루고 있습니다.  \n\n여기에서는 소방관용 승강기에 제한합니다."
+  },
+  {
+    "ChapterID": "CH012",
+    "ModelCodeVersionID": "MCV003",
+    "Chapter": 3,
+    "TitleEN": "Definitions",
+    "TitleKR": "정의",
+    "ChapterComment": "한국과 달리 미국 대부분 지역에서의 소화용수 수압은 높은 편입니다. Light Hazard나 Ordinary Hazard의 경우 소화펌프 없이 제공되는 소화용수 압력만으로 설계가 가능합니다.\n\n지역에 따라 다르지만, 어떤 지역은 소방서에서 Flow Test 값을 보유하고 있는 경우도 있고, 다른 지역에서는 소방 설계 담당자가 직접 현장에서 소방관 입회하에 Flow Test를 실시하는 경우도 있습니다."
+  },
+  {
+    "ChapterID": "CH013",
+    "ModelCodeVersionID": "MCV003",
+    "Chapter": 4,
+    "TitleEN": "Standard for the Installation of Sprinkler Systems",
+    "TitleKR": "스프링클러 시스템의 설치 표준",
+    "ChapterComment": "NFPA 13 자체는 독립적인 기준으로 직접적인 법적 구속력은 없으나, IBC 등 다른 법령에서 스프링클러 설계 시 NFPA 13 기준 준수를 규정하고 있어 사실상 강제적 적용 기준입니다.\n\n설계를 시작하기 전 선행되어야 하는 사항은 위험도 분류입니다. 용도의 위험도에 따라 설계 기준이 달라지므로 정확한 위험도 분석은 정확한 설계의 출발점입니다. Section 4.3에서는 위험도에 따라 건물 및 실의 위험도를 구분하고 있습니다.\n\nNFPA 13의 용도 구분은 스프링클러 설계를 위한 전용 분류 체계로서 다른 건축 코드의 용도 분류와는 목적을 달리합니다."
+  },
+  {
+    "ChapterID": "CH014",
+    "ModelCodeVersionID": "MCV003",
+    "Chapter": 5,
+    "TitleEN": "Water Supplies",
+    "TitleKR": "급수",
+    "ChapterComment": null
+  },
+  {
+    "ChapterID": "CH015",
+    "ModelCodeVersionID": "MCV003",
+    "Chapter": 7,
+    "TitleEN": "Requirements for System Components and Hardware",
+    "TitleKR": "시스템 구성요소 및 하드웨어의 요구 사항",
+    "ChapterComment": null
+  },
+  {
+    "ChapterID": "CH016",
+    "ModelCodeVersionID": "MCV003",
+    "Chapter": 8,
+    "TitleEN": "System Types and Requirements",
+    "TitleKR": "설비 유형 및 요구사항",
+    "ChapterComment": null
+  },
+  {
+    "ChapterID": "CH017",
+    "ModelCodeVersionID": "MCV003",
+    "Chapter": 9,
+    "TitleEN": "Sprinkler Location Requirements",
+    "TitleKR": "스프링클러 위치 요구 사항",
+    "ChapterComment": "반도체 및 배터리 제조시설(FAB)은 필연적으로 다수의 은닉공간(Concealed Space)을 포함하며, 이러한 공간의 스프링클러 설치 여부가 설계 이슈가 될 수 있습니다.\n\n해당 조항들은 조건별로 스프링클러 적용 여부를 규정하고 있습니다.\n\n다만 NFPA 13은 재산 보호뿐만 아니라 인명 안전을 위한 최소 기준이므로, 관할 당국(AHJ)에서는 본 조항보다 더 엄격한 기준을 적용하여 은닉공간의 스프링클러 설치를 요구할 수 있습니다."
+  },
+  {
+    "ChapterID": "CH018",
+    "ModelCodeVersionID": "MCV003",
+    "Chapter": 10,
+    "TitleEN": "Installation Requirements for Standard Pendent, Upright, Pendent, Sidewall Spray Sprinkler",
+    "TitleKR": "표준형 하향식, 상향식 및 측벽식 스프레이 스프링클러의 설치 요구사항",
+    "ChapterComment": "NFPA 13에서는 스프링클러 살수 방해에 관한 다양한 조항들을 규정하고 있습니다. 그러나 실제 프로젝트의 특성과 현장에서의 공종 간 간섭 상황이 NFPA 13에 명시된 경우와 일치하지 않는 경우가 많습니다.\n\n이러한 경우 시공 중인 스프링클러 제조사의 Data Sheet에서 제시하는 Spray Pattern을 면밀히 분석하고, 유사한 조건의 NFPA 13 조항들을 적용하여 살수 방해로 인한 미보호 구역(Unprotected Area)이 발생하지 않도록 해야 합니다.\n\nNote: 스프링클러는 바닥면을 기준으로 보호 구역을 설정합니다."
+  },
+  {
+    "ChapterID": "CH019",
+    "ModelCodeVersionID": "MCV003",
+    "Chapter": 16,
+    "TitleEN": "Installation of Piping, Valves, and Appurtenances",
+    "TitleKR": "배관, 밸브 및 부속품의 설치",
+    "ChapterComment": null
+  },
+  {
+    "ChapterID": "CH020",
+    "ModelCodeVersionID": "MCV003",
+    "Chapter": 17,
+    "TitleEN": "Installation Requirements for Hanging and Support of System Piping",
+    "TitleKR": "시스템 배관의 행잉 및 지지 설치 요건",
+    "ChapterComment": null
+  },
+  {
+    "ChapterID": "CH021",
+    "ModelCodeVersionID": "MCV003",
+    "Chapter": 19,
+    "TitleEN": "Design Approaches",
+    "TitleKR": "설계 접근법",
+    "ChapterComment": null
+  },
+  {
+    "ChapterID": "CH022",
+    "ModelCodeVersionID": "MCV003",
+    "Chapter": 20,
+    "TitleEN": "General Requirements for Storage",
+    "TitleKR": "저장 일반 요구사항",
+    "ChapterComment": "NFPA 13에서 창고(Storage)에 관한 내용은 Chapter 20부터 25까지 기술되어 있습니다. 저장 물질, 저장 방법, 건물 높이, 랙(Rack)의 형태 및 높이 등 다양한 요소들을 다루고 있습니다.\n\nStorage의 설계 기준(Density/Area)은 하나의 정답이 있는 것이 아니라 여러 방법으로 결정됩니다. 공사비용 및 시공성 등을 종합적으로 고려하여 가장 최적화된 설계 기준을 선정하는 것이 중요합니다."
+  },
+  {
+    "ChapterID": "CH023",
+    "ModelCodeVersionID": "MCV003",
+    "Chapter": 21,
+    "TitleEN": "Protection of High-Piled Storage Using Control Mode Density Area (CMDA) Sprinklers",
+    "TitleKR": "제어모드밀도면적(CMDA) 스프링클러를 사용한 고적재 저장 보호",
+    "ChapterComment": null
+  },
+  {
+    "ChapterID": "CH024",
+    "ModelCodeVersionID": "MCV003",
+    "Chapter": 23,
+    "TitleEN": "ESFR Requirements for \nStorage Applications",
+    "TitleKR": "저장 적용을 위한 ESFR 요구사항",
+    "ChapterComment": null
+  },
+  {
+    "ChapterID": "CH025",
+    "ModelCodeVersionID": "MCV003",
+    "Chapter": 28,
+    "TitleEN": "Plans and Calculations",
+    "TitleKR": "계획 및 계산",
+    "ChapterComment": null
+  },
+  {
+    "ChapterID": "CH026",
+    "ModelCodeVersionID": "MCV003",
+    "Chapter": 25,
+    "TitleEN": "Protection of Rack Storage Using In-Rack Sprinklers",
+    "TitleKR": "인랙 스프링클러를 사용한 랙 저장의 방호",
+    "ChapterComment": null
+  },
+  {
+    "ChapterID": "CH027",
+    "ModelCodeVersionID": "MCV003",
+    "Chapter": "Annex A",
+    "TitleEN": "Explanatory Material",
+    "TitleKR": null,
+    "ChapterComment": null
+  },
+  {
+    "ChapterID": "CH028",
+    "ModelCodeVersionID": "MCV004",
+    "Chapter": 7,
+    "TitleEN": "System Components and Hardware",
+    "TitleKR": null,
+    "ChapterComment": null
+  },
+  {
+    "ChapterID": "CH029",
+    "ModelCodeVersionID": "MCV004",
+    "Chapter": 8,
+    "TitleEN": "System Requirements",
+    "TitleKR": "시스템 요구 사항",
+    "ChapterComment": "Standpipe System은 소방대가 현장에 도착했을 때 사용할 수 있는 입상 배관 설비입니다. IBC에서는 지상 출입구 기준 30 ft(9,144 mm) 이상 높이에 바닥이 있는 건물의 계단에 Standpipe를 요구하고 있으며, 앞서 언급한 특수 용도(Storage)에서는 Hose Connection을 요구하기도 합니다.\n\nStandpipe는 소방대 진입 경로와 직접 연계되도록 요구하고 있으며, 건물 외부 FDC (Fire Department Connection)와 반드시 연결되어야 합니다.\n\nStandpipe 분류\n- Class I: 소방대원 전용\n- Class II: 일반인도 사용 가능  \n- Class III: 소방대와 일반인 모두 사용 가능 (Class I과 II의 결합)\n\n대부분 요구되는 시스템은 Class I입니다. 과거에는 Class II도 요구되었지만, 일반인들의 사용 미숙으로 인해 현재는 대부분 Class I을 요구하고 있습니다."
+  },
+  {
+    "ChapterID": "CH030",
+    "ModelCodeVersionID": "MCV004",
+    "Chapter": 9,
+    "TitleEN": "Installation Requirements",
+    "TitleKR": "설치 요구사항",
+    "ChapterComment": "NFPA 13, 14에서는 연결송수구 개수에 대한 규정이 없습니다.\n일반적으로 옥내소화전 시스템은 스프링클러와 같은 수원을 사용하기 때문에 옥내소화전을 위한 연결송수구도 화재 발생 시 소방대가 각 연결구가 건물의 어떤 구역을 담당하는지를 현장에서 즉시 파악해야 하므로, 일반적으로 지하에서 주 수원을 공급하는 수직배관(시스템), 즉 주 체크 밸브가 설치된 곳에 설치합니다. 다시 말해 최소한 1개 이상이 됩니다.\n만일 시에서 수원이 공급되는 수직배관이 복수이면 복수의 연결송수구가 필요합니다."
+  },
+  {
+    "ChapterID": "CH031",
+    "ModelCodeVersionID": "MCV004",
+    "Chapter": 10,
+    "TitleEN": "Design",
+    "TitleKR": "설계",
+    "ChapterComment": null
+  },
+  {
+    "ChapterID": "CH032",
+    "ModelCodeVersionID": "MCV004",
+    "Chapter": 12,
+    "TitleEN": "System Acceptance",
+    "TitleKR": null,
+    "ChapterComment": null
+  },
+  {
+    "ChapterID": "CH033",
+    "ModelCodeVersionID": "MCV004",
+    "Chapter": "Annex A",
+    "TitleEN": "Explanatory Material",
+    "TitleKR": null,
+    "ChapterComment": null
+  },
+  {
+    "ChapterID": "CH034",
+    "ModelCodeVersionID": "MCV005",
+    "Chapter": 4,
+    "TitleEN": "General Requirements",
+    "TitleKR": "일반 요구 사항",
+    "ChapterComment": "Chapter 4는 소방펌프에 대한 일반 요구사항을 포함하고 있습니다. NFPA 20은 소방펌프 설치 요구사항을 규정하지 않는다는 점이 중요합니다. 소방펌프의 필요성은 진압 시스템의 수리학적 요구량과 이용 가능한 급수원에서 제공되는 유량 및 압력을 기준으로 결정됩니다.\n\n이용 가능한 급수원이 적절한 유량을 제공하지만 압력이 부족한 경우, 소방펌프를 사용하여 압력을 증가시킬 수 있습니다. 이용 가능한 급수원이 필요한 유량을 공급할 수 없는 경우에는 보조 급수원이 필요합니다.\n\n소방펌프 구동 형식\n\n1. 전동 모터 구동(Electric Motor Driven Pump)\n   - 가장 보편적, 전원 신뢰성이 확보된 건물에서 사용\n2. 디젤 엔진 구동(Diesel Engine Driven Pump)\n   - 대형 건물, 전력 공급 불안정 지역에서 사용\n   - 연료 저장탱크, 배기, 환기 시스템 필요\n3. 스팀 터빈 구동(Steam Turbine Pump)\n   - 산업 플랜트, 발전소 등 특수 현장\n\n펌프 형식\nEnd-suction, Horizontal split-case, Vertical turbine, Vertical inline 등\n\n용량 및 압력\n설계에서 요구하는 유량과 압력을 확보해야 하며(스탠드파이프 100 psi 이상 등), 흡입 측(Suction)의 안정적인 급수원 확보 및 토출 측(Discharge)에서 체크밸브, OS&Y 게이트밸브, 압력계 설치가 필수적입니다.\n\n펌프실 요구사항\n방수·배수·환기 확보, 화재 시 펌프 보호 가능 구조\n\nController & Power Supply\n1. 펌프 컨트롤러는 UL/FM 승인 제품 사용\n2. 자동 기동(Automatic Start): 압력 스위치 또는 감지 신호에 의해 자동 기동\n3. 수동 기동(Manual Start) 가능\n4. 비상 전원: 전기 펌프의 경우 신뢰성 있는 전원 필요, 디젤 펌프는 자체 비상전원 기능 요구"
+  },
+  {
+    "ChapterID": "CH035",
+    "ModelCodeVersionID": "MCV005",
+    "Chapter": 6,
+    "TitleEN": "Centrifugal Pumps",
+    "TitleKR": "원심 펌프",
+    "ChapterComment": null
+  },
+  {
+    "ChapterID": "CH036",
+    "ModelCodeVersionID": "MCV005",
+    "Chapter": 10,
+    "TitleEN": "Electric-Drive Controllers and Accessories",
+    "TitleKR": "전동 제어반 및 부속품",
+    "ChapterComment": null
+  },
+  {
+    "ChapterID": "CH037",
+    "ModelCodeVersionID": "MCV005",
+    "Chapter": 11,
+    "TitleEN": "Diesel Engine Drive",
+    "TitleKR": "디젤 엔진 구동",
+    "ChapterComment": null
+  },
+  {
+    "ChapterID": "CH038",
+    "ModelCodeVersionID": "MCV006",
+    "Chapter": 17,
+    "TitleEN": "Initiating Devices",
+    "TitleKR": null,
+    "ChapterComment": "스프링클러설비와 달리 자동화재탐지설비(이하 \"자탐\")는 특별히 정해진 설계 절차가 없습니다. 미국 프로젝트 경험이 있다면 미국 컨설팅 엔지니어링 회사가 제출한 기본설계 도면의 수준이 스프링클러 도면보다 간단하다는 것을 경험했을 것입니다. 미국에서의 자탐 설계는 제 경험상 시공사(시공 도면을 작성하는 회사)의 비중이 크며, 컨설팅 엔지니어는 시공사의 샵드로잉(Shop Drawing) 검토에 초점을 맞추고 있습니다. 이는 자탐이 제조사별 시스템(Notifier, Simplex, EST 등)에 의해 설계되기 때문입니다.\n\nNFPA 72에서 기술하고 있는 기본적인 요구사항들, 감지기의 종류와 배치, 스프링클러설비와의 연계, 감지기별 회로의 특성, 비상통신설비(Emergency Communication Systems), 음성/경보 통신설비(Voice/Alarm Communications Systems) 등에 관한 조항들에 대한 이해를 바탕으로 삼우 소방 엔지니어들이 해외 업체의 자탐 도면을 이해하고 검토하는 데 도움이 되길 바랍니다.\n\n다른 코드나 기준과 마찬가지로 NFPA 72 용어 정의에 대한 이해가 중요합니다. 여기에서는 정의에 대해서는 별도로 기술하지 않습니다."
+  },
+  {
+    "ChapterID": "CH039",
+    "ModelCodeVersionID": "MCV006",
+    "Chapter": 12,
+    "TitleEN": "Circuits and Pathways",
+    "TitleKR": null,
+    "ChapterComment": null
+  },
+  {
+    "ChapterID": "CH040",
+    "ModelCodeVersionID": "MCV006",
+    "Chapter": 17,
+    "TitleEN": "Initiating Devices",
+    "TitleKR": "작동 장치",
+    "ChapterComment": null
+  },
+  {
+    "ChapterID": "CH041",
+    "ModelCodeVersionID": "MCV006",
+    "Chapter": 21,
+    "TitleEN": "Emergency Control Function Interfaces",
+    "TitleKR": null,
+    "ChapterComment": null
+  },
+  {
+    "ChapterID": "CH042",
+    "ModelCodeVersionID": "MCV006",
+    "Chapter": 18,
+    "TitleEN": "Notification Appliance",
+    "TitleKR": null,
+    "ChapterComment": null
+  },
+  {
+    "ChapterID": "CH043",
+    "ModelCodeVersionID": "MCV006",
+    "Chapter": 23,
+    "TitleEN": "Protected Premises Alarm and Signaling Systems",
+    "TitleKR": null,
+    "ChapterComment": null
+  },
+  {
+    "ChapterID": "CH044",
+    "ModelCodeVersionID": "MCV006",
+    "Chapter": 24,
+    "TitleEN": "Emergency Communications Systems (ECSs)",
+    "TitleKR": null,
+    "ChapterComment": null
+  },
+  {
+    "ChapterID": "CH045",
+    "ModelCodeVersionID": "MCV006",
+    "Chapter": 26,
+    "TitleEN": "Supervising Station Alarm Systems",
+    "TitleKR": null,
+    "ChapterComment": null
+  },
+  {
+    "ChapterID": "CH046",
+    "ModelCodeVersionID": "MCV006",
+    "Chapter": 10,
+    "TitleEN": "Fundamentals",
+    "TitleKR": null,
+    "ChapterComment": null
+  },
+  {
+    "ChapterID": "CH047",
+    "ModelCodeVersionID": "MCV006",
+    "Chapter": "Annex B",
+    "TitleEN": "Engineering Guide for Automatic Fire Detector Spacing",
+    "TitleKR": null,
+    "ChapterComment": null
+  },
+  {
+    "ChapterID": "CH048",
+    "ModelCodeVersionID": "MCV007",
+    "Chapter": 4,
+    "TitleEN": "General Requirements",
+    "TitleKR": null,
+    "ChapterComment": null
+  },
+  {
+    "ChapterID": "CH049",
+    "ModelCodeVersionID": "MCV007",
+    "Chapter": 5,
+    "TitleEN": "Fire Protection",
+    "TitleKR": null,
+    "ChapterComment": null
+  },
+  {
+    "ChapterID": "CH050",
+    "ModelCodeVersionID": "MCV007",
+    "Chapter": "Annex A",
+    "TitleEN": "Explanatory Material",
+    "TitleKR": null,
+    "ChapterComment": null
+  },
+  {
+    "ChapterID": "CH051",
+    "ModelCodeVersionID": "MCV008",
+    "Chapter": 10,
+    "TitleEN": "Fire-Extinguishing Equipment for Cooking Operations in Buildings",
+    "TitleKR": null,
+    "ChapterComment": null
+  },
+  {
+    "ChapterID": "CH052",
+    "ModelCodeVersionID": "MCV009",
+    "Chapter": 11,
+    "TitleEN": "Fire Protection",
+    "TitleKR": null,
+    "ChapterComment": null
+  },
+  {
+    "ChapterID": "CH053",
+    "ModelCodeVersionID": "MCV010",
+    "Chapter": 5,
+    "TitleEN": "Water Supplies",
+    "TitleKR": "급수",
+    "ChapterComment": null
+  },
+  {
+    "ChapterID": "CH054",
+    "ModelCodeVersionID": "MCV010",
+    "Chapter": 6,
+    "TitleEN": "Water Supply Connections",
+    "TitleKR": "급수 연결",
+    "ChapterComment": null
+  },
+  {
+    "ChapterID": "CH055",
+    "ModelCodeVersionID": "MCV010",
+    "Chapter": 7,
+    "TitleEN": "Hydrants",
+    "TitleKR": "소화전",
+    "ChapterComment": null
+  },
+  {
+    "ChapterID": "CH056",
+    "ModelCodeVersionID": "MCV010",
+    "Chapter": 8,
+    "TitleEN": "Hose Houses and Equipment",
+    "TitleKR": "호스 보관함 및 설비",
+    "ChapterComment": null
+  },
+  {
+    "ChapterID": "CH057",
+    "ModelCodeVersionID": "MCV010",
+    "Chapter": 10,
+    "TitleEN": "Underground Requirements",
+    "TitleKR": "지하 요구사항",
+    "ChapterComment": null
+  },
+  {
+    "ChapterID": "CH058",
+    "ModelCodeVersionID": "MCV011",
+    "Chapter": 18,
+    "TitleEN": "Fire Department Access and Water Supply",
+    "TitleKR": "소방대 접근 및 급수",
+    "ChapterComment": null
+  },
+  {
+    "ChapterID": "CH059",
+    "ModelCodeVersionID": "MCV012",
+    "Chapter": 4,
+    "TitleEN": "General Information",
+    "TitleKR": "일반정보",
+    "ChapterComment": null
+  },
+  {
+    "ChapterID": "CH060",
+    "ModelCodeVersionID": "MCV012",
+    "Chapter": 5,
+    "TitleEN": "Total Flooding Systems",
+    "TitleKR": null,
+    "ChapterComment": null
+  },
+  {
+    "ChapterID": "CH061",
+    "ModelCodeVersionID": "MCV013",
+    "Chapter": 7,
+    "TitleEN": "Total Flooding Systems",
+    "TitleKR": null,
+    "ChapterComment": null
+  },
+  {
+    "ChapterID": "CH062",
+    "ModelCodeVersionID": "MCV013",
+    "Chapter": 8,
+    "TitleEN": "Local Application Systems",
+    "TitleKR": null,
+    "ChapterComment": "청정 소화 약제 시스템은 기본적으로 제조사의 사양을 인허가청에 기본 자료로 제출합니다. 각 제조사는 UL 인증을 받았고 NFPA 12와 2001을 준수합니다. 제조사의 특성에 따라 제품의 사양은 다양합니다. 본 장에서는 법적으로 반드시 필요한 사항으로 내용을 제한합니다.\nCO₂ 시스템 주요 제조사: Ansul, Fike\n청정 소화 약제 주요 제조사: Ansul (Inergen, Novec 1230), Fike (ECARO-25, FM-200)\n\nIBC나 NFPA 12에서 CO₂ 시스템이 필요한 곳을 특정하지는 않습니다.\nNFPA 12는 CO₂ 시스템의 설계·설치·유지관리 기준을 다루며, \"물·폼·분말 소화가 부적합한 화재 위험 설비\"를 보호하기 위한 표준입니다.\n\n일반적으로 CO₂ 시스템은 크게 두 가지 시스템이 있습니다.\n1. 전역 방출 시스템(Total Flooding System)\n특정 구역 전체를 CO₂ 가스로 충만시켜 화재 진압\n전기·기계실, 발전기실, 변전실, 펌프실, 터빈실, 페인트부스, 기계 공간 등\n2. 국소 방출 시스템(Local Application System)\n위험 설비 주변에 직접 분사하여 화재 진압\n인화성 액체 탱크, 윤활유 펌프, 컨베이어, 침유조(Quenching tank), 터빈 베어링 등"
+  },
+  {
+    "ChapterID": "CH063",
+    "ModelCodeVersionID": "MCV013",
+    "Chapter": 9,
+    "TitleEN": "Detection, Actuation, Alarm, and Control Systems for Clean Agent Releasing Applications",
+    "TitleKR": null,
+    "ChapterComment": "청정 소화 약제 방출 적용을 위한 감지, 작동, 경보 및 제어 시스템"
+  },
+  {
+    "ChapterID": "CH064",
+    "ModelCodeVersionID": "MCV013",
+    "Chapter": "Annex A",
+    "TitleEN": "Explanatory Material",
+    "TitleKR": null,
+    "ChapterComment": null
+  },
+  {
+    "ChapterID": "CH065",
+    "ModelCodeVersionID": "MCV014",
+    "Chapter": 1,
+    "TitleEN": "Administration",
+    "TitleKR": "관리",
+    "ChapterComment": "NFPA 15의 의도는 \"본 기준의 목적은 건전한 공학 원리, 시험 데이터 및 현장 경험을 기반으로 물분무 고정 시스템에 대한 최소 요구사항을 제공하는 것이다.\"입니다. 본 시스템은 엔지니어링 시스템으로 엔지니어마다 설치 기준이 다를 수 있습니다. 본 페이지에서는 주요 법적 기준에 제한합니다."
+  },
+  {
+    "ChapterID": "CH066",
+    "ModelCodeVersionID": "MCV014",
+    "Chapter": 6,
+    "TitleEN": "Installation Requirements",
+    "TitleKR": "설치 요구사항",
+    "ChapterComment": null
+  },
+  {
+    "ChapterID": "CH067",
+    "ModelCodeVersionID": "MCV014",
+    "Chapter": 7,
+    "TitleEN": "Design Objectives",
+    "TitleKR": "설계 목적",
+    "ChapterComment": null
+  },
+  {
+    "ChapterID": "CH068",
+    "ModelCodeVersionID": "MCV015",
+    "Chapter": 1,
+    "TitleEN": "Administration",
+    "TitleKR": "관리",
+    "ChapterComment": null
+  },
+  {
+    "ChapterID": "CH069",
+    "ModelCodeVersionID": "MCV015",
+    "Chapter": 3,
+    "TitleEN": "Definitions",
+    "TitleKR": "정의",
+    "ChapterComment": null
+  },
+  {
+    "ChapterID": "CH070",
+    "ModelCodeVersionID": "MCV015",
+    "Chapter": 4,
+    "TitleEN": "General Requirements",
+    "TitleKR": "일반 요구사항",
+    "ChapterComment": null
+  },
+  {
+    "ChapterID": "CH071",
+    "ModelCodeVersionID": "MCV015",
+    "Chapter": 6,
+    "TitleEN": "System Components",
+    "TitleKR": "시스템 구성요소",
+    "ChapterComment": null
+  },
+  {
+    "ChapterID": "CH072",
+    "ModelCodeVersionID": "MCV015",
+    "Chapter": 7,
+    "TitleEN": "System Design and Installation",
+    "TitleKR": "시스템 설계 및 설치",
+    "ChapterComment": null
+  },
+  {
+    "ChapterID": "CH073",
+    "ModelCodeVersionID": "MCV016",
+    "Chapter": 4,
+    "TitleEN": "Design Fundamentals",
+    "TitleKR": "설계 기본요소",
+    "ChapterComment": null
+  }
+]
