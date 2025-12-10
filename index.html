@@ -1847,123 +1847,8 @@
       document.getElementById('topSearchInput').focus();
     }
 
-    function performTopSearch() {
-      const searchValue = document.getElementById('topSearchInput').value;
-      if (searchValue.trim()) {
-        showSection('searchResults');
-        document.getElementById('searchResultsSubtitle').textContent = `검색어: "${searchValue}"`;
-        
-        const searchResultsList = document.getElementById('searchResultsList');
-        const highlightedText = (text, query) => {
-          if (!query) return text;
-          const regex = new RegExp(`(${query})`, 'gi');
-          return text.replace(regex, '<span class="search-highlight">$1</span>');
-        };
-        
-        // Updated search results with fold/unfold and eye icon
-        searchResultsList.innerHTML = `
-          <div class="border rounded-lg bg-white overflow-hidden">
-            <div class="result-collapsible p-4 hover:bg-gray-50 transition-colors" onclick="toggleResultItem('result1')">
-              <div class="flex items-center justify-between">
-                <div class="flex items-center gap-3 flex-1">
-                  <svg id="result1Icon" class="w-5 h-5 text-gray-600 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                  </svg>
-                  <div class="flex-1">
-                    <div class="flex items-center gap-2 mb-1">
-                      <span class="bg-[#F76C6C] text-white text-xs font-semibold px-2 py-1 rounded">IBC 2024</span>
-                      <span class="text-sm text-gray-500">Chapter 1, Section 101.1</span>
-                    </div>
-                    <h3 class="font-semibold text-[#24305E]">${highlightedText('Title', searchValue)}</h3>
-                  </div>
-                </div>
-                <!-- Updated eye icon to open popup instead of navigating -->
-                <button class="ml-4 p-2 bg-[#A8D0E6] text-[#24305E] rounded-lg hover:bg-[#8fc0d9] transition-colors" onclick="event.stopPropagation(); openSectionModal('101.1', 'IBC 2024', 'Title');" title="View section">
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                  </svg>
-                </button>
-              </div>
-            </div>
-            <div id="result1" class="result-content">
-              <div class="px-4 pb-4 text-sm text-gray-600 leading-relaxed space-y-1 border-t pt-3">
-                <p>${highlightedText('These regulations shall be known as the International Building Code', searchValue)}</p>
-                <p>${highlightedText('of [NAME OF JURISDICTION], hereinafter referred to as "this code."', searchValue)}</p>
-                <p class="text-gray-500 italic">${highlightedText('이 규정은 [관할 구역 이름]의 국제 건축 코드로 알려져야 하며...', searchValue)}</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="border rounded-lg bg-white overflow-hidden">
-            <div class="result-collapsible p-4 hover:bg-gray-50 transition-colors" onclick="toggleResultItem('result2')">
-              <div class="flex items-center justify-between">
-                <div class="flex items-center gap-3 flex-1">
-                  <svg id="result2Icon" class="w-5 h-5 text-gray-600 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                  </svg>
-                  <div class="flex-1">
-                    <div class="flex items-center gap-2 mb-1">
-                      <span class="bg-[#F76C6C] text-white text-xs font-semibold px-2 py-1 rounded">IBC 2024</span>
-                      <span class="text-sm text-gray-500">Chapter 1, Section 101.2</span>
-                    </div>
-                    <h3 class="font-semibold text-[#24305E]">${highlightedText('Scope', searchValue)}</h3>
-                  </div>
-                </div>
-                <button class="ml-4 p-2 bg-[#A8D0E6] text-[#24305E] rounded-lg hover:bg-[#8fc0d9] transition-colors" onclick="event.stopPropagation(); openSectionModal('101.2', 'IBC 2024', 'Scope');" title="View section">
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                  </svg>
-                </button>
-              </div>
-            </div>
-            <div id="result2" class="result-content">
-              <div class="px-4 pb-4 text-sm text-gray-600 leading-relaxed space-y-1 border-t pt-3">
-                <p>${highlightedText('The provisions of this code shall apply to the construction, alteration,', searchValue)}</p>
-                <p>${highlightedText('relocation, enlargement, replacement, repair, equipment, use and occupancy,', searchValue)}</p>
-                <p>${highlightedText('location, maintenance, removal and demolition of every building or structure...', searchValue)}</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="border rounded-lg bg-white overflow-hidden">
-            <div class="result-collapsible p-4 hover:bg-gray-50 transition-colors" onclick="toggleResultItem('result3')">
-              <div class="flex items-center justify-between">
-                <div class="flex items-center gap-3 flex-1">
-                  <svg id="result3Icon" class="w-5 h-5 text-gray-600 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                  </svg>
-                  <div class="flex-1">
-                    <div class="flex items-center gap-2 mb-1">
-                      <span class="bg-[#A8D0E6] text-[#24305E] text-xs font-semibold px-2 py-1 rounded">NFPA 13 2024</span>
-                      <span class="text-sm text-gray-500">Chapter 8, Section 8.3</span>
-                    </div>
-                    <h3 class="font-semibold text-[#24305E]">${highlightedText('System Components', searchValue)}</h3>
-                  </div>
-                </div>
-                <button class="ml-4 p-2 bg-[#A8D0E6] text-[#24305E] rounded-lg hover:bg-[#8fc0d9] transition-colors" onclick="event.stopPropagation(); openSectionModal('8.3', 'NFPA 13 2024', 'System Components');" title="View section">
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                  </svg>
-                </button>
-              </div>
-            </div>
-            <div id="result3" class="result-content">
-              <div class="px-4 pb-4 text-sm text-gray-600 leading-relaxed space-y-1 border-t pt-3">
-                <p>${highlightedText('Sprinkler system components shall be listed for their intended use', searchValue)}</p>
-                <p>${highlightedText('and installed in accordance with manufacturer\'s specifications', searchValue)}</p>
-                <p>${highlightedText('and this standard. All components must meet applicable standards...', searchValue)}</p>
-              </div>
-            </div>
-          </div>
-        `;
-        
-        document.getElementById('searchResultsCount').textContent = '3개 결과';
-      }
-    }
-
+    // performTopSearch는 전역 함수로 정의됨 (data layer section 참조)
+    // Enter 키 이벤트 리스너만 유지
     document.getElementById('topSearchInput')?.addEventListener('keypress', function(e) {
       if (e.key === 'Enter') {
         performTopSearch();
@@ -1974,117 +1859,9 @@
     const resetBtn = document.getElementById('resetBtn');
     const resultCount = document.getElementById('resultCount');
 
+    // 고급 검색 버튼 클릭 - 전역 함수 performAdvancedSearchReal 호출
     searchBtn?.addEventListener('click', function() {
-      const keyword = document.getElementById('keywordInput').value;
-      const selectedArchTags = Array.from(document.querySelectorAll('input[name="archCategory"]:checked')).map(cb => cb.value);
-      const selectedFireMechTags = Array.from(document.querySelectorAll('input[name="fireMechCategory"]:checked')).map(cb => cb.value);
-      const selectedFireElecTags = Array.from(document.querySelectorAll('input[name="fireElecCategory"]:checked')).map(cb => cb.value);
-
-      console.log('[v0] Search parameters:', {
-        keyword,
-        archTags: selectedArchTags,
-        fireMechTags: selectedFireMechTags,
-        fireElecTags: selectedFireElecTags
-      });
-      
-      const resultsList = document.getElementById('resultsList');
-      // Updated advanced search results with fold/unfold and eye icon
-      resultsList.innerHTML = `
-        <div class="border rounded-lg bg-white overflow-hidden">
-          <div class="result-collapsible p-4 hover:bg-gray-50 transition-colors" onclick="toggleResultItem('advResult1')">
-            <div class="flex items-center justify-between">
-              <div class="flex items-center gap-3 flex-1">
-                <svg id="advResult1Icon" class="w-5 h-5 text-gray-600 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                </svg>
-                <div class="flex-1">
-                  <div class="flex items-center gap-2 mb-1">
-                    <span class="bg-[#F76C6C] text-white text-xs font-semibold px-2 py-1 rounded">IBC 2024</span>
-                    <span class="text-sm text-gray-500">Chapter 5, Section 503</span>
-                  </div>
-                  <h3 class="font-semibold text-[#24305E]">General Building Heights and Areas</h3>
-                </div>
-              </div>
-              <!-- Updated eye icon to open popup -->
-              <button class="ml-4 p-2 bg-[#A8D0E6] text-[#24305E] rounded-lg hover:bg-[#8fc0d9] transition-colors" onclick="event.stopPropagation(); openSectionModal('503', 'IBC 2024', 'General Building Heights and Areas');" title="View section">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                </svg>
-              </button>
-            </div>
-          </div>
-          <div id="advResult1" class="result-content">
-            <div class="px-4 pb-4 text-sm text-gray-600 leading-relaxed border-t pt-3">
-              The height and area of buildings shall be limited based on the occupancy classification, 
-              type of construction, and the presence of automatic sprinkler systems...
-            </div>
-          </div>
-        </div>
-
-        <div class="border rounded-lg bg-white overflow-hidden">
-          <div class="result-collapsible p-4 hover:bg-gray-50 transition-colors" onclick="toggleResultItem('advResult2')">
-            <div class="flex items-center justify-between">
-              <div class="flex items-center gap-3 flex-1">
-                <svg id="advResult2Icon" class="w-5 h-5 text-gray-600 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                </svg>
-                <div class="flex-1">
-                  <div class="flex items-center gap-2 mb-1">
-                    <span class="bg-[#A8D0E6] text-[#24305E] text-xs font-semibold px-2 py-1 rounded">NFPA 13 2024</span>
-                    <span class="text-sm text-gray-500">Chapter 8, Section 8.3</span>
-                  </div>
-                  <h3 class="font-semibold text-[#24305E]">System Components and Hardware</h3>
-                </div>
-              </div>
-              <button class="ml-4 p-2 bg-[#A8D0E6] text-[#24305E] rounded-lg hover:bg-[#8fc0d9] transition-colors" onclick="event.stopPropagation(); openSectionModal('8.3', 'NFPA 13 2024', 'System Components and Hardware');" title="View section">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                </svg>
-              </button>
-            </div>
-          </div>
-          <div id="advResult2" class="result-content">
-            <div class="px-4 pb-4 text-sm text-gray-600 leading-relaxed border-t pt-3">
-              Sprinkler system components shall be listed for their intended use and installed in accordance 
-              with manufacturer's specifications and this standard...
-            </div>
-          </div>
-        </div>
-
-        <div class="border rounded-lg bg-white overflow-hidden">
-          <div class="result-collapsible p-4 hover:bg-gray-50 transition-colors" onclick="toggleResultItem('advResult3')">
-            <div class="flex items-center justify-between">
-              <div class="flex items-center gap-3 flex-1">
-                <svg id="advResult3Icon" class="w-5 h-5 text-gray-600 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                </svg>
-                <div class="flex-1">
-                  <div class="flex items-center gap-2 mb-1">
-                    <span class="bg-[#A8D0E6] text-[#24305E] text-xs font-semibold px-2 py-1 rounded">NFPA 72 2024</span>
-                    <span class="text-sm text-gray-500">Chapter 10, Section 10.4</span>
-                  </div>
-                  <h3 class="font-semibold text-[#24305E]">Fire Alarm System Design</h3>
-                </div>
-              </div>
-              <button class="ml-4 p-2 bg-[#A8D0E6] text-[#24305E] rounded-lg hover:bg-[#8fc0d9] transition-colors" onclick="event.stopPropagation(); openSectionModal('10.4', 'NFPA 72 2024', 'Fire Alarm System Design');" title="View section">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                </svg>
-              </button>
-            </div>
-          </div>
-          <div id="advResult3" class="result-content">
-            <div class="px-4 pb-4 text-sm text-gray-600 leading-relaxed border-t pt-3">
-              Fire alarm systems shall be designed to provide early warning of fire conditions and shall be 
-              installed in accordance with the requirements of this chapter...
-            </div>
-          </div>
-        </div>
-      `;
-      resultCount.textContent = '3개 결과';
+      performAdvancedSearchReal();
     });
 
     resetBtn?.addEventListener('click', function() {
@@ -2396,12 +2173,9 @@ ${note}
       if (clearBtn) clearBtn.style.display = 'none';
     }
 
+    // performAdvancedSearch는 전역 함수 performAdvancedSearchReal로 대체됨
     function performAdvancedSearch() {
-      const keyword = document.getElementById('keywordInput').value.trim();
-      if (keyword) {
-        // Perform search logic here
-        console.log('[v0] Advanced search for:', keyword);
-      }
+      performAdvancedSearchReal();
     }
 
     document.addEventListener('DOMContentLoaded', function() {
@@ -4464,6 +4238,13 @@ function performTopSearch() {
     const query = document.getElementById('topSearchInput').value.trim();
     if (!query) return;
 
+    // 데이터 로딩 확인 - 로딩 전이면 알림 후 리턴
+    if (!dataLoaded) {
+        console.warn('Data not loaded yet, please wait...');
+        alert('데이터를 로딩 중입니다. 잠시 후 다시 시도해주세요.');
+        return;
+    }
+
     // Switch to search results section (not advanced search)
     document.querySelectorAll('.section-content').forEach(s => s.classList.remove('active'));
     document.getElementById('searchResultsSection').classList.add('active');
@@ -4795,6 +4576,222 @@ function toggleAllSearchResults(expand) {
             toggleIcon.textContent = '▼';
         }
     });
+}
+
+// === 고급 검색 실제 구현 ===
+// Advanced Search using real JSON data
+function performAdvancedSearchReal() {
+    // 1. 데이터 로딩 확인
+    if (!dataLoaded) {
+        console.warn('Data not loaded yet for advanced search');
+        alert('데이터를 로딩 중입니다. 잠시 후 다시 시도해주세요.');
+        return;
+    }
+
+    // 2. 검색 파라미터 수집
+    const keyword = (document.getElementById('keywordInput')?.value || '').trim().toLowerCase();
+    const selectedArchTags = Array.from(document.querySelectorAll('input[name="archCategory"]:checked')).map(cb => cb.value);
+    const selectedFireMechTags = Array.from(document.querySelectorAll('input[name="fireMechCategory"]:checked')).map(cb => cb.value);
+    const selectedFireElecTags = Array.from(document.querySelectorAll('input[name="fireElecCategory"]:checked')).map(cb => cb.value);
+
+    const allSelectedTags = [...selectedArchTags, ...selectedFireMechTags, ...selectedFireElecTags];
+
+    console.log('[Advanced Search] Parameters:', { keyword, selectedTags: allSelectedTags });
+
+    // 3. 검색 수행
+    const results = [];
+
+    appData.CodeContent.forEach(content => {
+        let matches = false;
+
+        // 키워드 검색 (제목, 내용에서)
+        if (keyword) {
+            const titleEN = (content.TitleEN || '').toLowerCase();
+            const titleKR = (content.TitleKR || '').toLowerCase();
+            const contentEN = (content.ContentEN || '').toLowerCase();
+            const contentKR = (content.ContentKR || '').toLowerCase();
+
+            if (titleEN.includes(keyword) || titleKR.includes(keyword) ||
+                contentEN.includes(keyword) || contentKR.includes(keyword)) {
+                matches = true;
+            }
+        }
+
+        // 태그 필터링 (IndexTags, SubIndex)
+        if (allSelectedTags.length > 0) {
+            const contentTags = [];
+
+            // IndexTags에서 태그 수집
+            if (content.IndexTags && Array.isArray(content.IndexTags)) {
+                contentTags.push(...content.IndexTags);
+            }
+
+            // SubIndex에서 태그 수집
+            if (content.SubIndex) {
+                const subParts = content.SubIndex.split(';').flatMap(e => e.trim().split('_'));
+                contentTags.push(...subParts);
+            }
+
+            // 선택된 태그와 매칭 (부분 매칭 포함)
+            const tagMatches = allSelectedTags.some(selectedTag => {
+                return contentTags.some(contentTag => {
+                    return contentTag.includes(selectedTag) || selectedTag.includes(contentTag);
+                });
+            });
+
+            if (tagMatches) {
+                matches = true;
+            } else if (!keyword) {
+                // 키워드 없이 태그만 선택된 경우, 태그 매칭 필수
+                matches = false;
+            }
+        }
+
+        // 키워드도 태그도 없으면 검색 안함
+        if (!keyword && allSelectedTags.length === 0) {
+            return;
+        }
+
+        if (matches) {
+            // 코드 및 챕터 정보 가져오기
+            const modelCode = appData.ModelCode.find(mc => mc.ModelCodeID === content.ModelCodeID);
+            const version = appData.ModelCodeVersion.find(v => v.ModelCodeVersionID === content.ModelCodeVersionID);
+            const chapter = appData.CodeChapter.find(ch => ch.ChapterID === content.ChapterID);
+
+            if (modelCode && version && chapter) {
+                results.push({
+                    code: modelCode.ModelCodeName.split(':')[0].trim(),
+                    year: version.Year ? Math.floor(version.Year) : '',
+                    chapter: chapter.Chapter,
+                    chapterTitle: chapter.TitleEN || '',
+                    section: content.Section || '',
+                    subsection: content.Subsection || '',
+                    titleEN: content.TitleEN || '',
+                    titleKR: content.TitleKR || '',
+                    contentEN: content.ContentEN || '',
+                    contentKR: content.ContentKR || '',
+                    codeId: content.ModelCodeID,
+                    versionId: content.ModelCodeVersionID,
+                    chapterId: content.ChapterID,
+                    indexTags: content.IndexTags || [],
+                    subIndex: content.SubIndex || ''
+                });
+            }
+        }
+    });
+
+    console.log('[Advanced Search] Found results:', results.length);
+
+    // 4. 결과 렌더링
+    renderAdvancedSearchResults(results, keyword);
+}
+
+// 고급 검색 결과 렌더링 (스타일 적용)
+function renderAdvancedSearchResults(results, keyword) {
+    const resultsList = document.getElementById('resultsList');
+    const resultCount = document.getElementById('resultCount');
+
+    if (!resultsList) return;
+
+    // 결과 카운트 업데이트
+    if (resultCount) {
+        resultCount.textContent = `${results.length}개 결과`;
+    }
+
+    if (results.length === 0) {
+        resultsList.innerHTML = '<p class="text-gray-500 text-center py-8">검색 결과가 없습니다</p>';
+        return;
+    }
+
+    // 하이라이트 함수
+    const highlightText = (text, query) => {
+        if (!query || !text) return text;
+        const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+        return text.replace(regex, '<span class="bg-yellow-200 px-0.5 rounded font-semibold">$1</span>');
+    };
+
+    // 컨텍스트 추출 함수 (키워드 주변 텍스트)
+    const extractContext = (text, query, maxLen = 200) => {
+        if (!text) return '';
+        if (!query) return text.slice(0, maxLen) + (text.length > maxLen ? '...' : '');
+
+        const lowerText = text.toLowerCase();
+        const lowerQuery = query.toLowerCase();
+        const index = lowerText.indexOf(lowerQuery);
+
+        if (index === -1) {
+            return text.slice(0, maxLen) + (text.length > maxLen ? '...' : '');
+        }
+
+        const start = Math.max(0, index - 50);
+        const end = Math.min(text.length, index + query.length + 150);
+        let excerpt = text.slice(start, end);
+
+        if (start > 0) excerpt = '...' + excerpt;
+        if (end < text.length) excerpt = excerpt + '...';
+
+        return excerpt;
+    };
+
+    // HTML 생성
+    let html = '';
+
+    results.forEach((result, index) => {
+        const sectionNum = result.section + (result.subsection ? '.' + result.subsection : '');
+        const codeLabel = `${result.code} ${result.year}`;
+
+        // 코드별 색상 결정
+        const isIBC = result.code.includes('IBC');
+        const badgeClass = isIBC
+            ? 'bg-[#F76C6C] text-white'
+            : 'bg-[#A8D0E6] text-[#24305E]';
+
+        // 컨텍스트 추출 및 하이라이트
+        const titleDisplay = highlightText(result.titleEN || result.titleKR, keyword);
+        const contentContext = extractContext(result.contentEN || result.contentKR, keyword, 250);
+        const contentHighlighted = highlightText(contentContext, keyword);
+
+        html += `
+        <div class="border rounded-lg bg-white overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+          <div class="result-collapsible p-4 hover:bg-gray-50 transition-colors cursor-pointer" onclick="toggleResultItem('advResult${index}')">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-3 flex-1">
+                <svg id="advResult${index}Icon" class="w-5 h-5 text-gray-600 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+                <div class="flex-1">
+                  <div class="flex items-center gap-2 mb-1 flex-wrap">
+                    <span class="${badgeClass} text-xs font-semibold px-2 py-1 rounded">${codeLabel}</span>
+                    <span class="text-sm text-gray-500">Chapter ${result.chapter}, Section ${sectionNum}</span>
+                  </div>
+                  <h3 class="font-semibold text-[#24305E]">${titleDisplay || 'Untitled'}</h3>
+                </div>
+              </div>
+              <button class="ml-4 p-2 bg-[#A8D0E6] text-[#24305E] rounded-lg hover:bg-[#8fc0d9] transition-colors flex-shrink-0"
+                      onclick="event.stopPropagation(); loadCodeFromSidebar('${result.versionId}', '${result.codeId}');"
+                      title="코드 라이브러리에서 보기">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+          <div id="advResult${index}" class="result-content">
+            <div class="px-4 pb-4 text-sm text-gray-600 leading-relaxed border-t pt-3 space-y-2">
+              <p class="text-gray-700">${contentHighlighted}</p>
+              ${result.titleKR ? `<p class="text-gray-500 italic">${highlightText(result.titleKR, keyword)}</p>` : ''}
+              ${result.indexTags.length > 0 ? `
+              <div class="flex flex-wrap gap-1 mt-2">
+                ${result.indexTags.map(tag => `<span class="bg-gray-100 text-gray-600 text-xs px-2 py-0.5 rounded">${tag}</span>`).join('')}
+              </div>` : ''}
+            </div>
+          </div>
+        </div>
+        `;
+    });
+
+    resultsList.innerHTML = html;
 }
 
 // Toggle individual advanced search result (for displaySearchResults)
