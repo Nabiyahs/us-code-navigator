@@ -7,9 +7,104 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-    
+
+    /* === Responsive Design System === */
+    :root {
+      /* Base font size scales with viewport (min 14px, max 18px) */
+      --base-font: clamp(0.875rem, 0.8rem + 0.4vw, 1.125rem);
+
+      /* Sidebar width: 15% of viewport, min 200px, max 280px */
+      --sidebar-width: clamp(200px, 15vw, 280px);
+
+      /* Chapter sidebar width: 20% of viewport, min 260px, max 360px */
+      --chapter-sidebar-width: clamp(260px, 20vw, 360px);
+
+      /* Header height: proportional to viewport */
+      --header-height: clamp(60px, 5vh + 30px, 90px);
+
+      /* Spacing scale based on base font */
+      --space-xs: calc(var(--base-font) * 0.25);
+      --space-sm: calc(var(--base-font) * 0.5);
+      --space-md: calc(var(--base-font) * 1);
+      --space-lg: calc(var(--base-font) * 1.5);
+      --space-xl: calc(var(--base-font) * 2);
+
+      /* Font size scale */
+      --font-xs: calc(var(--base-font) * 0.75);
+      --font-sm: calc(var(--base-font) * 0.875);
+      --font-base: var(--base-font);
+      --font-lg: calc(var(--base-font) * 1.125);
+      --font-xl: calc(var(--base-font) * 1.25);
+      --font-2xl: calc(var(--base-font) * 1.5);
+      --font-3xl: calc(var(--base-font) * 1.875);
+    }
+
+    /* Apply base font to html for rem calculations */
+    html {
+      font-size: var(--base-font);
+    }
+
     body {
       font-family: 'Inter', sans-serif;
+      font-size: var(--font-base);
+      line-height: 1.6;
+    }
+
+    /* Responsive sidebar */
+    .main-sidebar {
+      width: var(--sidebar-width) !important;
+    }
+
+    .main-content {
+      margin-left: var(--sidebar-width) !important;
+    }
+
+    /* Responsive chapter sidebar */
+    .chapter-sidebar {
+      width: var(--chapter-sidebar-width) !important;
+    }
+
+    /* Responsive header */
+    .main-header {
+      height: var(--header-height) !important;
+    }
+
+    /* Responsive typography classes */
+    .resp-text-xs { font-size: var(--font-xs) !important; }
+    .resp-text-sm { font-size: var(--font-sm) !important; }
+    .resp-text-base { font-size: var(--font-base) !important; }
+    .resp-text-lg { font-size: var(--font-lg) !important; }
+    .resp-text-xl { font-size: var(--font-xl) !important; }
+    .resp-text-2xl { font-size: var(--font-2xl) !important; }
+    .resp-text-3xl { font-size: var(--font-3xl) !important; }
+
+    /* Responsive spacing */
+    .resp-p-sm { padding: var(--space-sm) !important; }
+    .resp-p-md { padding: var(--space-md) !important; }
+    .resp-p-lg { padding: var(--space-lg) !important; }
+    .resp-p-xl { padding: var(--space-xl) !important; }
+
+    .resp-px-md { padding-left: var(--space-md) !important; padding-right: var(--space-md) !important; }
+    .resp-px-lg { padding-left: var(--space-lg) !important; padding-right: var(--space-lg) !important; }
+    .resp-px-xl { padding-left: var(--space-xl) !important; padding-right: var(--space-xl) !important; }
+
+    .resp-py-sm { padding-top: var(--space-sm) !important; padding-bottom: var(--space-sm) !important; }
+    .resp-py-md { padding-top: var(--space-md) !important; padding-bottom: var(--space-md) !important; }
+    .resp-py-lg { padding-top: var(--space-lg) !important; padding-bottom: var(--space-lg) !important; }
+
+    .resp-mb-sm { margin-bottom: var(--space-sm) !important; }
+    .resp-mb-md { margin-bottom: var(--space-md) !important; }
+    .resp-mb-lg { margin-bottom: var(--space-lg) !important; }
+
+    /* Content area optimal line length for readability */
+    .content-readable {
+      max-width: 75ch;
+    }
+
+    /* Responsive content container height */
+    .content-area-height {
+      height: calc(100vh - var(--header-height)) !important;
+      max-height: calc(100vh - var(--header-height)) !important;
     }
     
     .sidebar-item {
@@ -477,10 +572,10 @@
 </head>
 <body class="bg-gray-50">
 <!-- Sidebar -->
-<aside class="fixed left-0 top-0 h-full w-64 bg-[#24305E] text-white shadow-lg z-10">
+<aside class="fixed left-0 top-0 h-full bg-[#24305E] text-white shadow-lg z-10 main-sidebar">
 <!-- Adjusted padding to match main header height -->
-<div class="p-6 border-b border-[#374785] flex items-center" style="height: 82px;">
-<h1 class="text-xl font-bold text-[#F8E9A1] cursor-pointer hover:text-white transition-colors" onclick="goToHome()">US CODE NAVIGATOR</h1>
+<div class="p-6 border-b border-[#374785] flex items-center main-header">
+<h1 class="font-bold text-[#F8E9A1] cursor-pointer hover:text-white transition-colors resp-text-xl" onclick="goToHome()">US CODE NAVIGATOR</h1>
 </div>
 <nav class="mt-6">
 <div class="sidebar-item active flex items-center px-6 py-3 text-white" data-section="home">
@@ -503,7 +598,7 @@
 </svg>
 </div>
 <!-- Submenu items -->
-<div class="overflow-hidden transition-all duration-300" id="librarySubmenu" style="max-height: 0;"><div class="submenu-item flex items-center pl-14 pr-6 py-2 text-sm text-gray-300 hover:text-white hover:bg-[#374785] rounded cursor-pointer transition-colors" data-code-id="MC001" data-section="library" data-version-id="MCV002" onclick="loadCodeFromSidebar('MCV002', 'MC001')">
+<div class="overflow-hidden transition-all duration-300" id="librarySubmenu" style="max-height: 0;"><div class="submenu-item flex items-center pl-14 pr-6 py-2 resp-text-sm text-gray-300 hover:text-white hover:bg-[#374785] rounded cursor-pointer transition-colors" data-code-id="MC001" data-section="library" data-version-id="MCV002" onclick="loadCodeFromSidebar('MCV002', 'MC001')">
 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
 <rect height="20" rx="2" ry="2" width="16" x="4" y="2"></rect>
 <path d="M9 22v-4h6v4"></path>
@@ -518,74 +613,74 @@
 <path d="M8 14h.01"></path>
 </svg>
             IBC 2024
-        </div><div class="submenu-item flex items-center pl-14 pr-6 py-2 text-sm text-gray-300 hover:text-white hover:bg-[#374785] rounded cursor-pointer transition-colors" data-code-id="MC007" data-section="library" data-version-id="MCV003" onclick="loadCodeFromSidebar('MCV003', 'MC007')">
+        </div><div class="submenu-item flex items-center pl-14 pr-6 py-2 resp-text-sm text-gray-300 hover:text-white hover:bg-[#374785] rounded cursor-pointer transition-colors" data-code-id="MC007" data-section="library" data-version-id="MCV003" onclick="loadCodeFromSidebar('MCV003', 'MC007')">
 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
 <path d="M7 16.3c2.2 0 4-1.83 4-4.05 0-1.16-.57-2.26-1.71-3.19S7.29 6.75 7 5.3c-.29 1.45-1.14 2.84-2.29 3.76S3 11.1 3 12.25c0 2.22 1.8 4.05 4 4.05z"></path>
 <path d="M12.56 6.6A10.97 10.97 0 0 0 14 3.02c.5 2.5 2 4.9 4 6.5s3 3.5 3 5.5a6.98 6.98 0 0 1-11.91 4.97"></path>
 </svg>
             NFPA 13 2025
-        </div><div class="submenu-item flex items-center pl-14 pr-6 py-2 text-sm text-gray-300 hover:text-white hover:bg-[#374785] rounded cursor-pointer transition-colors" data-code-id="MC008" data-section="library" data-version-id="MCV004" onclick="loadCodeFromSidebar('MCV004', 'MC008')">
+        </div><div class="submenu-item flex items-center pl-14 pr-6 py-2 resp-text-sm text-gray-300 hover:text-white hover:bg-[#374785] rounded cursor-pointer transition-colors" data-code-id="MC008" data-section="library" data-version-id="MCV004" onclick="loadCodeFromSidebar('MCV004', 'MC008')">
 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
 <path d="m2 22 1-1h3l9-9"></path>
 <path d="M3 21v-3l9-9"></path>
 <path d="m15 6 3.4-3.4a2.1 2.1 0 1 1 3 3L18 9l.4.4a2.1 2.1 0 1 1-3 3l-3.8-3.8a2.1 2.1 0 1 1 3-3l.4.4Z"></path>
 </svg>
             NFPA 14 2024
-        </div><div class="submenu-item flex items-center pl-14 pr-6 py-2 text-sm text-gray-300 hover:text-white hover:bg-[#374785] rounded cursor-pointer transition-colors" data-code-id="MC009" data-section="library" data-version-id="MCV005" onclick="loadCodeFromSidebar('MCV005', 'MC009')">
+        </div><div class="submenu-item flex items-center pl-14 pr-6 py-2 resp-text-sm text-gray-300 hover:text-white hover:bg-[#374785] rounded cursor-pointer transition-colors" data-code-id="MC009" data-section="library" data-version-id="MCV005" onclick="loadCodeFromSidebar('MCV005', 'MC009')">
 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
 <path d="m12 14 4-4"></path>
 <path d="M3.34 19a10 10 0 1 1 17.32 0"></path>
 </svg>
             NFPA 20 2025
-        </div><div class="submenu-item flex items-center pl-14 pr-6 py-2 text-sm text-gray-300 hover:text-white hover:bg-[#374785] rounded cursor-pointer transition-colors" data-code-id="MC010" data-section="library" data-version-id="MCV006" onclick="loadCodeFromSidebar('MCV006', 'MC010')">
+        </div><div class="submenu-item flex items-center pl-14 pr-6 py-2 resp-text-sm text-gray-300 hover:text-white hover:bg-[#374785] rounded cursor-pointer transition-colors" data-code-id="MC010" data-section="library" data-version-id="MCV006" onclick="loadCodeFromSidebar('MCV006', 'MC010')">
 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
 <path d="M6 8a6 6 0 0112 0c0 7 3 9 3 9H3s3-2 3-9"></path>
 <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path>
 </svg>
             NFPA 72 2025
-        </div><div class="submenu-item flex items-center pl-14 pr-6 py-2 text-sm text-gray-300 hover:text-white hover:bg-[#374785] rounded cursor-pointer transition-colors" data-code-id="MC011" data-section="library" data-version-id="MCV007" onclick="loadCodeFromSidebar('MCV007', 'MC011')">
+        </div><div class="submenu-item flex items-center pl-14 pr-6 py-2 resp-text-sm text-gray-300 hover:text-white hover:bg-[#374785] rounded cursor-pointer transition-colors" data-code-id="MC011" data-section="library" data-version-id="MCV007" onclick="loadCodeFromSidebar('MCV007', 'MC011')">
 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
 <path d="M7 16.3c2.2 0 4-1.83 4-4.05 0-1.16-.57-2.26-1.71-3.19S7.29 6.75 7 5.3c-.29 1.45-1.14 2.84-2.29 3.76S3 11.1 3 12.25c0 2.22 1.8 4.05 4 4.05z"></path>
 <path d="M12.56 6.6A10.97 10.97 0 0 0 14 3.02c.5 2.5 2 4.9 4 6.5s3 3.5 3 5.5a6.98 6.98 0 0 1-11.91 4.97"></path>
 </svg>
             NFPA 214 2021
-        </div><div class="submenu-item flex items-center pl-14 pr-6 py-2 text-sm text-gray-300 hover:text-white hover:bg-[#374785] rounded cursor-pointer transition-colors" data-code-id="MC012" data-section="library" data-version-id="MCV008" onclick="loadCodeFromSidebar('MCV008', 'MC012')">
+        </div><div class="submenu-item flex items-center pl-14 pr-6 py-2 resp-text-sm text-gray-300 hover:text-white hover:bg-[#374785] rounded cursor-pointer transition-colors" data-code-id="MC012" data-section="library" data-version-id="MCV008" onclick="loadCodeFromSidebar('MCV008', 'MC012')">
 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
 <path d="M7 16.3c2.2 0 4-1.83 4-4.05 0-1.16-.57-2.26-1.71-3.19S7.29 6.75 7 5.3c-.29 1.45-1.14 2.84-2.29 3.76S3 11.1 3 12.25c0 2.22 1.8 4.05 4 4.05z"></path>
 <path d="M12.56 6.6A10.97 10.97 0 0 0 14 3.02c.5 2.5 2 4.9 4 6.5s3 3.5 3 5.5a6.98 6.98 0 0 1-11.91 4.97"></path>
 </svg>
             NFPA 96 2024
-        </div><div class="submenu-item flex items-center pl-14 pr-6 py-2 text-sm text-gray-300 hover:text-white hover:bg-[#374785] rounded cursor-pointer transition-colors" data-code-id="MC013" data-section="library" data-version-id="MCV009" onclick="loadCodeFromSidebar('MCV009', 'MC013')">
+        </div><div class="submenu-item flex items-center pl-14 pr-6 py-2 resp-text-sm text-gray-300 hover:text-white hover:bg-[#374785] rounded cursor-pointer transition-colors" data-code-id="MC013" data-section="library" data-version-id="MCV009" onclick="loadCodeFromSidebar('MCV009', 'MC013')">
 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
 <path d="M7 16.3c2.2 0 4-1.83 4-4.05 0-1.16-.57-2.26-1.71-3.19S7.29 6.75 7 5.3c-.29 1.45-1.14 2.84-2.29 3.76S3 11.1 3 12.25c0 2.22 1.8 4.05 4 4.05z"></path>
 <path d="M12.56 6.6A10.97 10.97 0 0 0 14 3.02c.5 2.5 2 4.9 4 6.5s3 3.5 3 5.5a6.98 6.98 0 0 1-11.91 4.97"></path>
 </svg>
             NFPA 318 2025
-        </div><div class="submenu-item flex items-center pl-14 pr-6 py-2 text-sm text-gray-300 hover:text-white hover:bg-[#374785] rounded cursor-pointer transition-colors" data-code-id="MC014" data-section="library" data-version-id="MCV010" onclick="loadCodeFromSidebar('MCV010', 'MC014')">
+        </div><div class="submenu-item flex items-center pl-14 pr-6 py-2 resp-text-sm text-gray-300 hover:text-white hover:bg-[#374785] rounded cursor-pointer transition-colors" data-code-id="MC014" data-section="library" data-version-id="MCV010" onclick="loadCodeFromSidebar('MCV010', 'MC014')">
 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
 <path d="M7 16.3c2.2 0 4-1.83 4-4.05 0-1.16-.57-2.26-1.71-3.19S7.29 6.75 7 5.3c-.29 1.45-1.14 2.84-2.29 3.76S3 11.1 3 12.25c0 2.22 1.8 4.05 4 4.05z"></path>
 <path d="M12.56 6.6A10.97 10.97 0 0 0 14 3.02c.5 2.5 2 4.9 4 6.5s3 3.5 3 5.5a6.98 6.98 0 0 1-11.91 4.97"></path>
 </svg>
             NFPA 24 2025
-        </div><div class="submenu-item flex items-center pl-14 pr-6 py-2 text-sm text-gray-300 hover:text-white hover:bg-[#374785] rounded cursor-pointer transition-colors" data-code-id="MC016" data-section="library" data-version-id="MCV012" onclick="loadCodeFromSidebar('MCV012', 'MC016')">
+        </div><div class="submenu-item flex items-center pl-14 pr-6 py-2 resp-text-sm text-gray-300 hover:text-white hover:bg-[#374785] rounded cursor-pointer transition-colors" data-code-id="MC016" data-section="library" data-version-id="MCV012" onclick="loadCodeFromSidebar('MCV012', 'MC016')">
 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
 <path d="M7 16.3c2.2 0 4-1.83 4-4.05 0-1.16-.57-2.26-1.71-3.19S7.29 6.75 7 5.3c-.29 1.45-1.14 2.84-2.29 3.76S3 11.1 3 12.25c0 2.22 1.8 4.05 4 4.05z"></path>
 <path d="M12.56 6.6A10.97 10.97 0 0 0 14 3.02c.5 2.5 2 4.9 4 6.5s3 3.5 3 5.5a6.98 6.98 0 0 1-11.91 4.97"></path>
 </svg>
             NFPA 12 2025
-        </div><div class="submenu-item flex items-center pl-14 pr-6 py-2 text-sm text-gray-300 hover:text-white hover:bg-[#374785] rounded cursor-pointer transition-colors" data-code-id="MC018" data-section="library" data-version-id="MCV014" onclick="loadCodeFromSidebar('MCV014', 'MC018')">
+        </div><div class="submenu-item flex items-center pl-14 pr-6 py-2 resp-text-sm text-gray-300 hover:text-white hover:bg-[#374785] rounded cursor-pointer transition-colors" data-code-id="MC018" data-section="library" data-version-id="MCV014" onclick="loadCodeFromSidebar('MCV014', 'MC018')">
 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
 <path d="M7 16.3c2.2 0 4-1.83 4-4.05 0-1.16-.57-2.26-1.71-3.19S7.29 6.75 7 5.3c-.29 1.45-1.14 2.84-2.29 3.76S3 11.1 3 12.25c0 2.22 1.8 4.05 4 4.05z"></path>
 <path d="M12.56 6.6A10.97 10.97 0 0 0 14 3.02c.5 2.5 2 4.9 4 6.5s3 3.5 3 5.5a6.98 6.98 0 0 1-11.91 4.97"></path>
 </svg>
             NFPA 15 2022
-        </div><div class="submenu-item flex items-center pl-14 pr-6 py-2 text-sm text-gray-300 hover:text-white hover:bg-[#374785] rounded cursor-pointer transition-colors" data-code-id="MC019" data-section="library" data-version-id="MCV015" onclick="loadCodeFromSidebar('MCV015', 'MC019')">
+        </div><div class="submenu-item flex items-center pl-14 pr-6 py-2 resp-text-sm text-gray-300 hover:text-white hover:bg-[#374785] rounded cursor-pointer transition-colors" data-code-id="MC019" data-section="library" data-version-id="MCV015" onclick="loadCodeFromSidebar('MCV015', 'MC019')">
 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
 <path d="M7 16.3c2.2 0 4-1.83 4-4.05 0-1.16-.57-2.26-1.71-3.19S7.29 6.75 7 5.3c-.29 1.45-1.14 2.84-2.29 3.76S3 11.1 3 12.25c0 2.22 1.8 4.05 4 4.05z"></path>
 <path d="M12.56 6.6A10.97 10.97 0 0 0 14 3.02c.5 2.5 2 4.9 4 6.5s3 3.5 3 5.5a6.98 6.98 0 0 1-11.91 4.97"></path>
 </svg>
             NFPA 16 2010
-        </div><div class="submenu-item flex items-center pl-14 pr-6 py-2 text-sm text-gray-300 hover:text-white hover:bg-[#374785] rounded cursor-pointer transition-colors" data-code-id="MC020" data-section="library" data-version-id="MCV016" onclick="loadCodeFromSidebar('MCV016', 'MC020')">
+        </div><div class="submenu-item flex items-center pl-14 pr-6 py-2 resp-text-sm text-gray-300 hover:text-white hover:bg-[#374785] rounded cursor-pointer transition-colors" data-code-id="MC020" data-section="library" data-version-id="MCV016" onclick="loadCodeFromSidebar('MCV016', 'MC020')">
 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
 <path d="M7 16.3c2.2 0 4-1.83 4-4.05 0-1.16-.57-2.26-1.71-3.19S7.29 6.75 7 5.3c-.29 1.45-1.14 2.84-2.29 3.76S3 11.1 3 12.25c0 2.22 1.8 4.05 4 4.05z"></path>
 <path d="M12.56 6.6A10.97 10.97 0 0 0 14 3.02c.5 2.5 2 4.9 4 6.5s3 3.5 3 5.5a6.98 6.98 0 0 1-11.91 4.97"></path>
@@ -608,11 +703,11 @@
 </nav>
 </aside>
 <!-- Main Content -->
-<main class="ml-64 min-h-screen">
+<main class="min-h-screen main-content">
 <!-- Top Search Bar -->
 <!-- Header height now matches sidebar header -->
-<header class="bg-white border-b border-gray-200 sticky top-0 shadow-sm z-20" style="height: 82px;">
-<div class="px-8 h-full flex items-center w-full">
+<header class="bg-white border-b border-gray-200 sticky top-0 shadow-sm z-20 main-header">
+<div class="h-full flex items-center w-full resp-px-lg">
 <div class="max-w-2xl mx-auto search-input-wrapper w-full">
 <input class="search-input w-full px-4 py-3 pl-12 pr-24 border-2 border-gray-300 rounded-lg text-[#24305E] transition-all" id="topSearchInput" placeholder="Search codes, keywords, chapters..." type="text"/>
 <svg class="w-5 h-5 absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
@@ -633,13 +728,13 @@
 </header>
 <!-- Home Section -->
 <div class="section-content active" id="homeSection">
-<div class="p-8">
+<div class="resp-p-xl">
 <div class="max-w-7xl mx-auto">
 <!-- Section 1: Quick Actions -->
-<section class="mb-12">
-<h2 class="text-2xl font-bold text-[#24305E] mb-6">Quick Actions</h2>
+<section class="resp-mb-lg">
+<h2 class="resp-text-2xl font-bold text-[#24305E] resp-mb-lg">Quick Actions</h2>
 <div class="grid grid-cols-2 gap-6">
-<div class="feature-card bg-white p-6 rounded-lg border-2 border-gray-200 cursor-pointer" data-nav="search">
+<div class="feature-card bg-white resp-p-lg rounded-lg border-2 border-gray-200 cursor-pointer" data-nav="search">
 <div class="flex items-start gap-4">
 <!-- Using #F76C6C as accent color for feature cards -->
 <div class="w-12 h-12 bg-[#F76C6C] bg-opacity-10 rounded-lg flex items-center justify-center flex-shrink-0">
@@ -648,12 +743,12 @@
 </svg>
 </div>
 <div>
-<h3 class="text-lg font-bold text-[#24305E] mb-2">고급 검색</h3>
-<p class="text-gray-600 text-sm leading-relaxed">Filter by code type, version, and chapter</p>
+<h3 class="resp-text-lg font-bold text-[#24305E] resp-mb-sm">고급 검색</h3>
+<p class="text-gray-600 resp-text-sm leading-relaxed">Filter by code type, version, and chapter</p>
 </div>
 </div>
 </div>
-<div class="feature-card bg-white p-6 rounded-lg border-2 border-gray-200 cursor-pointer" data-nav="compare">
+<div class="feature-card bg-white resp-p-lg rounded-lg border-2 border-gray-200 cursor-pointer" data-nav="compare">
 <div class="flex items-start gap-4">
 <div class="w-12 h-12 bg-[#A8D0E6] rounded-lg flex items-center justify-center flex-shrink-0">
 <svg class="w-6 h-6 text-[#24305E]" fill="none" stroke="currentColor" viewbox="0 0 24 24">
@@ -661,8 +756,8 @@
 </svg>
 </div>
 <div>
-<h3 class="text-lg font-bold text-[#24305E] mb-2">코드 비교</h3>
-<p class="text-gray-600 text-sm leading-relaxed">Compare versions side by side</p>
+<h3 class="resp-text-lg font-bold text-[#24305E] resp-mb-sm">코드 비교</h3>
+<p class="text-gray-600 resp-text-sm leading-relaxed">Compare versions side by side</p>
 </div>
 </div>
 </div>
@@ -671,10 +766,10 @@
 <!-- Section 2: Libraries -->
 <!-- Replaced icons with Lucide-style icons -->
 <section>
-<h2 class="text-2xl font-bold text-[#24305E] mb-6">Libraries</h2>
+<h2 class="resp-text-2xl font-bold text-[#24305E] resp-mb-lg">Libraries</h2>
 <div class="grid grid-cols-4 gap-4">
-<div class="code-card bg-white p-4 rounded-lg border-2 border-gray-200 cursor-pointer relative" data-code-id="MC001" data-nav="library" data-version-id="MCV002">
-<span class="absolute top-3 right-3 text-xs font-medium text-[#A8D0E6] bg-[#A8D0E6] bg-opacity-20 px-2 py-1 rounded">건축〮구조</span>
+<div class="code-card bg-white resp-p-md rounded-lg border-2 border-gray-200 cursor-pointer relative" data-code-id="MC001" data-nav="library" data-version-id="MCV002">
+<span class="absolute top-3 right-3 resp-text-xs font-medium text-[#A8D0E6] bg-[#A8D0E6] bg-opacity-20 px-2 py-1 rounded">건축〮구조</span>
 <div class="w-12 h-12 bg-[#F8E9A1] rounded-lg flex items-center justify-center mb-3">
 <svg class="w-6 h-6 text-[#24305E]" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
 <rect height="20" rx="2" ry="2" width="16" x="4" y="2"></rect>
@@ -690,22 +785,22 @@
 <path d="M8 14h.01"></path>
 </svg>
 </div>
-<h3 class="text-lg font-bold text-[#24305E] mb-1">IBC 2024</h3>
-<p class="text-gray-600 text-xs">International Building Code</p>
+<h3 class="resp-text-lg font-bold text-[#24305E] mb-1">IBC 2024</h3>
+<p class="text-gray-600 resp-text-xs">International Building Code</p>
 </div>
-<div class="code-card bg-white p-4 rounded-lg border-2 border-gray-200 cursor-pointer relative" data-code-id="MC007" data-nav="library" data-version-id="MCV003">
-<span class="absolute top-3 right-3 text-xs font-medium text-[#F76C6C] bg-[#F76C6C] bg-opacity-20 px-2 py-1 rounded">소방</span>
+<div class="code-card bg-white resp-p-md rounded-lg border-2 border-gray-200 cursor-pointer relative" data-code-id="MC007" data-nav="library" data-version-id="MCV003">
+<span class="absolute top-3 right-3 resp-text-xs font-medium text-[#F76C6C] bg-[#F76C6C] bg-opacity-20 px-2 py-1 rounded">소방</span>
 <div class="w-12 h-12 bg-[#F8E9A1] rounded-lg flex items-center justify-center mb-3">
 <svg class="w-6 h-6 text-[#24305E]" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
 <path d="M7 16.3c2.2 0 4-1.83 4-4.05 0-1.16-.57-2.26-1.71-3.19S7.29 6.75 7 5.3c-.29 1.45-1.14 2.84-2.29 3.76S3 11.1 3 12.25c0 2.22 1.8 4.05 4 4.05z"></path>
 <path d="M12.56 6.6A10.97 10.97 0 0 0 14 3.02c.5 2.5 2 4.9 4 6.5s3 3.5 3 5.5a6.98 6.98 0 0 1-11.91 4.97"></path>
 </svg>
 </div>
-<h3 class="text-lg font-bold text-[#24305E] mb-1">NFPA 13 2025</h3>
-<p class="text-gray-600 text-xs">Standard for the Installation of Sprinkler Systems</p>
+<h3 class="resp-text-lg font-bold text-[#24305E] mb-1">NFPA 13 2025</h3>
+<p class="text-gray-600 resp-text-xs">Standard for the Installation of Sprinkler Systems</p>
 </div>
-<div class="code-card bg-white p-4 rounded-lg border-2 border-gray-200 cursor-pointer relative" data-code-id="MC008" data-nav="library" data-version-id="MCV004">
-<span class="absolute top-3 right-3 text-xs font-medium text-[#F76C6C] bg-[#F76C6C] bg-opacity-20 px-2 py-1 rounded">소방</span>
+<div class="code-card bg-white resp-p-md rounded-lg border-2 border-gray-200 cursor-pointer relative" data-code-id="MC008" data-nav="library" data-version-id="MCV004">
+<span class="absolute top-3 right-3 resp-text-xs font-medium text-[#F76C6C] bg-[#F76C6C] bg-opacity-20 px-2 py-1 rounded">소방</span>
 <div class="w-12 h-12 bg-[#F8E9A1] rounded-lg flex items-center justify-center mb-3">
 <svg class="w-6 h-6 text-[#24305E]" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
 <path d="m2 22 1-1h3l9-9"></path>
@@ -713,121 +808,121 @@
 <path d="m15 6 3.4-3.4a2.1 2.1 0 1 1 3 3L18 9l.4.4a2.1 2.1 0 1 1-3 3l-3.8-3.8a2.1 2.1 0 1 1 3-3l.4.4Z"></path>
 </svg>
 </div>
-<h3 class="text-lg font-bold text-[#24305E] mb-1">NFPA 14 2024</h3>
-<p class="text-gray-600 text-xs">Standard for the Installation of Standpipe and Hose Systems</p>
+<h3 class="resp-text-lg font-bold text-[#24305E] mb-1">NFPA 14 2024</h3>
+<p class="text-gray-600 resp-text-xs">Standard for the Installation of Standpipe and Hose Systems</p>
 </div>
-<div class="code-card bg-white p-4 rounded-lg border-2 border-gray-200 cursor-pointer relative" data-code-id="MC009" data-nav="library" data-version-id="MCV005">
-<span class="absolute top-3 right-3 text-xs font-medium text-[#F76C6C] bg-[#F76C6C] bg-opacity-20 px-2 py-1 rounded">소방</span>
+<div class="code-card bg-white resp-p-md rounded-lg border-2 border-gray-200 cursor-pointer relative" data-code-id="MC009" data-nav="library" data-version-id="MCV005">
+<span class="absolute top-3 right-3 resp-text-xs font-medium text-[#F76C6C] bg-[#F76C6C] bg-opacity-20 px-2 py-1 rounded">소방</span>
 <div class="w-12 h-12 bg-[#F8E9A1] rounded-lg flex items-center justify-center mb-3">
 <svg class="w-6 h-6 text-[#24305E]" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
 <path d="m12 14 4-4"></path>
 <path d="M3.34 19a10 10 0 1 1 17.32 0"></path>
 </svg>
 </div>
-<h3 class="text-lg font-bold text-[#24305E] mb-1">NFPA 20 2025</h3>
-<p class="text-gray-600 text-xs">Standard for the Installation of Stationary Pumps for Fire Protection</p>
+<h3 class="resp-text-lg font-bold text-[#24305E] mb-1">NFPA 20 2025</h3>
+<p class="text-gray-600 resp-text-xs">Standard for the Installation of Stationary Pumps for Fire Protection</p>
 </div>
-<div class="code-card bg-white p-4 rounded-lg border-2 border-gray-200 cursor-pointer relative" data-code-id="MC010" data-nav="library" data-version-id="MCV006">
-<span class="absolute top-3 right-3 text-xs font-medium text-[#F76C6C] bg-[#F76C6C] bg-opacity-20 px-2 py-1 rounded">소방</span>
+<div class="code-card bg-white resp-p-md rounded-lg border-2 border-gray-200 cursor-pointer relative" data-code-id="MC010" data-nav="library" data-version-id="MCV006">
+<span class="absolute top-3 right-3 resp-text-xs font-medium text-[#F76C6C] bg-[#F76C6C] bg-opacity-20 px-2 py-1 rounded">소방</span>
 <div class="w-12 h-12 bg-[#F8E9A1] rounded-lg flex items-center justify-center mb-3">
 <svg class="w-6 h-6 text-[#24305E]" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
 <path d="M6 8a6 6 0 0112 0c0 7 3 9 3 9H3s3-2 3-9"></path>
 <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path>
 </svg>
 </div>
-<h3 class="text-lg font-bold text-[#24305E] mb-1">NFPA 72 2025</h3>
-<p class="text-gray-600 text-xs">National Fire Protection Association</p>
+<h3 class="resp-text-lg font-bold text-[#24305E] mb-1">NFPA 72 2025</h3>
+<p class="text-gray-600 resp-text-xs">National Fire Protection Association</p>
 </div>
-<div class="code-card bg-white p-4 rounded-lg border-2 border-gray-200 cursor-pointer relative" data-code-id="MC011" data-nav="library" data-version-id="MCV007">
-<span class="absolute top-3 right-3 text-xs font-medium text-[#F76C6C] bg-[#F76C6C] bg-opacity-20 px-2 py-1 rounded">소방</span>
+<div class="code-card bg-white resp-p-md rounded-lg border-2 border-gray-200 cursor-pointer relative" data-code-id="MC011" data-nav="library" data-version-id="MCV007">
+<span class="absolute top-3 right-3 resp-text-xs font-medium text-[#F76C6C] bg-[#F76C6C] bg-opacity-20 px-2 py-1 rounded">소방</span>
 <div class="w-12 h-12 bg-[#F8E9A1] rounded-lg flex items-center justify-center mb-3">
 <svg class="w-6 h-6 text-[#24305E]" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
 <path d="M7 16.3c2.2 0 4-1.83 4-4.05 0-1.16-.57-2.26-1.71-3.19S7.29 6.75 7 5.3c-.29 1.45-1.14 2.84-2.29 3.76S3 11.1 3 12.25c0 2.22 1.8 4.05 4 4.05z"></path>
 <path d="M12.56 6.6A10.97 10.97 0 0 0 14 3.02c.5 2.5 2 4.9 4 6.5s3 3.5 3 5.5a6.98 6.98 0 0 1-11.91 4.97"></path>
 </svg>
 </div>
-<h3 class="text-lg font-bold text-[#24305E] mb-1">NFPA 214 2021</h3>
-<p class="text-gray-600 text-xs">Standard on Water-Cooling Towers</p>
+<h3 class="resp-text-lg font-bold text-[#24305E] mb-1">NFPA 214 2021</h3>
+<p class="text-gray-600 resp-text-xs">Standard on Water-Cooling Towers</p>
 </div>
-<div class="code-card bg-white p-4 rounded-lg border-2 border-gray-200 cursor-pointer relative" data-code-id="MC012" data-nav="library" data-version-id="MCV008">
-<span class="absolute top-3 right-3 text-xs font-medium text-[#F76C6C] bg-[#F76C6C] bg-opacity-20 px-2 py-1 rounded">소방</span>
+<div class="code-card bg-white resp-p-md rounded-lg border-2 border-gray-200 cursor-pointer relative" data-code-id="MC012" data-nav="library" data-version-id="MCV008">
+<span class="absolute top-3 right-3 resp-text-xs font-medium text-[#F76C6C] bg-[#F76C6C] bg-opacity-20 px-2 py-1 rounded">소방</span>
 <div class="w-12 h-12 bg-[#F8E9A1] rounded-lg flex items-center justify-center mb-3">
 <svg class="w-6 h-6 text-[#24305E]" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
 <path d="M7 16.3c2.2 0 4-1.83 4-4.05 0-1.16-.57-2.26-1.71-3.19S7.29 6.75 7 5.3c-.29 1.45-1.14 2.84-2.29 3.76S3 11.1 3 12.25c0 2.22 1.8 4.05 4 4.05z"></path>
 <path d="M12.56 6.6A10.97 10.97 0 0 0 14 3.02c.5 2.5 2 4.9 4 6.5s3 3.5 3 5.5a6.98 6.98 0 0 1-11.91 4.97"></path>
 </svg>
 </div>
-<h3 class="text-lg font-bold text-[#24305E] mb-1">NFPA 96 2024</h3>
-<p class="text-gray-600 text-xs">Standard for Ventilation Control and Fire Protection of Commercial Cooking Operations</p>
+<h3 class="resp-text-lg font-bold text-[#24305E] mb-1">NFPA 96 2024</h3>
+<p class="text-gray-600 resp-text-xs">Standard for Ventilation Control and Fire Protection of Commercial Cooking Operations</p>
 </div>
-<div class="code-card bg-white p-4 rounded-lg border-2 border-gray-200 cursor-pointer relative" data-code-id="MC013" data-nav="library" data-version-id="MCV009">
-<span class="absolute top-3 right-3 text-xs font-medium text-[#F76C6C] bg-[#F76C6C] bg-opacity-20 px-2 py-1 rounded">소방</span>
+<div class="code-card bg-white resp-p-md rounded-lg border-2 border-gray-200 cursor-pointer relative" data-code-id="MC013" data-nav="library" data-version-id="MCV009">
+<span class="absolute top-3 right-3 resp-text-xs font-medium text-[#F76C6C] bg-[#F76C6C] bg-opacity-20 px-2 py-1 rounded">소방</span>
 <div class="w-12 h-12 bg-[#F8E9A1] rounded-lg flex items-center justify-center mb-3">
 <svg class="w-6 h-6 text-[#24305E]" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
 <path d="M7 16.3c2.2 0 4-1.83 4-4.05 0-1.16-.57-2.26-1.71-3.19S7.29 6.75 7 5.3c-.29 1.45-1.14 2.84-2.29 3.76S3 11.1 3 12.25c0 2.22 1.8 4.05 4 4.05z"></path>
 <path d="M12.56 6.6A10.97 10.97 0 0 0 14 3.02c.5 2.5 2 4.9 4 6.5s3 3.5 3 5.5a6.98 6.98 0 0 1-11.91 4.97"></path>
 </svg>
 </div>
-<h3 class="text-lg font-bold text-[#24305E] mb-1">NFPA 318 2025</h3>
-<p class="text-gray-600 text-xs">Standard for the Protection of Semiconductor Fabrication Facilities</p>
+<h3 class="resp-text-lg font-bold text-[#24305E] mb-1">NFPA 318 2025</h3>
+<p class="text-gray-600 resp-text-xs">Standard for the Protection of Semiconductor Fabrication Facilities</p>
 </div>
-<div class="code-card bg-white p-4 rounded-lg border-2 border-gray-200 cursor-pointer relative" data-code-id="MC014" data-nav="library" data-version-id="MCV010">
-<span class="absolute top-3 right-3 text-xs font-medium text-[#F76C6C] bg-[#F76C6C] bg-opacity-20 px-2 py-1 rounded">소방</span>
+<div class="code-card bg-white resp-p-md rounded-lg border-2 border-gray-200 cursor-pointer relative" data-code-id="MC014" data-nav="library" data-version-id="MCV010">
+<span class="absolute top-3 right-3 resp-text-xs font-medium text-[#F76C6C] bg-[#F76C6C] bg-opacity-20 px-2 py-1 rounded">소방</span>
 <div class="w-12 h-12 bg-[#F8E9A1] rounded-lg flex items-center justify-center mb-3">
 <svg class="w-6 h-6 text-[#24305E]" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
 <path d="M7 16.3c2.2 0 4-1.83 4-4.05 0-1.16-.57-2.26-1.71-3.19S7.29 6.75 7 5.3c-.29 1.45-1.14 2.84-2.29 3.76S3 11.1 3 12.25c0 2.22 1.8 4.05 4 4.05z"></path>
 <path d="M12.56 6.6A10.97 10.97 0 0 0 14 3.02c.5 2.5 2 4.9 4 6.5s3 3.5 3 5.5a6.98 6.98 0 0 1-11.91 4.97"></path>
 </svg>
 </div>
-<h3 class="text-lg font-bold text-[#24305E] mb-1">NFPA 24 2025</h3>
-<p class="text-gray-600 text-xs">Standard for the Installation of Private Fire Service Mains and Their Appurtenances</p>
+<h3 class="resp-text-lg font-bold text-[#24305E] mb-1">NFPA 24 2025</h3>
+<p class="text-gray-600 resp-text-xs">Standard for the Installation of Private Fire Service Mains and Their Appurtenances</p>
 </div>
-<div class="code-card bg-white p-4 rounded-lg border-2 border-gray-200 cursor-pointer relative" data-code-id="MC016" data-nav="library" data-version-id="MCV012">
-<span class="absolute top-3 right-3 text-xs font-medium text-[#F76C6C] bg-[#F76C6C] bg-opacity-20 px-2 py-1 rounded">소방</span>
+<div class="code-card bg-white resp-p-md rounded-lg border-2 border-gray-200 cursor-pointer relative" data-code-id="MC016" data-nav="library" data-version-id="MCV012">
+<span class="absolute top-3 right-3 resp-text-xs font-medium text-[#F76C6C] bg-[#F76C6C] bg-opacity-20 px-2 py-1 rounded">소방</span>
 <div class="w-12 h-12 bg-[#F8E9A1] rounded-lg flex items-center justify-center mb-3">
 <svg class="w-6 h-6 text-[#24305E]" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
 <path d="M7 16.3c2.2 0 4-1.83 4-4.05 0-1.16-.57-2.26-1.71-3.19S7.29 6.75 7 5.3c-.29 1.45-1.14 2.84-2.29 3.76S3 11.1 3 12.25c0 2.22 1.8 4.05 4 4.05z"></path>
 <path d="M12.56 6.6A10.97 10.97 0 0 0 14 3.02c.5 2.5 2 4.9 4 6.5s3 3.5 3 5.5a6.98 6.98 0 0 1-11.91 4.97"></path>
 </svg>
 </div>
-<h3 class="text-lg font-bold text-[#24305E] mb-1">NFPA 12 2025</h3>
-<p class="text-gray-600 text-xs">Standard on Carbon Dioxide Extinguishing Systems</p>
+<h3 class="resp-text-lg font-bold text-[#24305E] mb-1">NFPA 12 2025</h3>
+<p class="text-gray-600 resp-text-xs">Standard on Carbon Dioxide Extinguishing Systems</p>
 </div>
-<div class="code-card bg-white p-4 rounded-lg border-2 border-gray-200 cursor-pointer relative" data-code-id="MC018" data-nav="library" data-version-id="MCV014">
-<span class="absolute top-3 right-3 text-xs font-medium text-[#F76C6C] bg-[#F76C6C] bg-opacity-20 px-2 py-1 rounded">소방</span>
+<div class="code-card bg-white resp-p-md rounded-lg border-2 border-gray-200 cursor-pointer relative" data-code-id="MC018" data-nav="library" data-version-id="MCV014">
+<span class="absolute top-3 right-3 resp-text-xs font-medium text-[#F76C6C] bg-[#F76C6C] bg-opacity-20 px-2 py-1 rounded">소방</span>
 <div class="w-12 h-12 bg-[#F8E9A1] rounded-lg flex items-center justify-center mb-3">
 <svg class="w-6 h-6 text-[#24305E]" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
 <path d="M7 16.3c2.2 0 4-1.83 4-4.05 0-1.16-.57-2.26-1.71-3.19S7.29 6.75 7 5.3c-.29 1.45-1.14 2.84-2.29 3.76S3 11.1 3 12.25c0 2.22 1.8 4.05 4 4.05z"></path>
 <path d="M12.56 6.6A10.97 10.97 0 0 0 14 3.02c.5 2.5 2 4.9 4 6.5s3 3.5 3 5.5a6.98 6.98 0 0 1-11.91 4.97"></path>
 </svg>
 </div>
-<h3 class="text-lg font-bold text-[#24305E] mb-1">NFPA 15 2022</h3>
-<p class="text-gray-600 text-xs">Standard for Water Spray Fixed Systems for Fire Protection</p>
+<h3 class="resp-text-lg font-bold text-[#24305E] mb-1">NFPA 15 2022</h3>
+<p class="text-gray-600 resp-text-xs">Standard for Water Spray Fixed Systems for Fire Protection</p>
 </div>
-<div class="code-card bg-white p-4 rounded-lg border-2 border-gray-200 cursor-pointer relative" data-code-id="MC019" data-nav="library" data-version-id="MCV015">
-<span class="absolute top-3 right-3 text-xs font-medium text-[#F76C6C] bg-[#F76C6C] bg-opacity-20 px-2 py-1 rounded">소방</span>
+<div class="code-card bg-white resp-p-md rounded-lg border-2 border-gray-200 cursor-pointer relative" data-code-id="MC019" data-nav="library" data-version-id="MCV015">
+<span class="absolute top-3 right-3 resp-text-xs font-medium text-[#F76C6C] bg-[#F76C6C] bg-opacity-20 px-2 py-1 rounded">소방</span>
 <div class="w-12 h-12 bg-[#F8E9A1] rounded-lg flex items-center justify-center mb-3">
 <svg class="w-6 h-6 text-[#24305E]" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
 <path d="M7 16.3c2.2 0 4-1.83 4-4.05 0-1.16-.57-2.26-1.71-3.19S7.29 6.75 7 5.3c-.29 1.45-1.14 2.84-2.29 3.76S3 11.1 3 12.25c0 2.22 1.8 4.05 4 4.05z"></path>
 <path d="M12.56 6.6A10.97 10.97 0 0 0 14 3.02c.5 2.5 2 4.9 4 6.5s3 3.5 3 5.5a6.98 6.98 0 0 1-11.91 4.97"></path>
 </svg>
 </div>
-<h3 class="text-lg font-bold text-[#24305E] mb-1">NFPA 16 2010</h3>
-<p class="text-gray-600 text-xs">Standard for the Installation of Foam-Water Sprinkler and Foam-Water Spray Systems</p>
+<h3 class="resp-text-lg font-bold text-[#24305E] mb-1">NFPA 16 2010</h3>
+<p class="text-gray-600 resp-text-xs">Standard for the Installation of Foam-Water Sprinkler and Foam-Water Spray Systems</p>
 </div>
-<div class="code-card bg-white p-4 rounded-lg border-2 border-gray-200 cursor-pointer relative" data-code-id="MC020" data-nav="library" data-version-id="MCV016">
-<span class="absolute top-3 right-3 text-xs font-medium text-[#F76C6C] bg-[#F76C6C] bg-opacity-20 px-2 py-1 rounded">소방</span>
+<div class="code-card bg-white resp-p-md rounded-lg border-2 border-gray-200 cursor-pointer relative" data-code-id="MC020" data-nav="library" data-version-id="MCV016">
+<span class="absolute top-3 right-3 resp-text-xs font-medium text-[#F76C6C] bg-[#F76C6C] bg-opacity-20 px-2 py-1 rounded">소방</span>
 <div class="w-12 h-12 bg-[#F8E9A1] rounded-lg flex items-center justify-center mb-3">
 <svg class="w-6 h-6 text-[#24305E]" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
 <path d="M7 16.3c2.2 0 4-1.83 4-4.05 0-1.16-.57-2.26-1.71-3.19S7.29 6.75 7 5.3c-.29 1.45-1.14 2.84-2.29 3.76S3 11.1 3 12.25c0 2.22 1.8 4.05 4 4.05z"></path>
 <path d="M12.56 6.6A10.97 10.97 0 0 0 14 3.02c.5 2.5 2 4.9 4 6.5s3 3.5 3 5.5a6.98 6.98 0 0 1-11.91 4.97"></path>
 </svg>
 </div>
-<h3 class="text-lg font-bold text-[#24305E] mb-1">NFPA 92 2024</h3>
-<p class="text-gray-600 text-xs">Standard for Smoke Control Systems</p>
+<h3 class="resp-text-lg font-bold text-[#24305E] mb-1">NFPA 92 2024</h3>
+<p class="text-gray-600 resp-text-xs">Standard for Smoke Control Systems</p>
 </div>
-<div class="code-card bg-white p-4 rounded-lg border-2 border-gray-200 cursor-not-allowed relative opacity-50" data-nav="library">
-<span class="absolute top-3 right-3 text-xs font-medium text-[#A8D0E6] bg-[#A8D0E6] bg-opacity-20 px-2 py-1 rounded">건축〮구조</span>
+<div class="code-card bg-white resp-p-md rounded-lg border-2 border-gray-200 cursor-not-allowed relative opacity-50" data-nav="library">
+<span class="absolute top-3 right-3 resp-text-xs font-medium text-[#A8D0E6] bg-[#A8D0E6] bg-opacity-20 px-2 py-1 rounded">건축〮구조</span>
 <div class="w-12 h-12 bg-[#F8E9A1] rounded-lg flex items-center justify-center mb-3">
 <svg class="w-6 h-6 text-[#24305E]" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
 <circle cx="16" cy="4" r="1"></circle>
@@ -837,11 +932,11 @@
 <path d="M13.76 17.5a5 5 0 0 0-6.88-6"></path>
 </svg>
 </div>
-<h3 class="text-lg font-bold text-[#24305E] mb-1">ADA</h3>
-<p class="text-gray-600 text-xs">Americans with Disabilities</p>
+<h3 class="resp-text-lg font-bold text-[#24305E] mb-1">ADA</h3>
+<p class="text-gray-600 resp-text-xs">Americans with Disabilities</p>
 </div>
-<div class="code-card bg-white p-4 rounded-lg border-2 border-gray-200 cursor-not-allowed relative opacity-50" data-nav="library">
-<span class="absolute top-3 right-3 text-xs font-medium text-[#A8D0E6] bg-[#A8D0E6] bg-opacity-20 px-2 py-1 rounded">기계〮배관</span>
+<div class="code-card bg-white resp-p-md rounded-lg border-2 border-gray-200 cursor-not-allowed relative opacity-50" data-nav="library">
+<span class="absolute top-3 right-3 resp-text-xs font-medium text-[#A8D0E6] bg-[#A8D0E6] bg-opacity-20 px-2 py-1 rounded">기계〮배관</span>
 <div class="w-12 h-12 bg-[#F8E9A1] rounded-lg flex items-center justify-center mb-3">
 <svg class="w-6 h-6 text-[#24305E]" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
 <path d="M17.7 7.7a2.5 2.5 0 1 1 1.8 4.3H2"></path>
@@ -849,38 +944,38 @@
 <path d="M12.6 19.4A2 2 0 1 0 14 16H2"></path>
 </svg>
 </div>
-<h3 class="text-lg font-bold text-[#24305E] mb-1">IMC</h3>
-<p class="text-gray-600 text-xs">International Mechanical Code</p>
+<h3 class="resp-text-lg font-bold text-[#24305E] mb-1">IMC</h3>
+<p class="text-gray-600 resp-text-xs">International Mechanical Code</p>
 </div>
-<div class="code-card bg-white p-4 rounded-lg border-2 border-gray-200 cursor-not-allowed relative opacity-50" data-nav="library">
-<span class="absolute top-3 right-3 text-xs font-medium text-[#A8D0E6] bg-[#A8D0E6] bg-opacity-20 px-2 py-1 rounded">기계〮배관</span>
+<div class="code-card bg-white resp-p-md rounded-lg border-2 border-gray-200 cursor-not-allowed relative opacity-50" data-nav="library">
+<span class="absolute top-3 right-3 resp-text-xs font-medium text-[#A8D0E6] bg-[#A8D0E6] bg-opacity-20 px-2 py-1 rounded">기계〮배관</span>
 <div class="w-12 h-12 bg-[#F8E9A1] rounded-lg flex items-center justify-center mb-3">
 <svg class="w-6 h-6 text-[#24305E]" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
 <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path>
 </svg>
 </div>
-<h3 class="text-lg font-bold text-[#24305E] mb-1">IPC</h3>
-<p class="text-gray-600 text-xs">International Plumbing Code</p>
+<h3 class="resp-text-lg font-bold text-[#24305E] mb-1">IPC</h3>
+<p class="text-gray-600 resp-text-xs">International Plumbing Code</p>
 </div>
-<div class="code-card bg-white p-4 rounded-lg border-2 border-gray-200 cursor-not-allowed relative opacity-50" data-nav="library">
-<span class="absolute top-3 right-3 text-xs font-medium text-[#A8D0E6] bg-[#A8D0E6] bg-opacity-20 px-2 py-1 rounded">기계〮배관</span>
+<div class="code-card bg-white resp-p-md rounded-lg border-2 border-gray-200 cursor-not-allowed relative opacity-50" data-nav="library">
+<span class="absolute top-3 right-3 resp-text-xs font-medium text-[#A8D0E6] bg-[#A8D0E6] bg-opacity-20 px-2 py-1 rounded">기계〮배관</span>
 <div class="w-12 h-12 bg-[#F8E9A1] rounded-lg flex items-center justify-center mb-3">
 <svg class="w-6 h-6 text-[#24305E]" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
 <path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>
 </div>
-<h3 class="text-lg font-bold text-[#24305E] mb-1">ASHRAE</h3>
-<p class="text-gray-600 text-xs">American Society of Heating, Refrigerating and Air-Conditioning Engineers</p>
+<h3 class="resp-text-lg font-bold text-[#24305E] mb-1">ASHRAE</h3>
+<p class="text-gray-600 resp-text-xs">American Society of Heating, Refrigerating and Air-Conditioning Engineers</p>
 </div>
-<div class="code-card bg-white p-4 rounded-lg border-2 border-gray-200 cursor-not-allowed relative opacity-50" data-nav="library">
-<span class="absolute top-3 right-3 text-xs font-medium text-[#FFA500] bg-[#FFA500] bg-opacity-20 px-2 py-1 rounded">전기</span>
+<div class="code-card bg-white resp-p-md rounded-lg border-2 border-gray-200 cursor-not-allowed relative opacity-50" data-nav="library">
+<span class="absolute top-3 right-3 resp-text-xs font-medium text-[#FFA500] bg-[#FFA500] bg-opacity-20 px-2 py-1 rounded">전기</span>
 <div class="w-12 h-12 bg-[#F8E9A1] rounded-lg flex items-center justify-center mb-3">
 <svg class="w-6 h-6 text-[#24305E]" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
 <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
 </svg>
 </div>
-<h3 class="text-lg font-bold text-[#24305E] mb-1">NEC</h3>
-<p class="text-gray-600 text-xs">National Eletrical Code</p>
+<h3 class="resp-text-lg font-bold text-[#24305E] mb-1">NEC</h3>
+<p class="text-gray-600 resp-text-xs">National Eletrical Code</p>
 </div></div>
 </section>
 </div>
@@ -889,11 +984,11 @@
 <!-- Library Section -->
 <!-- Removed PDF download button, made notes read-only, added hierarchical keywords -->
 <div class="section-content" id="librarySection">
-<header class="bg-white border-b border-gray-200 shadow-sm sticky top-0 z-10">
-<div class="px-8 py-4 flex items-center justify-between">
+<header class="bg-white border-b border-gray-200 shadow-sm sticky top-0 z-10 main-header">
+<div class="flex items-center justify-between resp-px-lg resp-py-sm">
 <div>
-<h1 class="text-2xl font-bold text-[#24305E]" id="codeTitle">IBC 2024</h1>
-<p class="text-sm text-gray-600" id="codeSubtitle">International Building Code</p>
+<h1 class="font-bold text-[#24305E] resp-text-2xl" id="codeTitle">IBC 2024</h1>
+<p class="text-gray-600 resp-text-sm" id="codeSubtitle">International Building Code</p>
 </div>
 <!-- REMOVED -->
 <!-- <select id="versionSelect" class="px-4 py-2 border-2 border-gray-300 rounded-lg text-sm font-medium text-gray-700 focus:outline-none focus:border-[#A8D0E6]">
@@ -903,21 +998,21 @@
             </select> -->
 </div>
 </header>
-<div class="flex" style="height: calc(100vh - 88px); overflow: hidden;">
+<div class="flex content-area-height" style="overflow: hidden;">
 <!-- Changed default state to show all sections expanded -->
-<aside class="w-80 bg-white border-r border-gray-200 overflow-y-auto sticky" style="top: 88px; max-height: calc(100vh - 88px);">
-<div class="p-6">
-<h2 class="text-lg font-bold text-[#24305E] mb-4">Chapters</h2>
+<aside class="bg-white border-r border-gray-200 overflow-y-auto sticky chapter-sidebar" style="top: var(--header-height); max-height: calc(100vh - var(--header-height));">
+<div class="resp-p-lg">
+<h2 class="font-bold text-[#24305E] resp-text-lg resp-mb-md">Chapters</h2>
 <div class="space-y-2" id="chapterList">
   <!-- Chapters will be dynamically loaded from JSON -->
-  <div class="text-gray-500 text-sm p-4">Loading chapters...</div>
+  <div class="text-gray-500 resp-text-sm resp-p-md">Loading chapters...</div>
 </div>
 </div>
 </aside>
-<div class="flex-1 p-8 overflow-y-auto">
+<div class="flex-1 resp-p-xl overflow-y-auto">
 <div id="contentArea">
   <!-- Content will be dynamically loaded from JSON -->
-  <div class="text-gray-500 text-center py-8">Select a code from the sidebar to view content</div>
+  <div class="text-gray-500 text-center resp-py-xl resp-text-base">Select a code from the sidebar to view content</div>
 </div>
 </div>
 </div>
@@ -925,16 +1020,16 @@
 <!-- Advanced Search Section -->
 <div class="section-content" id="searchSection">
 <header class="bg-white border-b border-gray-200 shadow-sm">
-<div class="px-8 py-6">
-<h1 class="text-3xl font-bold text-[#24305E]">고급 검색</h1>
-<p class="text-gray-600 mt-1">모든 코드 라이브러리에서 필터링 및 검색</p>
+<div class="resp-px-xl resp-py-lg">
+<h1 class="resp-text-3xl font-bold text-[#24305E]">고급 검색</h1>
+<p class="text-gray-600 mt-1 resp-text-base">모든 코드 라이브러리에서 필터링 및 검색</p>
 </div>
 </header>
-<div class="p-8">
-<div class="bg-white rounded-lg shadow-md p-6 mb-6" id="advSearchFilterCard">
+<div class="resp-p-xl">
+<div class="bg-white rounded-lg shadow-md resp-p-lg resp-mb-lg" id="advSearchFilterCard">
 <!-- Keyword Search Input (half width) -->
-<div class="mb-6">
-<label class="block text-sm font-semibold text-[#24305E] mb-2">키워드 검색</label>
+<div class="resp-mb-lg">
+<label class="block resp-text-sm font-semibold text-[#24305E] resp-mb-sm">키워드 검색</label>
 <div class="relative" style="max-width: 50%;">
 <input class="w-full px-4 py-2.5 pr-10 border-2 border-gray-300 rounded-lg text-gray-700 focus:outline-none focus:border-[#F76C6C]"
        id="keywordInput"
@@ -952,8 +1047,8 @@
 </div>
 
 <div class="border-t border-gray-200 pt-4">
-<div class="collapsible-header flex items-center justify-between p-3 rounded-lg cursor-pointer hover:bg-gray-50" onclick="toggleCollapsible('filterSection')">
-<h3 class="text-base font-semibold text-[#24305E]">필터</h3>
+<div class="collapsible-header flex items-center justify-between resp-p-sm rounded-lg cursor-pointer hover:bg-gray-50" onclick="toggleCollapsible('filterSection')">
+<h3 class="resp-text-base font-semibold text-[#24305E]">필터</h3>
 <svg class="w-5 h-5 text-gray-600 transition-transform" fill="none" id="filterSectionToggle" stroke="currentColor" viewbox="0 0 24 24">
 <path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
 </svg>
@@ -966,52 +1061,52 @@
 <label class="flex items-center cursor-pointer">
 <input class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" id="selectAllArch" onchange="toggleSelectAll('arch')" type="checkbox"/>
 </label>
-<h3 class="text-base font-bold text-[#24305E]">건축·구조</h3>
+<h3 class="resp-text-base font-bold text-[#24305E]">건축·구조</h3>
 </div>
 <div class="grid grid-cols-2 gap-x-4 gap-y-1">
 <label class="flex items-center cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
 <input class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="archCategory" type="checkbox" value="usage"/>
-<span class="ml-2 text-sm text-gray-700">용도</span>
+<span class="ml-2 resp-text-sm text-gray-700">용도</span>
 </label>
 <label class="flex items-center cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
 <input class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="archCategory" type="checkbox" value="height"/>
-<span class="ml-2 text-sm text-gray-700">높이</span>
+<span class="ml-2 resp-text-sm text-gray-700">높이</span>
 </label>
 <label class="flex items-center cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
 <input class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="archCategory" type="checkbox" value="area"/>
-<span class="ml-2 text-sm text-gray-700">면적</span>
+<span class="ml-2 resp-text-sm text-gray-700">면적</span>
 </label>
 <label class="flex items-center cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
 <input class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="archCategory" type="checkbox" value="standards"/>
-<span class="ml-2 text-sm text-gray-700">기준</span>
+<span class="ml-2 resp-text-sm text-gray-700">기준</span>
 </label>
 <label class="flex items-center cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
 <input class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="archCategory" type="checkbox" value="building-type"/>
-<span class="ml-2 text-sm text-gray-700">건물 유형</span>
+<span class="ml-2 resp-text-sm text-gray-700">건물 유형</span>
 </label>
 <label class="flex items-center cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
 <input class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="archCategory" type="checkbox" value="layout"/>
-<span class="ml-2 text-sm text-gray-700">배치</span>
+<span class="ml-2 resp-text-sm text-gray-700">배치</span>
 </label>
 <label class="flex items-center cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
 <input class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="archCategory" type="checkbox" value="finish"/>
-<span class="ml-2 text-sm text-gray-700">마감</span>
+<span class="ml-2 resp-text-sm text-gray-700">마감</span>
 </label>
 <label class="flex items-center cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
 <input class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="archCategory" type="checkbox" value="vehicle"/>
-<span class="ml-2 text-sm text-gray-700">차량</span>
+<span class="ml-2 resp-text-sm text-gray-700">차량</span>
 </label>
 <label class="flex items-center cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
 <input class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="archCategory" type="checkbox" value="rooftop"/>
-<span class="ml-2 text-sm text-gray-700">옥탑</span>
+<span class="ml-2 resp-text-sm text-gray-700">옥탑</span>
 </label>
 <label class="flex items-center cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
 <input class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="archCategory" type="checkbox" value="exterior"/>
-<span class="ml-2 text-sm text-gray-700">외장재</span>
+<span class="ml-2 resp-text-sm text-gray-700">외장재</span>
 </label>
 <label class="flex items-center cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
 <input class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="archCategory" type="checkbox" value="roof"/>
-<span class="ml-2 text-sm text-gray-700">지붕</span>
+<span class="ml-2 resp-text-sm text-gray-700">지붕</span>
 </label>
 </div>
 </div>
@@ -1020,14 +1115,14 @@
 <label class="flex items-center cursor-pointer">
 <input class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" id="selectAllFire" onchange="toggleSelectAll('fire')" type="checkbox"/>
 </label>
-<h3 class="text-base font-bold text-[#24305E]">소방</h3>
+<h3 class="resp-text-base font-bold text-[#24305E]">소방</h3>
 </div>
 <!-- 성능기반설계 -->
 <div class="mb-2">
 <label class="flex items-center justify-between cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors">
 <div class="flex items-center">
 <input class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="fireCategory" type="checkbox" value="성능기반설계"/>
-<span class="ml-2 text-sm text-gray-700">성능기반설계</span>
+<span class="ml-2 resp-text-sm text-gray-700">성능기반설계</span>
 </div>
 </label>
 </div>
@@ -1037,7 +1132,7 @@
 <div class="flex items-center justify-between cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors" onclick="toggleCollapsible('firePump')">
 <div class="flex items-center">
 <input class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="fireCategory" type="checkbox" value="소화펌프" onclick="event.stopPropagation()"/>
-<span class="ml-2 text-sm text-gray-700">소화펌프</span>
+<span class="ml-2 resp-text-sm text-gray-700">소화펌프</span>
 </div>
 <div class="flex items-center justify-center w-5 h-5 text-gray-600 font-bold text-lg" id="firePumpToggle">+</div>
 </div>
@@ -1116,7 +1211,7 @@
 <div class="flex items-center justify-between cursor-pointer hover:bg-gray-50 p-1.5 rounded transition-colors" onclick="toggleCollapsible('standpipe')">
 <div class="flex items-center">
 <input class="w-3.5 h-3.5 text-[#F76C6C] focus:ring-[#A8D0E6] rounded" name="fireCategory" type="checkbox" value="옥내소화전" onclick="event.stopPropagation()"/>
-<span class="ml-2 text-sm text-gray-700">옥내소화전</span>
+<span class="ml-2 resp-text-sm text-gray-700">옥내소화전</span>
 </div>
 <div class="flex items-center justify-center w-5 h-5 text-gray-600 font-bold text-lg" id="standpipeToggle">+</div>
 </div>
@@ -1245,13 +1340,13 @@
 <!-- Code Compare Section -->
 <div class="section-content" id="compareSection">
 <header class="bg-white border-b border-gray-200 shadow-sm">
-<div class="px-8 py-6">
-<h1 class="text-3xl font-bold text-[#24305E]">코드 비교</h1>
-<p class="text-gray-600 mt-1">다양한 코드 버전을 나란히 비교</p>
+<div class="resp-px-xl resp-py-lg">
+<h1 class="resp-text-3xl font-bold text-[#24305E]">코드 비교</h1>
+<p class="text-gray-600 mt-1 resp-text-base">다양한 코드 버전을 나란히 비교</p>
 </div>
 </header>
-<div class="p-8">
-<div class="bg-white rounded-lg shadow-md p-6 mb-6">
+<div class="resp-p-xl">
+<div class="bg-white rounded-lg shadow-md resp-p-lg resp-mb-lg">
 <div class="collapsible-header flex items-center justify-between p-3 rounded-lg" onclick="toggleCollapsible('codeSelectSection')">
 <svg class="w-5 h-5 text-gray-600 transition-transform" fill="none" id="codeSelectSectionToggle" stroke="currentColor" viewbox="0 0 24 24">
 <path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
@@ -1260,7 +1355,7 @@
 <div class="collapsible-content expanded" id="codeSelectSection">
 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
 <div>
-<label class="block text-sm font-semibold text-[#24305E] mb-2">Code A</label>
+<label class="block resp-text-sm font-semibold text-[#24305E] resp-mb-sm">Code A</label>
 <select class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg mb-3 focus:outline-none focus:border-[#A8D0E6]" id="codeAType">
 <option value="IBC">IBC - International Building Code</option>
 <option value="NFPA13">NFPA 13 - Sprinkler Systems</option>
@@ -1274,7 +1369,7 @@
 <!-- Split section input into Section and Subsection fields -->
 <div class="grid grid-cols-2 gap-3">
 <div class="relative">
-<label class="block text-xs font-medium text-gray-600 mb-1">Section</label>
+<label class="block resp-text-xs font-medium text-gray-600 mb-1">Section</label>
 <input class="w-full px-3 py-2 pr-8 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-[#A8D0E6]" id="codeASection" list="sectionListA" placeholder="예: 101" type="text"/>
 <button class="absolute right-2 top-8 p-1 hover:bg-gray-100 rounded transition-colors" onclick="clearInput('codeASection')" title="Clear">
 <svg class="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
@@ -1291,7 +1386,7 @@
 </datalist>
 </div>
 <div class="relative">
-<label class="block text-xs font-medium text-gray-600 mb-1">Subsection</label>
+<label class="block resp-text-xs font-medium text-gray-600 mb-1">Subsection</label>
 <input class="w-full px-3 py-2 pr-8 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-[#A8D0E6]" id="codeASubsection" placeholder="예: 3.4" type="text"/>
 <button class="absolute right-2 top-8 p-1 hover:bg-gray-100 rounded transition-colors" onclick="clearInput('codeASubsection')" title="Clear">
 <svg class="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
@@ -1302,7 +1397,7 @@
 </div>
 </div>
 <div>
-<label class="block text-sm font-semibold text-[#24305E] mb-2">Code B</label>
+<label class="block resp-text-sm font-semibold text-[#24305E] resp-mb-sm">Code B</label>
 <select class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg mb-3 focus:outline-none focus:border-[#A8D0E6]" id="codeBType">
 <option value="IBC">IBC - International Building Code</option>
 <option value="NFPA13">NFPA 13 - Sprinkler Systems</option>
@@ -1316,7 +1411,7 @@
 <!-- Split section input into Section and Subsection fields -->
 <div class="grid grid-cols-2 gap-3">
 <div class="relative">
-<label class="block text-xs font-medium text-gray-600 mb-1">Section</label>
+<label class="block resp-text-xs font-medium text-gray-600 mb-1">Section</label>
 <input class="w-full px-3 py-2 pr-8 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-[#A8D0E6]" id="codeBSection" list="sectionListB" placeholder="예: 101" type="text"/>
 <button class="absolute right-2 top-8 p-1 hover:bg-gray-100 rounded transition-colors" onclick="clearInput('codeBSection')" title="Clear">
 <svg class="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
@@ -1333,7 +1428,7 @@
 </datalist>
 </div>
 <div class="relative">
-<label class="block text-xs font-medium text-gray-600 mb-1">Subsection</label>
+<label class="block resp-text-xs font-medium text-gray-600 mb-1">Subsection</label>
 <input class="w-full px-3 py-2 pr-8 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-[#A8D0E6]" id="codeBSubsection" placeholder="예: 3.4" type="text"/>
 <button class="absolute right-2 top-8 p-1 hover:bg-gray-100 rounded transition-colors" onclick="clearInput('codeBSubsection')" title="Clear">
 <svg class="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
@@ -2440,12 +2535,12 @@ function loadChapters(versionId, codeId) {
 
         return `
         <div class="chapter-group">
-            <div class="chapter-item px-4 py-3 rounded-lg hover:bg-[#A8D0E6] cursor-pointer flex items-center justify-between"
+            <div class="chapter-item resp-px-md resp-py-sm rounded-lg hover:bg-[#A8D0E6] cursor-pointer flex items-center justify-between"
                  data-chapter="${ch.Chapter}" data-chapter-id="${ch.ChapterID}"
                  onclick="toggleChapterSections('${ch.ChapterID}', '${versionId}')">
                 <div>
-                    <div class="font-semibold text-[#24305E] text-sm">Chapter ${ch.Chapter}</div>
-                    <div class="text-sm text-gray-600 mt-1">${ch.TitleEN || ''}</div>
+                    <div class="font-semibold text-[#24305E] resp-text-sm">Chapter ${ch.Chapter}</div>
+                    <div class="resp-text-sm text-gray-600 mt-1">${ch.TitleEN || ''}</div>
                 </div>
                 <svg id="chapterIcon-${ch.ChapterID}" class="w-4 h-4 text-[#24305E] transition-transform ${i === 0 ? 'rotate-180' : ''}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
@@ -2453,7 +2548,7 @@ function loadChapters(versionId, codeId) {
             </div>
             <div id="chapterSections-${ch.ChapterID}" class="pl-6 mt-1 space-y-1 ${i === 0 ? '' : 'hidden'}">
                 ${sectionNums.map(sec => `
-                <div class="section-item px-3 py-2 text-sm text-gray-700 hover:bg-[#A8D0E6] rounded cursor-pointer"
+                <div class="section-item resp-px-md resp-py-sm resp-text-sm text-gray-700 hover:bg-[#A8D0E6] rounded cursor-pointer"
                      data-section="${sec}" onclick="scrollToSection('${ch.ChapterID}', '${sec}', '${versionId}')">
                     Section ${sec}
                 </div>
@@ -2535,12 +2630,12 @@ function loadChapterContent(chapterId, versionId) {
 
     if (!contents || contents.length === 0) {
         contentArea.innerHTML = `
-            <div class="bg-white rounded-lg shadow-sm p-8">
-                <h2 class="text-2xl font-bold text-[#24305E] mb-2">Chapter ${chapter.Chapter}: ${chapter.TitleEN || ''}</h2>
-                ${chapter.TitleKR ? `<p class="text-sm text-gray-600">${chapter.TitleKR}</p>` : ''}
+            <div class="bg-white rounded-lg shadow-sm resp-p-xl">
+                <h2 class="resp-text-2xl font-bold text-[#24305E] resp-mb-sm">Chapter ${chapter.Chapter}: ${chapter.TitleEN || ''}</h2>
+                ${chapter.TitleKR ? `<p class="resp-text-sm text-gray-600">${chapter.TitleKR}</p>` : ''}
                 ${chapter.ChapterComment ? `
-                <div class="mt-4 p-4 bg-blue-50 border-l-4 border-blue-400 rounded">
-                    <p class="text-sm text-gray-700 whitespace-pre-line">${chapter.ChapterComment}</p>
+                <div class="mt-4 resp-p-md bg-blue-50 border-l-4 border-blue-400 rounded">
+                    <p class="resp-text-sm text-gray-700 whitespace-pre-line">${chapter.ChapterComment}</p>
                 </div>` : ''}
                 <p class="text-gray-500 mt-6">No content available for this chapter.</p>
             </div>
@@ -2558,14 +2653,14 @@ function loadChapterContent(chapterId, versionId) {
 
     // HTML 생성
     let html = `
-        <div class="bg-white rounded-lg shadow-sm p-8 mb-6">
-            <div class="mb-6">
-                <h2 class="text-2xl font-bold text-[#24305E] mb-2">Chapter ${chapter.Chapter}: ${chapter.TitleEN || ''}</h2>
-                ${chapter.TitleKR ? `<p class="text-sm text-gray-600">${chapter.TitleKR}</p>` : ''}
+        <div class="bg-white rounded-lg shadow-sm resp-p-xl resp-mb-lg">
+            <div class="resp-mb-lg">
+                <h2 class="resp-text-2xl font-bold text-[#24305E] resp-mb-sm">Chapter ${chapter.Chapter}: ${chapter.TitleEN || ''}</h2>
+                ${chapter.TitleKR ? `<p class="resp-text-sm text-gray-600">${chapter.TitleKR}</p>` : ''}
             </div>
             ${chapter.ChapterComment ? `
-            <div class="mb-6 p-4 bg-blue-50 border-l-4 border-blue-400 rounded">
-                <p class="text-sm text-gray-700 whitespace-pre-line">${chapter.ChapterComment}</p>
+            <div class="resp-mb-lg resp-p-md bg-blue-50 border-l-4 border-blue-400 rounded">
+                <p class="resp-text-sm text-gray-700 whitespace-pre-line">${chapter.ChapterComment}</p>
             </div>` : ''}
     `;
 
@@ -2582,9 +2677,9 @@ function loadChapterContent(chapterId, versionId) {
         const sectionTitle = sectionNum === 'General' ? 'General' : 'Section ' + sectionNum;
 
         html += `
-            <div class="content-section mb-8">
-                <h3 class="text-xl font-semibold text-[#374785] mb-3">${sectionTitle}${firstContent.TitleEN ? ' - ' + firstContent.TitleEN : ''}</h3>
-                ${firstContent.TitleKR ? `<p class="text-sm text-gray-500 mb-4">${firstContent.TitleKR}</p>` : ''}
+            <div class="content-section resp-mb-lg">
+                <h3 class="resp-text-xl font-semibold text-[#374785] resp-mb-md">${sectionTitle}${firstContent.TitleEN ? ' - ' + firstContent.TitleEN : ''}</h3>
+                ${firstContent.TitleKR ? `<p class="resp-text-sm text-gray-500 resp-mb-md">${firstContent.TitleKR}</p>` : ''}
                 <div class="space-y-4">
         `;
 
@@ -2601,7 +2696,7 @@ function loadChapterContent(chapterId, versionId) {
             const lastTag = indexTags.length > 0 ? indexTags[indexTags.length - 1] : '';
 
             html += `
-                <div class="bg-gray-50 p-4 rounded-lg relative" id="section-${sectionNumber.replace(/\./g, '-')}">
+                <div class="bg-gray-50 resp-p-md rounded-lg relative" id="section-${sectionNumber.replace(/\./g, '-')}">
                     <div class="absolute top-3 right-3 flex items-center gap-1">
                         <button class="p-1.5 hover:bg-gray-200 rounded transition-colors" title="Copy link" onclick="copyLink('${sectionNumber}')">
                             <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -2614,20 +2709,20 @@ function loadChapterContent(chapterId, versionId) {
                             </svg>
                         </button>
                     </div>
-                    <div class="flex items-center gap-2 mb-3 flex-wrap">
-                        <span class="text-xs bg-[#A8D0E6] text-[#24305E] font-semibold px-2 py-0.5 rounded">${codeLabel}: Chapter ${chapter.Chapter} - ${sectionNumber}</span>
-                        ${lastTag ? `<span class="text-xs bg-[#F8E9A1] text-[#24305E] px-2 py-0.5 rounded">${lastTag}</span>` : ''}
+                    <div class="flex items-center gap-2 resp-mb-md flex-wrap">
+                        <span class="resp-text-xs bg-[#A8D0E6] text-[#24305E] font-semibold px-2 py-0.5 rounded">${codeLabel}: Chapter ${chapter.Chapter} - ${sectionNumber}</span>
+                        ${lastTag ? `<span class="resp-text-xs bg-[#F8E9A1] text-[#24305E] px-2 py-0.5 rounded">${lastTag}</span>` : ''}
                     </div>
-                    <div class="flex items-center gap-2 mb-2">
-                        <h4 class="font-semibold text-[#24305E]">${sectionNumber}${content.TitleEN ? ' ' + content.TitleEN : ''}</h4>
+                    <div class="flex items-center gap-2 resp-mb-sm">
+                        <h4 class="font-semibold text-[#24305E] resp-text-base">${sectionNumber}${content.TitleEN ? ' ' + content.TitleEN : ''}</h4>
                     </div>
-                    ${content.TitleKR ? `<p class="text-base text-gray-600 mb-2">${content.TitleKR}</p>` : ''}
-                    ${content.ContentEN ? `<p class="text-gray-700 leading-relaxed mb-2">${content.ContentEN}</p>` : ''}
-                    ${content.ContentKR ? `<p class="text-gray-600 text-base leading-relaxed mb-3">${content.ContentKR}</p>` : ''}
+                    ${content.TitleKR ? `<p class="resp-text-base text-gray-600 resp-mb-sm">${content.TitleKR}</p>` : ''}
+                    ${content.ContentEN ? `<p class="text-gray-700 leading-relaxed resp-mb-sm resp-text-base">${content.ContentEN}</p>` : ''}
+                    ${content.ContentKR ? `<p class="text-gray-600 leading-relaxed resp-mb-md resp-text-base">${content.ContentKR}</p>` : ''}
                     ${content.Comment ? `
-                    <div class="mt-3 pt-3 border-t border-gray-200 bg-[#FEE9EC] bg-opacity-30 p-3 rounded-lg">
-                        <label class="text-xs font-semibold text-[#F76C6C] mb-1 block">Note</label>
-                        <div class="w-full text-base p-2 bg-white border border-[#F76C6C] border-opacity-20 rounded text-gray-700 whitespace-pre-line">
+                    <div class="mt-3 pt-3 border-t border-gray-200 bg-[#FEE9EC] bg-opacity-30 resp-p-md rounded-lg">
+                        <label class="resp-text-xs font-semibold text-[#F76C6C] mb-1 block">Note</label>
+                        <div class="w-full resp-text-base resp-p-sm bg-white border border-[#F76C6C] border-opacity-20 rounded text-gray-700 whitespace-pre-line">
                             ${content.Comment}
                         </div>
                     </div>` : ''}
