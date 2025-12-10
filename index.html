@@ -2402,16 +2402,19 @@ function getDiscipline(modelCodeId) {
 
 // === UI Functions ===
 function loadChapters(versionId, codeId) {
+    console.log('loadChapters called:', { versionId, codeId, dataLoaded });
+
     // 데이터 로딩 확인
     if (!dataLoaded) {
         console.warn('loadChapters called before data loaded');
         return;
     }
 
-    const chapters = getChapters(versionId);
-    const chapterList = document.getElementById('chapterList');
+    try {
+        const chapters = getChapters(versionId);
+        const chapterList = document.getElementById('chapterList');
 
-    console.log('Loading chapters for version:', versionId, 'Found:', chapters.length, 'chapters');
+        console.log('Loading chapters for version:', versionId, 'Found:', chapters.length, 'chapters');
 
     if (!chapters || chapters.length === 0) {
         chapterList.innerHTML = '<p class="text-gray-500 text-sm p-4">No chapters available for this version</p>';
@@ -2464,6 +2467,13 @@ function loadChapters(versionId, codeId) {
     // 첫 번째 챕터 로드
     if (chapters.length > 0) {
         loadChapterContent(chapters[0].ChapterID, versionId);
+    }
+    } catch (error) {
+        console.error('Error in loadChapters:', error);
+        const chapterList = document.getElementById('chapterList');
+        if (chapterList) {
+            chapterList.innerHTML = `<p class="text-red-500 p-4">Error loading chapters: ${error.message}</p>`;
+        }
     }
 }
 
@@ -2555,24 +2565,29 @@ function scrollToSection(chapterId, sectionNum, versionId, event) {
 }
 
 function loadChapterContent(chapterId, versionId) {
+    console.log('loadChapterContent called:', { chapterId, versionId });
+
     // 데이터 로딩 확인
     if (!dataLoaded) {
         console.warn('loadChapterContent called before data loaded');
         return;
     }
 
-    const chapter = appData.CodeChapter.find(ch => ch.ChapterID === chapterId);
-    if (!chapter) {
-        console.warn('Chapter not found:', chapterId);
-        return;
-    }
+    try {
+        const chapter = appData.CodeChapter.find(ch => ch.ChapterID === chapterId);
+        if (!chapter) {
+            console.warn('Chapter not found:', chapterId);
+            return;
+        }
 
-    // Get model code info for dynamic labels
-    const version = appData.ModelCodeVersion.find(v => v.ModelCodeVersionID === versionId);
-    const modelCode = version ? appData.ModelCode.find(mc => mc.ModelCodeID === version.ModelCodeID) : null;
-    const codeName = modelCode ? modelCode.ModelCodeName : 'Code';
-    const codeYear = version ? Math.floor(version.Year) : '';
-    const codeLabel = `${codeName} ${codeYear}`;
+        console.log('Found chapter:', chapter.Chapter, chapter.TitleEN);
+
+        // Get model code info for dynamic labels
+        const version = appData.ModelCodeVersion.find(v => v.ModelCodeVersionID === versionId);
+        const modelCode = version ? appData.ModelCode.find(mc => mc.ModelCodeID === version.ModelCodeID) : null;
+        const codeName = modelCode ? modelCode.ModelCodeName : 'Code';
+        const codeYear = version ? Math.floor(version.Year) : '';
+        const codeLabel = `${codeName} ${codeYear}`;
 
     // 챕터 활성화 표시
     document.querySelectorAll('.chapter-item').forEach(item => {
@@ -2716,6 +2731,14 @@ function loadChapterContent(chapterId, versionId) {
 
     html += '</div>';
     contentArea.innerHTML = html;
+    console.log('Content rendered successfully');
+    } catch (error) {
+        console.error('Error in loadChapterContent:', error);
+        const contentArea = document.getElementById('contentArea');
+        if (contentArea) {
+            contentArea.innerHTML = `<div class="text-red-500 p-4">Error loading content: ${error.message}</div>`;
+        }
+    }
 }
 
 // Attachment modal function - uses the existing image modal
@@ -2865,7 +2888,9 @@ let navigationHistory = [];
 
 // Unified function to generate section ID
 function getSectionId(chapterId, sectionNum) {
-    return 'section-' + chapterId + '-' + sectionNum.replace(/\./g, '-');
+    // sectionNum이 숫자일 수 있으므로 문자열로 변환
+    const sectionStr = String(sectionNum);
+    return 'section-' + chapterId + '-' + sectionStr.replace(/\./g, '-');
 }
 
 // Google search fallback
