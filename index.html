@@ -478,21 +478,42 @@
       overflow: hidden;
     }
 
-    /* Filter checkbox sizes - smaller to match text */
+    /* Filter checkbox sizes - 80% of text height */
     .filter-checkbox {
-      width: 11px;
-      height: 11px;
-      flex-shrink: 0;
-    }
-    .filter-checkbox-sm {
       width: 10px;
       height: 10px;
       flex-shrink: 0;
     }
-    .filter-checkbox-xs {
+    .filter-checkbox-sm {
       width: 9px;
       height: 9px;
       flex-shrink: 0;
+    }
+    .filter-checkbox-xs {
+      width: 8px;
+      height: 8px;
+      flex-shrink: 0;
+    }
+
+    /* Korean consonant index */
+    .consonant-index {
+      display: flex;
+      flex-direction: column;
+      font-size: 9px;
+      line-height: 1.2;
+      color: #9ca3af;
+      position: sticky;
+      top: 0;
+      right: 0;
+    }
+    .consonant-index span {
+      cursor: pointer;
+      padding: 1px 2px;
+      text-align: center;
+    }
+    .consonant-index span:hover {
+      color: #374785;
+      font-weight: bold;
     }
 
   </style>
@@ -2176,6 +2197,17 @@ function renderAdvancedFilters(filtersByDiscipline, disciplines) {
     const container = document.getElementById('dynamicFilters');
     if (!container) return;
 
+    // 한글 자음 추출 함수
+    const getInitialConsonant = (str) => {
+        const consonants = ['ㄱ','ㄲ','ㄴ','ㄷ','ㄸ','ㄹ','ㅁ','ㅂ','ㅃ','ㅅ','ㅆ','ㅇ','ㅈ','ㅉ','ㅊ','ㅋ','ㅌ','ㅍ','ㅎ'];
+        const code = str.charCodeAt(0) - 0xAC00;
+        if (code < 0 || code > 11171) return null;
+        return consonants[Math.floor(code / 588)];
+    };
+
+    // 기본 자음 목록 (색인용)
+    const baseConsonants = ['ㄱ','ㄴ','ㄷ','ㄹ','ㅁ','ㅂ','ㅅ','ㅇ','ㅈ','ㅊ','ㅋ','ㅌ','ㅍ','ㅎ'];
+
     let html = '<div class="grid grid-cols-1 md:grid-cols-3 gap-4">';
 
     disciplines.forEach(disc => {
@@ -2183,13 +2215,25 @@ function renderAdvancedFilters(filtersByDiscipline, disciplines) {
         if (!data) return;
 
         const categoryName = disc.id === 'D001' ? 'arch' : disc.id === 'D005' ? 'fireMech' : 'fireElec';
+        const isFireMech = disc.id === 'D005';
+        const needsConsonantIndex = disc.id === 'D001' || disc.id === 'D004';
 
         // 모든 필터 항목 통합 (SubIndex + IndexTags)
         const allItems = [];
 
         // SubIndex 계층 구조 추가
         const sortedParents = Object.keys(data.subIndexHierarchy).sort();
+
+        // 소방기계: 자동화재탐지설비 중복 제거
+        const processedParents = new Set();
+
         sortedParents.forEach(parent => {
+            // 소방기계에서 자동화재탐지설비 중복 처리
+            if (isFireMech && parent === '자동화재탐지설비') {
+                if (processedParents.has('자동화재탐지설비')) return;
+                processedParents.add('자동화재탐지설비');
+            }
+
             const children = data.subIndexHierarchy[parent];
             const childKeys = Object.keys(children).sort();
             allItems.push({
@@ -2212,9 +2256,16 @@ function renderAdvancedFilters(filtersByDiscipline, disciplines) {
             });
         });
 
-        // 총 항목 수 계산 (다단 레이아웃 결정용)
-        const totalItems = allItems.length;
-        const useMultiColumn = totalItems > 12;
+        // 자음별 그룹화 (색인용)
+        const consonantGroups = {};
+        if (needsConsonantIndex) {
+            allItems.forEach((item, idx) => {
+                const consonant = getInitialConsonant(item.value);
+                if (consonant && !consonantGroups[consonant]) {
+                    consonantGroups[consonant] = idx;
+                }
+            });
+        }
 
         html += `
         <div class="border rounded-lg p-3 relative" id="filterBox${categoryName}">
@@ -2237,29 +2288,40 @@ function renderAdvancedFilters(filtersByDiscipline, disciplines) {
                     </svg>
                 </button>
             </div>
-            <div class="max-h-80 overflow-y-auto ${useMultiColumn ? 'columns-2 gap-2' : 'space-y-0.5'}">
+            <div class="flex">
+                <div class="max-h-80 overflow-y-auto flex-1 space-y-0.5 pr-1" id="filterList${categoryName}">
         `;
 
         // 모든 항목 렌더링
-        allItems.forEach(item => {
+        allItems.forEach((item, itemIdx) => {
             const parentId = `${categoryName}_${item.value.replace(/[^a-zA-Z0-9가-힣]/g, '')}`;
             const hasChildren = item.children && item.children.length > 0;
+            const itemConsonant = getInitialConsonant(item.value);
+
+            // 자음 앵커 추가
+            const consonantAnchor = needsConsonantIndex && itemConsonant && consonantGroups[itemConsonant] === itemIdx
+                ? `id="consonant${categoryName}_${itemConsonant}"`
+                : '';
 
             if (hasChildren) {
-                // 하위 항목이 있는 부모
+                // 소방기계: 모두 펼침, 다른 분야: 접힘
+                const isExpanded = isFireMech;
+                const hiddenClass = isExpanded ? '' : 'hidden';
+                const toggleSymbol = isExpanded ? '−' : '+';
+
                 html += `
-                <div class="mb-0.5 ${useMultiColumn ? 'break-inside-avoid' : ''}">
-                    <div class="flex items-center justify-between cursor-pointer hover:bg-gray-50 py-0.5 px-1 rounded transition-colors"
-                         onclick="toggleFilterGroup('${parentId}')">
+                <div class="mb-0.5" ${consonantAnchor}>
+                    <div class="flex items-center justify-between ${isFireMech ? '' : 'cursor-pointer'} hover:bg-gray-50 py-0.5 px-1 rounded transition-colors"
+                         ${isFireMech ? '' : `onclick="toggleFilterGroup('${parentId}')"`}>
                         <label class="flex items-center" onclick="event.stopPropagation()">
                             <input class="filter-checkbox text-[#F76C6C] focus:ring-[#A8D0E6] rounded"
                                    name="${categoryName}Category" type="checkbox" value="${item.value}"
                                    onchange="toggleParentCheckbox(this, '${parentId}'); updateClearButton('${categoryName}')"/>
                             <span class="ml-1.5 text-xs text-gray-800">${item.value}</span>
                         </label>
-                        <span class="text-[10px] text-gray-400 font-mono" id="${parentId}Toggle">+</span>
+                        ${isFireMech ? '' : `<span class="text-[10px] text-gray-400 font-mono" id="${parentId}Toggle">${toggleSymbol}</span>`}
                     </div>
-                    <div class="hidden mt-0.5 ml-3 space-y-0.5" id="${parentId}">
+                    <div class="${hiddenClass} mt-0.5 ml-3 space-y-0.5" id="${parentId}">
                 `;
 
                 // 자식 항목 렌더링
@@ -2268,20 +2330,23 @@ function renderAdvancedFilters(filtersByDiscipline, disciplines) {
                     const hasGrandchildren = child.grandchildren && child.grandchildren.length > 0;
 
                     if (hasGrandchildren) {
-                        // 손자 항목이 있는 자식
+                        const childExpanded = isFireMech;
+                        const childHiddenClass = childExpanded ? '' : 'hidden';
+                        const childToggleSymbol = childExpanded ? '−' : '+';
+
                         html += `
                         <div class="mb-0.5">
-                            <div class="flex items-center justify-between cursor-pointer hover:bg-gray-50 py-0.5 px-1 rounded transition-colors"
-                                 onclick="toggleFilterGroup('${childId}')">
+                            <div class="flex items-center justify-between ${isFireMech ? '' : 'cursor-pointer'} hover:bg-gray-50 py-0.5 px-1 rounded transition-colors"
+                                 ${isFireMech ? '' : `onclick="toggleFilterGroup('${childId}')"`}>
                                 <label class="flex items-center" onclick="event.stopPropagation()">
                                     <input class="filter-checkbox-sm text-[#F76C6C] focus:ring-[#A8D0E6] rounded"
                                            name="${categoryName}Category" type="checkbox" value="${child.fullValue}"
                                            onchange="updateClearButton('${categoryName}')"/>
                                     <span class="ml-1 text-[11px] text-gray-700">${child.value}</span>
                                 </label>
-                                <span class="text-[10px] text-gray-400 font-mono" id="${childId}Toggle">+</span>
+                                ${isFireMech ? '' : `<span class="text-[10px] text-gray-400 font-mono" id="${childId}Toggle">${childToggleSymbol}</span>`}
                             </div>
-                            <div class="hidden mt-0.5 ml-3 space-y-0.5" id="${childId}">
+                            <div class="${childHiddenClass} mt-0.5 ml-3 space-y-0.5" id="${childId}">
                                 ${child.grandchildren.map(gc => `
                                 <label class="flex items-center cursor-pointer hover:bg-gray-50 py-0.5 px-1 rounded transition-colors">
                                     <input class="filter-checkbox-xs text-[#F76C6C] focus:ring-[#A8D0E6] rounded"
@@ -2293,7 +2358,6 @@ function renderAdvancedFilters(filtersByDiscipline, disciplines) {
                             </div>
                         </div>`;
                     } else {
-                        // 손자 없는 자식
                         html += `
                         <label class="flex items-center cursor-pointer hover:bg-gray-50 py-0.5 px-1 rounded transition-colors">
                             <input class="filter-checkbox-sm text-[#F76C6C] focus:ring-[#A8D0E6] rounded"
@@ -2306,9 +2370,8 @@ function renderAdvancedFilters(filtersByDiscipline, disciplines) {
 
                 html += '</div></div>';
             } else {
-                // 하위 항목이 없는 단독 항목 (태그 또는 단독 부모)
                 html += `
-                <label class="flex items-center cursor-pointer hover:bg-gray-50 py-0.5 px-1 rounded transition-colors ${useMultiColumn ? 'break-inside-avoid' : ''}">
+                <label class="flex items-center cursor-pointer hover:bg-gray-50 py-0.5 px-1 rounded transition-colors" ${consonantAnchor}>
                     <input class="filter-checkbox text-[#F76C6C] focus:ring-[#A8D0E6] rounded"
                            name="${categoryName}Category" type="checkbox" value="${item.value}"
                            onchange="updateClearButton('${categoryName}')"/>
@@ -2317,11 +2380,38 @@ function renderAdvancedFilters(filtersByDiscipline, disciplines) {
             }
         });
 
+        html += '</div>';
+
+        // 자음 색인 추가 (건축구조, 소방전기만)
+        if (needsConsonantIndex) {
+            html += `
+                <div class="consonant-index ml-1 border-l border-gray-200 pl-1">
+                    ${baseConsonants.map(c => {
+                        const hasItems = consonantGroups[c] !== undefined;
+                        return hasItems
+                            ? `<span onclick="scrollToConsonant('${categoryName}', '${c}')">${c}</span>`
+                            : `<span class="text-gray-300 cursor-default">${c}</span>`;
+                    }).join('')}
+                </div>
+            `;
+        }
+
         html += '</div></div>';
     });
 
     html += '</div>';
     container.innerHTML = html;
+}
+
+function scrollToConsonant(category, consonant) {
+    const element = document.getElementById(`consonant${category}_${consonant}`);
+    const container = document.getElementById(`filterList${category}`);
+    if (element && container) {
+        const containerRect = container.getBoundingClientRect();
+        const elementRect = element.getBoundingClientRect();
+        const scrollTop = container.scrollTop + (elementRect.top - containerRect.top);
+        container.scrollTo({ top: scrollTop, behavior: 'smooth' });
+    }
 }
 
 function toggleFilterGroup(groupId) {
