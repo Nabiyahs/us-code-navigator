@@ -4024,11 +4024,21 @@ function renderAdvancedFilters(filtersByDiscipline, disciplines) {
         const isFireMech = disc.id === 'D005';
         const needsConsonantIndex = disc.id === 'D001' || disc.id === 'D004';
 
+        // 영어/한글 분류 함수: 영어 먼저, 한글 나중
+        const isEnglishFirst = (str) => /^[A-Za-z0-9]/.test(str);
+        const sortEnglishFirst = (a, b) => {
+            const aIsEng = isEnglishFirst(a);
+            const bIsEng = isEnglishFirst(b);
+            if (aIsEng && !bIsEng) return -1;
+            if (!aIsEng && bIsEng) return 1;
+            return a.localeCompare(b, 'ko');
+        };
+
         // 모든 필터 항목 통합 (SubIndex + IndexTags)
         const allItems = [];
 
-        // SubIndex 계층 구조 추가
-        const sortedParents = Object.keys(data.subIndexHierarchy).sort();
+        // SubIndex 계층 구조 추가 (영어 먼저 정렬)
+        const sortedParents = Object.keys(data.subIndexHierarchy).sort(sortEnglishFirst);
 
         // 소방기계: 자동화재탐지설비 중복 제거
         const processedParents = new Set();
@@ -4041,26 +4051,30 @@ function renderAdvancedFilters(filtersByDiscipline, disciplines) {
             }
 
             const children = data.subIndexHierarchy[parent];
-            const childKeys = Object.keys(children).sort();
+            const childKeys = Object.keys(children).sort(sortEnglishFirst);
             allItems.push({
                 type: 'parent',
                 value: parent,
                 children: childKeys.map(child => ({
                     value: child,
                     fullValue: `${parent}_${child}`,
-                    grandchildren: Array.from(children[child]).sort()
+                    grandchildren: Array.from(children[child]).sort(sortEnglishFirst)
                 }))
             });
         });
 
-        // IndexTags도 최상위 항목으로 추가
-        data.indexTags.forEach(tag => {
+        // IndexTags도 최상위 항목으로 추가 (영어 먼저 정렬)
+        const sortedTags = [...data.indexTags].sort(sortEnglishFirst);
+        sortedTags.forEach(tag => {
             allItems.push({
                 type: 'tag',
                 value: tag,
                 children: []
             });
         });
+
+        // 전체 allItems도 영어 먼저 정렬
+        allItems.sort((a, b) => sortEnglishFirst(a.value, b.value));
 
         // 자음별 그룹화 (색인용)
         const consonantGroups = {};
@@ -4083,19 +4097,19 @@ function renderAdvancedFilters(filtersByDiscipline, disciplines) {
                                onchange="toggleSelectAllDynamic('${categoryName}')"
                                type="checkbox"/>
                     </label>
-                    <h3 class="text-sm font-bold text-[#24305E]">${disc.name}</h3>
+                    <h3 class="text-base font-bold text-[#24305E]">${disc.name}</h3>
                 </div>
-                <button class="hidden text-gray-400 hover:text-red-500 p-1 transition-colors"
+                <button class="hidden text-gray-400 hover:text-red-500 p-1.5 transition-colors rounded hover:bg-red-50"
                         id="clearBtn${categoryName}"
                         onclick="clearCategoryFilters('${categoryName}')"
-                        title="필터 전체 해제">
+                        title="선택 해제">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                     </svg>
                 </button>
             </div>
             <div class="flex">
-                <div class="max-h-80 overflow-y-auto flex-1 space-y-1 pr-2" id="filterList${categoryName}">
+                <div class="max-h-96 overflow-y-auto flex-1 space-y-1.5 pr-2" id="filterList${categoryName}">
         `;
 
         // 모든 항목 렌더링
@@ -4116,18 +4130,18 @@ function renderAdvancedFilters(filtersByDiscipline, disciplines) {
                 const toggleSymbol = isExpanded ? '−' : '+';
 
                 html += `
-                <div class="mb-0.5" ${consonantAnchor}>
-                    <div class="flex items-center justify-between ${isFireMech ? '' : 'cursor-pointer'} hover:bg-gray-50 py-1 px-1.5 rounded transition-colors"
+                <div class="mb-1" ${consonantAnchor}>
+                    <div class="flex items-center justify-between ${isFireMech ? '' : 'cursor-pointer'} hover:bg-gray-50 py-1.5 px-2 rounded transition-colors"
                          ${isFireMech ? '' : `onclick="toggleFilterGroup('${parentId}')"`}>
                         <label class="flex items-center gap-2" onclick="event.stopPropagation()">
                             <input class="filter-checkbox"
                                    name="${categoryName}Category" type="checkbox" value="${item.value}"
                                    onchange="toggleParentCheckbox(this, '${parentId}'); updateClearButton('${categoryName}')"/>
-                            <span class="text-xs text-gray-800">${item.value}</span>
+                            <span class="text-sm text-gray-800">${item.value}</span>
                         </label>
-                        ${isFireMech ? '' : `<span class="text-[10px] text-gray-400 font-mono" id="${parentId}Toggle">${toggleSymbol}</span>`}
+                        ${isFireMech ? '' : `<span class="text-xs text-gray-400 font-mono" id="${parentId}Toggle">${toggleSymbol}</span>`}
                     </div>
-                    <div class="${hiddenClass} mt-1 ml-4 space-y-0.5" id="${parentId}">
+                    <div class="${hiddenClass} mt-1 ml-5 space-y-0.5" id="${parentId}">
                 `;
 
                 // 자식 항목 렌더링
@@ -4142,34 +4156,34 @@ function renderAdvancedFilters(filtersByDiscipline, disciplines) {
 
                         html += `
                         <div class="mb-0.5">
-                            <div class="flex items-center justify-between ${isFireMech ? '' : 'cursor-pointer'} hover:bg-gray-50 py-1 px-1.5 rounded transition-colors"
+                            <div class="flex items-center justify-between ${isFireMech ? '' : 'cursor-pointer'} hover:bg-gray-50 py-1.5 px-2 rounded transition-colors"
                                  ${isFireMech ? '' : `onclick="toggleFilterGroup('${childId}')"`}>
-                                <label class="flex items-center gap-1.5" onclick="event.stopPropagation()">
+                                <label class="flex items-center gap-2" onclick="event.stopPropagation()">
                                     <input class="filter-checkbox-sm"
                                            name="${categoryName}Category" type="checkbox" value="${child.fullValue}"
                                            onchange="updateClearButton('${categoryName}')"/>
-                                    <span class="text-[11px] text-gray-700">${child.value}</span>
+                                    <span class="text-[13px] text-gray-700">${child.value}</span>
                                 </label>
-                                ${isFireMech ? '' : `<span class="text-[10px] text-gray-400 font-mono" id="${childId}Toggle">${childToggleSymbol}</span>`}
+                                ${isFireMech ? '' : `<span class="text-xs text-gray-400 font-mono" id="${childId}Toggle">${childToggleSymbol}</span>`}
                             </div>
-                            <div class="${childHiddenClass} mt-1 ml-4 space-y-0.5" id="${childId}">
+                            <div class="${childHiddenClass} mt-1 ml-5 space-y-0.5" id="${childId}">
                                 ${child.grandchildren.map(gc => `
-                                <label class="flex items-center gap-1.5 cursor-pointer hover:bg-gray-50 py-0.5 px-1.5 rounded transition-colors">
+                                <label class="flex items-center gap-2 cursor-pointer hover:bg-gray-50 py-1 px-2 rounded transition-colors">
                                     <input class="filter-checkbox-xs"
                                            name="${categoryName}Category" type="checkbox" value="${item.value}_${child.value}_${gc}"
                                            onchange="updateClearButton('${categoryName}')"/>
-                                    <span class="text-[10px] text-gray-600">${gc}</span>
+                                    <span class="text-xs text-gray-600">${gc}</span>
                                 </label>
                                 `).join('')}
                             </div>
                         </div>`;
                     } else {
                         html += `
-                        <label class="flex items-center gap-1.5 cursor-pointer hover:bg-gray-50 py-1 px-1.5 rounded transition-colors">
+                        <label class="flex items-center gap-2 cursor-pointer hover:bg-gray-50 py-1.5 px-2 rounded transition-colors">
                             <input class="filter-checkbox-sm"
                                    name="${categoryName}Category" type="checkbox" value="${child.fullValue}"
                                    onchange="updateClearButton('${categoryName}')"/>
-                            <span class="text-[11px] text-gray-700">${child.value}</span>
+                            <span class="text-[13px] text-gray-700">${child.value}</span>
                         </label>`;
                     }
                 });
@@ -4177,11 +4191,11 @@ function renderAdvancedFilters(filtersByDiscipline, disciplines) {
                 html += '</div></div>';
             } else {
                 html += `
-                <label class="flex items-center gap-2 cursor-pointer hover:bg-gray-50 py-1 px-1.5 rounded transition-colors" ${consonantAnchor}>
+                <label class="flex items-center gap-2 cursor-pointer hover:bg-gray-50 py-1.5 px-2 rounded transition-colors" ${consonantAnchor}>
                     <input class="filter-checkbox"
                            name="${categoryName}Category" type="checkbox" value="${item.value}"
                            onchange="updateClearButton('${categoryName}')"/>
-                    <span class="text-xs text-gray-800">${item.value}</span>
+                    <span class="text-sm text-gray-800">${item.value}</span>
                 </label>`;
             }
         });
