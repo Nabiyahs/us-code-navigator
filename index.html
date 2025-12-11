@@ -29104,6 +29104,33 @@ Central Station의 감시 서비스는 건물의 소유자, 재실자 또는 관
 </div>
 </div>
 </div>
+<!-- Code Book Popup Modal -->
+<div class="modal" id="codePopupModal">
+<div class="modal-content" style="max-width: 480px; padding: 24px;">
+<div class="flex items-center justify-between mb-4 pb-4 border-b border-gray-200">
+<h3 class="text-xl font-bold text-[#24305E]" id="codePopupTitle">Code Title</h3>
+<button class="p-2 hover:bg-gray-100 rounded-lg transition-colors" onclick="closeCodePopup()">
+<svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+</div>
+<div class="mb-4">
+<p class="text-gray-600 text-sm mb-3" id="codePopupDescription">Code description will appear here.</p>
+<div class="flex items-center gap-2 mb-3">
+<span class="text-xs font-medium px-2 py-1 rounded" id="codePopupDiscipline">Discipline</span>
+</div>
+</div>
+<div class="flex justify-end gap-3">
+<button class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors" onclick="closeCodePopup()">
+닫기
+</button>
+<button class="px-4 py-2 text-sm font-medium text-white bg-[#F76C6C] rounded-lg hover:bg-[#e55a5a] transition-colors" id="codePopupGoBtn" onclick="goToCodeFromPopup()">
+바로가기
+</button>
+</div>
+</div>
+</div>
 <script>
     const sections = {
       home: document.getElementById('homeSection'),
@@ -29730,17 +29757,55 @@ ${note}
       const modal = document.getElementById('sectionModal');
       modal.classList.remove('active');
     }
-    
+
+    // Code Popup Modal Functions
+    let currentPopupCodeId = null;
+    let currentPopupVersionId = null;
+
+    function openCodePopup(codeId, versionId, codeName, description, disciplineLabel, disciplineColor) {
+      currentPopupCodeId = codeId;
+      currentPopupVersionId = versionId;
+
+      const modal = document.getElementById('codePopupModal');
+      document.getElementById('codePopupTitle').textContent = codeName;
+      document.getElementById('codePopupDescription').textContent = description;
+
+      const disciplineSpan = document.getElementById('codePopupDiscipline');
+      disciplineSpan.textContent = disciplineLabel;
+      disciplineSpan.style.backgroundColor = disciplineColor + '33';
+      disciplineSpan.style.color = disciplineColor;
+
+      modal.classList.add('active');
+    }
+
+    function closeCodePopup() {
+      const modal = document.getElementById('codePopupModal');
+      modal.classList.remove('active');
+      currentPopupCodeId = null;
+      currentPopupVersionId = null;
+    }
+
+    function goToCodeFromPopup() {
+      if (currentPopupCodeId && currentPopupVersionId) {
+        closeCodePopup();
+        switchToLibraryCode(currentPopupCodeId, currentPopupVersionId);
+      }
+    }
+
     // Close modal when clicking outside
     window.onclick = function(event) {
       const imageModal = document.getElementById('imageModal');
       const sectionModal = document.getElementById('sectionModal');
-      
+      const codePopupModal = document.getElementById('codePopupModal');
+
       if (event.target === imageModal) {
         closeModal();
       }
       if (event.target === sectionModal) {
         closeSectionModal();
+      }
+      if (event.target === codePopupModal) {
+        closeCodePopup();
       }
     }
 
@@ -30781,8 +30846,13 @@ function displayTopSearchResults(exactMatches, partialMatches, keyword, attachme
         // Check if this is an attachment result (Table/Figure)
         if (result.type === 'attachment') {
             // Display attachment using library-style figure display
+            // Updated per user requirements: code name without year
             const imagePath = result.fileName || '';
             const badgeText = result.attachment?.Type === 'T' ? '표' : '그림';
+            const chapterSectionDisplay = sectionNum === 'General'
+                ? `Chapter ${result.chapter}`
+                : `Chapter ${result.chapter}, Section ${sectionNum}`;
+
             html += `
                 <div class="bg-gray-50 p-4 rounded-lg relative search-result-item" id="search-result-${index}">
                     <!-- Copy button -->
@@ -30794,12 +30864,15 @@ function displayTopSearchResults(exactMatches, partialMatches, keyword, attachme
                         </button>
                     </div>
 
-                    <!-- Badge and Title -->
-                    <div class="flex items-center gap-2 mb-3 flex-wrap">
-                        <span class="text-xs bg-[#A8D0E6] text-[#24305E] font-semibold px-2 py-0.5 rounded">${result.code} ${result.year}: Ch.${result.chapter} - ${sectionNum}</span>
+                    <!-- Badge and Title - code name without year -->
+                    <div class="flex items-center gap-2 mb-2 flex-wrap">
+                        <span class="text-xs bg-[#A8D0E6] text-[#24305E] font-semibold px-2 py-0.5 rounded">${result.code}</span>
+                        <span class="text-xs text-gray-500">${chapterSectionDisplay}</span>
                         <span class="text-xs bg-[#F76C6C] text-white px-2 py-0.5 rounded">${badgeText}</span>
                     </div>
-                    <h4 class="font-semibold text-[#24305E] text-sm mb-2">${highlightedTitleEN}</h4>
+                    <!-- EN Title -->
+                    <h4 class="font-semibold text-[#24305E] text-sm mb-1">${highlightedTitleEN}</h4>
+                    <!-- KR Title -->
                     ${result.titleKR ? `<p class="text-gray-600 text-sm mb-3">${highlightedTitleKR}</p>` : ''}
 
                     <!-- Image display in smaller size (90px x 90px) -->
@@ -30827,7 +30900,15 @@ function displayTopSearchResults(exactMatches, partialMatches, keyword, attachme
                 </div>
             `;
         } else {
-            // Use reference.txt design with collapse/expand functionality for regular content
+            // Updated search result display per user requirements:
+            // - Code name without year
+            // - Chapter/section in title format (e.g., "Chapter 5, Section 5.4.3")
+            // - EN title, KR title
+            // - Body preview (2-3 lines) with collapse
+            const chapterSectionDisplay = sectionNum === 'General'
+                ? `Chapter ${result.chapter}`
+                : `Chapter ${result.chapter}, Section ${sectionNum}`;
+
             html += `
                 <div class="bg-gray-50 p-4 rounded-lg relative search-result-item" id="search-result-${index}">
                     <!-- Expand/Collapse Toggle -->
@@ -30855,15 +30936,23 @@ function displayTopSearchResults(exactMatches, partialMatches, keyword, attachme
 
                     <!-- Summary (always visible) -->
                     <div class="ml-12 pr-20">
+                        <!-- Code name without year -->
                         <div class="flex items-center gap-2 mb-2 flex-wrap">
-                            <span class="text-xs bg-[#A8D0E6] text-[#24305E] font-semibold px-2 py-0.5 rounded">${result.code} ${result.year}: Ch.${result.chapter} - ${sectionNum}</span>
+                            <span class="text-xs bg-[#A8D0E6] text-[#24305E] font-semibold px-2 py-0.5 rounded">${result.code}</span>
+                            <span class="text-xs text-gray-500">${chapterSectionDisplay}</span>
                         </div>
-                        <h4 class="font-semibold text-[#24305E] text-sm cursor-pointer" onclick="toggleSearchResult(${index})">${sectionNum}${result.titleEN ? ' ' + highlightedTitleEN : ''}</h4>
+                        <!-- EN Title -->
+                        <h4 class="font-semibold text-[#24305E] text-sm cursor-pointer" onclick="toggleSearchResult(${index})">${result.titleEN ? highlightedTitleEN : chapterSectionDisplay}</h4>
+                        <!-- KR Title -->
+                        ${result.titleKR ? `<p class="text-gray-600 text-sm mt-1">${highlightedTitleKR}</p>` : ''}
+                        <!-- Body preview (2-3 lines collapsed) -->
+                        <div class="mt-2 text-sm text-gray-600 line-clamp-2">
+                            ${result.contentEN ? highlightedContentEN : ''}
+                        </div>
                     </div>
 
-                    <!-- Details (collapsible) -->
+                    <!-- Details (collapsible - full content) -->
                     <div class="result-details hidden ml-12 pr-20 mt-2 border-t border-gray-200 pt-2">
-                        ${result.titleKR ? `<p class="text-gray-600 text-sm leading-relaxed mb-2">${highlightedTitleKR}</p>` : ''}
                         ${result.contentEN ? `<p class="text-gray-700 text-sm leading-relaxed mb-2">${highlightedContentEN}</p>` : ''}
                         ${result.contentKR ? `<p class="text-gray-600 text-sm leading-relaxed">${highlightedContentKR}</p>` : ''}
                     </div>
@@ -31336,9 +31425,14 @@ function displaySearchResults(exactMatches, partialMatches, allFilteredResults, 
         // Check if this is an attachment result
         if (result.type === 'attachment') {
             // Display attachment using library-style figure display
+            // Updated: code name without year, proper chapter/section format
             const imagePath = result.fileName || '';
             const badgeText = result.attachment?.Type === 'T' ? '표' : '그림';
             const uniqueId = `searchResultAttachment${index}`;
+            const chapterSectionDisplay = sectionNum === 'General'
+                ? `Chapter ${result.chapter}`
+                : `Chapter ${result.chapter}, Section ${sectionNum}`;
+
             html += `
                 <div class="border rounded-lg bg-white overflow-hidden search-result-item" data-result='${JSON.stringify(result).replace(/'/g, "\'")}'>
                     <div class="result-collapsible p-4 hover:bg-gray-50 transition-colors" onclick="toggleResultItem('${uniqueId}')">
@@ -31348,13 +31442,15 @@ function displaySearchResults(exactMatches, partialMatches, allFilteredResults, 
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                                 </svg>
                                 <div class="flex-1">
-                                    <!-- Badge and Title -->
+                                    <!-- Badge and Title - code name without year -->
                                     <div class="flex items-center gap-2 mb-1">
-                                        <span class="bg-[#A8D0E6] text-[#24305E] text-xs font-semibold px-2 py-1 rounded">${result.code} ${result.year}</span>
-                                        <span class="text-sm text-gray-500">Chapter ${result.chapter}, Section ${sectionNum}</span>
+                                        <span class="bg-[#A8D0E6] text-[#24305E] text-xs font-semibold px-2 py-1 rounded">${result.code}</span>
+                                        <span class="text-sm text-gray-500">${chapterSectionDisplay}</span>
                                         <span class="text-xs bg-[#F76C6C] text-white px-2 py-1 rounded">${badgeText}</span>
                                     </div>
+                                    <!-- EN Title -->
                                     <h3 class="font-semibold text-[#24305E]">${displayTitleEN}</h3>
+                                    <!-- KR Title -->
                                     ${displayTitleKR ? `<p class="text-gray-600 text-sm mt-1">${displayTitleKR}</p>` : ''}
                                 </div>
                             </div>
@@ -31390,7 +31486,15 @@ function displaySearchResults(exactMatches, partialMatches, allFilteredResults, 
             `;
         } else {
             // Display regular content result
+            // Updated: code name without year, proper chapter/section format, EN+KR titles, body preview
             const uniqueId = `searchResult${index}`;
+            const chapterSectionDisplay = sectionNum === 'General'
+                ? `Chapter ${result.chapter}`
+                : `Chapter ${result.chapter}, Section ${sectionNum}`;
+
+            // Truncate content for preview (first ~100 chars)
+            const contentPreview = (result.contentEN || '').substring(0, 150) + ((result.contentEN || '').length > 150 ? '...' : '');
+
             html += `
                 <div class="border rounded-lg bg-white overflow-hidden search-result-item" data-result='${JSON.stringify(result).replace(/'/g, "\'")}'>
                     <div class="result-collapsible p-4 hover:bg-gray-50 transition-colors" onclick="toggleResultItem('${uniqueId}')"
@@ -31402,12 +31506,17 @@ function displaySearchResults(exactMatches, partialMatches, allFilteredResults, 
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                                 </svg>
                                 <div class="flex-1">
-                                    <!-- Location and Index tags -->
+                                    <!-- Code name without year + chapter/section -->
                                     <div class="flex items-center gap-2 mb-1">
-                                        <span class="bg-[#F76C6C] text-white text-xs font-semibold px-2 py-1 rounded">${result.code} ${result.year}</span>
-                                        <span class="text-sm text-gray-500">Chapter ${result.chapter}, Section ${sectionNum}</span>
+                                        <span class="bg-[#A8D0E6] text-[#24305E] text-xs font-semibold px-2 py-1 rounded">${result.code}</span>
+                                        <span class="text-sm text-gray-500">${chapterSectionDisplay}</span>
                                     </div>
-                                    <h3 class="font-semibold text-[#24305E]">${sectionNum}${result.titleEN ? ' ' + result.titleEN : ''}</h3>
+                                    <!-- EN Title -->
+                                    <h3 class="font-semibold text-[#24305E]">${displayTitleEN || chapterSectionDisplay}</h3>
+                                    <!-- KR Title -->
+                                    ${displayTitleKR ? `<p class="text-gray-600 text-sm mt-1">${displayTitleKR}</p>` : ''}
+                                    <!-- Body preview (2-3 lines) -->
+                                    ${contentPreview ? `<p class="text-gray-500 text-sm mt-2 line-clamp-2">${contentPreview}</p>` : ''}
                                 </div>
                             </div>
                             <!-- Copy button -->
@@ -31418,10 +31527,9 @@ function displaySearchResults(exactMatches, partialMatches, allFilteredResults, 
                             </button>
                         </div>
                     </div>
-                    ${displayTitleKR || displayContentEN || displayContentKR ? `
+                    ${displayContentEN || displayContentKR ? `
                     <div id="${uniqueId}" class="result-content">
                         <div class="px-4 pb-4 text-sm text-gray-600 leading-relaxed space-y-1 border-t pt-3">
-                            ${displayTitleKR ? `<p class="text-gray-600 leading-relaxed">${displayTitleKR}</p>` : ''}
                             ${displayContentEN ? `<p class="text-gray-700 leading-relaxed">${displayContentEN}</p>` : ''}
                             ${displayContentKR ? `<p class="text-gray-600 leading-relaxed">${displayContentKR}</p>` : ''}
                         </div>
@@ -31898,8 +32006,37 @@ document.addEventListener('DOMContentLoaded', function() {
             const versionId = this.dataset.versionId;
             const codeId = this.dataset.codeId;
 
-            // Switch to library code
-            switchToLibraryCode(codeId, versionId);
+            // Get code information for popup
+            const modelCode = appData.ModelCode.find(mc => mc.ModelCodeID === codeId);
+            const version = appData.ModelCodeVersion.find(v => v.ModelCodeVersionID === versionId);
+
+            if (modelCode && version) {
+                const codeName = modelCode.ModelCodeName + ' ' + Math.floor(version.Year);
+                const description = modelCode.DescriptionEN || '';
+
+                // Get discipline info
+                const mcd = appData.ModelCodeDiscipline.find(m => m.ModelCodeID === codeId);
+                let disciplineLabel = '일반';
+                let disciplineColor = '#A8D0E6';
+
+                if (mcd) {
+                    const discipline = appData.Discipline.find(d => d.DisciplineID === mcd.DisciplineID);
+                    if (discipline) {
+                        disciplineLabel = discipline.DisciplineNameKR || discipline.DisciplineNameEN || '일반';
+                        // Use appropriate color based on discipline
+                        if (discipline.DisciplineID === 'DISC002') { // 소방
+                            disciplineColor = '#F76C6C';
+                        } else if (discipline.DisciplineID === 'DISC001') { // 건축
+                            disciplineColor = '#A8D0E6';
+                        }
+                    }
+                }
+
+                openCodePopup(codeId, versionId, codeName, description, disciplineLabel, disciplineColor);
+            } else {
+                // Fallback: directly navigate if data not loaded
+                switchToLibraryCode(codeId, versionId);
+            }
         });
     });
 
