@@ -752,40 +752,69 @@
     }
 
     /* === CODE CONTENT DISPLAY READABILITY === */
+    /* Content wrapper for continuous reading */
+    .content-wrapper {
+      position: relative;
+    }
+
+    /* Language label for content blocks */
+    .content-label {
+      display: inline-block;
+      font-size: 0.625rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.125rem 0.5rem;
+      border-radius: 3px;
+      margin-bottom: 0.375rem;
+    }
+
+    .content-label-en {
+      color: #374785;
+      background: rgba(168, 208, 230, 0.25);
+    }
+
+    .content-label-kr {
+      color: #92400e;
+      background: rgba(248, 233, 161, 0.35);
+    }
+
     /* English content block */
     .content-en {
       font-size: 0.9375rem;
-      line-height: 1.75;
-      letter-spacing: 0.01em;
-      color: #374151;
-      padding: 0.75rem 1rem;
-      background: linear-gradient(to right, rgba(168, 208, 230, 0.08) 0%, rgba(168, 208, 230, 0.02) 100%);
-      border-left: 3px solid #A8D0E6;
-      border-radius: 0 6px 6px 0;
-      margin-bottom: 0.5rem;
+      line-height: 1.85;
+      letter-spacing: 0.015em;
+      color: #1f2937;
+      padding: 0.875rem 1.125rem;
+      background: linear-gradient(to right, rgba(168, 208, 230, 0.12) 0%, rgba(168, 208, 230, 0.03) 100%);
+      border-left: 4px solid #A8D0E6;
+      border-radius: 0 8px 8px 0;
+      margin-bottom: 0.625rem;
+      white-space: pre-line;
     }
 
     /* Korean content block */
     .content-kr {
-      font-size: 0.875rem;
-      line-height: 1.8;
-      letter-spacing: 0.02em;
-      color: #4B5563;
-      padding: 0.625rem 1rem;
-      background: linear-gradient(to right, rgba(248, 233, 161, 0.12) 0%, rgba(248, 233, 161, 0.03) 100%);
-      border-left: 3px solid #F8E9A1;
-      border-radius: 0 6px 6px 0;
-      margin-bottom: 0.75rem;
+      font-size: 0.9rem;
+      line-height: 1.9;
+      letter-spacing: 0.025em;
+      color: #374151;
+      padding: 0.75rem 1.125rem;
+      background: linear-gradient(to right, rgba(248, 233, 161, 0.15) 0%, rgba(248, 233, 161, 0.04) 100%);
+      border-left: 4px solid #F8E9A1;
+      border-radius: 0 8px 8px 0;
+      margin-bottom: 0.875rem;
+      white-space: pre-line;
     }
 
-    /* NOTE block - natural wrapping */
+    /* NOTE block - natural wrapping with enhanced visibility */
     .note-block {
-      display: inline-block;
-      margin-top: 0.75rem;
-      padding: 0.5rem 0.875rem;
-      background: linear-gradient(135deg, rgba(247, 108, 108, 0.08) 0%, rgba(247, 108, 108, 0.04) 100%);
-      border-left: 3px solid #F76C6C;
-      border-radius: 0 6px 6px 0;
+      display: block;
+      margin-top: 0.875rem;
+      padding: 0.625rem 1rem;
+      background: linear-gradient(135deg, rgba(247, 108, 108, 0.1) 0%, rgba(247, 108, 108, 0.04) 100%);
+      border-left: 4px solid #F76C6C;
+      border-radius: 0 8px 8px 0;
       max-width: 100%;
     }
 
@@ -793,50 +822,96 @@
       display: inline-block;
       font-size: 0.6875rem;
       font-weight: 700;
-      letter-spacing: 0.1em;
-      color: #F76C6C;
-      background: rgba(247, 108, 108, 0.12);
-      padding: 0.125rem 0.5rem;
+      letter-spacing: 0.12em;
+      color: #dc2626;
+      background: rgba(247, 108, 108, 0.18);
+      padding: 0.1875rem 0.625rem;
       border-radius: 3px;
-      margin-right: 0.5rem;
+      margin-right: 0.625rem;
       vertical-align: middle;
     }
 
     .note-content {
       display: inline;
       font-size: 0.875rem;
-      line-height: 1.7;
+      line-height: 1.75;
       color: #4B5563;
       vertical-align: middle;
+      white-space: pre-line;
     }
 
-    /* Index tags - enhanced visibility */
+    /* Index tags - enhanced visibility with prominent styling */
     .index-tag {
-      font-size: 0.8125rem;
-      font-weight: 600;
-      letter-spacing: 0.03em;
-      padding: 0.375rem 0.75rem;
-      background: linear-gradient(135deg, #F8E9A1 0%, #F5DC7D 100%);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      padding: 0.3125rem 0.625rem;
+      background: linear-gradient(135deg, #F8E9A1 0%, #f5d96a 100%);
       color: #24305E;
       border-radius: 4px;
-      box-shadow: 0 1px 2px rgba(36, 48, 94, 0.1);
+      box-shadow: 0 1px 3px rgba(36, 48, 94, 0.12);
       cursor: pointer;
       transition: all 0.2s ease;
+      border: 1px solid rgba(245, 217, 106, 0.5);
     }
 
     .index-tag:hover {
-      background: linear-gradient(135deg, #F5DC7D 0%, #E8CF6A 100%);
+      background: linear-gradient(135deg, #f5d96a 0%, #e8c84a 100%);
       transform: translateY(-1px);
-      box-shadow: 0 2px 4px rgba(36, 48, 94, 0.15);
+      box-shadow: 0 3px 6px rgba(36, 48, 94, 0.18);
     }
 
-    /* Section title styling */
+    /* Section title styling - enhanced */
     .section-title {
-      font-size: 1rem;
-      font-weight: 600;
+      font-size: 1.0625rem;
+      font-weight: 700;
       color: #24305E;
-      letter-spacing: 0.01em;
+      letter-spacing: 0.015em;
       line-height: 1.5;
+    }
+
+    /* Section card - seamless for continuous reading */
+    .section-card {
+      background: #fafbfc;
+      border-radius: 8px;
+      padding: 1.25rem;
+      margin-bottom: 1rem;
+      border: 1px solid rgba(168, 208, 230, 0.2);
+      transition: border-color 0.2s ease;
+    }
+
+    .section-card:hover {
+      border-color: rgba(168, 208, 230, 0.4);
+    }
+
+    /* Chapter container - minimal separation for continuous reading */
+    .chapter-container {
+      border-bottom: 1px solid rgba(168, 208, 230, 0.15);
+      padding-bottom: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .chapter-container:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+    }
+
+    /* Chapter header styling */
+    .chapter-header {
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 2px solid #A8D0E6;
+    }
+
+    .chapter-comment {
+      font-size: 0.875rem;
+      line-height: 1.8;
+      color: #4B5563;
+      background: linear-gradient(to right, rgba(55, 71, 133, 0.04) 0%, rgba(55, 71, 133, 0.01) 100%);
+      border-left: 4px solid #374785;
+      padding: 1rem 1.25rem;
+      border-radius: 0 8px 8px 0;
+      white-space: pre-line;
     }
 
     /* === BOOKSHELF STYLES START === */
@@ -3133,6 +3208,9 @@ async function loadAppData() {
       ModelCodeDiscipline: modelCodeDiscipline
     };
 
+    // Map ChapterID to CodeContent based on OrderKey pattern
+    mapChapterIDsToContent();
+
     dataLoaded = true;
     console.log('All data loaded successfully');
     console.log('CodeContent entries:', appData.CodeContent.length);
@@ -4387,6 +4465,98 @@ function goToHome() {
     if (homeSection) homeSection.classList.add('active');
 }
 
+// === ChapterID Mapping Function ===
+// Maps ChapterID to CodeContent based on OrderKey pattern matching
+function mapChapterIDsToContent() {
+    if (!appData.CodeContent || !appData.CodeChapter) return;
+
+    // Build chapter lookup: For each ModelCodeVersion, map Chapter number to ChapterID
+    // Also track Section number ranges for more accurate mapping
+    const chapterLookup = {};
+
+    appData.CodeChapter.forEach(ch => {
+        const versionId = ch.ModelCodeVersionID;
+        if (!chapterLookup[versionId]) {
+            chapterLookup[versionId] = {};
+        }
+        // Handle both numeric and string chapter numbers (e.g., "Annex A")
+        const chapterKey = String(ch.Chapter).toLowerCase();
+        chapterLookup[versionId][chapterKey] = ch.ChapterID;
+    });
+
+    // Determine ModelCodeVersionID based on Section number pattern
+    // IBC style: Section numbers are in format Chapter*100 + x (e.g., Chapter 3 has Sections 301-312)
+    // NFPA style: Section numbers are direct (e.g., Chapter 4 has Sections 4.x)
+    function determineVersionAndChapter(orderKey) {
+        if (!orderKey) return { versionId: null, chapterNum: null };
+
+        const parts = orderKey.split('.');
+        let chapterPart = parts[0];
+        const sectionPart = parts[1] ? parts[1].replace(/[\[\]A-Za-z]/g, '') : '0';
+
+        // Handle Annex chapters
+        if (chapterPart.toLowerCase().startsWith('annex')) {
+            chapterPart = chapterPart.toLowerCase();
+        } else {
+            chapterPart = parseInt(chapterPart) || 0;
+        }
+
+        const sectionNum = parseInt(sectionPart) || 0;
+
+        // Determine code type based on Section number pattern
+        // IBC: Section numbers are typically Chapter*100 + x (e.g., Section 306 for Chapter 3)
+        // NFPA: Section numbers match chapter or are small numbers
+
+        if (typeof chapterPart === 'number' && chapterPart > 0) {
+            // Check if section number follows IBC pattern (Chapter * 100 + x)
+            const expectedIBCSectionBase = chapterPart * 100;
+            const isIBCPattern = sectionNum >= expectedIBCSectionBase && sectionNum < expectedIBCSectionBase + 100;
+
+            if (isIBCPattern) {
+                // IBC 2024 (MCV002)
+                return { versionId: 'MCV002', chapterNum: chapterPart };
+            } else {
+                // NFPA style - need to find matching version
+                // Check which versions have this chapter number
+                for (const versionId of Object.keys(chapterLookup)) {
+                    if (versionId === 'MCV002') continue; // Skip IBC
+                    if (chapterLookup[versionId][String(chapterPart).toLowerCase()]) {
+                        return { versionId, chapterNum: chapterPart };
+                    }
+                }
+                // Default to IBC if no NFPA match found
+                return { versionId: 'MCV002', chapterNum: chapterPart };
+            }
+        } else if (typeof chapterPart === 'string') {
+            // Annex - find in NFPA versions first
+            for (const versionId of Object.keys(chapterLookup)) {
+                if (chapterLookup[versionId][chapterPart]) {
+                    return { versionId, chapterNum: chapterPart };
+                }
+            }
+        }
+
+        return { versionId: null, chapterNum: null };
+    }
+
+    // Map each CodeContent to its ChapterID
+    let mappedCount = 0;
+    appData.CodeContent.forEach(content => {
+        const { versionId, chapterNum } = determineVersionAndChapter(content.OrderKey);
+
+        if (versionId && chapterNum !== null && chapterLookup[versionId]) {
+            const chapterKey = String(chapterNum).toLowerCase();
+            const chapterId = chapterLookup[versionId][chapterKey];
+            if (chapterId) {
+                content.ChapterID = chapterId;
+                mappedCount++;
+            }
+        }
+    });
+
+    console.log(`Mapped ${mappedCount} CodeContent entries to ChapterIDs`);
+}
+
 // === Schema-based Data Access Functions ===
 function getModelCodeVersions(modelCodeId) {
     return appData.ModelCodeVersion.filter(v => v.ModelCodeID === modelCodeId);
@@ -4665,13 +4835,13 @@ function loadChapterContent(chapterId, versionId) {
         if (!contents || contents.length === 0) {
             // 빈 챕터의 경우 메시지 없이 챕터 제목과 코멘트만 표시
             contentArea.innerHTML = `
-                <div class="bg-white rounded-lg shadow-sm p-8">
-                    <h2 class="text-2xl font-bold text-[#24305E] mb-2">Chapter ${chapter.Chapter}: ${chapter.TitleEN || ''}</h2>
-                    ${chapter.TitleKR ? `<p class="text-sm text-gray-600">${chapter.TitleKR}</p>` : ''}
+                <div class="bg-white rounded-lg shadow-sm p-6 md:p-8">
+                    <div class="chapter-header">
+                        <h2 class="text-2xl font-bold text-[#24305E] mb-2">Chapter ${chapter.Chapter}: ${chapter.TitleEN || ''}</h2>
+                        ${chapter.TitleKR ? `<p class="text-base text-gray-600 mt-1">${chapter.TitleKR}</p>` : ''}
+                    </div>
                     ${chapter.ChapterComment ? `
-                    <div class="mt-4 p-4 bg-blue-50 border-l-4 border-blue-400 rounded">
-                        <p class="text-sm text-gray-700 whitespace-pre-line">${chapter.ChapterComment}</p>
-                    </div>` : ''}
+                    <div class="chapter-comment">${chapter.ChapterComment}</div>` : ''}
                 </div>
             `;
             return;
@@ -4685,17 +4855,15 @@ function loadChapterContent(chapterId, versionId) {
             sections[sectionNum].push(content);
         });
 
-        // HTML 생성
+        // HTML 생성 - 연속 스크롤 경험을 위한 단일 컨테이너
         let html = `
-            <div class="bg-white rounded-lg shadow-sm p-8 mb-6">
-                <div class="mb-6">
+            <div class="bg-white rounded-lg shadow-sm p-6 md:p-8">
+                <div class="chapter-header">
                     <h2 class="text-2xl font-bold text-[#24305E] mb-2">Chapter ${chapter.Chapter}: ${chapter.TitleEN || ''}</h2>
-                    ${chapter.TitleKR ? `<p class="text-sm text-gray-600">${chapter.TitleKR}</p>` : ''}
+                    ${chapter.TitleKR ? `<p class="text-base text-gray-600 mt-1">${chapter.TitleKR}</p>` : ''}
                 </div>
                 ${chapter.ChapterComment ? `
-                <div class="mb-6 p-4 bg-blue-50 border-l-4 border-blue-400 rounded">
-                    <p class="text-sm text-gray-700 whitespace-pre-line">${chapter.ChapterComment}</p>
-                </div>` : ''}
+                <div class="chapter-comment mb-6">${chapter.ChapterComment}</div>` : ''}
         `;
 
         // 각 섹션 출력
@@ -4711,10 +4879,10 @@ function loadChapterContent(chapterId, versionId) {
             const sectionTitle = sectionNum === 'General' ? 'General' : 'Section ' + sectionNum;
 
             html += `
-                <div class="content-section mb-6">
-                    <h3 class="text-xl font-semibold text-[#374785] mb-4">${sectionTitle}${firstContent.TitleEN ? ' - ' + firstContent.TitleEN : ''}</h3>
-                    ${firstContent.TitleKR ? `<p class="text-base text-gray-600 mb-4">${firstContent.TitleKR}</p>` : ''}
-                    <div class="space-y-4">
+                <div class="content-section mb-8">
+                    <h3 class="text-xl font-semibold text-[#374785] mb-3 pb-2 border-b border-gray-200">${sectionTitle}${firstContent.TitleEN ? ' - ' + firstContent.TitleEN : ''}</h3>
+                    ${firstContent.TitleKR ? `<p class="text-sm text-gray-600 mb-4 italic">${firstContent.TitleKR}</p>` : ''}
+                    <div class="space-y-5">
             `;
 
             // 각 subsection 출력
@@ -4753,11 +4921,11 @@ function loadChapterContent(chapterId, versionId) {
                 }
                 const uniqueTags = Array.from(allTags);
 
-                // e1dccdf 스타일 적용
+                // 섹션 카드 스타일 적용
                 html += `
-                    <div class="bg-gray-50 p-4 rounded-lg relative" id="${sectionId}" data-section="${sectionNum}">
+                    <div class="section-card relative" id="${sectionId}" data-section="${sectionNum}">
                         <!-- 복사 버튼 (우상단) -->
-                        <div class="absolute top-3 right-3 flex items-center gap-1">
+                        <div class="absolute top-3 right-3 flex items-center gap-1 opacity-40 hover:opacity-100 transition-opacity">
                             <button class="p-1.5 hover:bg-gray-200 rounded transition-colors" title="Copy link" onclick="copyLink('${sectionNumber}')">
                                 <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path>
@@ -4771,19 +4939,21 @@ function loadChapterContent(chapterId, versionId) {
                         </div>
 
                         <!-- 타이틀 -->
-                        <div class="flex items-center gap-2 mb-3">
+                        <div class="flex items-start gap-2 mb-3 pr-16">
                             <h4 class="section-title">${sectionNumber}${content.TitleEN ? ' ' + content.TitleEN : ''}</h4>
                         </div>
 
                         <!-- 키워드 태그 (Index/SubIndex) - 상단 배치 -->
                         ${uniqueTags.length > 0 ? `
-                        <div class="flex items-center gap-2 flex-wrap mb-3">
+                        <div class="flex items-center gap-2 flex-wrap mb-4">
                             ${uniqueTags.map(tag => `<span class="index-tag" onclick="showTagSectionsPopup('${tag.replace(/'/g, "\\'")}', '${versionId}')">${tag}</span>`).join('')}
                         </div>` : ''}
 
                         <!-- 콘텐츠 -->
-                        ${content.ContentEN ? `<div class="content-en">${content.ContentEN}</div>` : ''}
-                        ${content.ContentKR ? `<div class="content-kr">${content.ContentKR}</div>` : ''}
+                        <div class="content-wrapper">
+                            ${content.ContentEN ? `<div class="content-en">${content.ContentEN}</div>` : ''}
+                            ${content.ContentKR ? `<div class="content-kr">${content.ContentKR}</div>` : ''}
+                        </div>
 
                         <!-- NOTE -->
                         ${content.Comment ? `
@@ -4856,21 +5026,21 @@ function loadAllChaptersContent(versionId, codeId) {
         const codeYear = version ? Math.floor(version.Year) : '';
         const codeLabel = `${codeName} ${codeYear}`;
 
-        let allHtml = '';
+        // 연속 스크롤을 위한 단일 컨테이너 시작
+        let allHtml = '<div class="bg-white rounded-lg shadow-sm p-6 md:p-8">';
 
-        chapters.forEach((chapter) => {
+        chapters.forEach((chapter, chapterIndex) => {
             const contents = getContents(chapter.ChapterID);
+            const isLastChapter = chapterIndex === chapters.length - 1;
 
             allHtml += `
-                <div id="chapter-${chapter.ChapterID}" class="bg-white rounded-lg shadow-sm p-8 mb-6" data-chapter-id="${chapter.ChapterID}">
-                    <div class="mb-6">
+                <div id="chapter-${chapter.ChapterID}" class="chapter-container ${isLastChapter ? '' : ''}" data-chapter-id="${chapter.ChapterID}">
+                    <div class="chapter-header">
                         <h2 class="text-2xl font-bold text-[#24305E] mb-2">Chapter ${chapter.Chapter}: ${chapter.TitleEN || ''}</h2>
-                        ${chapter.TitleKR ? `<p class="text-sm text-gray-600">${chapter.TitleKR}</p>` : ''}
+                        ${chapter.TitleKR ? `<p class="text-base text-gray-600 mt-1">${chapter.TitleKR}</p>` : ''}
                     </div>
                     ${chapter.ChapterComment ? `
-                    <div class="mb-6 p-4 bg-blue-50 border-l-4 border-blue-400 rounded">
-                        <p class="text-sm text-gray-700 whitespace-pre-line">${chapter.ChapterComment}</p>
-                    </div>` : ''}
+                    <div class="chapter-comment mb-6">${chapter.ChapterComment}</div>` : ''}
             `;
 
             if (!contents || contents.length === 0) {
@@ -4893,10 +5063,10 @@ function loadAllChaptersContent(versionId, codeId) {
                     const sectionTitle = sectionNum === 'General' ? 'General' : 'Section ' + sectionNum;
 
                     allHtml += `
-                        <div class="content-section mb-6">
-                            <h3 class="text-xl font-semibold text-[#374785] mb-4">${sectionTitle}${firstContent.TitleEN ? ' - ' + firstContent.TitleEN : ''}</h3>
-                            ${firstContent.TitleKR ? `<p class="text-base text-gray-600 mb-4">${firstContent.TitleKR}</p>` : ''}
-                            <div class="space-y-4">
+                        <div class="content-section mb-8">
+                            <h3 class="text-xl font-semibold text-[#374785] mb-3 pb-2 border-b border-gray-200">${sectionTitle}${firstContent.TitleEN ? ' - ' + firstContent.TitleEN : ''}</h3>
+                            ${firstContent.TitleKR ? `<p class="text-sm text-gray-600 mb-4 italic">${firstContent.TitleKR}</p>` : ''}
+                            <div class="space-y-5">
                     `;
 
                     sectionContents.forEach(content => {
@@ -4926,8 +5096,8 @@ function loadAllChaptersContent(versionId, codeId) {
                         const uniqueTags = Array.from(allTags);
 
                         allHtml += `
-                            <div class="bg-gray-50 p-4 rounded-lg relative" id="${sectionId}" data-section="${sectionNum}">
-                                <div class="absolute top-3 right-3 flex items-center gap-1">
+                            <div class="section-card relative" id="${sectionId}" data-section="${sectionNum}">
+                                <div class="absolute top-3 right-3 flex items-center gap-1 opacity-40 hover:opacity-100 transition-opacity">
                                     <button class="p-1.5 hover:bg-gray-200 rounded transition-colors" title="Copy link" onclick="copyLink('${sectionNumber}')">
                                         <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path>
@@ -4939,15 +5109,17 @@ function loadAllChaptersContent(versionId, codeId) {
                                         </svg>
                                     </button>
                                 </div>
-                                <div class="flex items-center gap-2 mb-3">
+                                <div class="flex items-start gap-2 mb-3 pr-16">
                                     <h4 class="section-title">${sectionNumber}${content.TitleEN ? ' ' + content.TitleEN : ''}</h4>
                                 </div>
                                 ${uniqueTags.length > 0 ? `
-                                <div class="flex items-center gap-2 flex-wrap mb-3">
+                                <div class="flex items-center gap-2 flex-wrap mb-4">
                                     ${uniqueTags.map(tag => `<span class="index-tag" onclick="showTagSectionsPopup('${tag.replace(/'/g, "\\'")}', '${versionId}')">${tag}</span>`).join('')}
                                 </div>` : ''}
-                                ${content.ContentEN ? `<div class="content-en">${content.ContentEN}</div>` : ''}
-                                ${content.ContentKR ? `<div class="content-kr">${content.ContentKR}</div>` : ''}
+                                <div class="content-wrapper">
+                                    ${content.ContentEN ? `<div class="content-en">${content.ContentEN}</div>` : ''}
+                                    ${content.ContentKR ? `<div class="content-kr">${content.ContentKR}</div>` : ''}
+                                </div>
                                 ${content.Comment ? `
                                 <div class="note-block">
                                     <span class="note-label">NOTE</span>
@@ -4982,6 +5154,9 @@ function loadAllChaptersContent(versionId, codeId) {
 
             allHtml += '</div>';
         });
+
+        // 단일 컨테이너 닫기
+        allHtml += '</div>';
 
         contentArea.innerHTML = allHtml;
 
