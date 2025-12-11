@@ -636,6 +636,121 @@
       line-height: 1.65;
     }
 
+    /* === LIBRARY SUBMENU TYPOGRAPHY === */
+    .submenu-item {
+      font-size: 15px;
+      letter-spacing: 0.02em;
+      line-height: 1.5;
+    }
+
+    /* === CODE CONTENT DISPLAY TYPOGRAPHY === */
+    /* Code title header area */
+    #librarySection header h1#codeTitle {
+      font-size: 1.75rem;
+      letter-spacing: -0.01em;
+      line-height: 1.3;
+    }
+
+    #librarySection header p#codeSubtitle {
+      font-size: 0.9375rem;
+      letter-spacing: 0.02em;
+      line-height: 1.4;
+      margin-top: 0.25rem;
+    }
+
+    /* Korean subtitle styling */
+    #librarySection header .code-title-kr {
+      font-size: 1rem;
+      color: #374785;
+      font-weight: 500;
+      letter-spacing: 0.01em;
+      margin-top: 0.125rem;
+    }
+
+    /* Chapter container - continuous book flow (no card background) */
+    #contentArea > div[data-chapter-id] {
+      background: transparent;
+      box-shadow: none;
+      border-radius: 0;
+      padding: 2rem 0;
+      margin-bottom: 0;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    #contentArea > div[data-chapter-id]:last-child {
+      border-bottom: none;
+    }
+
+    /* Chapter title */
+    #contentArea h2 {
+      font-size: 1.5rem;
+      letter-spacing: -0.01em;
+      line-height: 1.35;
+    }
+
+    /* Section title */
+    #contentArea .content-section h3 {
+      font-size: 1.25rem;
+      letter-spacing: 0.01em;
+      line-height: 1.4;
+    }
+
+    /* Section subtitle (Korean) */
+    #contentArea .content-section > p.text-gray-600 {
+      font-size: 1rem;
+      letter-spacing: 0.02em;
+      line-height: 1.55;
+    }
+
+    /* Content section number and title */
+    #contentArea .bg-gray-50 h4 {
+      font-size: 1.0625rem;
+      letter-spacing: 0.01em;
+      line-height: 1.45;
+    }
+
+    /* English content body */
+    #contentArea .bg-gray-50 > p.text-gray-700 {
+      font-size: 1rem;
+      letter-spacing: 0.015em;
+      line-height: 1.75;
+      color: #374151;
+    }
+
+    /* Korean content body */
+    #contentArea .bg-gray-50 > p.text-gray-600 {
+      font-size: 0.9375rem;
+      letter-spacing: 0.02em;
+      line-height: 1.7;
+      color: #4b5563;
+    }
+
+    /* Content section card styling - lighter background */
+    #contentArea .bg-gray-50 {
+      background-color: #fafafa;
+      border: 1px solid #f0f0f0;
+    }
+
+    /* Note/Comment area */
+    #contentArea .bg-gray-50 .text-sm.text-gray-700 {
+      font-size: 0.9375rem;
+      line-height: 1.65;
+    }
+
+    /* Tags */
+    #contentArea .text-xs.bg-\[\#F8E9A1\] {
+      font-size: 0.75rem;
+      letter-spacing: 0.03em;
+      padding: 0.25rem 0.625rem;
+    }
+
+    /* Chapter comment box */
+    #contentArea .bg-blue-50 p {
+      font-size: 0.9375rem;
+      line-height: 1.65;
+      letter-spacing: 0.01em;
+    }
+
     /* === BOOKSHELF STYLES START === */
     /* Book popup overlay */
     .book-popup {
@@ -1941,11 +2056,12 @@
 <!-- Library Section -->
 <!-- Removed PDF download button, made notes read-only, added hierarchical keywords -->
 <div class="section-content" id="librarySection">
-<header class="bg-white border-b border-gray-200 shadow-sm sticky top-0 z-10 h-20">
-<div class="flex items-center justify-between px-6 py-2">
+<header class="bg-white border-b border-gray-200 shadow-sm sticky top-0 z-10 h-auto min-h-[80px]">
+<div class="flex items-center justify-between px-6 py-3">
 <div>
-<h1 class="font-bold text-[#24305E] text-2xl" id="codeTitle">IBC 2024</h1>
-<p class="text-gray-600 text-sm" id="codeSubtitle">International Building Code</p>
+<h1 class="font-bold text-[#24305E]" id="codeTitle">IBC 2024</h1>
+<p class="text-gray-600" id="codeSubtitle">International Building Code</p>
+<p class="code-title-kr hidden" id="codeTitleKR"></p>
 </div>
 <!-- REMOVED -->
 <!-- <select id="versionSelect" class="px-4 py-2 border-2 border-gray-300 rounded-lg text-sm font-medium text-gray-700 focus:outline-none focus:border-[#A8D0E6]">
@@ -4295,7 +4411,16 @@ function loadChapters(versionId, codeId) {
             const codeName = modelCode.ModelCodeName.split(':')[0].trim();
             const year = version && version.Year ? ' ' + Math.floor(version.Year) : '';
             document.getElementById('codeTitle').textContent = codeName + year;
-            document.getElementById('codeSubtitle').textContent = modelCode.Description || '';
+            document.getElementById('codeSubtitle').textContent = modelCode.DescriptionEN || modelCode.Description || '';
+
+            // 한국어 제목 표시
+            const codeTitleKR = document.getElementById('codeTitleKR');
+            if (codeTitleKR && modelCode.DescriptionKR) {
+                codeTitleKR.textContent = modelCode.DescriptionKR;
+                codeTitleKR.classList.remove('hidden');
+            } else if (codeTitleKR) {
+                codeTitleKR.classList.add('hidden');
+            }
         }
 
         // 모든 챕터를 연속 스크롤로 로드
