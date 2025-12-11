@@ -622,10 +622,47 @@
 
     .book-page {
       flex: 1;
-      padding: 32px 40px;
+      padding: 40px 48px 60px 48px;
       overflow-y: auto;
-      background: linear-gradient(to bottom, #ffffff 0%, #fefefe 100%);
+      background: linear-gradient(to bottom, #fffef8 0%, #faf9f3 100%);
       position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Published book page styling */
+    .book-page::before {
+      content: '';
+      position: absolute;
+      top: 24px;
+      left: 32px;
+      right: 32px;
+      height: 1px;
+      background: linear-gradient(to right, transparent 0%, rgba(36, 48, 94, 0.08) 20%, rgba(36, 48, 94, 0.08) 80%, transparent 100%);
+    }
+
+    .book-page-content {
+      flex: 1;
+      overflow-y: auto;
+    }
+
+    .book-page-footer {
+      position: absolute;
+      bottom: 20px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      font-family: 'Georgia', serif;
+      font-size: 11px;
+      color: #666;
+      letter-spacing: 1px;
+    }
+
+    .book-page-footer::before,
+    .book-page-footer::after {
+      content: '—';
+      margin: 0 8px;
+      color: #bbb;
     }
 
     .book-page::-webkit-scrollbar {
@@ -746,7 +783,7 @@
     }
 
     .book-cover-top {
-      padding: 10px 10px 6px 14px;
+      padding: 22px 10px 6px 14px;
       flex: 1;
       display: flex;
       flex-direction: column;
@@ -1081,7 +1118,7 @@
   <span class="discipline-tag">소방기계</span>
   <div class="book-cover-top">
     <h3 class="text-lg font-black text-white leading-tight mt-2">NFPA 13</h3>
-    <p class="text-[10px] text-white/90 mt-1.5 leading-snug font-medium">스프링클러 설비 설치 기준</p>
+    <p class="text-[10px] text-white/90 mt-1.5 leading-snug font-medium">스프링클러 설비 설치기준</p>
     <p class="text-[9px] text-white/70 mt-0.5 leading-snug">Sprinkler Systems</p>
   </div>
   <div class="book-cover-bottom">
@@ -1107,7 +1144,7 @@
   <span class="discipline-tag">소방기계</span>
   <div class="book-cover-top">
     <h3 class="text-lg font-black text-white leading-tight mt-2">NFPA 20</h3>
-    <p class="text-[10px] text-white/90 mt-1.5 leading-snug font-medium">소방용 고정펌프 설치 기준</p>
+    <p class="text-[10px] text-white/90 mt-1.5 leading-snug font-medium">소방용 고정펌프 설치기준</p>
     <p class="text-[9px] text-white/70 mt-0.5 leading-snug">Fire Pumps</p>
   </div>
   <div class="book-cover-bottom">
@@ -1146,7 +1183,7 @@
   <span class="discipline-tag">소방기계</span>
   <div class="book-cover-top">
     <h3 class="text-lg font-black text-white leading-tight mt-2">NFPA 318</h3>
-    <p class="text-[10px] text-white/90 mt-1.5 leading-snug font-medium">반도체 제조시설 방호 기준</p>
+    <p class="text-[10px] text-white/90 mt-1.5 leading-snug font-medium">반도체 제조시설 방호기준</p>
     <p class="text-[9px] text-white/70 mt-0.5 leading-snug">Semiconductor Facilities</p>
   </div>
   <div class="book-cover-bottom">
@@ -1159,7 +1196,7 @@
   <span class="discipline-tag">소방기계</span>
   <div class="book-cover-top">
     <h3 class="text-lg font-black text-[#24305E] leading-tight mt-2">NFPA 214</h3>
-    <p class="text-[10px] text-[#24305E]/90 mt-1.5 leading-snug font-medium">수냉식 냉각탑 기준</p>
+    <p class="text-[10px] text-[#24305E]/90 mt-1.5 leading-snug font-medium">수냉식 냉각탑기준</p>
     <p class="text-[9px] text-[#24305E]/70 mt-0.5 leading-snug">Water-Cooling Towers</p>
   </div>
   <div class="book-cover-bottom">
@@ -1185,7 +1222,7 @@
   <span class="discipline-tag">소방기계</span>
   <div class="book-cover-top">
     <h3 class="text-lg font-black text-[#24305E] leading-tight mt-2">NFPA 24</h3>
-    <p class="text-[10px] text-[#24305E]/90 mt-1.5 leading-snug font-medium">전용 소방배관 설치 기준</p>
+    <p class="text-[10px] text-[#24305E]/90 mt-1.5 leading-snug font-medium">전용 소방배관 설치기준</p>
     <p class="text-[9px] text-[#24305E]/70 mt-0.5 leading-snug">Private Fire Service Mains</p>
   </div>
   <div class="book-cover-bottom">
@@ -1198,7 +1235,7 @@
   <span class="discipline-tag">소방기계</span>
   <div class="book-cover-top">
     <h3 class="text-lg font-black text-white leading-tight mt-2">NFPA 12</h3>
-    <p class="text-[10px] text-white/90 mt-1.5 leading-snug font-medium">이산화탄소 소화설비 기준</p>
+    <p class="text-[10px] text-white/90 mt-1.5 leading-snug font-medium">이산화탄소 소화설비기준</p>
     <p class="text-[9px] text-white/70 mt-0.5 leading-snug">CO2 Extinguishing Systems</p>
   </div>
   <div class="book-cover-bottom">
@@ -1211,7 +1248,7 @@
   <span class="discipline-tag">소방기계</span>
   <div class="book-cover-top">
     <h3 class="text-lg font-black text-white leading-tight mt-2">NFPA 15</h3>
-    <p class="text-[10px] text-white/90 mt-1.5 leading-snug font-medium">소방용 물분무 고정설비 기준</p>
+    <p class="text-[10px] text-white/90 mt-1.5 leading-snug font-medium">소방용 물분무 고정설비기준</p>
     <p class="text-[9px] text-white/70 mt-0.5 leading-snug">Water Spray Systems</p>
   </div>
   <div class="book-cover-bottom">
@@ -1237,7 +1274,7 @@
   <span class="discipline-tag">소방기계</span>
   <div class="book-cover-top">
     <h3 class="text-lg font-black text-white leading-tight mt-2">NFPA 92</h3>
-    <p class="text-[10px] text-white/90 mt-1.5 leading-snug font-medium">제연설비 기준</p>
+    <p class="text-[10px] text-white/90 mt-1.5 leading-snug font-medium">제연설비기준</p>
     <p class="text-[9px] text-white/70 mt-0.5 leading-snug">Smoke Control Systems</p>
   </div>
   <div class="book-cover-bottom">
@@ -1326,41 +1363,53 @@
     <div class="book-spine"></div>
     <!-- 왼쪽 페이지: 코드 기본 정보 -->
     <div class="book-page book-page-left" id="bookPageLeft">
-      <!-- 상단 바: 바로가기 -->
-      <div class="flex items-center justify-between mb-4">
-        <button class="px-3 py-1 bg-[#F76C6C] text-white text-xs font-semibold rounded hover:bg-[#e55a5a] transition-colors" onclick="openCodeContent()">
-          바로가기
-        </button>
-        <span class="text-xs text-gray-400" id="pageIndicator">1 / 2</span>
+      <div class="book-page-content">
+        <!-- 상단 바: 바로가기 -->
+        <div class="flex items-center justify-between mb-6">
+          <button class="px-4 py-1.5 bg-[#F76C6C] text-white text-xs font-semibold rounded-sm hover:bg-[#e55a5a] transition-colors shadow-sm" onclick="openCodeContent()">
+            바로가기
+          </button>
+          <span class="text-[10px] text-gray-400 uppercase tracking-widest font-medium" id="pageIndicator">Page 1 of 2</span>
+        </div>
+        <!-- 코드 기본 정보 - 출판물 스타일 -->
+        <div class="mb-6 pb-5 border-b border-gray-200">
+          <p class="text-[10px] font-semibold text-[#F76C6C] uppercase tracking-[0.2em] mb-2" id="bookOrg">NFPA</p>
+          <h2 class="text-3xl font-black text-[#24305E] tracking-tight leading-none" id="bookTitle">NFPA 13</h2>
+          <div class="mt-4 space-y-1">
+            <p class="text-base text-[#24305E] font-semibold leading-relaxed" id="bookSubtitleKR">스프링클러 설비 설치기준</p>
+            <p class="text-sm text-[#374785] italic" id="bookSubtitle">Standard for the Installation of Sprinkler Systems</p>
+          </div>
+          <span class="inline-block text-[10px] bg-[#24305E] text-white px-3 py-1 rounded-sm font-semibold mt-4 uppercase tracking-wider" id="bookDiscipline">소방기계</span>
+        </div>
+        <!-- 코드 설명 -->
+        <div class="space-y-4 text-sm leading-relaxed text-gray-700" id="bookDescriptionLeft">
+          <!-- 코드 설명이 여기에 동적으로 로드됨 -->
+        </div>
       </div>
-      <!-- 코드 기본 정보 -->
-      <div class="mb-4">
-        <span class="text-[10px] font-semibold text-[#F76C6C] uppercase tracking-wider" id="bookOrg">NFPA</span>
-        <h2 class="text-2xl font-black text-[#24305E] mt-1" id="bookTitle">NFPA 13</h2>
-        <p class="text-sm text-gray-600 mt-2 leading-relaxed font-medium" id="bookSubtitleKR">스프링클러 설비 설치 기준</p>
-        <p class="text-xs text-[#374785] mt-1" id="bookSubtitle">Standard for the Installation of Sprinkler Systems</p>
-        <span class="inline-block text-[10px] bg-[#A8D0E6] text-[#24305E] px-2 py-0.5 rounded font-medium mt-3" id="bookDiscipline">소방기계</span>
-      </div>
-      <div class="space-y-3 text-sm" id="bookDescriptionLeft">
-        <!-- 코드 설명이 여기에 동적으로 로드됨 -->
-      </div>
+      <div class="book-page-footer" id="leftPageNum">1</div>
     </div>
     <!-- 오른쪽 페이지: 코드 분석 -->
     <div class="book-page book-page-right" id="bookPageRight">
-      <!-- 상단 바: 덮기 버튼 -->
-      <div class="flex items-center justify-end mb-4">
-        <button class="px-3 py-1 bg-gray-200 text-gray-700 text-xs font-semibold rounded hover:bg-gray-300 transition-colors" onclick="closeBookPopup()">
-          덮기
-        </button>
+      <div class="book-page-content">
+        <!-- 상단 바: 덮기 버튼 -->
+        <div class="flex items-center justify-end mb-6">
+          <button class="px-4 py-1.5 bg-gray-100 text-gray-600 text-xs font-semibold rounded-sm hover:bg-gray-200 transition-colors border border-gray-200" onclick="closeBookPopup()">
+            덮기
+          </button>
+        </div>
+        <!-- 코드 분석 헤더 -->
+        <div class="mb-5 pb-3 border-b border-gray-200">
+          <h3 class="text-lg font-bold text-[#24305E] tracking-tight">
+            코드 분석
+          </h3>
+          <p class="text-xs text-gray-500 mt-1 italic">Technical Analysis & Key Points</p>
+        </div>
+        <!-- 코드 분석 내용 -->
+        <div class="space-y-4 text-sm leading-relaxed text-gray-700" id="bookDescriptionRight">
+          <!-- 코드 분석 내용이 여기에 동적으로 로드됨 -->
+        </div>
       </div>
-      <div class="mb-3">
-        <h3 class="text-base font-bold text-[#24305E] flex items-center gap-1.5">
-          코드 분석
-        </h3>
-      </div>
-      <div class="space-y-3 text-sm" id="bookDescriptionRight">
-        <!-- 코드 분석 내용이 여기에 동적으로 로드됨 -->
-      </div>
+      <div class="book-page-footer" id="rightPageNum">2</div>
     </div>
   </div>
   <!-- 오른쪽 페이지 넘김 버튼 (책 외부 오른쪽 가장자리) -->
@@ -2461,7 +2510,7 @@ const codeDescriptions = {
   'NFPA13': {
     title: 'NFPA 13',
     subtitle: 'Standard for the Installation of Sprinkler Systems',
-    subtitleKR: '스프링클러 설비 설치 기준',
+    subtitleKR: '스프링클러 설비 설치기준',
     org: 'NFPA',
     discipline: '소방기계',
     codeId: 'MC007',
@@ -2513,7 +2562,7 @@ const codeDescriptions = {
   'NFPA14': {
     title: 'NFPA 14',
     subtitle: 'Standard for the Installation of Standpipe and Hose Systems',
-    subtitleKR: '연결송수관 및 호스시스템 설치 기준',
+    subtitleKR: '연결송수관 및 호스시스템 설치기준',
     org: 'NFPA',
     discipline: '소방기계',
     codeId: 'MC008',
@@ -2547,7 +2596,7 @@ const codeDescriptions = {
   'NFPA20': {
     title: 'NFPA 20',
     subtitle: 'Standard for the Installation of Stationary Pumps for Fire Protection',
-    subtitleKR: '소방용 고정펌프 설치 기준',
+    subtitleKR: '소방용 고정펌프 설치기준',
     org: 'NFPA',
     discipline: '소방기계',
     codeId: 'MC009',
@@ -2652,7 +2701,7 @@ const codeDescriptions = {
   'NFPA214': {
     title: 'NFPA 214',
     subtitle: 'Standard on Water-Cooling Towers',
-    subtitleKR: '수냉식 냉각탑 기준',
+    subtitleKR: '수냉식 냉각탑기준',
     org: 'NFPA',
     discipline: '소방기계',
     codeId: 'MC011',
@@ -2686,7 +2735,7 @@ const codeDescriptions = {
   'NFPA96': {
     title: 'NFPA 96',
     subtitle: 'Standard for Ventilation Control and Fire Protection of Commercial Cooking Operations',
-    subtitleKR: '상업용 주방의 환기 제어 및 화재방호 기준',
+    subtitleKR: '상업용 주방의 환기 제어 및 화재방호기준',
     org: 'NFPA',
     discipline: '소방기계',
     codeId: 'MC012',
@@ -2720,7 +2769,7 @@ const codeDescriptions = {
   'NFPA318': {
     title: 'NFPA 318',
     subtitle: 'Standard for the Protection of Semiconductor Fabrication Facilities',
-    subtitleKR: '반도체 제조시설 방호 기준',
+    subtitleKR: '반도체 제조시설 방호기준',
     org: 'NFPA',
     discipline: '소방기계',
     codeId: 'MC013',
@@ -2772,7 +2821,7 @@ const codeDescriptions = {
   'NFPA24': {
     title: 'NFPA 24',
     subtitle: 'Standard for the Installation of Private Fire Service Mains and Their Appurtenances',
-    subtitleKR: '전용 소방배관 및 부속설비 설치 기준',
+    subtitleKR: '전용 소방배관 및 부속설비 설치기준',
     org: 'NFPA',
     discipline: '소방기계',
     codeId: 'MC014',
@@ -2781,7 +2830,7 @@ const codeDescriptions = {
       {
         left: `
           <h3 class="text-lg font-semibold text-[#24305E] mb-3">개요</h3>
-          <p class="text-sm text-gray-700 leading-relaxed mb-4">사설 소화용 급수배관, 옥외소화전, 제어밸브 등의 설치 기준을 다룹니다. 대규모 산업시설이나 캠퍼스형 부지에서 필수적입니다.</p>
+          <p class="text-sm text-gray-700 leading-relaxed mb-4">사설 소화용 급수배관, 옥외소화전, 제어밸브 등의 설치기준을 다룹니다. 대규모 산업시설이나 캠퍼스형 부지에서 필수적입니다.</p>
           <h3 class="text-lg font-semibold text-[#24305E] mb-3">주요 구성요소</h3>
           <ul class="text-sm text-gray-700 space-y-2">
             <li>• Underground piping</li>
@@ -2807,7 +2856,7 @@ const codeDescriptions = {
   'NFPA12': {
     title: 'NFPA 12',
     subtitle: 'Standard on Carbon Dioxide Extinguishing Systems',
-    subtitleKR: '이산화탄소 소화설비 기준',
+    subtitleKR: '이산화탄소 소화설비기준',
     org: 'NFPA',
     discipline: '소방기계',
     codeId: 'MC016',
@@ -2842,7 +2891,7 @@ const codeDescriptions = {
   'NFPA15': {
     title: 'NFPA 15',
     subtitle: 'Standard for Water Spray Fixed Systems for Fire Protection',
-    subtitleKR: '소방용 물분무 고정설비 기준',
+    subtitleKR: '소방용 물분무 고정설비기준',
     org: 'NFPA',
     discipline: '소방기계',
     codeId: 'MC018',
@@ -2877,7 +2926,7 @@ const codeDescriptions = {
   'NFPA16': {
     title: 'NFPA 16',
     subtitle: 'Standard for the Installation of Foam-Water Sprinkler and Foam-Water Spray Systems',
-    subtitleKR: '포-물분무 스프링클러 및 포-물분무 시스템 설치 기준',
+    subtitleKR: '포-물분무 스프링클러 및 포-물분무 시스템 설치기준',
     org: 'NFPA',
     discipline: '소방기계',
     codeId: 'MC019',
@@ -2911,7 +2960,7 @@ const codeDescriptions = {
   'NFPA92': {
     title: 'NFPA 92',
     subtitle: 'Standard for Smoke Control Systems',
-    subtitleKR: '제연설비 기준',
+    subtitleKR: '제연설비기준',
     org: 'NFPA',
     discipline: '소방기계',
     codeId: 'MC020',
@@ -3122,8 +3171,14 @@ function loadBookPage(pageIndex) {
   document.getElementById('bookDescriptionLeft').innerHTML = page.left;
   document.getElementById('bookDescriptionRight').innerHTML = page.right;
 
-  // 페이지 인디케이터 업데이트
-  document.getElementById('pageIndicator').textContent = `${pageIndex + 1} / ${totalPages}`;
+  // 페이지 인디케이터 업데이트 (상단)
+  document.getElementById('pageIndicator').textContent = `Page ${pageIndex + 1} of ${totalPages}`;
+
+  // 페이지 번호 업데이트 (하단 중앙)
+  const leftPageNum = (pageIndex * 2) + 1;
+  const rightPageNum = (pageIndex * 2) + 2;
+  document.getElementById('leftPageNum').textContent = leftPageNum;
+  document.getElementById('rightPageNum').textContent = rightPageNum;
 
   // 버튼 상태 업데이트
   document.getElementById('prevPageBtn').disabled = pageIndex === 0;
