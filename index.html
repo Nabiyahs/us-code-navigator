@@ -781,37 +781,37 @@
 
     /* English content block */
     .content-en {
-      font-size: 0.9375rem;
-      line-height: 1.85;
-      letter-spacing: 0.015em;
+      font-size: 1.0625rem;
+      line-height: 1.9;
+      letter-spacing: 0.012em;
       color: #1f2937;
-      padding: 0.875rem 1.125rem;
+      padding: 1rem 1.25rem;
       background: linear-gradient(to right, rgba(168, 208, 230, 0.12) 0%, rgba(168, 208, 230, 0.03) 100%);
       border-left: 4px solid #A8D0E6;
       border-radius: 0 8px 8px 0;
-      margin-bottom: 0.625rem;
+      margin-bottom: 0.75rem;
       white-space: pre-line;
     }
 
     /* Korean content block */
     .content-kr {
-      font-size: 0.9rem;
-      line-height: 1.9;
-      letter-spacing: 0.025em;
+      font-size: 1.0rem;
+      line-height: 1.95;
+      letter-spacing: 0.02em;
       color: #374151;
-      padding: 0.75rem 1.125rem;
+      padding: 0.875rem 1.25rem;
       background: linear-gradient(to right, rgba(248, 233, 161, 0.15) 0%, rgba(248, 233, 161, 0.04) 100%);
       border-left: 4px solid #F8E9A1;
       border-radius: 0 8px 8px 0;
-      margin-bottom: 0.875rem;
+      margin-bottom: 1rem;
       white-space: pre-line;
     }
 
     /* NOTE block - natural wrapping with enhanced visibility */
     .note-block {
       display: block;
-      margin-top: 0.875rem;
-      padding: 0.625rem 1rem;
+      margin-top: 1rem;
+      padding: 0.75rem 1.125rem;
       background: linear-gradient(135deg, rgba(247, 108, 108, 0.1) 0%, rgba(247, 108, 108, 0.04) 100%);
       border-left: 4px solid #F76C6C;
       border-radius: 0 8px 8px 0;
@@ -820,21 +820,21 @@
 
     .note-label {
       display: inline-block;
-      font-size: 0.6875rem;
+      font-size: 0.75rem;
       font-weight: 700;
       letter-spacing: 0.12em;
       color: #dc2626;
       background: rgba(247, 108, 108, 0.18);
-      padding: 0.1875rem 0.625rem;
+      padding: 0.25rem 0.625rem;
       border-radius: 3px;
-      margin-right: 0.625rem;
+      margin-right: 0.75rem;
       vertical-align: middle;
     }
 
     .note-content {
       display: inline;
-      font-size: 0.875rem;
-      line-height: 1.75;
+      font-size: 0.9375rem;
+      line-height: 1.8;
       color: #4B5563;
       vertical-align: middle;
       white-space: pre-line;
@@ -842,10 +842,10 @@
 
     /* Index tags - enhanced visibility with prominent styling */
     .index-tag {
-      font-size: 0.75rem;
+      font-size: 0.8125rem;
       font-weight: 700;
       letter-spacing: 0.04em;
-      padding: 0.3125rem 0.625rem;
+      padding: 0.375rem 0.75rem;
       background: linear-gradient(135deg, #F8E9A1 0%, #f5d96a 100%);
       color: #24305E;
       border-radius: 4px;
@@ -863,7 +863,7 @@
 
     /* Section title styling - enhanced */
     .section-title {
-      font-size: 1.0625rem;
+      font-size: 1.1875rem;
       font-weight: 700;
       color: #24305E;
       letter-spacing: 0.015em;
@@ -874,8 +874,8 @@
     .section-card {
       background: #fafbfc;
       border-radius: 8px;
-      padding: 1.25rem;
-      margin-bottom: 1rem;
+      padding: 1.5rem;
+      margin-bottom: 1.25rem;
       border: 1px solid rgba(168, 208, 230, 0.2);
       transition: border-color 0.2s ease;
     }
@@ -4586,7 +4586,13 @@ function mapChapterIDsToContent() {
         return { versionId: null, chapterNum: null };
     }
 
-    // Map each CodeContent to its ChapterID
+    // Build version to modelCode lookup
+    const versionToModelCode = {};
+    appData.ModelCodeVersion.forEach(v => {
+        versionToModelCode[v.ModelCodeVersionID] = v.ModelCodeID;
+    });
+
+    // Map each CodeContent to its ChapterID, ModelCodeVersionID, and ModelCodeID
     let mappedCount = 0;
     appData.CodeContent.forEach(content => {
         const { versionId, chapterNum } = determineVersionAndChapter(content.OrderKey);
@@ -4596,12 +4602,14 @@ function mapChapterIDsToContent() {
             const chapterId = chapterLookup[versionId][chapterKey];
             if (chapterId) {
                 content.ChapterID = chapterId;
+                content.ModelCodeVersionID = versionId;
+                content.ModelCodeID = versionToModelCode[versionId] || null;
                 mappedCount++;
             }
         }
     });
 
-    console.log(`Mapped ${mappedCount} CodeContent entries to ChapterIDs`);
+    console.log(`Mapped ${mappedCount} CodeContent entries to ChapterIDs and ModelCodeIDs`);
 }
 
 // === Schema-based Data Access Functions ===
@@ -6211,7 +6219,11 @@ function performSearch() {
     let skippedByFilter = 0;
 
     appData.CodeContent.forEach(content => {
-        if (!modelCodeIds.has(content.ModelCodeID)) return;
+        // Skip content without ModelCodeID only when filters are applied
+        // If no discipline filters are selected, include content even without ModelCodeID mapping
+        const hasModelCodeFilter = selectedArchTags.length > 0 || selectedFireMechTags.length > 0 || selectedFireElecTags.length > 0;
+        if (hasModelCodeFilter && !modelCodeIds.has(content.ModelCodeID)) return;
+        if (!hasModelCodeFilter && !content.ModelCodeID && !content.ChapterID) return; // Skip unmapped content
 
         processedCount++;
 
@@ -6284,27 +6296,39 @@ function performSearch() {
             matchedCount++;
         }
 
-        // Get code info first
-        const modelCode = appData.ModelCode.find(mc => mc.ModelCodeID === content.ModelCodeID);
-        const version = appData.ModelCodeVersion.find(v => v.ModelCodeVersionID === content.ModelCodeVersionID);
-        const chapter = appData.CodeChapter.find(ch => ch.ChapterID === content.ChapterID);
+        // Get code info - try direct mapping first, then fallback to ChapterID lookup
+        let modelCode = appData.ModelCode.find(mc => mc.ModelCodeID === content.ModelCodeID);
+        let version = appData.ModelCodeVersion.find(v => v.ModelCodeVersionID === content.ModelCodeVersionID);
+        let chapter = appData.CodeChapter.find(ch => ch.ChapterID === content.ChapterID);
 
-        if (modelCode && version && chapter) {
+        // Fallback: If no direct mapping, try to get info from ChapterID
+        if (!modelCode && chapter) {
+            version = appData.ModelCodeVersion.find(v => v.ModelCodeVersionID === chapter.ModelCodeVersionID);
+            if (version) {
+                modelCode = appData.ModelCode.find(mc => mc.ModelCodeID === version.ModelCodeID);
+            }
+        }
+
+        if (chapter) {
+            // Extract section from OrderKey since CodeContent doesn't have Section field
+            const sectionFromOrderKey = getSectionFromOrderKey(content.OrderKey);
             const result = {
-                code: modelCode.ModelCodeName.split(':')[0].trim(),
-                year: version.Year ? Math.floor(version.Year) : '',
+                code: modelCode ? modelCode.ModelCodeName.split(':')[0].trim() : 'Code',
+                year: version && version.Year ? Math.floor(version.Year) : '',
                 chapter: chapter.Chapter,
                 chapterTitle: chapter.TitleEN || '',
-                section: content.Section || 'General',
+                section: sectionFromOrderKey || 'General',
                 subsection: content.Subsection || '',
                 titleEN: content.TitleEN || '',
                 titleKR: content.TitleKR || '',
                 contentEN: content.ContentEN || '',
                 contentKR: content.ContentKR || '',
+                comment: content.Comment || '',
+                indexTags: content.IndexTags || [],
                 codeId: content.ModelCodeID,
                 versionId: content.ModelCodeVersionID,
                 chapterId: content.ChapterID,
-                contentId: content.ContentID
+                orderKey: content.OrderKey
             };
 
             // If keyword is provided, filter by keyword
