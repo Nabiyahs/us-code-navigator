@@ -3830,20 +3830,18 @@ function initAdvancedSearchFilters() {
             .filter(mcd => mcd.DisciplineID === disc.id)
             .map(mcd => mcd.ModelCodeID);
 
-        // Index 태그 수집 (CD, SD, DD, IFR, IFC 제외)
+        // Index 태그 수집 (모든 태그 포함: CD, SD, DD, IFR, IFC 등)
         const indexTags = new Set();
         // SubIndex 계층 구조 수집 (parent -> { child -> [grandchildren] })
         const subIndexHierarchy = {};
 
         appData.CodeContent.forEach(content => {
             if (modelCodes.includes(content.ModelCodeID)) {
-                // IndexTags 배열에서 태그 추출
+                // IndexTags 배열에서 태그 추출 (모든 태그 포함)
                 if (content.IndexTags && Array.isArray(content.IndexTags)) {
                     content.IndexTags.forEach(tag => {
-                        // 약자 태그 제외 (DD, IFR, IFC만 - CD, SD는 포함)
-                        if (!['DD', 'IFR', 'IFC'].includes(tag)) {
-                            indexTags.add(tag);
-                        }
+                        // 모든 index 태그 포함 (CD, SD, DD, IFR, IFC 등 영어 태그 포함)
+                        indexTags.add(tag);
                     });
                 }
 
