@@ -923,6 +923,13 @@
         font-size: 1.375rem;
       }
 
+      /* Library submenu items - larger font */
+      .submenu-item {
+        font-size: 0.9375rem;
+        padding-top: 0.625rem;
+        padding-bottom: 0.625rem;
+      }
+
       /* Home section */
       #homeSection .p-8 {
         padding: 3rem;
@@ -968,11 +975,7 @@
         padding: 40px 56px 32px 56px;
       }
 
-      /* Library section */
-      #librarySection aside.w-80 {
-        width: 22rem;
-      }
-
+      /* Library section - keep chapter sidebar width fixed */
       #librarySection .p-6 {
         padding: 1.75rem;
       }
@@ -1023,15 +1026,7 @@
 
     /* 3XL screens (1920px+) - larger scale */
     @media (min-width: 1920px) {
-      /* Sidebar */
-      aside.fixed {
-        width: 18rem;
-      }
-
-      main {
-        margin-left: 18rem;
-      }
-
+      /* Sidebar - keep width fixed for alignment */
       .sidebar-item {
         font-size: 1.125rem;
         padding: 1.125rem 2rem;
@@ -1043,6 +1038,13 @@
 
       aside.fixed .p-6 {
         padding: 1.75rem;
+      }
+
+      /* Library submenu items - larger font */
+      .submenu-item {
+        font-size: 1rem;
+        padding-top: 0.75rem;
+        padding-bottom: 0.75rem;
       }
 
       /* Home section */
@@ -1089,11 +1091,7 @@
         padding: 48px 64px 36px 64px;
       }
 
-      /* Library section sidebar */
-      #librarySection aside.w-80 {
-        width: 24rem;
-      }
-
+      /* Library section - keep chapter sidebar width fixed */
       #librarySection .p-6 {
         padding: 2rem;
       }
@@ -1138,29 +1136,11 @@
         padding: 0.75rem 1.5rem;
         font-size: 1rem;
       }
-
-      /* Header */
-      header.h-20 {
-        height: 5.5rem;
-      }
-
-      .content-area-height {
-        height: calc(100vh - 88px) !important;
-        max-height: calc(100vh - 88px) !important;
-      }
     }
 
     /* 4XL screens (2560px+) - maximum scale for ultra-wide */
     @media (min-width: 2560px) {
-      /* Sidebar */
-      aside.fixed {
-        width: 20rem;
-      }
-
-      main {
-        margin-left: 20rem;
-      }
-
+      /* Sidebar - keep width fixed for alignment */
       .sidebar-item {
         font-size: 1.25rem;
         padding: 1.25rem 2.25rem;
@@ -1172,6 +1152,13 @@
 
       aside.fixed .p-6 {
         padding: 2rem;
+      }
+
+      /* Library submenu items - larger font */
+      .submenu-item {
+        font-size: 1.0625rem;
+        padding-top: 0.875rem;
+        padding-bottom: 0.875rem;
       }
 
       /* Home section */
@@ -1225,11 +1212,7 @@
         border-radius: 16px;
       }
 
-      /* Library section sidebar */
-      #librarySection aside.w-80 {
-        width: 26rem;
-      }
-
+      /* Library section - keep chapter sidebar width fixed */
       #librarySection .p-6 {
         padding: 2.25rem;
       }
@@ -1273,16 +1256,6 @@
       .filter-pill {
         padding: 0.875rem 1.75rem;
         font-size: 1.0625rem;
-      }
-
-      /* Header */
-      header.h-20 {
-        height: 6rem;
-      }
-
-      .content-area-height {
-        height: calc(100vh - 96px) !important;
-        max-height: calc(100vh - 96px) !important;
       }
 
       /* Book popup scales */
@@ -4377,6 +4350,7 @@ function loadChapterContent(chapterId, versionId) {
         const contentArea = document.getElementById('contentArea');
 
         if (!contents || contents.length === 0) {
+            // 빈 챕터의 경우 메시지 없이 챕터 제목과 코멘트만 표시
             contentArea.innerHTML = `
                 <div class="bg-white rounded-lg shadow-sm p-8">
                     <h2 class="text-2xl font-bold text-[#24305E] mb-2">Chapter ${chapter.Chapter}: ${chapter.TitleEN || ''}</h2>
@@ -4385,7 +4359,6 @@ function loadChapterContent(chapterId, versionId) {
                     <div class="mt-4 p-4 bg-blue-50 border-l-4 border-blue-400 rounded">
                         <p class="text-sm text-gray-700 whitespace-pre-line">${chapter.ChapterComment}</p>
                     </div>` : ''}
-                    <p class="text-gray-500 mt-6">No content available for this chapter.</p>
                 </div>
             `;
             return;
@@ -4590,7 +4563,7 @@ function loadAllChaptersContent(versionId, codeId) {
             `;
 
             if (!contents || contents.length === 0) {
-                allHtml += `<p class="text-gray-500">No content available for this chapter.</p>`;
+                // 빈 챕터는 메시지 없이 자연스럽게 다음 챕터로 이어지도록 함
             } else {
                 const sections = {};
                 contents.forEach(content => {
