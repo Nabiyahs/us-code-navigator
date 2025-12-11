@@ -751,6 +751,94 @@
       letter-spacing: 0.01em;
     }
 
+    /* === CODE CONTENT DISPLAY READABILITY === */
+    /* English content block */
+    .content-en {
+      font-size: 0.9375rem;
+      line-height: 1.75;
+      letter-spacing: 0.01em;
+      color: #374151;
+      padding: 0.75rem 1rem;
+      background: linear-gradient(to right, rgba(168, 208, 230, 0.08) 0%, rgba(168, 208, 230, 0.02) 100%);
+      border-left: 3px solid #A8D0E6;
+      border-radius: 0 6px 6px 0;
+      margin-bottom: 0.5rem;
+    }
+
+    /* Korean content block */
+    .content-kr {
+      font-size: 0.875rem;
+      line-height: 1.8;
+      letter-spacing: 0.02em;
+      color: #4B5563;
+      padding: 0.625rem 1rem;
+      background: linear-gradient(to right, rgba(248, 233, 161, 0.12) 0%, rgba(248, 233, 161, 0.03) 100%);
+      border-left: 3px solid #F8E9A1;
+      border-radius: 0 6px 6px 0;
+      margin-bottom: 0.75rem;
+    }
+
+    /* NOTE block - natural wrapping */
+    .note-block {
+      display: inline-block;
+      margin-top: 0.75rem;
+      padding: 0.5rem 0.875rem;
+      background: linear-gradient(135deg, rgba(247, 108, 108, 0.08) 0%, rgba(247, 108, 108, 0.04) 100%);
+      border-left: 3px solid #F76C6C;
+      border-radius: 0 6px 6px 0;
+      max-width: 100%;
+    }
+
+    .note-label {
+      display: inline-block;
+      font-size: 0.6875rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      color: #F76C6C;
+      background: rgba(247, 108, 108, 0.12);
+      padding: 0.125rem 0.5rem;
+      border-radius: 3px;
+      margin-right: 0.5rem;
+      vertical-align: middle;
+    }
+
+    .note-content {
+      display: inline;
+      font-size: 0.875rem;
+      line-height: 1.7;
+      color: #4B5563;
+      vertical-align: middle;
+    }
+
+    /* Index tags - enhanced visibility */
+    .index-tag {
+      font-size: 0.8125rem;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      padding: 0.375rem 0.75rem;
+      background: linear-gradient(135deg, #F8E9A1 0%, #F5DC7D 100%);
+      color: #24305E;
+      border-radius: 4px;
+      box-shadow: 0 1px 2px rgba(36, 48, 94, 0.1);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .index-tag:hover {
+      background: linear-gradient(135deg, #F5DC7D 0%, #E8CF6A 100%);
+      transform: translateY(-1px);
+      box-shadow: 0 2px 4px rgba(36, 48, 94, 0.15);
+    }
+
+    /* Section title styling */
+    .section-title {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #24305E;
+      letter-spacing: 0.01em;
+      line-height: 1.5;
+    }
+
     /* === BOOKSHELF STYLES START === */
     /* Book popup overlay */
     .book-popup {
@@ -2845,12 +2933,9 @@ ${note}
             </div>
             
             <div class="mt-4 pt-4 border-t border-gray-200">
-              <div class="inline-block bg-[#FEE9EC] bg-opacity-30 px-3 py-2 rounded-lg">
-                <label class="text-xs font-semibold text-[#F76C6C] mb-1 block">Note</label>
-                <div class="text-sm text-gray-700 leading-relaxed">
-                  This section establishes the fundamental scope and applicability of the code to all aspects
-                  of building construction, maintenance, and demolition.
-                </div>
+              <div class="note-block">
+                <span class="note-label">NOTE</span>
+                <span class="note-content">This section establishes the fundamental scope and applicability of the code to all aspects of building construction, maintenance, and demolition.</span>
               </div>
             </div>
           </div>
@@ -4686,27 +4771,25 @@ function loadChapterContent(chapterId, versionId) {
                         </div>
 
                         <!-- 타이틀 -->
-                        <div class="flex items-center gap-2 mb-2">
-                            <h4 class="font-semibold text-[#24305E]">${sectionNumber}${content.TitleEN ? ' ' + content.TitleEN : ''}</h4>
+                        <div class="flex items-center gap-2 mb-3">
+                            <h4 class="section-title">${sectionNumber}${content.TitleEN ? ' ' + content.TitleEN : ''}</h4>
                         </div>
 
-                        <!-- 콘텐츠 -->
-                        ${content.ContentEN ? `<p class="text-gray-700 leading-relaxed mb-2">${content.ContentEN}</p>` : ''}
-                        ${content.ContentKR ? `<p class="text-gray-600 text-sm leading-relaxed mb-3">${content.ContentKR}</p>` : ''}
-
-                        <!-- 키워드 태그 (Index/SubIndex) -->
+                        <!-- 키워드 태그 (Index/SubIndex) - 상단 배치 -->
                         ${uniqueTags.length > 0 ? `
                         <div class="flex items-center gap-2 flex-wrap mb-3">
-                            ${uniqueTags.map(tag => `<span class="text-xs bg-[#F8E9A1] text-[#24305E] px-2 py-0.5 rounded cursor-pointer hover:bg-[#F5DC7D] transition-colors" onclick="showTagSectionsPopup('${tag.replace(/'/g, "\\'")}', '${versionId}')">${tag}</span>`).join('')}
+                            ${uniqueTags.map(tag => `<span class="index-tag" onclick="showTagSectionsPopup('${tag.replace(/'/g, "\\'")}', '${versionId}')">${tag}</span>`).join('')}
                         </div>` : ''}
 
-                        <!-- Note -->
+                        <!-- 콘텐츠 -->
+                        ${content.ContentEN ? `<div class="content-en">${content.ContentEN}</div>` : ''}
+                        ${content.ContentKR ? `<div class="content-kr">${content.ContentKR}</div>` : ''}
+
+                        <!-- NOTE -->
                         ${content.Comment ? `
-                        <div class="mt-3 pt-3 border-t border-gray-200 bg-[#FEE9EC] bg-opacity-30 p-3 rounded-lg">
-                            <label class="text-xs font-semibold text-[#F76C6C] mb-1 block">Note</label>
-                            <div class="w-full text-sm p-2 bg-white border border-[#F76C6C] border-opacity-20 rounded text-gray-700 whitespace-pre-line">
-                                ${content.Comment}
-                            </div>
+                        <div class="note-block">
+                            <span class="note-label">NOTE</span>
+                            <span class="note-content">${content.Comment}</span>
                         </div>` : ''}
 
                         <!-- 첨부파일 -->
@@ -4856,19 +4939,19 @@ function loadAllChaptersContent(versionId, codeId) {
                                         </svg>
                                     </button>
                                 </div>
-                                <div class="flex items-center gap-2 mb-2">
-                                    <h4 class="font-semibold text-[#24305E]">${sectionNumber}${content.TitleEN ? ' ' + content.TitleEN : ''}</h4>
+                                <div class="flex items-center gap-2 mb-3">
+                                    <h4 class="section-title">${sectionNumber}${content.TitleEN ? ' ' + content.TitleEN : ''}</h4>
                                 </div>
-                                ${content.ContentEN ? `<p class="text-gray-700 leading-relaxed mb-2">${content.ContentEN}</p>` : ''}
-                                ${content.ContentKR ? `<p class="text-gray-600 text-sm leading-relaxed mb-3">${content.ContentKR}</p>` : ''}
                                 ${uniqueTags.length > 0 ? `
                                 <div class="flex items-center gap-2 flex-wrap mb-3">
-                                    ${uniqueTags.map(tag => `<span class="text-xs bg-[#F8E9A1] text-[#24305E] px-2 py-0.5 rounded cursor-pointer hover:bg-[#F5DC7D] transition-colors" onclick="showTagSectionsPopup('${tag.replace(/'/g, "\\'")}', '${versionId}')">${tag}</span>`).join('')}
+                                    ${uniqueTags.map(tag => `<span class="index-tag" onclick="showTagSectionsPopup('${tag.replace(/'/g, "\\'")}', '${versionId}')">${tag}</span>`).join('')}
                                 </div>` : ''}
+                                ${content.ContentEN ? `<div class="content-en">${content.ContentEN}</div>` : ''}
+                                ${content.ContentKR ? `<div class="content-kr">${content.ContentKR}</div>` : ''}
                                 ${content.Comment ? `
-                                <div class="mt-3 pt-3 border-t border-gray-200 bg-[#FEE9EC] bg-opacity-30 p-3 rounded-lg">
-                                    <label class="text-xs font-semibold text-[#F76C6C] mb-1 block">Note</label>
-                                    <div class="w-full text-sm p-2 bg-white border border-[#F76C6C] border-opacity-20 rounded text-gray-700 whitespace-pre-line">${content.Comment}</div>
+                                <div class="note-block">
+                                    <span class="note-label">NOTE</span>
+                                    <span class="note-content">${content.Comment}</span>
                                 </div>` : ''}
                                 ${attachments.length > 0 ? `
                                 <div class="mt-3 pt-3 border-t border-gray-200">
@@ -6239,9 +6322,9 @@ function displaySearchResults(exactMatches, partialMatches, allFilteredResults, 
 
                             <!-- Content text if available -->
                             ${displayContentEN || displayContentKR ? `
-                                <div class="mt-3 pt-3 border-t border-gray-200 text-sm text-gray-600 leading-relaxed space-y-1">
-                                    ${displayContentEN ? `<p class="text-gray-700 leading-relaxed">${displayContentEN}</p>` : ''}
-                                    ${displayContentKR ? `<p class="text-gray-600 leading-relaxed">${displayContentKR}</p>` : ''}
+                                <div class="mt-3 pt-3 border-t border-gray-200 space-y-1">
+                                    ${displayContentEN ? `<div class="content-en">${displayContentEN}</div>` : ''}
+                                    ${displayContentKR ? `<div class="content-kr">${displayContentKR}</div>` : ''}
                                 </div>
                             ` : ''}
                         </div>
@@ -6280,10 +6363,10 @@ function displaySearchResults(exactMatches, partialMatches, allFilteredResults, 
                     </div>
                     ${displayTitleKR || displayContentEN || displayContentKR ? `
                     <div id="${uniqueId}" class="result-content">
-                        <div class="px-4 pb-4 text-sm text-gray-600 leading-relaxed space-y-1 border-t pt-3">
-                            ${displayTitleKR ? `<p class="text-gray-600 leading-relaxed">${displayTitleKR}</p>` : ''}
-                            ${displayContentEN ? `<p class="text-gray-700 leading-relaxed">${displayContentEN}</p>` : ''}
-                            ${displayContentKR ? `<p class="text-gray-600 leading-relaxed">${displayContentKR}</p>` : ''}
+                        <div class="px-4 pb-4 border-t pt-3">
+                            ${displayTitleKR ? `<p class="text-sm text-gray-600 leading-relaxed mb-2">${displayTitleKR}</p>` : ''}
+                            ${displayContentEN ? `<div class="content-en">${displayContentEN}</div>` : ''}
+                            ${displayContentKR ? `<div class="content-kr">${displayContentKR}</div>` : ''}
                         </div>
                     </div>
                     ` : ''}
