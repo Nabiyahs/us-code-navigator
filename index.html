@@ -3786,9 +3786,9 @@ function loadChapters(versionId, codeId) {
             document.getElementById('codeSubtitle').textContent = modelCode.Description || '';
         }
 
-        // 첫 번째 챕터 로드
+        // 모든 챕터를 연속 스크롤로 로드
         if (chapters.length > 0) {
-            loadChapterContent(chapters[0].ChapterID, versionId);
+            loadAllChaptersContent(versionId, codeId);
         }
     } catch (error) {
         console.error('Error in loadChapters:', error);
@@ -3816,8 +3816,26 @@ function toggleChapterSections(chapterId, versionId, event) {
         icon.classList.toggle('rotate-180');
     }
 
-    // 챕터 콘텐츠 로드
-    loadChapterContent(chapterId, versionId);
+    // 챕터 활성화 표시
+    document.querySelectorAll('.chapter-item').forEach(item => {
+        item.classList.remove('active', 'bg-[#F8E9A1]');
+    });
+    const activeItem = document.querySelector(`[data-chapter-id="${chapterId}"]`);
+    if (activeItem) {
+        activeItem.classList.add('active', 'bg-[#F8E9A1]');
+    }
+
+    // 해당 챕터로 스크롤
+    const chapterElement = document.getElementById('chapter-' + chapterId);
+    if (chapterElement) {
+        const contentContainer = document.querySelector('#librarySection .flex-1.overflow-y-auto');
+        if (contentContainer) {
+            const containerRect = contentContainer.getBoundingClientRect();
+            const elementRect = chapterElement.getBoundingClientRect();
+            const scrollPosition = Math.max(0, contentContainer.scrollTop + elementRect.top - containerRect.top - 20);
+            contentContainer.scrollTo({ top: scrollPosition, behavior: 'smooth' });
+        }
+    }
 }
 
 // 섹션으로 스크롤
@@ -3829,61 +3847,45 @@ function scrollToSection(chapterId, sectionNum, versionId, event) {
 
     console.log('scrollToSection called:', { chapterId, sectionNum, versionId });
 
-    // 먼저 해당 챕터 콘텐츠 로드
-    loadChapterContent(chapterId, versionId);
+    // 챕터 활성화 표시
+    document.querySelectorAll('.chapter-item').forEach(item => {
+        item.classList.remove('active', 'bg-[#F8E9A1]');
+    });
+    const activeChapter = document.querySelector(`[data-chapter-id="${chapterId}"]`);
+    if (activeChapter) {
+        activeChapter.classList.add('active', 'bg-[#F8E9A1]');
+    }
 
     // 사이드바 섹션 아이템 하이라이팅 업데이트
     document.querySelectorAll('.section-item').forEach(item => {
         item.classList.remove('bg-[#A8D0E6]', 'text-white');
     });
-    // 현재 선택된 섹션 하이라이트 (data-section 속성으로 찾기)
     const currentSectionItem = document.querySelector(`.section-item[data-section="${sectionNum}"]`);
     if (currentSectionItem) {
         currentSectionItem.classList.add('bg-[#A8D0E6]', 'text-white');
-        console.log('Highlighted section item:', sectionNum);
-    } else {
-        console.warn('Section item not found for highlighting:', sectionNum);
     }
 
-    // 콘텐츠 로드 완료 후 섹션으로 스크롤 (timeout 증가)
-    setTimeout(() => {
-        // 섹션 ID 생성
-        const sectionId = getSectionId(chapterId, sectionNum);
-        console.log('Looking for section ID:', sectionId);
+    // 섹션 ID 생성
+    const sectionId = getSectionId(chapterId, sectionNum);
+    let sectionElement = document.getElementById(sectionId);
 
-        // 정확한 ID로 찾기
-        let sectionElement = document.getElementById(sectionId);
-
-        // 못 찾으면 data-section 속성으로 찾기
-        if (!sectionElement) {
-            sectionElement = document.querySelector(`[data-section="${sectionNum}"]`);
-            console.log('Fallback to data-section:', sectionElement ? 'found' : 'not found');
+    // 못 찾으면 챕터 내에서 data-section으로 찾기
+    if (!sectionElement) {
+        const chapterBlock = document.getElementById('chapter-' + chapterId);
+        if (chapterBlock) {
+            sectionElement = chapterBlock.querySelector(`[data-section="${sectionNum}"]`);
         }
+    }
 
-        if (sectionElement) {
-            console.log('Found section element:', sectionElement.id);
-            // 스크롤 가능한 컨테이너 내에서 스크롤
-            const contentContainer = document.querySelector('#librarySection .flex-1.overflow-y-auto');
-            if (contentContainer) {
-                // getBoundingClientRect로 정확한 위치 계산
-                const containerRect = contentContainer.getBoundingClientRect();
-                const elementRect = sectionElement.getBoundingClientRect();
-                const relativeTop = elementRect.top - containerRect.top;
-                const scrollPosition = Math.max(0, contentContainer.scrollTop + relativeTop - 100);
-
-                contentContainer.scrollTo({
-                    top: scrollPosition,
-                    behavior: 'smooth'
-                });
-                console.log('Scrolled to position:', scrollPosition);
-            } else {
-                sectionElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                console.log('Used scrollIntoView fallback');
-            }
-        } else {
-            console.error('Section element not found:', sectionId);
+    if (sectionElement) {
+        const contentContainer = document.querySelector('#librarySection .flex-1.overflow-y-auto');
+        if (contentContainer) {
+            const containerRect = contentContainer.getBoundingClientRect();
+            const elementRect = sectionElement.getBoundingClientRect();
+            const scrollPosition = Math.max(0, contentContainer.scrollTop + elementRect.top - containerRect.top - 100);
+            contentContainer.scrollTo({ top: scrollPosition, behavior: 'smooth' });
         }
-    }, 300);
+    }
 }
 
 function loadChapterContent(chapterId, versionId) {
@@ -4089,6 +4091,177 @@ function loadChapterContent(chapterId, versionId) {
         console.log('Content rendered successfully');
     } catch (error) {
         console.error('Error in loadChapterContent:', error);
+        const contentArea = document.getElementById('contentArea');
+        if (contentArea) {
+            contentArea.innerHTML = `<div class="text-red-500 p-4">Error loading content: ${error.message}</div>`;
+        }
+    }
+}
+
+// 모든 챕터를 연속 스크롤로 로드
+function loadAllChaptersContent(versionId, codeId) {
+    console.log('loadAllChaptersContent called:', { versionId, codeId });
+
+    if (!dataLoaded) {
+        console.warn('loadAllChaptersContent called before data loaded');
+        return;
+    }
+
+    try {
+        const chapters = getChapters(versionId);
+        const contentArea = document.getElementById('contentArea');
+
+        if (!chapters || chapters.length === 0) {
+            contentArea.innerHTML = '<p class="text-gray-500 text-center py-8">No chapters available for this version.</p>';
+            return;
+        }
+
+        const version = appData.ModelCodeVersion.find(v => v.ModelCodeVersionID === versionId);
+        const modelCode = version ? appData.ModelCode.find(mc => mc.ModelCodeID === version.ModelCodeID) : null;
+        const codeName = modelCode ? modelCode.ModelCodeName : 'Code';
+        const codeYear = version ? Math.floor(version.Year) : '';
+        const codeLabel = `${codeName} ${codeYear}`;
+
+        let allHtml = '';
+
+        chapters.forEach((chapter) => {
+            const contents = getContents(chapter.ChapterID);
+
+            allHtml += `
+                <div id="chapter-${chapter.ChapterID}" class="bg-white rounded-lg shadow-sm p-8 mb-6" data-chapter-id="${chapter.ChapterID}">
+                    <div class="mb-6">
+                        <h2 class="text-2xl font-bold text-[#24305E] mb-2">Chapter ${chapter.Chapter}: ${chapter.TitleEN || ''}</h2>
+                        ${chapter.TitleKR ? `<p class="text-sm text-gray-600">${chapter.TitleKR}</p>` : ''}
+                    </div>
+                    ${chapter.ChapterComment ? `
+                    <div class="mb-6 p-4 bg-blue-50 border-l-4 border-blue-400 rounded">
+                        <p class="text-sm text-gray-700 whitespace-pre-line">${chapter.ChapterComment}</p>
+                    </div>` : ''}
+            `;
+
+            if (!contents || contents.length === 0) {
+                allHtml += `<p class="text-gray-500">No content available for this chapter.</p>`;
+            } else {
+                const sections = {};
+                contents.forEach(content => {
+                    const sectionNum = getSectionFromOrderKey(content.OrderKey) || 'General';
+                    if (!sections[sectionNum]) sections[sectionNum] = [];
+                    sections[sectionNum].push(content);
+                });
+
+                Object.keys(sections).sort((a, b) => {
+                    if (a === 'General') return -1;
+                    if (b === 'General') return 1;
+                    return parseFloat(a) - parseFloat(b);
+                }).forEach(sectionNum => {
+                    const sectionContents = sections[sectionNum];
+                    const firstContent = sectionContents[0];
+                    const sectionTitle = sectionNum === 'General' ? 'General' : 'Section ' + sectionNum;
+
+                    allHtml += `
+                        <div class="content-section mb-6">
+                            <h3 class="text-xl font-semibold text-[#374785] mb-4">${sectionTitle}${firstContent.TitleEN ? ' - ' + firstContent.TitleEN : ''}</h3>
+                            ${firstContent.TitleKR ? `<p class="text-base text-gray-600 mb-4">${firstContent.TitleKR}</p>` : ''}
+                            <div class="space-y-4">
+                    `;
+
+                    sectionContents.forEach(content => {
+                        const subsection = content.Subsection ? `.${content.Subsection}` : '';
+                        const sectionNumber = `${sectionNum}${subsection}`;
+                        const sectionId = getSectionId(chapter.ChapterID, sectionNumber);
+                        const attachments = content.AttachmentID ? getAttachmentsByIds(content.AttachmentID) : [];
+                        const indexTags = content.IndexTags || [];
+                        const subIndex = content.SubIndex || '';
+                        const allTags = new Set();
+                        indexTags.forEach(tag => {
+                            tag.split(';').forEach(t => {
+                                const trimmed = t.trim();
+                                if (trimmed && !['CD', 'SD', 'DD', 'IFR', 'IFC'].includes(trimmed)) {
+                                    allTags.add(trimmed);
+                                }
+                            });
+                        });
+                        if (subIndex) {
+                            subIndex.split(';').forEach(entry => {
+                                entry.trim().split('_').forEach(part => {
+                                    const trimmed = part.trim();
+                                    if (trimmed) allTags.add(trimmed);
+                                });
+                            });
+                        }
+                        const uniqueTags = Array.from(allTags);
+
+                        allHtml += `
+                            <div class="bg-gray-50 p-4 rounded-lg relative" id="${sectionId}" data-section="${sectionNum}">
+                                <div class="absolute top-3 right-3 flex items-center gap-1">
+                                    <button class="p-1.5 hover:bg-gray-200 rounded transition-colors" title="Copy link" onclick="copyLink('${sectionNumber}')">
+                                        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path>
+                                        </svg>
+                                    </button>
+                                    <button class="p-1.5 hover:bg-gray-200 rounded transition-colors" title="Copy content" onclick="copyContent('${sectionNumber}')">
+                                        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                                        </svg>
+                                    </button>
+                                </div>
+                                <div class="flex items-center gap-2 mb-2">
+                                    <h4 class="font-semibold text-[#24305E]">${sectionNumber}${content.TitleEN ? ' ' + content.TitleEN : ''}</h4>
+                                </div>
+                                ${content.ContentEN ? `<p class="text-gray-700 leading-relaxed mb-2">${content.ContentEN}</p>` : ''}
+                                ${content.ContentKR ? `<p class="text-gray-600 text-sm leading-relaxed mb-3">${content.ContentKR}</p>` : ''}
+                                ${uniqueTags.length > 0 ? `
+                                <div class="flex items-center gap-2 flex-wrap mb-3">
+                                    ${uniqueTags.map(tag => `<span class="text-xs bg-[#F8E9A1] text-[#24305E] px-2 py-0.5 rounded cursor-pointer hover:bg-[#F5DC7D] transition-colors" onclick="showTagSectionsPopup('${tag.replace(/'/g, "\\'")}', '${versionId}')">${tag}</span>`).join('')}
+                                </div>` : ''}
+                                ${content.Comment ? `
+                                <div class="mt-3 pt-3 border-t border-gray-200 bg-[#FEE9EC] bg-opacity-30 p-3 rounded-lg">
+                                    <label class="text-xs font-semibold text-[#F76C6C] mb-1 block">Note</label>
+                                    <div class="w-full text-sm p-2 bg-white border border-[#F76C6C] border-opacity-20 rounded text-gray-700 whitespace-pre-line">${content.Comment}</div>
+                                </div>` : ''}
+                                ${attachments.length > 0 ? `
+                                <div class="mt-3 pt-3 border-t border-gray-200">
+                                    <div class="figures-scroll">
+                                        ${attachments.map(att => {
+                                            const imageFileName = att.ActualFileName || att.FileName;
+                                            const encodedFileName = encodeURIComponent(imageFileName);
+                                            return `
+                                            <div class="figure-thumbnail" onclick="openAttachmentModal('${att.AttachmentID}')">
+                                                <img class="figure-thumbnail-image" src="image/${encodedFileName}" alt="${att.Type === 'T' ? 'Table' : 'Figure'} ${att.Number || ''}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                                                <div class="bg-gray-100 rounded flex items-center justify-center" style="display: none; height: 140px;">
+                                                    <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="${att.Type && att.Type.toLowerCase() === 't' ? 'M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z' : 'M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z'}"></path>
+                                                    </svg>
+                                                </div>
+                                                <p class="figure-thumbnail-label">${att.Type === 'T' ? 'Table' : 'Figure'} ${att.Number || ''}</p>
+                                            </div>`;
+                                        }).join('')}
+                                    </div>
+                                </div>` : ''}
+                            </div>
+                        `;
+                    });
+
+                    allHtml += '</div></div>';
+                });
+            }
+
+            allHtml += '</div>';
+        });
+
+        contentArea.innerHTML = allHtml;
+
+        // 첫 번째 챕터 활성화
+        if (chapters.length > 0) {
+            const firstItem = document.querySelector(`[data-chapter-id="${chapters[0].ChapterID}"]`);
+            if (firstItem) {
+                firstItem.classList.add('active', 'bg-[#F8E9A1]');
+            }
+        }
+
+        console.log('All chapters loaded:', chapters.length);
+    } catch (error) {
+        console.error('Error in loadAllChaptersContent:', error);
         const contentArea = document.getElementById('contentArea');
         if (contentArea) {
             contentArea.innerHTML = `<div class="text-red-500 p-4">Error loading content: ${error.message}</div>`;
