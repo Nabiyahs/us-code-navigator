@@ -4965,14 +4965,26 @@ function switchToLibraryCode(codeId, versionId) {
     document.querySelectorAll('.section-content').forEach(s => s.classList.remove('active'));
     document.getElementById('librarySection').classList.add('active');
 
-    // Update sidebar active state
+    // Update sidebar active state - remove active from all, then add to library parent
     document.querySelectorAll('.sidebar-item').forEach(item => {
-        if (item.dataset.section === 'library') {
-            item.classList.add('active');
-        } else {
-            item.classList.remove('active');
-        }
+        item.classList.remove('active');
     });
+
+    // Find and activate the library menu parent item (the one with toggleLibraryMenu onclick)
+    const libraryMenuItem = document.querySelector('.sidebar-item[onclick="toggleLibraryMenu()"]');
+    if (libraryMenuItem) {
+        libraryMenuItem.classList.add('active');
+    }
+
+    // Expand the library submenu if it's collapsed
+    const librarySubmenu = document.getElementById('librarySubmenu');
+    const libraryMenuIcon = document.getElementById('libraryMenuIcon');
+    if (librarySubmenu && (librarySubmenu.style.maxHeight === '0px' || librarySubmenu.style.maxHeight === '')) {
+        librarySubmenu.style.maxHeight = librarySubmenu.scrollHeight + 'px';
+        if (libraryMenuIcon) {
+            libraryMenuIcon.classList.add('rotate-180');
+        }
+    }
 
     // Highlight selected submenu item
     document.querySelectorAll('.submenu-item').forEach(item => {
