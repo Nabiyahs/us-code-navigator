@@ -1462,7 +1462,7 @@
 <!-- Chapter sidebar -->
 <aside class="w-80 bg-white border-r border-gray-200 overflow-y-auto sticky" style="top: 80px; max-height: calc(100vh - 80px);">
 <div class="p-6">
-<h2 class="text-lg font-bold text-[#24305E] mb-4">Chapters</h2>
+<h2 class="text-lg font-bold text-[#24305E] mb-4">CHAPTERS</h2>
 <div class="space-y-2" id="chapterList">
   <!-- Chapters will be dynamically loaded from JSON -->
   <div class="text-gray-500 text-sm p-4">Loading chapters...</div>
@@ -3758,7 +3758,7 @@ function loadChapters(versionId, codeId) {
                 <div class="chapter-item px-4 py-2 rounded-lg hover:bg-[#A8D0E6] cursor-pointer flex items-center justify-between"
                      data-chapter="${ch.Chapter}" data-chapter-id="${ch.ChapterID}"
                      onclick="toggleChapterSections('${ch.ChapterID}', '${versionId}', event)">
-                    <span class="font-semibold text-[#24305E] text-sm">Chapter ${ch.Chapter}</span>
+                    <span class="font-semibold text-[#24305E] text-sm">CHAPTER ${ch.Chapter}</span>
                     <svg id="chapterIcon-${ch.ChapterID}" class="w-4 h-4 text-[#24305E] transition-transform flex-shrink-0 ${i === 0 ? 'rotate-180' : ''}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                     </svg>
@@ -3767,7 +3767,7 @@ function loadChapters(versionId, codeId) {
                     ${sectionNums.map(sec => `
                     <div class="section-item px-4 py-2 text-sm text-gray-700 hover:bg-[#A8D0E6] rounded cursor-pointer"
                          data-section="${sec}" onclick="scrollToSection('${ch.ChapterID}', '${sec}', '${versionId}', event)">
-                        Section ${sec}
+                        SECTION ${sec}
                     </div>
                     `).join('')}
                 </div>
@@ -3786,9 +3786,9 @@ function loadChapters(versionId, codeId) {
             document.getElementById('codeSubtitle').textContent = modelCode.Description || '';
         }
 
-        // 첫 번째 챕터 로드
+        // 모든 챕터를 연속 스크롤 뷰로 로드
         if (chapters.length > 0) {
-            loadChapterContent(chapters[0].ChapterID, versionId);
+            loadAllChaptersContent(versionId, codeId);
         }
     } catch (error) {
         console.error('Error in loadChapters:', error);
@@ -3816,11 +3816,47 @@ function toggleChapterSections(chapterId, versionId, event) {
         icon.classList.toggle('rotate-180');
     }
 
-    // 챕터 콘텐츠 로드
-    loadChapterContent(chapterId, versionId);
+    // 연속 스크롤 뷰에서 챕터로 스크롤 (챕터 활성화 표시)
+    scrollToChapterInContinuousView(chapterId);
 }
 
-// 섹션으로 스크롤
+// 연속 스크롤 뷰에서 챕터로 스크롤
+function scrollToChapterInContinuousView(chapterId) {
+    console.log('scrollToChapterInContinuousView called:', chapterId);
+
+    // 챕터 활성화 표시
+    document.querySelectorAll('.chapter-item').forEach(item => {
+        item.classList.remove('active', 'bg-[#F8E9A1]');
+    });
+    const activeItem = document.querySelector(`[data-chapter-id="${chapterId}"]`);
+    if (activeItem) {
+        activeItem.classList.add('active', 'bg-[#F8E9A1]');
+    }
+
+    // 챕터 요소로 스크롤
+    const chapterElement = document.getElementById('chapter-' + chapterId);
+    if (chapterElement) {
+        const contentContainer = document.querySelector('#librarySection .flex-1.overflow-y-auto');
+        if (contentContainer) {
+            const containerRect = contentContainer.getBoundingClientRect();
+            const elementRect = chapterElement.getBoundingClientRect();
+            const relativeTop = elementRect.top - containerRect.top;
+            const scrollPosition = Math.max(0, contentContainer.scrollTop + relativeTop - 20);
+
+            contentContainer.scrollTo({
+                top: scrollPosition,
+                behavior: 'smooth'
+            });
+            console.log('Scrolled to chapter:', chapterId);
+        } else {
+            chapterElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    } else {
+        console.warn('Chapter element not found:', chapterId);
+    }
+}
+
+// 섹션으로 스크롤 (연속 스크롤 뷰용)
 function scrollToSection(chapterId, sectionNum, versionId, event) {
     // 이벤트 버블링 방지
     if (event) {
@@ -3829,61 +3865,255 @@ function scrollToSection(chapterId, sectionNum, versionId, event) {
 
     console.log('scrollToSection called:', { chapterId, sectionNum, versionId });
 
-    // 먼저 해당 챕터 콘텐츠 로드
-    loadChapterContent(chapterId, versionId);
+    // 챕터 활성화 표시
+    document.querySelectorAll('.chapter-item').forEach(item => {
+        item.classList.remove('active', 'bg-[#F8E9A1]');
+    });
+    const activeChapterItem = document.querySelector(`[data-chapter-id="${chapterId}"]`);
+    if (activeChapterItem) {
+        activeChapterItem.classList.add('active', 'bg-[#F8E9A1]');
+    }
 
     // 사이드바 섹션 아이템 하이라이팅 업데이트
     document.querySelectorAll('.section-item').forEach(item => {
         item.classList.remove('bg-[#A8D0E6]', 'text-white');
     });
-    // 현재 선택된 섹션 하이라이트 (data-section 속성으로 찾기)
+    // 현재 선택된 섹션 하이라이트
     const currentSectionItem = document.querySelector(`.section-item[data-section="${sectionNum}"]`);
     if (currentSectionItem) {
         currentSectionItem.classList.add('bg-[#A8D0E6]', 'text-white');
-        console.log('Highlighted section item:', sectionNum);
-    } else {
-        console.warn('Section item not found for highlighting:', sectionNum);
     }
 
-    // 콘텐츠 로드 완료 후 섹션으로 스크롤 (timeout 증가)
-    setTimeout(() => {
-        // 섹션 ID 생성
-        const sectionId = getSectionId(chapterId, sectionNum);
-        console.log('Looking for section ID:', sectionId);
+    // 섹션 ID 생성
+    const sectionId = getSectionId(chapterId, sectionNum);
+    console.log('Looking for section ID:', sectionId);
 
-        // 정확한 ID로 찾기
-        let sectionElement = document.getElementById(sectionId);
+    // 정확한 ID로 찾기
+    let sectionElement = document.getElementById(sectionId);
 
-        // 못 찾으면 data-section 속성으로 찾기
-        if (!sectionElement) {
-            sectionElement = document.querySelector(`[data-section="${sectionNum}"]`);
-            console.log('Fallback to data-section:', sectionElement ? 'found' : 'not found');
+    // 못 찾으면 챕터 내 data-section 속성으로 찾기
+    if (!sectionElement) {
+        const chapterBlock = document.getElementById('chapter-' + chapterId);
+        if (chapterBlock) {
+            sectionElement = chapterBlock.querySelector(`[data-section="${sectionNum}"]`);
         }
+    }
 
-        if (sectionElement) {
-            console.log('Found section element:', sectionElement.id);
-            // 스크롤 가능한 컨테이너 내에서 스크롤
-            const contentContainer = document.querySelector('#librarySection .flex-1.overflow-y-auto');
-            if (contentContainer) {
-                // getBoundingClientRect로 정확한 위치 계산
-                const containerRect = contentContainer.getBoundingClientRect();
-                const elementRect = sectionElement.getBoundingClientRect();
-                const relativeTop = elementRect.top - containerRect.top;
-                const scrollPosition = Math.max(0, contentContainer.scrollTop + relativeTop - 100);
+    if (sectionElement) {
+        console.log('Found section element:', sectionElement.id);
+        const contentContainer = document.querySelector('#librarySection .flex-1.overflow-y-auto');
+        if (contentContainer) {
+            const containerRect = contentContainer.getBoundingClientRect();
+            const elementRect = sectionElement.getBoundingClientRect();
+            const relativeTop = elementRect.top - containerRect.top;
+            const scrollPosition = Math.max(0, contentContainer.scrollTop + relativeTop - 100);
 
-                contentContainer.scrollTo({
-                    top: scrollPosition,
-                    behavior: 'smooth'
-                });
-                console.log('Scrolled to position:', scrollPosition);
-            } else {
-                sectionElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                console.log('Used scrollIntoView fallback');
-            }
+            contentContainer.scrollTo({
+                top: scrollPosition,
+                behavior: 'smooth'
+            });
+            console.log('Scrolled to position:', scrollPosition);
         } else {
-            console.error('Section element not found:', sectionId);
+            sectionElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
-    }, 300);
+    } else {
+        console.error('Section element not found:', sectionId);
+    }
+}
+
+// 모든 챕터를 연속 스크롤 뷰로 로드
+function loadAllChaptersContent(versionId, codeId) {
+    console.log('loadAllChaptersContent called:', { versionId, codeId });
+
+    if (!dataLoaded) {
+        console.warn('loadAllChaptersContent called before data loaded');
+        return;
+    }
+
+    try {
+        const chapters = getChapters(versionId);
+        const contentArea = document.getElementById('contentArea');
+
+        if (!chapters || chapters.length === 0) {
+            contentArea.innerHTML = '<p class="text-gray-500 text-center py-8">No chapters available for this version.</p>';
+            return;
+        }
+
+        // Get model code info for dynamic labels
+        const version = appData.ModelCodeVersion.find(v => v.ModelCodeVersionID === versionId);
+        const modelCode = version ? appData.ModelCode.find(mc => mc.ModelCodeID === version.ModelCodeID) : null;
+        const codeName = modelCode ? modelCode.ModelCodeName : 'Code';
+        const codeYear = version ? Math.floor(version.Year) : '';
+        const codeLabel = `${codeName} ${codeYear}`;
+
+        let allHtml = '';
+
+        // 각 챕터를 순서대로 렌더링
+        chapters.forEach((chapter, chapterIndex) => {
+            const contents = getContents(chapter.ChapterID);
+
+            // 챕터 시작 (ID 포함하여 스크롤 타겟으로 사용)
+            allHtml += `
+                <div id="chapter-${chapter.ChapterID}" class="chapter-content-block bg-white rounded-lg shadow-sm p-8 mb-8" data-chapter-id="${chapter.ChapterID}">
+                    <div class="mb-6 pb-4 border-b-2 border-[#24305E]">
+                        <h2 class="text-2xl font-bold text-[#24305E] mb-2">CHAPTER ${chapter.Chapter}: ${chapter.TitleEN || ''}</h2>
+                        ${chapter.TitleKR ? `<p class="text-base text-gray-600">${chapter.TitleKR}</p>` : ''}
+                    </div>
+                    ${chapter.ChapterComment ? `
+                    <div class="mb-6 p-4 bg-blue-50 border-l-4 border-blue-400 rounded">
+                        <p class="text-sm text-gray-700 whitespace-pre-line">${chapter.ChapterComment}</p>
+                    </div>` : ''}
+            `;
+
+            if (!contents || contents.length === 0) {
+                allHtml += `<p class="text-gray-500">No content available for this chapter.</p>`;
+            } else {
+                // 섹션별로 그룹화
+                const sections = {};
+                contents.forEach(content => {
+                    const sectionNum = getSectionFromOrderKey(content.OrderKey) || 'General';
+                    if (!sections[sectionNum]) sections[sectionNum] = [];
+                    sections[sectionNum].push(content);
+                });
+
+                // 각 섹션 출력
+                Object.keys(sections).sort((a, b) => {
+                    if (a === 'General') return -1;
+                    if (b === 'General') return 1;
+                    return parseFloat(a) - parseFloat(b);
+                }).forEach(sectionNum => {
+                    const sectionContents = sections[sectionNum];
+                    const firstContent = sectionContents[0];
+                    const sectionTitle = sectionNum === 'General' ? 'General' : 'SECTION ' + sectionNum;
+                    const sectionId = getSectionId(chapter.ChapterID, sectionNum);
+
+                    allHtml += `
+                        <div class="content-section mb-6" id="${sectionId}" data-section="${sectionNum}">
+                            <h3 class="text-xl font-semibold text-[#374785] mb-4">${sectionTitle}${firstContent.TitleEN ? ' - ' + firstContent.TitleEN : ''}</h3>
+                            ${firstContent.TitleKR ? `<p class="text-base text-gray-600 mb-4">${firstContent.TitleKR}</p>` : ''}
+                            <div class="space-y-4">
+                    `;
+
+                    // 각 subsection 출력
+                    sectionContents.forEach(content => {
+                        const subsection = content.Subsection ? `.${content.Subsection}` : '';
+                        const sectionNumber = `${sectionNum}${subsection}`;
+                        const contentSectionId = getSectionId(chapter.ChapterID, sectionNumber);
+
+                        // Attachments 찾기
+                        const attachments = content.AttachmentID ? getAttachmentsByIds(content.AttachmentID) : [];
+
+                        // Index 태그 표시
+                        const indexTags = content.IndexTags || [];
+                        const subIndex = content.SubIndex || '';
+                        const allTags = new Set();
+                        indexTags.forEach(tag => {
+                            tag.split(';').forEach(t => {
+                                const trimmed = t.trim();
+                                if (trimmed && !['CD', 'SD', 'DD', 'IFR', 'IFC'].includes(trimmed)) {
+                                    allTags.add(trimmed);
+                                }
+                            });
+                        });
+                        if (subIndex) {
+                            subIndex.split(';').forEach(entry => {
+                                entry.trim().split('_').forEach(part => {
+                                    const trimmed = part.trim();
+                                    if (trimmed) allTags.add(trimmed);
+                                });
+                            });
+                        }
+                        const uniqueTags = Array.from(allTags);
+
+                        allHtml += `
+                            <div class="bg-gray-50 p-4 rounded-lg relative" id="${contentSectionId}" data-section="${sectionNum}">
+                                <div class="absolute top-3 right-3 flex items-center gap-1">
+                                    <button class="p-1.5 hover:bg-gray-200 rounded transition-colors" title="Copy link" onclick="copyLink('${sectionNumber}')">
+                                        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path>
+                                        </svg>
+                                    </button>
+                                    <button class="p-1.5 hover:bg-gray-200 rounded transition-colors" title="Copy content" onclick="copyContent('${sectionNumber}')">
+                                        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                                        </svg>
+                                    </button>
+                                </div>
+
+                                <div class="pr-16">
+                                    <p class="font-medium text-gray-800 mb-2">
+                                        <span class="text-[#F76C6C] font-bold">${codeLabel} §${sectionNumber}</span>
+                                    </p>
+                                    ${content.ContentEN ? `<p class="text-gray-700 leading-relaxed mb-3 whitespace-pre-line">${content.ContentEN}</p>` : ''}
+                                    ${content.ContentKR ? `<p class="text-gray-600 leading-relaxed text-sm whitespace-pre-line">${content.ContentKR}</p>` : ''}
+                                </div>
+
+                                ${uniqueTags.length > 0 ? `
+                                <div class="mt-3 pt-3 border-t border-gray-200">
+                                    <div class="flex flex-wrap gap-1.5">
+                                        ${uniqueTags.map(tag => `
+                                            <span class="index-tag inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-[#F8E9A1] text-[#24305E] cursor-pointer hover:bg-[#e5d88a] transition-colors" onclick="showTagSections('${tag.replace(/'/g, "\\'")}')">
+                                                ${tag}
+                                            </span>
+                                        `).join('')}
+                                    </div>
+                                </div>
+                                ` : ''}
+
+                                ${content.CommentEN || content.CommentKR ? `
+                                <div class="mt-4 p-3 bg-amber-50 border-l-4 border-amber-400 rounded">
+                                    ${content.CommentEN ? `<p class="text-sm text-gray-700">${content.CommentEN}</p>` : ''}
+                                    ${content.CommentKR ? `<p class="text-sm text-gray-600 mt-1">${content.CommentKR}</p>` : ''}
+                                </div>
+                                ` : ''}
+
+                                ${attachments.length > 0 ? `
+                                <div class="mt-4 space-y-2">
+                                    ${attachments.map(att => `
+                                        <div class="flex items-center gap-2 p-2 bg-white rounded border">
+                                            <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                            </svg>
+                                            <span class="text-sm text-gray-700">${att.AttachmentName || att.FileName || 'Attachment'}</span>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                                ` : ''}
+                            </div>
+                        `;
+                    });
+
+                    allHtml += `
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+
+            allHtml += `</div>`; // chapter-content-block 닫기
+        });
+
+        contentArea.innerHTML = allHtml;
+
+        // 첫 번째 챕터를 활성화
+        if (chapters.length > 0) {
+            document.querySelectorAll('.chapter-item').forEach(item => {
+                item.classList.remove('active', 'bg-[#F8E9A1]');
+            });
+            const firstChapterItem = document.querySelector(`[data-chapter-id="${chapters[0].ChapterID}"]`);
+            if (firstChapterItem) {
+                firstChapterItem.classList.add('active', 'bg-[#F8E9A1]');
+            }
+        }
+
+        console.log('All chapters loaded:', chapters.length);
+    } catch (error) {
+        console.error('Error in loadAllChaptersContent:', error);
+        const contentArea = document.getElementById('contentArea');
+        if (contentArea) {
+            contentArea.innerHTML = `<p class="text-red-500 p-4">Error loading content: ${error.message}</p>`;
+        }
+    }
 }
 
 function loadChapterContent(chapterId, versionId) {
