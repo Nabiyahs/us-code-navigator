@@ -1,5 +1,780 @@
 [
   {
+    "Subsection": null,
+    "OrderKey": "0002",
+    "Index": "CD;정의;구역",
+    "SubIndex": null,
+    "TitleEN": "Area",
+    "TitleKR": "면적, 구획",
+    "ContentEN": "The area included within surrounding exterior walls, or exterior walls and fire walls, exclusive of vent shafts and courts. Areas of the building not provided with surrounding walls shall be included in the building area if such areas are included within the horizontal projection of the roof or floor above.",
+    "ContentKR": "외벽 또는 외벽 및 방화벽으로 둘러싸인 구역에 포함된 면적으로, 환기 샤프트 및 중정(Court)은 제외한다. 벽으로 둘러싸이지 않은 구역은 해당 구역이 상부 지붕 또는 바닥의 수평 투영 내에 포함되는 경우에 화재 구역에 포함한다.",
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "CD",
+      "정의",
+      "구역"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0002",
+    "Index": "CD;정의",
+    "SubIndex": null,
+    "TitleEN": "Closed System",
+    "TitleKR": "폐쇄형 시스템",
+    "ContentEN": "The use of a solid or liquid hazardous material involving a closed vessel or system that remains closed during normal operations where vapors emitted by the product are not liberated outside of the vessel or system and the product is not exposed to the atmosphere during normal operations; and all uses of compressed gases. Examples of closed systems for solids and liquids include product conveyed through a piping system into a closed vessel, system or piece of equipment.",
+    "ContentKR": "정상 운전 중에도 밀폐 상태를 유지하는 밀폐용기나 시스템을 사용하여 고체 또는 액체 위험물질을 취급하는 방식으로 제품에서 발생하는 증기가 용기나 시스템 외부로 방출되지 않으며, 정상 운전 중 제품이 대기에 노출되지 않는 사용법과 압축가스의 사용을 모두 포함한다. 고체 및 액체의 폐쇄 시스템 예시로는 배관 계통을 통해 밀폐용기, 시스템 또는 장비로 이송되는 제품이 있다.",
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "CD",
+      "정의"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0002",
+    "Index": "CD;정의",
+    "SubIndex": null,
+    "TitleEN": "Combustible Liquid",
+    "TitleKR": "가연성 액체",
+    "ContentEN": "A liquid having a closed cup flash point at or above 100°F (38°C). Combustible liquids shall be subdivided as follows:\nThe category of combustible liquids does not include compressed gases or cryogenic fluids or liquids that do not have a fire point when tested in accordance with ASTM D92.\n\nClass II. Liquids having a closed cup flash point at or above 100°F (38°C) and below 140°F (60°C).\n\nClass IIIA. Liquids having a closed cup flash point at or above 140°F (60°C) and below 200°F (93°C).\n\nClass IIIB. Liquids having a closed cup flash point at or above 200°F (93°C).",
+    "ContentKR": "밀폐식 인화점이 100°F (38°C) 이상인 액체. 가연성 액체는 다음과 같이 분류된다. \n가연성 액체 범주에는 압축가스나 극저온 유체 또는 ASTM D92에 따라 시험했을 때 연소점이 없는 액체는 포함되지 않는다.\n\nClass II (2급): 밀폐식 인화점이 100°F (38°C) 이상 140°F (60°C) 미만인 액체\nClass IIIA (3A급): 밀폐식 인화점이140°F (60°C) 이상 200°F (93°C) 미만인 액체\nClass IIIB (3B급): 밀폐식 인화점이 200°F (93°C) 이상인 액체",
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "CD",
+      "정의"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0002",
+    "Index": "CD;정의",
+    "SubIndex": null,
+    "TitleEN": "Common Path of Egress Travel",
+    "TitleKR": "공통 피난 경로",
+    "ContentEN": "That portion of exit access travel distance measured from the most remote point of each room, area or space to that point where the occupants have separate and distinct access to two exits or exit access doorways.",
+    "ContentKR": "각 실, 구역 또는 공간의 최원점(最遠點)에서 재실자가 두 개의 별개 출구 또는 비상구로 분리 및 구별되는 접근가능한 지점까지 측정된 비상구 접근 거리의 부분.",
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "CD",
+      "정의"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0002",
+    "Index": "CD;정의",
+    "SubIndex": null,
+    "TitleEN": "Control Area",
+    "TitleKR": "관리 구역",
+    "ContentEN": "Spaces within a building where quantities of hazardous materials not exceeding the maximum allowable quantities per control area are stored, dispensed, used or handled. See the definition of “Outdoor control area” in the International Fire Code.",
+    "ContentKR": "건물 내에서 관리 구역당 최대 허용량을 초과하지 않는 범위의 위험물질을 저장, 분배, 사용 또는 취급하는 공간. IFC의 “Outdoor Control Area (실외 관리구역)\" 정의 참조.",
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "CD",
+      "정의"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0002",
+    "Index": "CD;정의",
+    "SubIndex": null,
+    "TitleEN": "Corrosive",
+    "TitleKR": "부식성 물질",
+    "ContentEN": "A chemical that causes visible destruction of, or irreversible alterations in, living tissue by chemical action at the point of contact. A chemical shall be considered corrosive if, when tested on the intact skin of albino rabbits by the method described in DOTn 49 CFR, Part 173.137, such chemical destroys or changes irreversibly the structure of the tissue at the point of contact following an exposure period of 4 hours. This term does not refer to action on inanimate surfaces.",
+    "ContentKR": "접촉 시 화학적 작용으로 생체조직에 가시적 손상을 일으키거나 비가역적 변화를 일으키는 화학물질. DOT 49 CFR, Part 173.137에 명시된 방법에 의해 알비노 토끼의 온전한 피부에 시험했을 때, 4시간 노출 후 접촉점의 조직 구조를 파괴하거나 비가역적으로 변화시키는 화학물질을 부식성으로 간주한다. 이 용어는 무기물 표면에 대한 작용을 의미하지 않는다.",
+    "Comment": "미국 교통부(DOT) 규정 중 위험물(Hazardous Materials) 운송 관련 규정에서, Division 6.2 – Infectious Substances (감염성 물질)의 Category B 분류 기준과 포장 요건을 규정한 부분입니다.",
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "CD",
+      "정의"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0002",
+    "Index": "CD;정의",
+    "SubIndex": null,
+    "TitleEN": "Exit Access",
+    "TitleKR": "피난통로 접근로",
+    "ContentEN": "That portion of a means of egress system that leads from any occupied portion of a building or structure to an exit.",
+    "ContentKR": "건물이나 구조물의 거주 부분에서 출구로 이어지는 피난수단시스템의 부분.",
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "CD",
+      "정의"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0002",
+    "Index": "CD;정의",
+    "SubIndex": null,
+    "TitleEN": "Exit Access Doorway",
+    "TitleKR": "비상문",
+    "ContentEN": "A door or access point along the path of egress travel from an occupied room, area or space where the path of egress enters an intervening room, corridor, exit access stairway or ramp.",
+    "ContentKR": "재실자가 있는 실, 구역 또는 공간에서 피난경로가 중간 실, 복도, 비상계단 또는 경사로로 이어지는 피난 경로상의 문 또는 접근지점.",
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "CD",
+      "정의"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0002",
+    "Index": "CD;정의",
+    "SubIndex": null,
+    "TitleEN": "Exit Access Stairway",
+    "TitleKR": "비상계단",
+    "ContentEN": "A stairway within the exit access portion of the means of egress system.",
+    "ContentKR": "피난수단시스템의 비상 출구 접근부 내에 있는 계단.",
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "CD",
+      "정의"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0002",
+    "Index": "CD;정의",
+    "SubIndex": null,
+    "TitleEN": "Exit Discharge",
+    "TitleKR": "옥외로의 출구",
+    "ContentEN": "That portion of a means of egress system between the termination of an exit and a public way.",
+    "ContentKR": "출구의 종단과 공공도로 사이의 피난수단시스템 부분.",
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "CD",
+      "정의"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0002",
+    "Index": "CD;정의",
+    "SubIndex": null,
+    "TitleEN": "Exit Passageway",
+    "TitleKR": "피난복도",
+    "ContentEN": "An exit component that is separated from other interior spaces of a building or structure by fire-resistance-rated construction and opening protectives, and provides for a protected path of egress travel in a horizontal direction to an exit or to the exit discharge.",
+    "ContentKR": "내화구조와 개구부 방호장치에 의해 건물이나 구조물의 다른 내부공간과 분리되어 수평방향으로 출구 또는 옥외 출구로 향하는 보호된 피난보행경로를 제공하는 출구 구성요소.",
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "CD",
+      "정의"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0002",
+    "Index": "CD;정의",
+    "SubIndex": null,
+    "TitleEN": "Explosion",
+    "TitleKR": "폭발",
+    "ContentEN": "An effect produced by the sudden violent expansion of gases, which may be accompanied by a shock wave or disruption, or both, of enclosing materials or structures. An explosion could result from any of the following:\n1. Chemical changes such as rapid oxidation, deflagration or detonation, decomposition of molecules and runaway polymerization (usually detonations).\n2. Physical changes such as pressure tank ruptures.\n3. Atomic changes (nuclear fission or fusion).",
+    "ContentKR": "가스의 급격하고 격렬한 팽창으로 발생하는 효과로 충격파나 둘러싼 자재 또는 구조물의 파괴, 또는 둘 다 수반할 수 있다. 폭발은 다음 중 어느 이유로도 발생할 수 있다.\n1. 급속 산화, 폭연 또는 폭굉(Detonation), 분자 분해 및 폭주중합반응(일반적으로 폭굉)과 같은 화학적 변화.\n2. 압력탱크 파열과 같은 물리적 변화.\n3. 원자 변화(핵분열 또는 핵융합).",
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "CD",
+      "정의"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0002",
+    "Index": "CD;정의",
+    "SubIndex": null,
+    "TitleEN": "Explosive",
+    "TitleKR": "폭발물",
+    "ContentEN": "A chemical compound, mixture or device, the primary or common purpose of which is to function by explosion. The term includes, but is not limited to: dynamite, black powder, pellet powder, initiating explosives, detonators, safety fuses, squibs, detonating cord, igniter cord, and igniters. The term “explosive” includes any material determined to be within the scope of USC Title 18: Chapter 40 and also includes any material classified as an explosive other than consumer fireworks, 1.4G by the hazardous materials regulations of DOTn 49 CFR Parts 100-185\n\n",
+    "ContentKR": "폭발에 의해 기능하는 것이 주요 또는 일반적 목적인 화합물, 혼합물 또는 장치. 이 용어는 다이너마이트, 흑색화약, 펠릿화약, 기폭약, 뇌관, 안전도화선, 폭관, 도폭선, 점화선 및 점화기를 포함하되 이에 국한되지 않는다. \"폭발물\"이라는 용어는 USC Title 18: Chapter 40의 적용범위에 해당하는 모든 물질을 포함하며, 소비자용 폭죽 (1.4G)을 제외하고 DOT 49 CFR Parts 100-185의 위험물질 규정에 의해 폭발물로 분류된 모든 물질을 포함한다.\n",
+    "Comment": "\nUSC Title 18: Chapter 40, 미국 연방법 형법(Title 18)에서 폭발물(Explosives) 관련 범죄와 규제를 다루는 장\nUSC: United States Code (미국 연방 법전)\nTitle 18: Crimes and Criminal Procedure (형사 및 형사소송)\nChapter 40: Importation, Manufacture, Distribution and Storage of Explosive Materials\n\nDOT 49 CFR Parts 100–185\n미국 교통부(DOT)의 위험물 운송 규정(Hazardous Materials Regulations, HMR) 전 범위를 담고 있는 파트\n49 CFR: Code of Federal Regulations Title 49 (Transportation)\nParts 100–185: Hazardous Materials Regulations(HMR) 전체",
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "CD",
+      "정의"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0002",
+    "Index": "CD;정의",
+    "SubIndex": null,
+    "TitleEN": "Fire Area",
+    "TitleKR": "방화구역",
+    "ContentEN": "The aggregate floor area enclosed and bounded by fire walls, fire barriers, exterior walls or horizontal assemblies of a building. Areas of the building not provided with surrounding walls shall be included in the fire area if such areas are included within the horizontal projection of the roof or floor next above.",
+    "ContentKR": "방화벽, 방화구획, 외벽 또는 건물의 수평구조체로 둘러싸이고 경계가 정해진 총 바닥면적. 둘레 벽이 설치되지 않은 건물 구역은 해당 구역이 상부 지붕 또는 바닥의 수평 투영 내에 포함되는 경우에 화재구역에 포함한다.",
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "CD",
+      "정의"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0002",
+    "Index": "CD;정의",
+    "SubIndex": null,
+    "TitleEN": "Fire Barrier",
+    "TitleKR": "방화구획",
+    "ContentEN": "A fire-resistance-rated wall assembly of materials designed to restrict the spread of fire in which continuity is maintained.",
+    "ContentKR": "화재 확산을 제한하도록 설계된 재료의 내화 벽체구조로서 연속성이 유지되는 것.",
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "CD",
+      "정의"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0002",
+    "Index": "CD;정의",
+    "SubIndex": null,
+    "TitleEN": "Fire Command Center",
+    "TitleKR": "방재센터",
+    "ContentEN": "The principal attended or unattended location where the status of detection, alarm communications and control systems is displayed, and from which the systems can be manually controlled.",
+    "ContentKR": "감지, 경보통신 및 제어시스템의 상태가 표시되고 이러한 시스템을 수동으로 제어할 수 있는 주요 유인 또는 무인 장소.",
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "CD",
+      "정의"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0002",
+    "Index": "CD;정의",
+    "SubIndex": null,
+    "TitleEN": "Fire Wall",
+    "TitleKR": "방화벽",
+    "ContentEN": "A fire-resistance-rated wall having protected openings, which restricts the spread of fire and extends continuously from the foundation to or through the roof, with sufficient structural stability under fire conditions to allow collapse of construction on either side without collapse of the wall.",
+    "ContentKR": "보호된 개구부를 갖춘 내화 벽체로서 화재 확산을 제한하고 기초부터 지붕까지 또는 지붕을 관통하여 연속적으로 연장되며, 화재 조건에서 양쪽의 구조물이 붕괴하더라도 벽체는 붕괴하지 않는 충분한 구조적 안정성을 갖춤.",
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "CD",
+      "정의"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0002",
+    "Index": "CD;정의",
+    "SubIndex": null,
+    "TitleEN": "Fire Resistance Rating",
+    "TitleKR": "내화성능",
+    "ContentEN": "The period of time a building element, component or assembly maintains the ability to confine a fire, continues to perform a given structural function, or both, as determined by the tests, or the methods based on tests, prescribed in Section 703.",
+    "ContentKR": "Section 703에 규정된 시험 또는 시험에 기반한 방법으로 결정된 건물 부재, 구성요소 또는 구조체가 화재를 억제하고 해당 구조적 기능을 계속 수행하거나, 둘 모두를 유지할 수 있는 시간.",
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "CD",
+      "정의"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0002",
+    "Index": "CD;정의",
+    "SubIndex": null,
+    "TitleEN": "Flammable Liquid",
+    "TitleKR": "인화성 액체",
+    "ContentEN": "A liquid having a closed cup flash point below 100°F (38°C). Flammable liquids are further categorized into a group known as Class I liquids. The Class I category is subdivided as follows:\nClass IA. Liquids having a flash point below 73°F (23°C) and a boiling point below 100°F (38°C).\nClass IB. Liquids having a flash point below 73°F (23°C) and a boiling point at or above 100°F (38°C).\nClass IC. Liquids having a flash point at or above 73°F (23°C) and below 100°F (38°C). The category of flammable liquids does not include compressed gases or cryogenic fluids, or liquids that do not have a fire point when tested in accordance with ASTM D92.\n\n",
+    "ContentKR": "밀폐식 인화점이 100°F (38°C) 미만인 액체. 인화성 액체는 Class 1 액체로 알려진 그룹으로 더 분류된다. Class 1 범주는 다음과 같이 세분화된다.\nClass IA (1A급): 인화점이 73°F (23°C) 미만이고 끓는점이 100°F (38°C) 미만인 액체.\nClass IB (1B급): 인화점이 73°F (23°C) 미만이고 끓는점이 100°F (38°C) 이상인 액체.\nClass IC (1C급): 인화점이 73°F (23°C) 이상 100°F (38°C) 미만인 액체. 압축가스나 극저온 유체 또는 ASTM D92에 따라 시험했을 때 연소점이 없는 액체는 인화성 액체 범주에 포함되지 않는다. \n",
+    "Comment": "ASTM D92: Cleveland Open Cup 방식의 인화점 및 착화점 시험법\n\n표준 이름: Standard Test Method for Flash and Fire Points by Cleveland Open Cup Tester (ASTM D92)\n적용 범위: 인화점(Flash Point) ≥ 79 °C (175 °F) 그리고 ≤ 400 °C (752 °F)인 석유 제품의 시험에 사용되며, 연료유는 제외\n\n시험 방식\n장비: Cleveland Open Cup (COC) 형태의 오픈 컵 장치(수동 또는 자동) 사용\n시험 절차: 샘플을 컵에 넣고 가열하며, 일정 온도마다 불꽃을 표면에 노출시켜 순간적으로 점화되는 온도를 인화점으로 기록. 인화점 이후 계속 가열 후 5초 이상 연소가 유지되면 그 온도를 착화점(Fire point)으로 기록\n\n오픈 컵 방식 vs 클로즈드 컵 방식:\n오픈 컵(ASTM D92)은 증기가 쉽게 외부로 유출되어 인화점 측정값이 상대적으로 높게 나오는 경향이 있습니다.\n반면, 클로즈드 컵(ASTM D93, Pensky‑Martens 방식)은 밀폐된 상태에서 측정되므로 인화점이 낮게 비교됩니다.",
+    "Reference": "ASTM D92",
+    "AttachmentID": null,
+    "IndexTags": [
+      "CD",
+      "정의"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0002",
+    "Index": "CD;정의",
+    "SubIndex": null,
+    "TitleEN": "Hazardous Material",
+    "TitleKR": "위험물질",
+    "ContentEN": "Those chemicals or substances that are physical hazards or health hazards as classified in Section 307 and the International Fire Code, whether the materials are in usable or waste condition.",
+    "ContentKR": "물질의 상태(사용가능 또는 폐기물)에 관계없이 Section 307과 IFC에서 물리적 위험성 또는 건강 위험성이 있는 것으로 분류된 화학물질 또는 물질.",
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "CD",
+      "정의"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0002",
+    "Index": "CD;정의",
+    "SubIndex": null,
+    "TitleEN": "Height, Building",
+    "TitleKR": "건물높이",
+    "ContentEN": "The vertical distance from grade plane to the average height of the highest roof surface.",
+    "ContentKR": "평균지반면(Grade plane)에서 최고 지붕면의 평균 높이까지의 수직 거리.",
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "CD",
+      "정의"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0002",
+    "Index": "CD;정의",
+    "SubIndex": null,
+    "TitleEN": "High-rise Building",
+    "TitleKR": "고층건물",
+    "ContentEN": "A building with an occupied floor or occupied roof located more than 75 feet (22 860 mm) above the lowest level of fire department vehicle access.",
+    "ContentKR": "소방차량 접근이 가능한 최하층으로부터 75피트(22,860mm) 초과 지점에 점유층 또는 점유옥상(Occupied Roof)이 위치한 건물.",
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "CD",
+      "정의"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0002",
+    "Index": "CD;정의",
+    "SubIndex": null,
+    "TitleEN": "Horizontal Assembly",
+    "TitleKR": "수평 구조체",
+    "ContentEN": "A fire-resistance-rated floor or roof assembly of materials designed to restrict the spread of fire in which continuity is maintained.",
+    "ContentKR": "화재 확산을 제한하도록 설계된 재료의 내화바닥 또는 지붕 구조체로서 연속성이 유지되는 것.",
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "CD",
+      "정의"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0002",
+    "Index": "CD;정의",
+    "SubIndex": null,
+    "TitleEN": "Horizontal Exit",
+    "TitleKR": "수평 출구",
+    "ContentEN": "An exit component consisting of fire-resistance-rated construction and opening protectives intended to compartmentalize portions of a building thereby creating refuge areas that afford safety from the fire and smoke from the area of fire origin.",
+    "ContentKR": "내화구조와 개구부 방호장치로 구성된 출구 구성요소로서, 건물의 일부를 구획화 하여 화재 발생 구역의 화재와 연기로부터 안전한 피난구역을 조성하는 것.",
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "CD",
+      "정의"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0002",
+    "Index": "CD;정의",
+    "SubIndex": null,
+    "TitleEN": "Life Safety Systems",
+    "TitleKR": "인명안전시스템",
+    "ContentEN": "Systems, devices and equipment that enhance or facilitate evacuation, smoke control, compartmentation and isolation.",
+    "ContentKR": "대피, 제연, 구획화 및 격리를 강화하거나 촉진하는 시스템, 장치 및 장비.",
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "CD",
+      "정의"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0002",
+    "Index": "CD;정의",
+    "SubIndex": null,
+    "TitleEN": "Means Of Egress",
+    "TitleKR": "피난수단",
+    "ContentEN": "A continuous and unobstructed path of vertical and horizontal egress travel from any occupied portion of a building or structure to a public way. A means of egress consists of three separate and distinct parts: the exit access, the exit and the exit discharge.",
+    "ContentKR": "건물이나 구조물의 점유부분에서 공공 도로까지 연속되고 장애물이 없는 수직 및 수평 피난 보행경로. 피난수단은 피난통로 접근로, 출구 및 옥외 출구의 세 부분으로 구성된다.",
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "CD",
+      "정의"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0002",
+    "Index": "CD;정의",
+    "SubIndex": null,
+    "TitleEN": "Mezzanine",
+    "TitleKR": "메자닌(중층)",
+    "ContentEN": "An intermediate level or levels between the floor and ceiling of any story and in accordance with Section 505.",
+    "ContentKR": "어떤 층의 바닥과 천장 사이의 중간층으로서 Section 505에 따른 것.",
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "CD",
+      "정의"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0002",
+    "Index": "CD;정의",
+    "SubIndex": null,
+    "TitleEN": "Occupant Load",
+    "TitleKR": "수용인원",
+    "ContentEN": "The number of persons for which the means of egress of a building or portion thereof is designed.",
+    "ContentKR": "건물 또는 그 일부분의 피난수단 설계 시에 사용하는 사람 수.",
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "CD",
+      "정의"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0002",
+    "Index": "CD;정의",
+    "SubIndex": null,
+    "TitleEN": "Occupiable Space",
+    "TitleKR": "점유거주가능공간",
+    "ContentEN": "A room or enclosed space designed for human occupancy in which individuals congregate for amusement, educational or similar purposes or in which occupants are engaged at labor, and which is equipped with means of egress and light and ventilation facilities meeting the requirements of this code.",
+    "ContentKR": "오락, 교육 또는 이와 유사한 목적으로 개인이 집합하거나 재실자가 작업에 종사하는 인간 거주용으로 설계된 실 또는 밀폐공간으로서, 본 규정의 요구사항을 만족하는 피난수단과 채광 및 환기시설을 갖춘 것.",
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "CD",
+      "정의"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0002",
+    "Index": "CD;정의",
+    "SubIndex": null,
+    "TitleEN": "Open System",
+    "TitleKR": "개방시스템",
+    "ContentEN": "The use of a solid or liquid hazardous material involving a vessel or system that is continuously open to the atmosphere during normal operations and where vapors are liberated, or the product is exposed to the atmosphere during normal operations. Examples of open systems for solids and liquids include dispensing from or into open beakers or containers, dip tank and plating tank operations.",
+    "ContentKR": "정상 운전 중에 계속하여 대기에 개방된 용기나 시스템을 사용하여 고체 또는 액체 위험물질을 취급하는 방식으로, 증기가 방출되거나 정상 운전 중 제품이 대기에 노출되는 것. 고체 및 액체 개방시스템의 예시로는 개방된 비커나 용기에서/용기로 분배하는 것, 침지조 및 도금조 작업이 있다.",
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "CD",
+      "정의"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0002",
+    "Index": "CD;정의",
+    "SubIndex": null,
+    "TitleEN": "Organic Peroxide",
+    "TitleKR": "유기과산화물",
+    "ContentEN": "An organic compound that contains the bivalent -O-O- structure and which may be considered to be a structural derivative of hydrogen peroxide where one or both of the hydrogen atoms have been replaced by an organic radical. Organic peroxides can pose an explosion hazard (detonation or deflagration) or they can be shock sensitive. They can also decompose into various unstable compounds over an extended period of time.\n\nClass I. Those formulations that are capable of deflagration but not detonation.\nClass II. Those formulations that burn very rapidly and that pose a moderate reactivity hazard.\nClass III. Those formulations that burn rapidly and that pose a moderate reactivity hazard.\nClass IV. Those formulations that burn in the same manner as ordinary combustibles and that pose a minimal reactivity hazard.\nClass V. Those formulations that burn with less intensity than ordinary combustibles or do not sustain combustion and that pose no reactivity hazard.",
+    "ContentKR": "2가 -O-O- 구조를 포함하며 하나 또는 두 개의 수소원자가 유기라디칼로 치환된 과산화수소의 구조적 유도체로 간주될 수 있는 유기화합물. 유기과산화물은 폭발 위험(폭굉 또는 폭연)을 야기하거나 충격에 민감할 수 있다. 또한 장기간에 걸쳐 다양한 불안정 화합물로 분해될 수 있다.\n\nClass I (1급). 폭연은 가능하지만 폭굉은 불가능한 화합물.\nClass II (2급). 매우 빠르게 연소하며 반응성이 중간인 화합물.\nClass III (3급). 빠르게 연소하며 반응성이 중간인 화합물.\nClass IV (4급). 일반 가연물과 같은 방식으로 연소하며 반응성이 최소인 화합물.\nClass V (5급). 일반 가연물보다 낮은 강도로 연소하거나 연소를 지속하지 않으며 반응성 위험이 없는 화합물.",
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "CD",
+      "정의"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0002",
+    "Index": "CD;정의",
+    "SubIndex": null,
+    "TitleEN": "Oxidizer",
+    "TitleKR": "산화제",
+    "ContentEN": "A material that readily yields oxygen or other oxidizing gas, or that readily reacts to promote or initiate combustion of combustible materials and, if heated or contaminated, can result in vigorous self-sustained decomposition.\n\nClass 4.An oxidizer that can undergo an explosive reaction due to contamination or exposure to thermal or physical shock and that causes a severe increase in the burning rate of combustible materials with which it comes into contact. Additionally, the oxidizer causes a severe increase in the burning rate and can cause spontaneous ignition of combustibles.\nClass 3.An oxidizer that causes a severe increase in the burning rate of combustible materials with which it comes in contact.\nClass 2.An oxidizer that will cause a moderate increase in the burning rate of combustible materials with which it comes in contact.\nClass 1.An oxidizer that does not moderately increase the burning rate of combustible materials.",
+    "ContentKR": "산소나 기타 산화성 가스를 쉽게 발생시키거나 가연물질의 연소를 촉진 또는 개시하도록 쉽게 반응하며, 가열되거나 오염되면 격렬한 자가분해를 일으킬 수 있는 물질.\n\nClass 4 (4급). 오염이나 열적 또는 물리적 충격에의 노출로 인해 폭발반응을 일으킬 수 있고 접촉하는 가연물의 연소속도를 심각하게 증가시키는 산화제. 산화제는 또한 연소속도를 심각하게 증가시키고 가연물의 자연발화를 일으킬 수 있다.\nClass 3 (3급). 접촉하는 가연물의 연소속도를 심각하게 증가시키는 산화제.\nClass 2 (2급). 접촉하는 가연물질의 연소속도를 약간 증가시키는 산화제.\nClass 1 (1급). 가연물질의 연소속도를 약간 증가시키지 않는 산화제.",
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "CD",
+      "정의"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0002",
+    "Index": "CD;정의",
+    "SubIndex": null,
+    "TitleEN": "Shaft Enclosure",
+    "TitleKR": "샤프트 구획벽",
+    "ContentEN": "The walls or construction forming the boundaries of a shaft.",
+    "ContentKR": "샤프트의 경계를 형성하는 벽체 또는 구조.",
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "CD",
+      "정의"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0002",
+    "Index": "CD;정의",
+    "SubIndex": null,
+    "TitleEN": "Smoke Barrier",
+    "TitleKR": "방연벽",
+    "ContentEN": "A continuous membrane, either vertical or horizontal, such as a wall, floor or ceiling assembly, that is designed and constructed to restrict the movement of smoke.",
+    "ContentKR": "벽체, 바닥 또는 천장 구조체 등의 연속된 수직 또는 수평 막으로서, 연기의 이동을 제한하도록 설계되고 시공된 것.",
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "CD",
+      "정의"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0002",
+    "Index": "CD;정의",
+    "SubIndex": null,
+    "TitleEN": "Smoke Compartment",
+    "TitleKR": "방연구획실",
+    "ContentEN": "A space within a building separated from other interior areas of the building by smoke barriers, including interior walls and horizontal assemblies.",
+    "ContentKR": "방연벽(내벽과 수평구조체 포함)에 의해 건물의 다른 내부 구역과 분리된 건물 내 공간.",
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "CD",
+      "정의"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0002",
+    "Index": "CD;정의",
+    "SubIndex": null,
+    "TitleEN": "Smoke Proof Enclosure",
+    "TitleKR": "방연구조물",
+    "ContentEN": "An exit stairway or ramp designed and constructed so that the movement of the products of combustion produced by a fire occurring in any part of the building into the enclosure is limited.",
+    "ContentKR": "건물의 한 부분에서 발생한 화재로 인한 연소생성물이 구획 내로 이동하는 것을 제한하도록 설계 및 시공된 비상계단 또는 경사로.",
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "CD",
+      "정의"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0002",
+    "Index": "CD;정의",
+    "SubIndex": null,
+    "TitleEN": "Stairway",
+    "TitleKR": "계단",
+    "ContentEN": "Exit access: A stairway within the exit access portion of the means of egress system.\n\nInterior exit: An exit component that serves to meet one or more means of egress design requirements, such as required number of exits or exit access travel distance, and provides for a protected path of egress travel to the exit discharge or public way.",
+    "ContentKR": "비상계단: 피난수단 시스템의 피난통로 접근로 내에 있는 계단.\n\n내부 출구: 필요한 출구 개수나 피난 보행거리 등 하나 이상의 피난수단 설계 요구사항을 만족하는 출구 구성요소로서, 옥외 출구 또는 공공 도로까지 보호된 피난보행경로를 제공하는 것.",
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "CD",
+      "정의"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0002",
+    "Index": "CD;정의",
+    "SubIndex": null,
+    "TitleEN": "Through Penetration Fire Stop System",
+    "TitleKR": "설비 관통 내화충전시스템",
+    "ContentEN": "A breach in both sides of a floor, floor-ceiling or wall assembly to accommodate an item passing through the breaches.",
+    "ContentKR": "관통물을 수용하기 위해 바닥, 바닥-천장 또는 벽체 구조의 양면에 만들어진 관통부.",
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "CD",
+      "정의"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0003.0304",
+    "Index": "CD;SD;DD;IFR;IFC;용도구분/사용;업무시설군(Group B)",
+    "SubIndex": null,
+    "TitleEN": "Business Group B",
+    "TitleKR": "업무시설군 B 용도",
+    "ContentEN": "Business Group B occupancy includes, among others, the use of a building or structure, or a portion thereof, for office, professional or service-type transactions, including storage of records and accounts. Business occupancies shall include, but not be limited to, the following:\n\nAirport traffic control towers, Ambulatory care facilities, Animal hospitals, kennels and pounds, Banks, Barber and beauty shops, Car wash, Civic administration, Clinic, outpatient, Dry cleaning and laundries: pick-up and delivery stations and self-service, Educational occupancies for students above the 12th grade including higher education laboratories, Electronic data entry, Food processing establishments and commercial kitchens not associated with restaurants, cafeterias and similar dining facilities not more than 2,500 square feet (232 m2) in area, Laboratories: testing and research, Lithium-ion or lithium metal battery testing, research and development, Motor vehicle showrooms, Post offices, Print shops, Professional services (architects, attorneys, dentists, physicians, engineers, etc.), Radio and television stations, Telephone exchanges.\nTraining and skill development not in a school or academic program (this shall include, but not be limited to, tutoring centers, martial arts studios, gymnastics and similar uses regardless of the ages served, and where not classified as a Group A occupancy)",
+    "ContentKR": "Business Group B occupancy (업무시설군 B 용도)는 특히 기록 및 장부의 보관을 포함하여 사무, 전문직 또는 서비스업 거래를 위한 건물이나 구조물 또는 그 일부의 사용을 포함한다. 업무시설은 다음을 포함하되 이에 국한되지 않는다.\n\n공항 관제탑, 외래진료시설, 동물병원, 사육장, 보호소, 은행, 이미용실, 세차장, 시민행정시설, 외래진료소, 드라이클리닝 및 세탁소: 수거/배달 및 셀프서비스, 고등교육 실험실을 포함한 12학년 이상 학생을 위한 교육시설, 전자데이터 입력, 레스토랑/카페테리아 및 유사한 식당시설과 연관되지 않은 식품가공시설 및 상업용 주방(면적 2,500 sf (232m²) 이하), 시험 및 연구 실험실, 리튬이온 또는 리튬 금속 배터리 시험/연구개발, 자동차 전시장, 우체국, 인쇄소, 전문 서비스업(건축사, 변호사, 치과의사, 의사, 엔지니어 등), 라디오 및 텔레비전 방송국, 전화교환소.\n학교나 학술 프로그램이 아닌 훈련 및 기능 개발(이는 서비스 대상 연령에 관계없이 학습지, 무술 스튜디오, 체조 및 유사한 용도를 포함하되 이에 국한되지 않으며, Group A 용도로 분류되지 않는 경우를 포함함).",
+    "Comment": "Group B 용도는 일반적으로 사무실 및 그와 유사한 기능을 가진 건물 및 실로 구분됩니다.\n\n전자 데이터 처리 입력(Electronic data processing entry)과 리튬 이온 또는 리튬 금속 배터리 시험, 연구 및 개발(Lithium-ion or lithium metal battery testing, research and development)은 2024 개정판에 추가되었습니다.",
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "CD",
+      "SD",
+      "DD",
+      "IFR",
+      "IFC",
+      "용도구분/사용",
+      "업무시설군(Group B)"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0003.0307",
+    "Index": "CD;SD;DD;IFR;IFC;용도구분/사용;고위험시설군(Group H)",
+    "SubIndex": null,
+    "TitleEN": "High-hazard Group H",
+    "TitleKR": "고위험시설군 H",
+    "ContentEN": "High-hazard Group H occupancy includes, among others, the use of a building or structure, or a portion thereof, that involves the manufacturing, processing, generation or storage of materials that constitute a physical or health hazard in quantities in excess of those allowed in control areas complying with Section 414, based on the maximum allowable quantity limits for control areas set forth in Tables 307.1(1) and 307.1(2). Hazardous occupancies are classified in Groups H-1, H-2, H-3, H-4 and H-5 and shall be in accordance with this section, the requirements of Section 415 and the International Fire Code. Hazardous materials stored or used on top of roofs or canopies shall be classified as rooftop storage or use and shall comply with the International Fire Code.",
+    "ContentKR": "고위험시설군 H 용도는 특히 Table 307.1(1) 및 307.1(2)에 명시된 관리구역의 최대 허용량에 기반하여 Section 414를 준수하는 관리구역의 허용량을 초과하는 물리적 또는 건강 위험을 초래하는 물질의 제조, 가공, 생성 또는 저장을 수반하는 건물이나 구조물 또는 그 일부의 사용을 포함한다. 위험시설은 Group H-1, H-2, H-3, H-4 및 H-5로 분류하며 본 조항, Section 415의 요구사항 및 IFC에 따라야 한다. 지붕이나 캐노피 상부에 저장 또는 사용되는 위험물질은 옥상 저장 또는 사용으로 분류하며 IFC를 준수해야 한다.\n",
+    "Comment": "H 용도(H Occupancy)는 건물의 물리적 위험도나 사람의 건강에 미치는 영향력이 상당히 커서, H 용도로 물질을 저장, 가공, 생산 및 취급하는 건물은 미국 인허가청에서 다른 용도의 건물보다 상당히 관심을 가지고 자세히 검토하는 분야입니다.\n\nInternational Fire Code (IFC)는 Chapter 50, Section 5001.5.1에서 위험물 관리 계획(Hazardous Material Management Plan, HMMP) 보고서와 Section 5001.5.2에서 위험물 목록 명세서(Hazardous Material Inventory Statement, HMIS) 보고서를 요구하고 있습니다.\n\n일반적으로 위의 두 가지 보고서는 화학 엔지니어나 위험물질 전문 코드 컨설턴트가 수행합니다. 특히 화학 엔지니어나 위험물질 전문가로부터 프로젝트에서 취급하는 위험물질이 어떤 H 용도인지 컨설팅을 받아야 합니다. (Section 414.1.3 참조)\n\nTable 307.1(1) 및 307.1(2)에서 정하고 있는 위험물의 각 관리 구역(Control area)에서 취급 및 저장할 수 있는 최대 허용량을 초과하면 그 물질은 H 용도로 규정됩니다. H 용도는 그 위험도에 따라 H-1, H-2, H-3, H-4 그리고 H-5로 구분되고, H-1이 가장 위험한 물질입니다.\n프로젝트에서 취급하거나 저장하는 위험물질이 Table 307.1(1) 및 307.1(2)의 최대 허용량보다 적다면 그 물질은 S 용도(Storage)로 구분됩니다.\n\nH 용도는 Section 415와 International Fire Code에서 자세히 다룹니다.",
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "CD",
+      "SD",
+      "DD",
+      "IFR",
+      "IFC",
+      "용도구분/사용",
+      "고위험시설군(Group H)"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0003.0311",
+    "Index": "CD;SD;DD;IFR;IFC;저장시설군(Group S)",
+    "SubIndex": null,
+    "TitleEN": "Storage Group S",
+    "TitleKR": "저장시설군 S",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "CD",
+      "SD",
+      "DD",
+      "IFR",
+      "IFC",
+      "저장시설군(Group S)"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0003.0312",
+    "Index": "CD;SD;DD;IFR;IFC;설비/기타용도군(Group U)",
+    "SubIndex": null,
+    "TitleEN": "Utility And Miscellaneous Group U",
+    "TitleKR": "부속 및 기타용도군 U",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "CD",
+      "SD",
+      "DD",
+      "IFR",
+      "IFC",
+      "설비/기타용도군(Group U)"
+    ],
+    "SubindexPaths": []
+  },
+  {
     "Subsection": 1,
     "OrderKey": "0003.0306.001",
     "Index": "CD;SD;DD;IFR;IFC;용도구분/사용;공장산업시설군(Group F)",
@@ -385,6 +1160,70 @@
     "SubindexPaths": []
   },
   {
+    "Subsection": null,
+    "OrderKey": "0004",
+    "Index": "CD;SD;DD;IFR;IFC",
+    "SubIndex": null,
+    "TitleEN": "Special Detailed Requirements Based On Occupancy And Use",
+    "TitleKR": "용도 및 사용에 따른 특별 세부 요건",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "CD",
+      "SD",
+      "DD",
+      "IFR",
+      "IFC"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0004.0403",
+    "Index": "CD;SD;DD;IFR;IFC;고층건물",
+    "SubIndex": null,
+    "TitleEN": "High-rise Building",
+    "TitleKR": "고층 건물",
+    "ContentEN": "A building with an occupied floor or occupied roof located more than 75 feet (22 860 mm) above the lowest level of fire department vehicle access.",
+    "ContentKR": "화재 진압 차량 진입을 위한 최저 지면으로부터 22,860mm(75피트)를 초과하는 높이에 사람이 거주하거나 사용할 수 있는 층 또는 옥상이 위치한 건물.",
+    "Comment": "일반적인 미국 소방 사다리차가 사다리를 펼쳐 호수에서 물을 뿌려 닿을 수 있는 최대 높이",
+    "Reference": null,
+    "AttachmentID": "D004",
+    "IndexTags": [
+      "CD",
+      "SD",
+      "DD",
+      "IFR",
+      "IFC",
+      "고층건물"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0004.0413",
+    "Index": "SD;DD;IFR;IFC;가연물 저장",
+    "SubIndex": null,
+    "TitleEN": "Combustible Storage",
+    "TitleKR": "가연물 저장",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "SD",
+      "DD",
+      "IFR",
+      "IFC",
+      "가연물 저장"
+    ],
+    "SubindexPaths": []
+  },
+  {
     "Subsection": 5.1,
     "OrderKey": "0004.[BE]403.005",
     "Index": "CD;SD;DD;IFR;IFC;고층건물",
@@ -567,6 +1406,27 @@
         "스프링클러설비"
       ]
     ]
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0004.[F]414",
+    "Index": "SD;DD;IFR;IFC;위험물질",
+    "SubIndex": null,
+    "TitleEN": "Hazardous Materials",
+    "TitleKR": "위험물질",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "SD",
+      "DD",
+      "IFR",
+      "IFC",
+      "위험물질"
+    ],
+    "SubindexPaths": []
   },
   {
     "Subsection": 1,
@@ -770,6 +1630,27 @@
         "폭발제어 요건"
       ]
     ]
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0004.[F]415",
+    "Index": "SD;DD;IFR;IFC;위험물질",
+    "SubIndex": null,
+    "TitleEN": "Group H-1, H-2, H-3, H-4 And H-5",
+    "TitleKR": "Group H-1, H-2, H-3, H-4 및 H-5",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": "Section 415는 위험물질이 Table 307.1(1) 또는 Table 307.1(2)에서 허용한 양을 초과한 건물 및 실에 적용합니다.",
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "SD",
+      "DD",
+      "IFR",
+      "IFC",
+      "위험물질"
+    ],
+    "SubindexPaths": []
   },
   {
     "Subsection": 6,
@@ -1697,6 +2578,161 @@
     ]
   },
   {
+    "Subsection": null,
+    "OrderKey": "0005.0504",
+    "Index": "CD;SD;DD;IFR;IFC;건물 높이/면적",
+    "SubIndex": null,
+    "TitleEN": "Building Height And Number Of Stories",
+    "TitleKR": "건물 높이 및 층수",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "CD",
+      "SD",
+      "DD",
+      "IFR",
+      "IFC",
+      "건물 높이/면적"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0005.0505",
+    "Index": "SD;DD;IFR;IFC;건물 높이/면적;메자닌",
+    "SubIndex": null,
+    "TitleEN": "Mezzanines And Equipment Platforms",
+    "TitleKR": "메자닌 및 장비 플랫폼",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "SD",
+      "DD",
+      "IFR",
+      "IFC",
+      "건물 높이/면적",
+      "메자닌"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0005.0506",
+    "Index": "CD;SD;DD;IFR;IFC;건물 높이/면적",
+    "SubIndex": null,
+    "TitleEN": "Building Area",
+    "TitleKR": "건물 면적",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "CD",
+      "SD",
+      "DD",
+      "IFR",
+      "IFC",
+      "건물 높이/면적"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0005.0507",
+    "Index": "CD;SD;DD;IFR;IFC;건물 높이/면적;무제한 면적건물",
+    "SubIndex": null,
+    "TitleEN": "Unlimited Area Buildings",
+    "TitleKR": "무제한 면적 건물",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "CD",
+      "SD",
+      "DD",
+      "IFR",
+      "IFC",
+      "건물 높이/면적",
+      "무제한 면적건물"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0005.0508",
+    "Index": "SD;DD;IFR;IFC;건물 높이/면적;복합용도건물",
+    "SubIndex": null,
+    "TitleEN": "Mixed Use And Occupancy",
+    "TitleKR": "혼합 사용 및 용도",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": "혼합 용도(Mixed-use)에 관한 중요 조항들을 정리하면 아래와 같습니다.\n\n1. 부속 용도(Accessory use)로 쓰이는 공간들의 합이 해당 층의 면적의 10%가 넘으면 혼합 용도(Mixed-use)로 간주됩니다(Section 508.2.3).\n\n2. 혼합 용도(Mixed-use occupancy)의 접근 방식은 두 가지입니다(Section 508.3, 508.4):\n\n   (1) 비구획 용도(Nonseparated occupancies, Section 508.3)\n   - 건물 전체가 가장 강한 용도 규정을 따라야 합니다\n   - 각 용도별 구획은 필요하지 않습니다\n\n   (2) 구획 용도(Separated occupancies, Table 508.4)\n   - 각각의 용도별 Table 508.4에 따라 구획합니다\n   - 허용 면적은 각각의 용도의 실제 면적 / 허용 면적의 합이 1보다 작아야 합니다(Section 508.4.2)\n   - 허용 높이와 층수는 각각 용도가 허용 높이와 층수를 만족해야 합니다(Section 508.4.3)\n\n부속 용도(Accessory use, Section 508.2.3)\n1. 위험도가 같거나 낮아야 합니다\n2. 해당 층의 주용도 면적보다 10% 아래여야 합니다\n3. 별도의 방화 구획이 요구되지 않습니다\n\nH 용도 예시:  B 용도의 층에서 H-3 면적이 5%이면 위험도가 높아 부속 용도로 간주되지 않으며 혼합 용도로 접근해야 합니다.\n\n부수적 용도(Incidental use, Table 509)\n건물의 주용도 또는 혼합 용도 건물에서 부수적으로 존재하는 용도입니다.\n일반적으로 주용도보다 위험성이 큰 용도입니다.\nTable 509에 따라 구획합니다.",
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "SD",
+      "DD",
+      "IFR",
+      "IFC",
+      "건물 높이/면적",
+      "복합용도건물"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0005.0509",
+    "Index": "SD;DD;IFR;IFC;건물 높이/면적;부수적 용도",
+    "SubIndex": null,
+    "TitleEN": "Incidental Uses",
+    "TitleKR": "부수적 용도",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "SD",
+      "DD",
+      "IFR",
+      "IFC",
+      "건물 높이/면적",
+      "부수적 용도"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0005.0510",
+    "Index": "SD;DD;IFR;IFC;건물 높이/면적;부수적 용도",
+    "SubIndex": null,
+    "TitleEN": "Special Provisions",
+    "TitleKR": "특별 조항",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "SD",
+      "DD",
+      "IFR",
+      "IFC",
+      "건물 높이/면적",
+      "부수적 용도"
+    ],
+    "SubindexPaths": []
+  },
+  {
     "Subsection": 1,
     "OrderKey": "0005.0503.001",
     "Index": "CD;SD;DD;IFR;IFC;건물 높이/면적",
@@ -2041,7 +3077,7 @@
   {
     "Subsection": 2.1,
     "OrderKey": "0005.0506.002",
-    "Index": "CD;SD;DD;IFR;IFC;허용면적;단일 용도 건물(Single-occupancy buildings)",
+    "Index": "CD;SD;DD;IFR;IFC;허용면적;단일용도건물",
     "SubIndex": null,
     "TitleEN": "Single-occupancy Buildings",
     "TitleKR": "단일 용도 건물",
@@ -2057,7 +3093,7 @@
       "IFR",
       "IFC",
       "허용면적",
-      "단일 용도 건물(Single-occupancy buildings)"
+      "단일용도건물"
     ],
     "SubindexPaths": []
   },
@@ -2591,6 +3627,49 @@
     "SubindexPaths": []
   },
   {
+    "Subsection": null,
+    "OrderKey": "0006",
+    "Index": "SD;DD;IFR;IFC;구조유형",
+    "SubIndex": null,
+    "TitleEN": "Type Of Construction",
+    "TitleKR": "구조 유형",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": "구조 종류(Construction Type) 유형 I, II, III 및 V는 다시 두 가지 하위 등급(A와 B)으로 세분되며 구조 유형 IV는 네 가지 하위 등급(IV-A, IV-B, IV-C 및 IV-HT)으로 세분됩니다. A, B, C, HT (Heavy Timber) 유형은 코드 내에서 별도의 정의가 주어진 것은 아니며 단순히 구조 부재에 요구되는 시간 단위 내화 성능 등급(Hourly fire-resistance rating)으로 구분되었다고 이해하시면 됩니다. IV-A, IV-B, IV-C 구조 유형은 또한 요구되는 불연성 재료(Noncombustible) 보호 비율에 따라 구분됩니다.\n\n일반적으로 Type A 등급은 Type B 등급보다 더 높은 내화 성능 등급을 구조 부재에 요구합니다. Type I 및 Type IV를 제외한 다른 구조 유형에서 A와 B는 흔히 각각 보호(Protected) 구조와 비보호(Unprotected) 구조로 불립니다.",
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "SD",
+      "DD",
+      "IFR",
+      "IFC",
+      "구조유형"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0006.0601",
+    "Index": "SD;DD;IFR;IFC;구조유형;건축부재의 내화성능",
+    "SubIndex": null,
+    "TitleEN": "Fire-resistance Rating Requirements For Building Elements",
+    "TitleKR": "건축부재의 내화성능 요구사항",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": "D022",
+    "IndexTags": [
+      "SD",
+      "DD",
+      "IFR",
+      "IFC",
+      "구조유형",
+      "건축부재의 내화성능"
+    ],
+    "SubindexPaths": []
+  },
+  {
     "Subsection": 2,
     "OrderKey": "0006.0602.002",
     "Index": "SD;DD;IFR;IFC;구조유형;Type I/Type II",
@@ -2698,6 +3777,356 @@
       "구조유형",
       "Type V",
       "허용자재"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0007",
+    "Index": "DD;IFR;IFC;내화",
+    "SubIndex": null,
+    "TitleEN": "Fire And Smoke Protection Features",
+    "TitleKR": "화재 및 연기 방호 설비",
+    "ContentEN": "The fire-resistance rating of building elements, components or assemblies shall be determined in accordance with Section 703.2.1 or 703.2.2 without the use of automatic sprinklers or any other fire suppression system being incorporated, or in accordance with Section 703.2.3.",
+    "ContentKR": "건축 요소, 구성요소 또는 구조체의 내화 성능 등급은 자동 스프링클러 또는 기타 소화 시스템의 사용 없이 Section 703.2.1 또는 Section 703.2.2에 따라 결정되거나 Section 703.2.3에 따라 결정되어야 한다.",
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "DD",
+      "IFR",
+      "IFC",
+      "내화"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0007.0704",
+    "Index": "SD;DD;IFR;IFC;내화성능;주요 구조체",
+    "SubIndex": null,
+    "TitleEN": "Fire-resistance Rating Requirements Of Structure Members",
+    "TitleKR": "구조부재의 내화성능 요구사항",
+    "ContentEN": "The fire-resistance ratings of structural members and assemblies shall comply with this section and the requirements for the type of construction as specified in Table 601.",
+    "ContentKR": "구조 부재 및 구조체의 내화 성능 등급은 본 절 및 Table 601에 명시된 구조 유형에 대한 요구사항을 준수해야 한다.",
+    "Comment": "Section 704에서는 내화 성능 등급(Fire-resistance rating)이 요구되는 구조 부재(Structural members)에 적용되는 규정을 담고 있습니다. 구조 부재에 요구되는 내화 등급은 일반적으로 Table 601에 명시된 구조 종류(Type of Construction)에 따라 결정됩니다. 그러나 코드의 다른 조항들(예: Section 707.5, 709.4, 710.4, 711.2.2의 연속성 규정)은 구조 부재가 내화 성능 등급이 요구되는 구조체를 지지(Support)하는 경우 해당 부재에도 내화 성능 등급을 요구할 수 있습니다.\n\n",
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "SD",
+      "DD",
+      "IFR",
+      "IFC",
+      "내화성능",
+      "주요 구조체"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0007.0705",
+    "Index": "SD;DD;IFR;IFC;내화성능;외벽",
+    "SubIndex": null,
+    "TitleEN": "Exterior Wall",
+    "TitleKR": "외벽",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "SD",
+      "DD",
+      "IFR",
+      "IFC",
+      "내화성능",
+      "외벽"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0007.0706",
+    "Index": "SD;DD;IFR;IFC;내화성능벽체;내화/방화벽",
+    "SubIndex": null,
+    "TitleEN": "Fire Wall",
+    "TitleKR": "방화벽",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "SD",
+      "DD",
+      "IFR",
+      "IFC",
+      "내화성능벽체",
+      "내화/방화벽"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0007.0707",
+    "Index": "SD;DD;IFR;IFC;내화성능벽체;방화구획벽",
+    "SubIndex": null,
+    "TitleEN": "Fire Barrier",
+    "TitleKR": "방화구획",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": "방화벽(Fire Barrier)은 피난 시설(Exits), 부수적 용도 구역(Incidental Use Areas), 샤프트(Shafts), 위험물 관리 구역(Hazardous Materials Control Areas) 그리고 화재 구역(Fire Areas) 등을 구획하기 위해 사용됩니다. \n방화벽은 방화 칸막이(Fire Partition, Section 708 참조)보다 더 높은 수준의 화재 보호 성능을 제공하지만 방화벽(Fire Wall)과 같은 구조적 독립성(Structural Integrity)은 갖고 있지 않습니다.\n\n",
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "SD",
+      "DD",
+      "IFR",
+      "IFC",
+      "내화성능벽체",
+      "방화구획벽"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0007.0708",
+    "Index": "SD;DD;IFR;IFC;내화성능벽체;방화칸막이",
+    "SubIndex": null,
+    "TitleEN": "Fire Partition",
+    "TitleKR": "방화칸막이",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "SD",
+      "DD",
+      "IFR",
+      "IFC",
+      "내화성능벽체",
+      "방화칸막이"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0007.0709",
+    "Index": "DD;IFR;IFC;제연벽;방연구획벽",
+    "SubIndex": null,
+    "TitleEN": "Smoke Barrier",
+    "TitleKR": "방연구획",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "DD",
+      "IFR",
+      "IFC",
+      "제연벽",
+      "방연구획벽"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0007.0710",
+    "Index": "DD;IFR;IFC;제연벽;연기차단벽",
+    "SubIndex": null,
+    "TitleEN": "Smoke Partition",
+    "TitleKR": "연기차단벽",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "DD",
+      "IFR",
+      "IFC",
+      "제연벽",
+      "연기차단벽"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0007.0711",
+    "Index": "DD;IFR;IFC;마감;바닥/지붕 구조재",
+    "SubIndex": null,
+    "TitleEN": "Floor And Roof Assembly",
+    "TitleKR": "바닥 및 지붕 구조재",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "DD",
+      "IFR",
+      "IFC",
+      "마감",
+      "바닥/지붕 구조재"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0007.0712",
+    "Index": "DD;IFR;IFC;수직 개구부",
+    "SubIndex": null,
+    "TitleEN": "Vertical Opening",
+    "TitleKR": "수직 개구부",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "DD",
+      "IFR",
+      "IFC",
+      "수직 개구부"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0007.0713",
+    "Index": "DD;IFR;IFC;내화성능벽체;샤프트",
+    "SubIndex": null,
+    "TitleEN": "Shaft Enclosures",
+    "TitleKR": "샤프트 구획",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "DD",
+      "IFR",
+      "IFC",
+      "내화성능벽체",
+      "샤프트"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0007.0714",
+    "Index": "DD;IFR;IFC;관통",
+    "SubIndex": null,
+    "TitleEN": "Penetrations",
+    "TitleKR": "관통부",
+    "ContentEN": "Penetrations of fire-resistance-rated walls by ducts that are not protected with dampers shall comply with Sections 714.3 through 714.4.3. Penetrations of horizontal assemblies not protected with a shaft as permitted by Section 717.6, and not required to be protected with fire dampers by other sections of this code, shall comply with Sections 714.5 through 714.6.2. Ducts and air transfer openings that are protected with dampers shall comply with Section 717.",
+    "ContentKR": "댐퍼로 보호되지 않은 덕트에 의한 내화등급 벽체의 관통부는 Section 714.3부터 Section 714.4.3까지를 준수해야 한다.\nSection 717.6에서 허용하는 샤프트로 보호되지 않고, 본 코드의 다른 Section에서 방화댐퍼로 보호하도록 요구되지 않는 수평 구조체의 관통부는 Section 714.5부터 Section 714.6.2까지를 준수해야 한다.\n댐퍼로 보호되는 덕트 및 공기 이송 개구부는 Section 717을 준수해야 한다.",
+    "Comment": "기본적으로 내화 벽 또는 바닥을 통과하는 개구부에는 통과 대상(벽, 바닥)의 내화 성능과 동일한 성능의 내장재 및 댐퍼로 보호한다고 이해하시면 됩니다.\n\n덕트 및 공기 전달 개구부는 Section 717 참조.\n슬리브로 보호 시는 제조사의 사양서에 따라 설치.\n\n",
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "DD",
+      "IFR",
+      "IFC",
+      "관통"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0007.0715",
+    "Index": "DD;IFR;IFC;이음부/틈새",
+    "SubIndex": null,
+    "TitleEN": "Joints And Voids",
+    "TitleKR": "이음부 및 틈새",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "DD",
+      "IFR",
+      "IFC",
+      "이음부/틈새"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0007.0716",
+    "Index": "IFR;IFC;개구부 보호",
+    "SubIndex": null,
+    "TitleEN": "Opening Protective",
+    "TitleKR": "개구부 보호",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "IFR",
+      "IFC",
+      "개구부 보호"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0007.0717",
+    "Index": "IFR;IFC;덕트/개구부",
+    "SubIndex": null,
+    "TitleEN": "Ducts And Air Transfer Opening",
+    "TitleKR": "덕트 및 공기이송 개구부",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "IFR",
+      "IFC",
+      "덕트/개구부"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0007.0718",
+    "Index": "DD;IFR;IFC;은폐공간",
+    "SubIndex": null,
+    "TitleEN": "Concealed Space",
+    "TitleKR": "은폐 공간",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "DD",
+      "IFR",
+      "IFC",
+      "은폐공간"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0007.0722",
+    "Index": "IFC;계산된 내화성능",
+    "SubIndex": null,
+    "TitleEN": "Calculated Fire Resistance",
+    "TitleKR": "계산된 내화성능",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "IFC",
+      "계산된 내화성능"
     ],
     "SubindexPaths": []
   },
@@ -3978,6 +5407,49 @@
     "SubindexPaths": []
   },
   {
+    "Subsection": null,
+    "OrderKey": "0008",
+    "Index": "IFR;IFC;마감",
+    "SubIndex": null,
+    "TitleEN": "Interior Finishes",
+    "TitleKR": "내장재",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "IFR",
+      "IFC",
+      "마감"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0008.0804",
+    "Index": "IFR;IFC;마감",
+    "SubIndex": "마감_바닥",
+    "TitleEN": "Interior Floor Finish",
+    "TitleKR": "내부 바닥 마감재",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "IFR",
+      "IFC",
+      "마감"
+    ],
+    "SubindexPaths": [
+      [
+        "마감",
+        "바닥"
+      ]
+    ]
+  },
+  {
     "Subsection": "1.1",
     "OrderKey": "0008.0803.001",
     "Index": "IFR;IFC;마감",
@@ -4100,6 +5572,243 @@
         "용도별 등급"
       ]
     ]
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0009",
+    "Index": "IFR;IFC;소방설비;감시서비스",
+    "SubIndex": null,
+    "TitleEN": "Fire Protection And Life Safety Systems",
+    "TitleKR": "소방 및 인명안전 설비",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "IFR",
+      "IFC",
+      "소방설비",
+      "감시서비스"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0009.0902",
+    "Index": "SD;DD;IFR;IFC;소화펌프;펌프실/입상배관실 크기",
+    "SubIndex": null,
+    "TitleEN": "Fire Pump and Riser Room Size",
+    "TitleKR": "소화펌프 및 입상배관실 크기",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "SD",
+      "DD",
+      "IFR",
+      "IFC",
+      "소화펌프",
+      "펌프실/입상배관실 크기"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0009.0903",
+    "Index": "IFR;IFC;스프링클러설비",
+    "SubIndex": null,
+    "TitleEN": "Automatic Sprinkler System",
+    "TitleKR": "자동스프링클러설비",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "IFR",
+      "IFC",
+      "스프링클러설비"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0009.0904",
+    "Index": "IFR;IFC;스프링클러설비;대체소화설비",
+    "SubIndex": null,
+    "TitleEN": "Alternative Automatic Fire-extinguishing System",
+    "TitleKR": "대체 자동소화설비",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "IFR",
+      "IFC",
+      "스프링클러설비",
+      "대체소화설비"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0009.0905",
+    "Index": "IFR;IFC;연결송수관 설비",
+    "SubIndex": null,
+    "TitleEN": "Standpipe Systems",
+    "TitleKR": "연결송수관설비",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "IFR",
+      "IFC",
+      "연결송수관 설비"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0009.0906",
+    "Index": "IFR;IFC;소화기",
+    "SubIndex": null,
+    "TitleEN": "Portable Fire Extinguishers",
+    "TitleKR": "소화기",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "IFR",
+      "IFC",
+      "소화기"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0009.0907",
+    "Index": "IFR;IFC;자탐설비",
+    "SubIndex": null,
+    "TitleEN": "Fire Alarm And Detection Systems",
+    "TitleKR": "화재경보 및 감지설비",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "IFR",
+      "IFC",
+      "자탐설비"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0009.0908",
+    "Index": "IFR;IFC;비상경보설비",
+    "SubIndex": null,
+    "TitleEN": "Emergency Alarm Systems",
+    "TitleKR": "비상경보설비",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "IFR",
+      "IFC",
+      "비상경보설비"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0009.0909",
+    "Index": "IFR;IFC;소방/인명안전 시스템;제연설비",
+    "SubIndex": null,
+    "TitleEN": "Smoke Control Systems",
+    "TitleKR": "제언설비",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "IFR",
+      "IFC",
+      "소방/인명안전 시스템",
+      "제연설비"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0009.0910",
+    "Index": "IFR;IFC;제연설비;소방관용 제연패널",
+    "SubIndex": null,
+    "TitleEN": "Smoke And Heat Removal",
+    "TitleKR": "연기 및 열 배출",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "IFR",
+      "IFC",
+      "제연설비",
+      "소방관용 제연패널"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0009.0911",
+    "Index": "IFR;IFC;소방/인명안전 시스템;방재센터",
+    "SubIndex": null,
+    "TitleEN": "Fire Command Center",
+    "TitleKR": "방재센터",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "IFR",
+      "IFC",
+      "소방/인명안전 시스템",
+      "방재센터"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0009.0913",
+    "Index": "IFR;IFC;소화펌프;구획",
+    "SubIndex": null,
+    "TitleEN": "Fire Pumps",
+    "TitleKR": "소화펌프",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": "NFPA 20",
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "IFR",
+      "IFC",
+      "소화펌프",
+      "구획"
+    ],
+    "SubindexPaths": []
   },
   {
     "Subsection": "6",
@@ -4850,8 +6559,8 @@
   {
     "Subsection": "3.3",
     "OrderKey": "0009.0905.003",
-    "Index": "IFR;IFC;연결송수관 설비;설치대상;밀폐/개방형 몰",
-    "SubIndex": "설치대상_밀폐/개방형 몰",
+    "Index": "IFR;IFC;연결송수관 설비;설치대상;밀폐/개방형 몰 건물",
+    "SubIndex": "설치대상_밀폐/개방형 몰 건물",
     "TitleEN": "Covered and Open Mall Buildings",
     "TitleKR": null,
     "ContentEN": "Covered mall and open mall buildings shall be equipped throughout with a standpipe system where required by Section 905.3.1. Mall buildings not required to be equipped with a standpipe system by Section 905.3.1 shall be equipped with Class I hose connections connected to the automatic sprinkler system sized to deliver water at 250 gallons per minute (946.4 L/min) at the hydraulically most remote hose connection while concurrently supplying the automatic sprinkler system demand. The standpipe system shall be designed to not exceed a 50 pounds per square inch (psi) (345 kPa) residual pressure loss with a flow of 250 gallons per minute (946.4 L/min) from the fire department connection to the hydraulically most remote hose connection. Hose connections shall be provided at each of the following locations:\n\n1.Within the mall at the entrance to each exit passageway or corridor.\n2.At each floor-level landing within interior exit stairways opening directly on the mall.\n3.At exterior public entrances to the mall of a covered mall building.\n4.At public entrances at the perimeter line of an open mall building.\n5.At other locations as necessary so that the distance to reach all portions of a tenant space does not exceed 200 feet (60 960 mm) from a hose connection.",
@@ -4864,12 +6573,12 @@
       "IFC",
       "연결송수관 설비",
       "설치대상",
-      "밀폐/개방형 몰"
+      "밀폐/개방형 몰 건물"
     ],
     "SubindexPaths": [
       [
         "설치대상",
-        "밀폐/개방형 몰"
+        "밀폐/개방형 몰 건물"
       ]
     ]
   },
@@ -6221,6 +7930,210 @@
     "SubindexPaths": []
   },
   {
+    "Subsection": null,
+    "OrderKey": "0010",
+    "Index": "IFC;피난계획",
+    "SubIndex": null,
+    "TitleEN": "Means Of Egress",
+    "TitleKR": "피난시설",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": "피난 수단은 (Egress Components) 다음 세 가지 주요 요소 및 세부 요건으로 구성됩니다.\n\nExit Access (출구 접근)\n- 일반적인 출구 접근 요구사항\n- 출구 접근 보행거리\n- 통로(집회용 공간 제외)\n- 계단 및 경사로에 대한 특정 요구사항\n- 복도\n- 피난 발코니\n\nExit (출구) \n- 출구 구성 요소(Exit Components)\n- 내부 및 외부 계단·경사로(Interior & Exterior Stairways and Ramps)\n- 출구 통로(Exit Passageways)\n- 수평 출구(Horizontal Exits)\n\nExit Discharge (출구 방출)\n- 출구 방출(Exit Discharge)\n- 피난 마당(Egress Courts)",
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "IFC",
+      "피난계획"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0010.1002",
+    "Index": "IFC;피난계획",
+    "SubIndex": null,
+    "TitleEN": "Maintenance and Plans",
+    "TitleKR": "유지보수 및 계획",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "IFC",
+      "피난계획"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0010.1003",
+    "Index": "SD;DD;IFR;IFC;피난계획",
+    "SubIndex": null,
+    "TitleEN": "General Means Of Egress",
+    "TitleKR": "일반 피난시설",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "SD",
+      "DD",
+      "IFR",
+      "IFC",
+      "피난계획"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0010.1004",
+    "Index": "SD;DD;IFR;IFC;피난계획;수용인원",
+    "SubIndex": null,
+    "TitleEN": "Occupant Load",
+    "TitleKR": "수용인원",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "SD",
+      "DD",
+      "IFR",
+      "IFC",
+      "피난계획",
+      "수용인원"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0010.1005",
+    "Index": "SD;DD;IFR;IFC",
+    "SubIndex": null,
+    "TitleEN": "Means Of Egress Sizing",
+    "TitleKR": "피난시설 규모 산정",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "SD",
+      "DD",
+      "IFR",
+      "IFC"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0010.1006",
+    "Index": "SD;DD;IFR;IFC;출구/출구로 개수",
+    "SubIndex": null,
+    "TitleEN": "Number Of Exit And Exit Access Doorway",
+    "TitleKR": "출구 및 출구접근통로의 출입문 개수",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "SD",
+      "DD",
+      "IFR",
+      "IFC",
+      "출구/출구로 개수"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0010.1007",
+    "Index": "SD;DD;IFR;IFC;출구/출구로 배치",
+    "SubIndex": null,
+    "TitleEN": "Exit And Exit Access Doorway Configuration",
+    "TitleKR": "출구 및 출구접근통로의 출입문 구성",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "SD",
+      "DD",
+      "IFR",
+      "IFC",
+      "출구/출구로 배치"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0010.1009",
+    "Index": "DD;IFR;IFC;장애인피난",
+    "SubIndex": null,
+    "TitleEN": "Accessible Means Of Egress",
+    "TitleKR": "장애인 피난수단",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "DD",
+      "IFR",
+      "IFC",
+      "장애인피난"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0010.1010",
+    "Index": "SD;DD;IFR;IFC;피난계획;문/게이트/회전식문",
+    "SubIndex": null,
+    "TitleEN": "Door, Gates, And Turnstiles",
+    "TitleKR": "문, 게이트 및 회전식 문",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "SD",
+      "DD",
+      "IFR",
+      "IFC",
+      "피난계획",
+      "문/게이트/회전식문"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0010.1011",
+    "Index": "SD;DD;IFR;IFC;계단",
+    "SubIndex": null,
+    "TitleEN": "Stairways",
+    "TitleKR": "계단",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "SD",
+      "DD",
+      "IFR",
+      "IFC",
+      "계단"
+    ],
+    "SubindexPaths": []
+  },
+  {
     "Subsection": "8",
     "OrderKey": "0010.1011.008",
     "Index": "SD;DD;IFR;IFC;계단",
@@ -6238,6 +8151,245 @@
       "IFR",
       "IFC",
       "계단"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0010.1012",
+    "Index": "DD;IFR;IFC;경사로",
+    "SubIndex": null,
+    "TitleEN": "Ramps",
+    "TitleKR": "경사로",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "DD",
+      "IFR",
+      "IFC",
+      "경사로"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0010.1013",
+    "Index": "DD;IFR;IFC;피난계획;출구;표지",
+    "SubIndex": null,
+    "TitleEN": "Exit Signs",
+    "TitleKR": "출구 표지",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "DD",
+      "IFR",
+      "IFC",
+      "피난계획",
+      "출구",
+      "표지"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0010.1014",
+    "Index": "DD;IFR;IFC;피난계획;손잡이",
+    "SubIndex": null,
+    "TitleEN": "Handrails",
+    "TitleKR": "손잡이",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "DD",
+      "IFR",
+      "IFC",
+      "피난계획",
+      "손잡이"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0010.1015",
+    "Index": "DD;IFR;IFC;피난계획;난간",
+    "SubIndex": null,
+    "TitleEN": "Guards",
+    "TitleKR": "난간",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "DD",
+      "IFR",
+      "IFC",
+      "피난계획",
+      "난간"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0010.1016",
+    "Index": "SD;DD;IFR;IFC;피난계획;출구접근",
+    "SubIndex": null,
+    "TitleEN": "Exit Access",
+    "TitleKR": "출구접근통로",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "SD",
+      "DD",
+      "IFR",
+      "IFC",
+      "피난계획",
+      "출구접근"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0010.1017",
+    "Index": "SD;DD;IFR;IFC;피난계획;출구접근;보행거리",
+    "SubIndex": null,
+    "TitleEN": "Exit Access Travel Distance",
+    "TitleKR": "출구접근 이동거리",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "SD",
+      "DD",
+      "IFR",
+      "IFC",
+      "피난계획",
+      "출구접근",
+      "보행거리"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0010.1018",
+    "Index": "SD;DD;IFR;IFC;피난계획;사무실/상업시설;통로",
+    "SubIndex": null,
+    "TitleEN": "Aisles",
+    "TitleKR": "통로",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "SD",
+      "DD",
+      "IFR",
+      "IFC",
+      "피난계획",
+      "사무실/상업시설",
+      "통로"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0010.1020",
+    "Index": "SD;DD;IFR;IFC;피난계획;복도",
+    "SubIndex": null,
+    "TitleEN": "Corridors",
+    "TitleKR": "복도",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "SD",
+      "DD",
+      "IFR",
+      "IFC",
+      "피난계획",
+      "복도"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0010.1024",
+    "Index": "SD;DD;IFR;IFC;출구통로",
+    "SubIndex": null,
+    "TitleEN": "Exit Passageways",
+    "TitleKR": "피난통로 접근로",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "SD",
+      "DD",
+      "IFR",
+      "IFC",
+      "출구통로"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0010.1026",
+    "Index": "SD;DD;IFR;IFC;피난계획;수평출구",
+    "SubIndex": null,
+    "TitleEN": "Horizontal Exits",
+    "TitleKR": "수평피난구",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "SD",
+      "DD",
+      "IFR",
+      "IFC",
+      "피난계획",
+      "수평출구"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0010.1028",
+    "Index": "SD;DD;IFR;IFC;피난계획;출구 방출부",
+    "SubIndex": null,
+    "TitleEN": "Exit Discharge",
+    "TitleKR": "옥외로의 출구",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "SD",
+      "DD",
+      "IFR",
+      "IFC",
+      "피난계획",
+      "출구 방출부"
     ],
     "SubindexPaths": []
   },
@@ -8423,6 +10575,49 @@
     "SubindexPaths": []
   },
   {
+    "Subsection": null,
+    "OrderKey": "0030",
+    "Index": "SD;DD;IFR;IFC;엘리베이터",
+    "SubIndex": null,
+    "TitleEN": "Elevators And Conveying Systems",
+    "TitleKR": "엘리베이터 및 운반설비",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "SD",
+      "DD",
+      "IFR",
+      "IFC",
+      "엘리베이터"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0030.3007",
+    "Index": "SD;DD;IFR;IFC;엘리베이터;소방관",
+    "SubIndex": null,
+    "TitleEN": "Fire Service Access Elevator",
+    "TitleKR": "소방구조용 엘리베이터",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "SD",
+      "DD",
+      "IFR",
+      "IFC",
+      "엘리베이터",
+      "소방관"
+    ],
+    "SubindexPaths": []
+  },
+  {
     "Subsection": 1,
     "OrderKey": "0030.3007.001",
     "Index": "SD;DD;IFR;IFC;엘리베이터;소방관",
@@ -8515,6 +10710,23 @@
     "SubindexPaths": []
   },
   {
+    "Subsection": null,
+    "OrderKey": "0003",
+    "Index": "스프링클러",
+    "SubIndex": null,
+    "TitleEN": "Definitions",
+    "TitleKR": "정의",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "스프링클러"
+    ],
+    "SubindexPaths": []
+  },
+  {
     "Subsection": 3,
     "OrderKey": "0003.0003.003",
     "Index": "스프링클러",
@@ -8552,6 +10764,23 @@
         "유량시험"
       ]
     ]
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0004",
+    "Index": "스프링클러",
+    "SubIndex": null,
+    "TitleEN": "General Requirements",
+    "TitleKR": "일반 요구사항",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "스프링클러"
+    ],
+    "SubindexPaths": []
   },
   {
     "Subsection": 3,
@@ -8730,6 +10959,45 @@
     ]
   },
   {
+    "Subsection": null,
+    "OrderKey": "0005",
+    "Index": "스프링클러",
+    "SubIndex": "스프링클러_급수(소화용수)",
+    "TitleEN": "Water Supplies",
+    "TitleKR": "급수",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "스프링클러"
+    ],
+    "SubindexPaths": [
+      [
+        "스프링클러",
+        "급수(소화용수)"
+      ]
+    ]
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0005.0001",
+    "Index": "스프링클러",
+    "SubIndex": null,
+    "TitleEN": "General",
+    "TitleKR": null,
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "스프링클러"
+    ],
+    "SubindexPaths": []
+  },
+  {
     "Subsection": 1.1,
     "OrderKey": "0005.0005.001",
     "Index": "스프링클러",
@@ -8772,6 +11040,23 @@
         "급수(소화용수)"
       ]
     ]
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0007",
+    "Index": "스프링클러",
+    "SubIndex": null,
+    "TitleEN": "Requirements for System Components and Hardware",
+    "TitleKR": "시스템 구성요소 및 하드웨어의 요구 사항",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "스프링클러"
+    ],
+    "SubindexPaths": []
   },
   {
     "Subsection": 2,
@@ -9227,6 +11512,29 @@
       [
         "스프링클러",
         "밸브"
+      ]
+    ]
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0008",
+    "Index": "스프링클러",
+    "SubIndex": "스프링클러_시스템_요구사항",
+    "TitleEN": "System Types and Requirements",
+    "TitleKR": "설비 유형 및 요구사항",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "스프링클러"
+    ],
+    "SubindexPaths": [
+      [
+        "스프링클러",
+        "시스템",
+        "요구사항"
       ]
     ]
   },
@@ -10310,6 +12618,28 @@
     "Comment": null,
     "Reference": null,
     "AttachmentID": "D232",
+    "IndexTags": [
+      "스프링클러"
+    ],
+    "SubindexPaths": [
+      [
+        "스프링클러",
+        "설치장소"
+      ]
+    ]
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0009",
+    "Index": "스프링클러",
+    "SubIndex": "스프링클러_설치장소",
+    "TitleEN": "Sprinkler Location Requirements",
+    "TitleKR": "스프링클러 장소 요구사항",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
     "IndexTags": [
       "스프링클러"
     ],
@@ -13408,6 +15738,28 @@
     ]
   },
   {
+    "Subsection": null,
+    "OrderKey": "0010",
+    "Index": "스프링클러",
+    "SubIndex": "스프링클러_헤드",
+    "TitleEN": "Installation Requirements for Standard Pendent, Upright, Pendent, Sidewall Spray Sprinkler",
+    "TitleKR": "표준형 하향식, 상향식 및 측벽식 스프레이 스프링클러의 설치 요구사항",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "스프링클러"
+    ],
+    "SubindexPaths": [
+      [
+        "스프링클러",
+        "헤드"
+      ]
+    ]
+  },
+  {
     "Subsection": 2,
     "OrderKey": "0010.0010.002",
     "Index": "스프링클러",
@@ -14024,6 +16376,23 @@
     ]
   },
   {
+    "Subsection": null,
+    "OrderKey": "0016",
+    "Index": "스프링클러",
+    "SubIndex": null,
+    "TitleEN": "Installation of Piping, Valves, and Appurtenances",
+    "TitleKR": "배관, 밸브 및 부속품의 설치",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "스프링클러"
+    ],
+    "SubindexPaths": []
+  },
+  {
     "Subsection": 12,
     "OrderKey": "0016.0016.012",
     "Index": "스프링클러",
@@ -14081,6 +16450,28 @@
       [
         "스프링클러",
         "연결송수구"
+      ]
+    ]
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0017",
+    "Index": "스프링클러",
+    "SubIndex": "스프링클러_행거",
+    "TitleEN": "Installation Requirements for Hanging and Support of System Piping",
+    "TitleKR": "시스템 배관의 행잉 및 지지 설치 요건",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "스프링클러"
+    ],
+    "SubindexPaths": [
+      [
+        "스프링클러",
+        "행거"
       ]
     ]
   },
@@ -14327,6 +16718,23 @@
     ]
   },
   {
+    "Subsection": null,
+    "OrderKey": "0019",
+    "Index": "스프링클러",
+    "SubIndex": null,
+    "TitleEN": "Design Approaches",
+    "TitleKR": "설계 접근법",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "스프링클러"
+    ],
+    "SubindexPaths": []
+  },
+  {
     "Subsection": 2,
     "OrderKey": "0019.0019.002",
     "Index": "스프링클러",
@@ -14516,6 +16924,28 @@
       [
         "스프링클러",
         "살수밀도"
+      ]
+    ]
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0020",
+    "Index": "스프링클러",
+    "SubIndex": "스프링클러_저장시설",
+    "TitleEN": "General Requirements for Storage",
+    "TitleKR": "저장 일반 요구사항",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "스프링클러"
+    ],
+    "SubindexPaths": [
+      [
+        "스프링클러",
+        "저장시설"
       ]
     ]
   },
@@ -15403,6 +17833,28 @@
     ]
   },
   {
+    "Subsection": null,
+    "OrderKey": "0021",
+    "Index": "스프링클러",
+    "SubIndex": "스프링클러_CMDA",
+    "TitleEN": "Protection of High-Piled Storage Using Control Mode Density Area (CMDA) Sprinklers",
+    "TitleKR": "제어모드밀도면적(CMDA) 스프링클러를 사용한 고적재 저장 보호",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "스프링클러"
+    ],
+    "SubindexPaths": [
+      [
+        "스프링클러",
+        "CMDA"
+      ]
+    ]
+  },
+  {
     "Subsection": 1,
     "OrderKey": "0021.0021.001",
     "Index": "스프링클러",
@@ -15887,6 +18339,28 @@
     ]
   },
   {
+    "Subsection": null,
+    "OrderKey": "0023",
+    "Index": "스프링클러",
+    "SubIndex": "스프링클러_ESFR",
+    "TitleEN": "ESFR Requirements for \nStorage Applications",
+    "TitleKR": "저장 적용을 위한 ESFR 요구사항",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "스프링클러"
+    ],
+    "SubindexPaths": [
+      [
+        "스프링클러",
+        "ESFR"
+      ]
+    ]
+  },
+  {
     "Subsection": 1,
     "OrderKey": "0023.0023.001",
     "Index": "스프링클러",
@@ -16239,6 +18713,29 @@
     ]
   },
   {
+    "Subsection": null,
+    "OrderKey": "0025.0025",
+    "Index": "스프링클러",
+    "SubIndex": "스프링클러_저장시설_인랙스프링클러",
+    "TitleEN": "Protection of Rack Storage Using In-Rack Sprinklers",
+    "TitleKR": "인랙 스프링클러를 사용한 랙 저장의 방호",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "스프링클러"
+    ],
+    "SubindexPaths": [
+      [
+        "스프링클러",
+        "저장시설",
+        "인랙스프링클러"
+      ]
+    ]
+  },
+  {
     "Subsection": "1.1",
     "OrderKey": "0025.0025.001",
     "Index": "스프링클러",
@@ -16304,6 +18801,28 @@
         "스프링클러",
         "저장시설",
         "인랙스프링클러"
+      ]
+    ]
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0028",
+    "Index": "스프링클러",
+    "SubIndex": "스프링클러_계획 및 계산",
+    "TitleEN": "Plans and Calculations",
+    "TitleKR": "계획 및 계산",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "스프링클러"
+    ],
+    "SubindexPaths": [
+      [
+        "스프링클러",
+        "계획 및 계산"
       ]
     ]
   },
@@ -17148,6 +19667,29 @@
     ]
   },
   {
+    "Subsection": null,
+    "OrderKey": "0007",
+    "Index": "옥내소화전",
+    "SubIndex": "옥내소화전_시스템 유형_건식",
+    "TitleEN": "System Components and Hardware",
+    "TitleKR": "시스템 구성요소 및 하드웨어",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "옥내소화전"
+    ],
+    "SubindexPaths": [
+      [
+        "옥내소화전",
+        "시스템 유형",
+        "건식"
+      ]
+    ]
+  },
+  {
     "Subsection": "9",
     "OrderKey": "0007.0007.009",
     "Index": "옥내소화전",
@@ -17212,6 +19754,23 @@
         "연결송수구"
       ]
     ]
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0008",
+    "Index": "옥내소화전",
+    "SubIndex": null,
+    "TitleEN": "System Requirements",
+    "TitleKR": "시스템 요구 사항",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "옥내소화전"
+    ],
+    "SubindexPaths": []
   },
   {
     "Subsection": 2,
@@ -17677,6 +20236,23 @@
         "건식"
       ]
     ]
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0009",
+    "Index": "옥내소화전",
+    "SubIndex": null,
+    "TitleEN": "Installation Requirements",
+    "TitleKR": "설치 요구사항",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "옥내소화전"
+    ],
+    "SubindexPaths": []
   },
   {
     "Subsection": 3,
@@ -18332,6 +20908,23 @@
         "연결송수구"
       ]
     ]
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0010",
+    "Index": "옥내소화전",
+    "SubIndex": null,
+    "TitleEN": "Design",
+    "TitleKR": "설계",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "옥내소화전"
+    ],
+    "SubindexPaths": []
   },
   {
     "Subsection": 2,
@@ -19456,6 +22049,28 @@
     ]
   },
   {
+    "Subsection": null,
+    "OrderKey": "0012",
+    "Index": "옥내소화전",
+    "SubIndex": "옥내소화전_시스템인수",
+    "TitleEN": "System Acceptance",
+    "TitleKR": "시스템 인수",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "옥내소화전"
+    ],
+    "SubindexPaths": [
+      [
+        "옥내소화전",
+        "시스템인수"
+      ]
+    ]
+  },
+  {
     "Subsection": "4",
     "OrderKey": "0012.0012.004",
     "Index": "옥내소화전",
@@ -19686,6 +22301,23 @@
         "수리계산"
       ]
     ]
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0004",
+    "Index": "소화펌프",
+    "SubIndex": null,
+    "TitleEN": "General Requirements",
+    "TitleKR": "일반 요구 사항",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "소화펌프"
+    ],
+    "SubindexPaths": []
   },
   {
     "Subsection": 1,
@@ -20411,6 +23043,23 @@
     ]
   },
   {
+    "Subsection": null,
+    "OrderKey": "0006",
+    "Index": "소화펌프",
+    "SubIndex": null,
+    "TitleEN": "Centrifugal Pumps",
+    "TitleKR": "원심 펌프",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "소화펌프"
+    ],
+    "SubindexPaths": []
+  },
+  {
     "Subsection": 1,
     "OrderKey": "0006.0006.001",
     "Index": "소화펌프",
@@ -20715,6 +23364,28 @@
     ]
   },
   {
+    "Subsection": null,
+    "OrderKey": "0010",
+    "Index": "소화펌프",
+    "SubIndex": "소화펌프_전동제어반",
+    "TitleEN": "Electric-Drive Controllers and Accessories",
+    "TitleKR": "전동 제어반 및 부속품",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "소화펌프"
+    ],
+    "SubindexPaths": [
+      [
+        "소화펌프",
+        "전동제어반"
+      ]
+    ]
+  },
+  {
     "Subsection": "2",
     "OrderKey": "0010.0010.002",
     "Index": "소화펌프",
@@ -20997,6 +23668,28 @@
       [
         "소화펌프",
         "전동제어반"
+      ]
+    ]
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0011",
+    "Index": "소화펌프",
+    "SubIndex": "소화펌프_디젤엔진",
+    "TitleEN": "Diesel Engine Drive",
+    "TitleKR": "디젤 엔진 구동",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "소화펌프"
+    ],
+    "SubindexPaths": [
+      [
+        "소화펌프",
+        "디젤엔진"
       ]
     ]
   },
@@ -21343,6 +24036,23 @@
         "연료탱크"
       ]
     ]
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0010",
+    "Index": "자동화재탐지설비",
+    "SubIndex": null,
+    "TitleEN": "Fundamentals",
+    "TitleKR": null,
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": "화재경보설비 설계에는 정해진 특별한 순서가 없습니다. 일반적으로 전원 공급(Power Supply)은 마지막 단계입니다.",
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "자동화재탐지설비"
+    ],
+    "SubindexPaths": []
   },
   {
     "Subsection": 6,
@@ -22048,6 +24758,23 @@
     ]
   },
   {
+    "Subsection": null,
+    "OrderKey": "0012",
+    "Index": "자동화재탐지설비",
+    "SubIndex": null,
+    "TitleEN": "Circuits and Pathways",
+    "TitleKR": null,
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "자동화재탐지설비"
+    ],
+    "SubindexPaths": []
+  },
+  {
     "Subsection": 1,
     "OrderKey": "0012.0012.001",
     "Index": "자동화재탐지설비",
@@ -22190,6 +24917,23 @@
         "경로 등급"
       ]
     ]
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0017",
+    "Index": "자동화재탐지설비",
+    "SubIndex": null,
+    "TitleEN": "Initiating Devices",
+    "TitleKR": "작동 장치",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "자동화재탐지설비"
+    ],
+    "SubindexPaths": []
   },
   {
     "Subsection": 1,
@@ -23764,6 +26508,40 @@
     ]
   },
   {
+    "Subsection": null,
+    "OrderKey": "Annex B",
+    "Index": "자동화재탐지설비",
+    "SubIndex": null,
+    "TitleEN": "Engineering Guide for Automatic Fire Detector Spacing",
+    "TitleKR": "자동화재탐지기 이격 거리 공학 지침",
+    "ContentEN": "This annex is not a part of the requirements of this NFPA document but is included for informational purposes only.\nUsers of Annex B should refer back to the text of NFPA 72 to familiarize themselves with the limitations of the design methods summarized herein.\n\nSection B.‍2, and particularly B.‍2.2 and B.‍2.3, are largely based on the work of Custer and Meacham as found in “Performance-Based Fire Safety Engineering: An Introduction of Basic Concepts” (Meacham and Custer 1995) and Introduction to Performance-Based Fire Safety (Custer and Meacham 1997). [25]\n\nThe National Fire Protection Association and the Technical Committee on Initiating Devices for Fire Alarm Systems gratefully acknowledge the technical contributions of the Society of Fire Protection Engineers, Richard Custer, and Brian Meacham to performance-based design and this annex.",
+    "ContentKR": "이 부록은 NFPA 문서의 필수 요구사항은 아니며 정보 제공 목적으로만 포함된다.\n부록 B를 사용하는 이용자는 NFPA 72 본문을 참고하여 본 부록에 요약된 설계 방법 한계를 숙지해야 한다.\nB.2항, 특히 B.2.2항 및 B.2.3항은 주로 \"성능 기반 화재 안전 공학: 기본 개념 소개”(Meacham and Custer 1995) 및 \"성능 기반 화재 안전 입문\"(Custer and Meacham 1997)에 나오는 Custer와 Meacham의 연구에 기반한다.\n\nNFPA 및 화재 경보 시스템 기동 장치 기술 위원회는 성능 위주 설계 및 본 부록에 대한 화재 방호 공학회, Richard Custer 및 Brian Meacham의 기술적 기여에 깊은 감사를 표한다.",
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "자동화재탐지설비"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "Annex B.B.1",
+    "Index": "자동화재탐지설비",
+    "SubIndex": null,
+    "TitleEN": "Introduction",
+    "TitleKR": "서론",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "자동화재탐지설비"
+    ],
+    "SubindexPaths": []
+  },
+  {
     "Subsection": "1",
     "OrderKey": "Annex B.B.1.001",
     "Index": "자동화재탐지설비",
@@ -23772,6 +26550,23 @@
     "TitleKR": "범위",
     "ContentEN": "Annex B provides information intended to supplement Chapter 17. It includes a procedure for determining detector spacing based on the objectives set for the system, the size and growth rate of the design fire, the ceiling height, ambient temperature, and the response characteristics of the detectors. In addition to providing an engineering method for the design of detection systems using plume-dependent detectors, heat detectors, and smoke detectors, this annex also provides guidance on the use of radiant energy–sensing detectors.",
     "ContentKR": "부록 B는 제17장을 보완하기 위한 정보를 제공한다. 여기에는 시스템에 설정된 목표, 설계 화재의 크기 및 성장 속도, 천장 높이, 주변 온도, 그리고 탐지기의 반응 특성을 기반으로 탐지기 이격 거리를 결정하는 절차가 포함된다. 연기 기류 의존형 탐지기, 열 탐지기, 그리고 연기 감지기를 사용하는 탐지 시스템의 설계를 위한 공학적 방법을 제공하는 것 외에도, 본 부록은 복사 에너지 감지 탐지기 사용에 대한 지침도 제공한다.",
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "자동화재탐지설비"
+    ],
+    "SubindexPaths": []
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0018",
+    "Index": "자동화재탐지설비",
+    "SubIndex": null,
+    "TitleEN": "Notification Appliances",
+    "TitleKR": null,
+    "ContentEN": null,
+    "ContentKR": null,
     "Comment": null,
     "Reference": null,
     "AttachmentID": null,
@@ -23812,6 +26607,28 @@
     "ContentEN": null,
     "ContentKR": null,
     "Comment": "자탐 설계는 제조사마다 감지기 적용범위(커버리지)나 시스템 작동 방식이 다르기 때문에 엔지니어가 선택한 시스템에 따라 설계가 진행되며, 이러한 설계를 성능위주설계(Performance-Based Design)라고 합니다. 자탐 설계 이해의 중요한 사항 중 하나는 건축물에 적용된 시스템의 특성을 이해하는 것입니다.\n\n",
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "자동화재탐지설비"
+    ],
+    "SubindexPaths": [
+      [
+        "자동화재탐지설비",
+        "성능위주설계"
+      ]
+    ]
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0024",
+    "Index": "자동화재탐지설비",
+    "SubIndex": "자동화재탐지설비_성능위주설계",
+    "TitleEN": "Emergency Communications Systems (ECSs)",
+    "TitleKR": null,
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
     "Reference": null,
     "AttachmentID": null,
     "IndexTags": [
@@ -24587,6 +27404,23 @@
     ]
   },
   {
+    "Subsection": null,
+    "OrderKey": "0021",
+    "Index": "자동화재탐지설비",
+    "SubIndex": null,
+    "TitleEN": "Emergency Control Function Interfaces",
+    "TitleKR": null,
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "자동화재탐지설비"
+    ],
+    "SubindexPaths": []
+  },
+  {
     "Subsection": 1,
     "OrderKey": "0021.0021.001",
     "Index": "자동화재탐지설비",
@@ -25218,6 +28052,23 @@
         "도어/셔터 릴리즈"
       ]
     ]
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0023",
+    "Index": "자동화재탐지설비",
+    "SubIndex": null,
+    "TitleEN": "Protected Premises Alarm and Signaling Systems",
+    "TitleKR": null,
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "자동화재탐지설비"
+    ],
+    "SubindexPaths": []
   },
   {
     "Subsection": 1,
@@ -28855,6 +31706,23 @@
     ]
   },
   {
+    "Subsection": null,
+    "OrderKey": "0026",
+    "Index": "자동화재탐지설비",
+    "SubIndex": null,
+    "TitleEN": "Supervising Station Alarm Systems",
+    "TitleKR": null,
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "자동화재탐지설비"
+    ],
+    "SubindexPaths": []
+  },
+  {
     "Subsection": "3",
     "OrderKey": "0026.0026.003",
     "Index": "자동화재탐지설비",
@@ -29273,6 +32141,23 @@
     ]
   },
   {
+    "Subsection": null,
+    "OrderKey": "0004",
+    "Index": "냉각탑",
+    "SubIndex": null,
+    "TitleEN": "General Requirements",
+    "TitleKR": "일반사항",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "냉각탑"
+    ],
+    "SubindexPaths": []
+  },
+  {
     "Subsection": "1",
     "OrderKey": "0004.0004.001",
     "Index": "냉각탑",
@@ -29401,6 +32286,28 @@
       [
         "냉각탑",
         "건물 옥상의 가연성 냉각탑"
+      ]
+    ]
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0005",
+    "Index": "냉각탑",
+    "SubIndex": "냉각탑_소방",
+    "TitleEN": "Fire Protection",
+    "TitleKR": "소방",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "냉각탑"
+    ],
+    "SubindexPaths": [
+      [
+        "냉각탑",
+        "소방"
       ]
     ]
   },
@@ -30496,6 +33403,27 @@
     ]
   },
   {
+    "Subsection": null,
+    "OrderKey": "0010",
+    "Index": "주방후드",
+    "SubIndex": "주방소화장치",
+    "TitleEN": "Fire-Extinguishing Equipment for Cooking Operations in Buildings",
+    "TitleKR": "건물 내 조리 작업을 위한 소화 설비",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "주방후드"
+    ],
+    "SubindexPaths": [
+      [
+        "주방소화장치"
+      ]
+    ]
+  },
+  {
     "Subsection": "1",
     "OrderKey": "0010.0010.001",
     "Index": "주방후드",
@@ -30826,6 +33754,29 @@
     ]
   },
   {
+    "Subsection": null,
+    "OrderKey": "0011",
+    "Index": "클린룸",
+    "SubIndex": "클린룸_가연성덕트_소방",
+    "TitleEN": "Fire Protection",
+    "TitleKR": "소방",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "클린룸"
+    ],
+    "SubindexPaths": [
+      [
+        "클린룸",
+        "가연성덕트",
+        "소방"
+      ]
+    ]
+  },
+  {
     "Subsection": "2",
     "OrderKey": "0011.0011.002",
     "Index": "클린룸",
@@ -30987,6 +33938,27 @@
     ]
   },
   {
+    "Subsection": null,
+    "OrderKey": "0005",
+    "Index": "소방급수",
+    "SubIndex": "소방급수",
+    "TitleEN": "Water Supplies",
+    "TitleKR": "급수",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "소방급수"
+    ],
+    "SubindexPaths": [
+      [
+        "소방급수"
+      ]
+    ]
+  },
+  {
     "Subsection": "2",
     "OrderKey": "0005.0005.002",
     "Index": "소방급수",
@@ -31075,6 +34047,28 @@
     ]
   },
   {
+    "Subsection": null,
+    "OrderKey": "0006",
+    "Index": "소방급수",
+    "SubIndex": "소방급수_급수",
+    "TitleEN": "Water Supply Connections",
+    "TitleKR": "급수",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "소방급수"
+    ],
+    "SubindexPaths": [
+      [
+        "소방급수",
+        "급수"
+      ]
+    ]
+  },
+  {
     "Subsection": "2",
     "OrderKey": "0006.0006.002",
     "Index": "소방급수",
@@ -31159,6 +34153,51 @@
       [
         "소방급수",
         "급수"
+      ]
+    ]
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0007",
+    "Index": "소방급수",
+    "SubIndex": "소방급수_옥외소화전_제어밸브",
+    "TitleEN": "Hydrants",
+    "TitleKR": null,
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "소방급수"
+    ],
+    "SubindexPaths": [
+      [
+        "소방급수",
+        "옥외소화전",
+        "제어밸브"
+      ]
+    ]
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0007",
+    "Index": "소방급수",
+    "SubIndex": "소방급수_옥외소화전",
+    "TitleEN": "Hydrants",
+    "TitleKR": "소화전",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "소방급수"
+    ],
+    "SubindexPaths": [
+      [
+        "소방급수",
+        "옥외소화전"
       ]
     ]
   },
@@ -31370,6 +34409,28 @@
     ]
   },
   {
+    "Subsection": null,
+    "OrderKey": "0008",
+    "Index": "소방급수",
+    "SubIndex": "소방급수_호스 보관함",
+    "TitleEN": "Hose Houses and Equipment",
+    "TitleKR": "호스 보관함 및 설비",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "소방급수"
+    ],
+    "SubindexPaths": [
+      [
+        "소방급수",
+        "호스 보관함"
+      ]
+    ]
+  },
+  {
     "Subsection": "2",
     "OrderKey": "0008.0008.002",
     "Index": "소방급수",
@@ -31454,6 +34515,28 @@
       [
         "소방급수",
         "호스 보관함"
+      ]
+    ]
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0010",
+    "Index": "소방급수",
+    "SubIndex": "소방급수_지중배관 요구사항",
+    "TitleEN": "Underground Requirements",
+    "TitleKR": "지하 요구사항",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "소방급수"
+    ],
+    "SubindexPaths": [
+      [
+        "소방급수",
+        "지중배관 요구사항"
       ]
     ]
   },
@@ -31656,6 +34739,28 @@
     ]
   },
   {
+    "Subsection": null,
+    "OrderKey": "0018",
+    "Index": "소방급수",
+    "SubIndex": "소방급수_소방대 접근 및 급수",
+    "TitleEN": "Fire Department Access and Water Supply",
+    "TitleKR": "소방대 접근 및 급수",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "소방급수"
+    ],
+    "SubindexPaths": [
+      [
+        "소방급수",
+        "소방대 접근 및 급수"
+      ]
+    ]
+  },
+  {
     "Subsection": "5",
     "OrderKey": "0018.0018.005",
     "Index": "소방급수",
@@ -31764,6 +34869,23 @@
         "시험 및 인수"
       ]
     ]
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0004",
+    "Index": "소화가스",
+    "SubIndex": null,
+    "TitleEN": "General Information",
+    "TitleKR": "일반정보",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "소화가스"
+    ],
+    "SubindexPaths": []
   },
   {
     "Subsection": "1",
@@ -32034,6 +35156,28 @@
     ]
   },
   {
+    "Subsection": null,
+    "OrderKey": "0005",
+    "Index": "소화가스",
+    "SubIndex": "소화가스_Venting",
+    "TitleEN": "Total Flooding Systems",
+    "TitleKR": "전역 방출 시스템",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "소화가스"
+    ],
+    "SubindexPaths": [
+      [
+        "소화가스",
+        "Venting"
+      ]
+    ]
+  },
+  {
     "Subsection": "2",
     "OrderKey": "0005.0005.002",
     "Index": "소화가스",
@@ -32100,6 +35244,28 @@
     ]
   },
   {
+    "Subsection": null,
+    "OrderKey": "0007",
+    "Index": "소화가스",
+    "SubIndex": "소화가스_Venting",
+    "TitleEN": "Total Flooding Systems",
+    "TitleKR": "전역 방출 시스템",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "소화가스"
+    ],
+    "SubindexPaths": [
+      [
+        "소화가스",
+        "Venting"
+      ]
+    ]
+  },
+  {
     "Subsection": "1",
     "OrderKey": "0007.0007.001",
     "Index": "소화가스",
@@ -32140,6 +35306,28 @@
       [
         "소화가스",
         "대피절차"
+      ]
+    ]
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0009",
+    "Index": "소화가스",
+    "SubIndex": "소화가스_일반사항",
+    "TitleEN": "Detection, Actuation, Alarm, and Control Systems for Clean Agent Releasing Applications",
+    "TitleKR": "청정 소화 약제 방출 적용을 위한 감지, 작동, 경보 및 제어 시스템",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "소화가스"
+    ],
+    "SubindexPaths": [
+      [
+        "소화가스",
+        "일반사항"
       ]
     ]
   },
@@ -32535,6 +35723,28 @@
     "SubindexPaths": []
   },
   {
+    "Subsection": null,
+    "OrderKey": "0001",
+    "Index": "물분무소화설비",
+    "SubIndex": "물분무소화설비_적용대상",
+    "TitleEN": "Administration",
+    "TitleKR": "관리",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "물분무소화설비"
+    ],
+    "SubindexPaths": [
+      [
+        "물분무소화설비",
+        "적용대상"
+      ]
+    ]
+  },
+  {
     "Subsection": "1",
     "OrderKey": "0001.0001.001",
     "Index": "물분무소화설비",
@@ -32620,6 +35830,28 @@
       [
         "물분무소화설비",
         "적용대상"
+      ]
+    ]
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0006.0003",
+    "Index": "물분무소화설비",
+    "SubIndex": "물분무소화설비_설치요구사항",
+    "TitleEN": "Installation Requirements",
+    "TitleKR": "설치 요구사항",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "물분무소화설비"
+    ],
+    "SubindexPaths": [
+      [
+        "물분무소화설비",
+        "설치요구사항"
       ]
     ]
   },
@@ -32954,6 +36186,29 @@
     ]
   },
   {
+    "Subsection": null,
+    "OrderKey": "0007",
+    "Index": "물분무소화설비",
+    "SubIndex": "물분무소화설비_설계_살수밀도",
+    "TitleEN": "Design Objectives",
+    "TitleKR": "설계 목표",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "물분무소화설비"
+    ],
+    "SubindexPaths": [
+      [
+        "물분무소화설비",
+        "설계",
+        "살수밀도"
+      ]
+    ]
+  },
+  {
     "Subsection": "2",
     "OrderKey": "0007.0007.002",
     "Index": "물분무소화설비",
@@ -33160,6 +36415,27 @@
     ]
   },
   {
+    "Subsection": null,
+    "OrderKey": "0001",
+    "Index": "포소화설비",
+    "SubIndex": "포소화설비",
+    "TitleEN": "Administration",
+    "TitleKR": "관리",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "포소화설비"
+    ],
+    "SubindexPaths": [
+      [
+        "포소화설비"
+      ]
+    ]
+  },
+  {
     "Subsection": "3",
     "OrderKey": "0001.0001.003",
     "Index": "포소화설비",
@@ -33212,6 +36488,28 @@
     "TitleKR": null,
     "ContentEN": "Foam-water deluge systems are applicable to the protection of two-dimensional flammable liquid hazards. They shall be permitted to be used for any of the purposes or combinations thereof detailed in 1.3.2.1 through 1.3.2.3.",
     "ContentKR": "포소화 델루지 시스템은 2차원 인화성 액체 위험의 방호에 적용 가능하다. 이들은 Section 1.3.2.1부터 Section 1.3.2.3까지 상세히 설명된 목적 또는 그 조합 중 어디에나 사용될 수 있다.",
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "포소화설비"
+    ],
+    "SubindexPaths": [
+      [
+        "포소화설비",
+        "적용대상"
+      ]
+    ]
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0003",
+    "Index": "포소화설비",
+    "SubIndex": "포소화설비_적용대상",
+    "TitleEN": "Definitions",
+    "TitleKR": "정의",
+    "ContentEN": null,
+    "ContentKR": null,
     "Comment": null,
     "Reference": null,
     "AttachmentID": null,
@@ -33292,6 +36590,28 @@
     ]
   },
   {
+    "Subsection": null,
+    "OrderKey": "0004",
+    "Index": "포소화설비",
+    "SubIndex": "포소화설비_일반요구사항",
+    "TitleEN": "General Requirements",
+    "TitleKR": "일반 요구사항",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "포소화설비"
+    ],
+    "SubindexPaths": [
+      [
+        "포소화설비",
+        "일반요구사항"
+      ]
+    ]
+  },
+  {
     "Subsection": "2",
     "OrderKey": "0004.0004.002",
     "Index": "포소화설비",
@@ -33311,6 +36631,28 @@
         "포소화설비",
         "일반요구사항",
         "설계요구사항"
+      ]
+    ]
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0006",
+    "Index": "포소화설비",
+    "SubIndex": "포소화설비_시스템구성",
+    "TitleEN": "System Components",
+    "TitleKR": "시스템 구성요소",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "포소화설비"
+    ],
+    "SubindexPaths": [
+      [
+        "포소화설비",
+        "시스템구성"
       ]
     ]
   },
@@ -33377,6 +36719,29 @@
       [
         "포소화설비",
         "원액저장탱크"
+      ]
+    ]
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0007",
+    "Index": "포소화설비",
+    "SubIndex": "포소화설비_일반요구사항_설계요구사항",
+    "TitleEN": "System Design and Installation",
+    "TitleKR": "시스템 설계 및 설치",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": null,
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "포소화설비"
+    ],
+    "SubindexPaths": [
+      [
+        "포소화설비",
+        "일반요구사항",
+        "설계요구사항"
       ]
     ]
   },
@@ -33935,6 +37300,28 @@
       [
         "포소화설비",
         "수리계산"
+      ]
+    ]
+  },
+  {
+    "Subsection": null,
+    "OrderKey": "0004",
+    "Index": "제연설비",
+    "SubIndex": "제연설비_설계기본사항",
+    "TitleEN": "Design Fundamentals",
+    "TitleKR": "설계 기본사항",
+    "ContentEN": null,
+    "ContentKR": null,
+    "Comment": "NFPA 92A(Recommended Practice for Smoke-Control Systems)와 NFPA 92B(Guide for Smoke Management Systems in Malls, Atria, and Large Areas)는 두 문서가 원래 서로 보완 관계였으나, 중복 내용이 많고 실제 설계 시 둘 다 동시에 적용해야 하는 비효율이 계속 지적되었는데, 2012년부터 NFPA 92(Standard for Smoke Control Systems, 2024 Edition)로 통합되었습니다.\n\n제연 시스템은 엔지니어가 어떤 목적을 가지고 설계를 하느냐에 따라 다양한 형태의 시스템이 구축됩니다. IBC에서는 용도별 제연이 요구되는 곳을 지정하고, NFPA 92는 압력차 같은 아주 기본적인 것만 규정합니다.\n\n제연은 화재 모델링(Fire Modeling)과 함께 수행되며, 화재 모델링 도구에는 Fire Dynamic, Plume Smoke Layer 등 제연에 관한 모든 공식이 적용되어 입력값(예를 들어 설계 화재)들만 적절하다면 실제와 유사한 형태의 화재를 구현할 수 있고 거기에 맞는 제연 시스템을 설계할 수 있습니다.\n\nCode Check List #81 - 88 참조",
+    "Reference": null,
+    "AttachmentID": null,
+    "IndexTags": [
+      "제연설비"
+    ],
+    "SubindexPaths": [
+      [
+        "제연설비",
+        "설계기본사항"
       ]
     ]
   },

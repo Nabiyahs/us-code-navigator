@@ -4579,27 +4579,51 @@ function getContents(chapterId) {
     // Filter by ChapterID directly for accurate results
     return appData.CodeContent.filter(c => c.ChapterID === chapterId)
         .sort((a, b) => {
-            // Sort by OrderKey for proper ordering
-            return (a.OrderKey || '').localeCompare(b.OrderKey || '');
+            // Sort by OrderKey while ignoring special prefixes like [F], [BE], [BS]
+            const normalizeForSort = (key) => {
+                if (!key) return '';
+                // Remove special prefixes from each part for sorting
+                return key.split('.').map(part => {
+                    // Remove brackets and letters for sorting, keep only numbers
+                    const numericPart = part.replace(/[\[\]A-Za-z]/g, '');
+                    // Pad with zeros for proper numeric sorting
+                    return numericPart.padStart(6, '0');
+                }).join('.');
+            };
+            return normalizeForSort(a.OrderKey).localeCompare(normalizeForSort(b.OrderKey));
         });
 }
 
 // Helper function to parse OrderKey into chapter, section, subsection
+// Handles special prefixes like [F], [BE], [BS] by stripping them for numeric parsing
 function parseOrderKey(orderKey) {
-    if (!orderKey) return { chapter: 0, section: 0, item: 0 };
+    if (!orderKey) return { chapter: 0, section: 0, item: 0, sectionRaw: null };
     const parts = orderKey.split('.');
+    // Extract numeric parts while preserving original for display
+    const sectionRaw = parts[1] || null; // Keep original with prefix for display
     return {
         chapter: parseInt(parts[0]) || 0,
-        section: parseInt(parts[1]) || 0,
-        item: parseInt(parts[2]) || 0
+        section: parseInt((parts[1] || '').replace(/[\[\]A-Za-z]/g, '')) || 0,
+        item: parseInt((parts[2] || '').replace(/[\[\]A-Za-z,]/g, '')) || 0,
+        sectionRaw: sectionRaw // Original section string with prefix
     };
 }
 
-// Get section number from OrderKey
+// Get section number from OrderKey (strips special prefixes for numeric value)
 function getSectionFromOrderKey(orderKey) {
     if (!orderKey) return null;
     const parts = orderKey.split('.');
-    return parts[1] ? parseInt(parts[1]) : null;
+    if (!parts[1]) return null;
+    // Remove special prefixes like [F], [BE], [BS] for numeric parsing
+    const numericSection = parts[1].replace(/[\[\]A-Za-z]/g, '');
+    return parseInt(numericSection) || null;
+}
+
+// Get section display string from OrderKey (preserves special prefixes for display)
+function getSectionDisplayFromOrderKey(orderKey) {
+    if (!orderKey) return null;
+    const parts = orderKey.split('.');
+    return parts[1] || null;
 }
 
 function getAttachments(versionId, chapter, section, subsection) {
@@ -4653,10 +4677,19 @@ function loadChapters(versionId, codeId) {
 
         // 챕터 리스트 생성 (Chapter 번호만 표시, title 제거)
         chapterList.innerHTML = chapters.map((ch, i) => {
-            // 해당 챕터의 섹션들 가져오기
+            // 해당 챕터의 섹션들 가져오기 - preserve display strings with prefixes
             const contents = getContents(ch.ChapterID);
-            const sectionNums = [...new Set(contents.map(c => getSectionFromOrderKey(c.OrderKey)).filter(s => s))];
-            sectionNums.sort((a, b) => a - b);
+            // Create map of display string -> numeric value for sorting
+            const sectionMap = {};
+            contents.forEach(c => {
+                const display = getSectionDisplayFromOrderKey(c.OrderKey);
+                const numeric = getSectionFromOrderKey(c.OrderKey);
+                if (display && !sectionMap[display]) {
+                    sectionMap[display] = numeric || 0;
+                }
+            });
+            // Sort by numeric value while keeping display strings
+            const sectionDisplays = Object.keys(sectionMap).sort((a, b) => sectionMap[a] - sectionMap[b]);
 
             return `
             <div class="chapter-group">
@@ -4669,7 +4702,7 @@ function loadChapters(versionId, codeId) {
                     </svg>
                 </div>
                 <div id="chapterSections-${ch.ChapterID}" class="pl-6 mt-1 space-y-1 ${i === 0 ? '' : 'hidden'}">
-                    ${sectionNums.map(sec => `
+                    ${sectionDisplays.map(sec => `
                     <div class="section-item px-4 py-2 text-sm text-gray-700 hover:bg-[#A8D0E6] rounded cursor-pointer"
                          data-section="${sec}" onclick="scrollToSection('${ch.ChapterID}', '${sec}', '${versionId}', event)">
                         Section ${sec}
@@ -4856,11 +4889,18 @@ function loadChapterContent(chapterId, versionId) {
         }
 
         // 섹션별로 그룹화 (OrderKey 기반)
+        // Use display string (with prefixes like [F], [BE]) as key, store numeric value for sorting
         const sections = {};
         contents.forEach(content => {
-            const sectionNum = getSectionFromOrderKey(content.OrderKey) || 'General';
-            if (!sections[sectionNum]) sections[sectionNum] = [];
-            sections[sectionNum].push(content);
+            const sectionDisplay = getSectionDisplayFromOrderKey(content.OrderKey) || 'General';
+            const sectionNumeric = getSectionFromOrderKey(content.OrderKey) || 0;
+            if (!sections[sectionDisplay]) {
+                sections[sectionDisplay] = {
+                    contents: [],
+                    numericValue: sectionNumeric
+                };
+            }
+            sections[sectionDisplay].contents.push(content);
         });
 
         // HTML 생성 - 연속 스크롤 경험을 위한 단일 컨테이너
@@ -4874,13 +4914,14 @@ function loadChapterContent(chapterId, versionId) {
                 <div class="chapter-comment mb-6">${chapter.ChapterComment}</div>` : ''}
         `;
 
-        // 각 섹션 출력
+        // 각 섹션 출력 - sort by numeric value while preserving display string with prefixes
         Object.keys(sections).sort((a, b) => {
             if (a === 'General') return -1;
             if (b === 'General') return 1;
-            return parseFloat(a) - parseFloat(b);
+            return sections[a].numericValue - sections[b].numericValue;
         }).forEach(sectionNum => {
-            const sectionContents = sections[sectionNum];
+            const sectionData = sections[sectionNum];
+            const sectionContents = sectionData.contents;
             const firstContent = sectionContents[0];
 
             // Display "General" for General sections, not "Section General"
@@ -5054,19 +5095,27 @@ function loadAllChaptersContent(versionId, codeId) {
             if (!contents || contents.length === 0) {
                 // 빈 챕터는 메시지 없이 자연스럽게 다음 챕터로 이어지도록 함
             } else {
+                // Use display string (with prefixes like [F], [BE]) as key, store numeric value for sorting
                 const sections = {};
                 contents.forEach(content => {
-                    const sectionNum = getSectionFromOrderKey(content.OrderKey) || 'General';
-                    if (!sections[sectionNum]) sections[sectionNum] = [];
-                    sections[sectionNum].push(content);
+                    const sectionDisplay = getSectionDisplayFromOrderKey(content.OrderKey) || 'General';
+                    const sectionNumeric = getSectionFromOrderKey(content.OrderKey) || 0;
+                    if (!sections[sectionDisplay]) {
+                        sections[sectionDisplay] = {
+                            contents: [],
+                            numericValue: sectionNumeric
+                        };
+                    }
+                    sections[sectionDisplay].contents.push(content);
                 });
 
                 Object.keys(sections).sort((a, b) => {
                     if (a === 'General') return -1;
                     if (b === 'General') return 1;
-                    return parseFloat(a) - parseFloat(b);
+                    return sections[a].numericValue - sections[b].numericValue;
                 }).forEach(sectionNum => {
-                    const sectionContents = sections[sectionNum];
+                    const sectionData = sections[sectionNum];
+                    const sectionContents = sectionData.contents;
                     const firstContent = sectionContents[0];
                     const sectionTitle = sectionNum === 'General' ? 'General' : 'Section ' + sectionNum;
 
@@ -5334,8 +5383,9 @@ let navigationHistory = [];
 // Unified function to generate section ID
 function getSectionId(chapterId, sectionNum) {
     // sectionNum이 숫자일 수 있으므로 문자열로 변환
+    // Handle special characters like [F], [BE], [BS] by replacing brackets and dots
     const sectionStr = String(sectionNum);
-    return 'section-' + chapterId + '-' + sectionStr.replace(/\./g, '-');
+    return 'section-' + chapterId + '-' + sectionStr.replace(/[\[\]\.]/g, '-').replace(/-+/g, '-');
 }
 
 // Google search fallback
@@ -6264,13 +6314,14 @@ function performSearch() {
 
         if (chapter) {
             // Extract section from OrderKey since CodeContent doesn't have Section field
-            const sectionFromOrderKey = getSectionFromOrderKey(content.OrderKey);
+            // Use display version (with prefixes like [F], [BE]) for display
+            const sectionDisplay = getSectionDisplayFromOrderKey(content.OrderKey) || 'General';
             const result = {
                 code: modelCode ? modelCode.ModelCodeName.split(':')[0].trim() : 'Code',
                 year: version && version.Year ? Math.floor(version.Year) : '',
                 chapter: chapter.Chapter,
                 chapterTitle: chapter.TitleEN || '',
-                section: sectionFromOrderKey || 'General',
+                section: sectionDisplay,
                 subsection: content.Subsection || '',
                 titleEN: content.TitleEN || '',
                 titleKR: content.TitleKR || '',
