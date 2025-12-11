@@ -2041,7 +2041,7 @@
   {
     "Subsection": 2.1,
     "OrderKey": "0005.0506.002",
-    "Index": "CD;SD;DD;IFR;IFC;허용면적;하나의 용도 빌딩(Single-occupancy buildings)",
+    "Index": "CD;SD;DD;IFR;IFC;허용면적;단일 용도 건물(Single-occupancy buildings)",
     "SubIndex": null,
     "TitleEN": "Single-occupancy Buildings",
     "TitleKR": "단일 용도 건물",
@@ -2057,7 +2057,7 @@
       "IFR",
       "IFC",
       "허용면적",
-      "하나의 용도 빌딩(Single-occupancy buildings)"
+      "단일 용도 건물(Single-occupancy buildings)"
     ],
     "SubindexPaths": []
   },
