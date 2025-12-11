@@ -3621,13 +3621,17 @@ function changePage(direction) {
 function openCodeContent() {
   if (!currentBook) return;
 
+  // 팝업 닫기 전에 필요한 값 저장 (closeBookPopup이 currentBook을 null로 설정하므로)
+  const versionId = currentBook.versionId;
+  const codeId = currentBook.codeId;
+
   // 팝업 닫기
   closeBookPopup();
 
   // 기존 함수를 사용하여 라이브러리 섹션으로 이동
   // loadCodeFromSidebar(versionId, codeId) 호출
   if (typeof loadCodeFromSidebar === 'function') {
-    loadCodeFromSidebar(currentBook.versionId, currentBook.codeId);
+    loadCodeFromSidebar(versionId, codeId);
   } else {
     console.warn('loadCodeFromSidebar function not available');
     showSection('library');
