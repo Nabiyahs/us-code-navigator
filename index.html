@@ -4107,6 +4107,8 @@ function renderAdvancedFilters(filtersByDiscipline, disciplines) {
 
         const categoryName = disc.id === 'D001' ? 'arch' : disc.id === 'D005' ? 'fireMech' : 'fireElec';
         const isFireMech = disc.id === 'D005';
+        const isArchitecture = disc.id === 'D001';
+        const isAlwaysExpanded = isFireMech || isArchitecture; // 건축구조, 소방기계: 항상 펼침
         const needsConsonantIndex = disc.id === 'D001' || disc.id === 'D004';
 
         // 영어/한글 분류 함수: 영어 먼저, 한글 나중
@@ -4161,6 +4163,51 @@ function renderAdvancedFilters(filtersByDiscipline, disciplines) {
         // 전체 allItems도 영어 먼저 정렬
         allItems.sort((a, b) => sortEnglishFirst(a.value, b.value));
 
+        // 건축구조(D001) 전용: 사용자 정의 정렬 순서 및 중복 제거
+        const isArch = disc.id === 'D001';
+        if (isArch) {
+            // 1. 중복 제거 (같은 value를 가진 항목은 하나만 유지)
+            const seenValues = new Set();
+            const uniqueItems = [];
+            allItems.forEach(item => {
+                if (!seenValues.has(item.value)) {
+                    seenValues.add(item.value);
+                    uniqueItems.push(item);
+                }
+            });
+            allItems.length = 0;
+            allItems.push(...uniqueItems);
+
+            // 2. 사용자 정의 정렬 순서
+            const priorityOrder = [
+                'SD', 'DD', 'CD', 'IFC', 'IFR',
+                'Class B', 'Class C', 'Class D', 'ESS',
+                'Group A', 'Group B', 'Group E', 'Group F', 'Group F-1',
+                'Group H', 'Group H-1', 'Group H-2', 'Group H-2/H-3', 'Group H-2/H-3/H-4',
+                'Group H-3/H-4', 'Group H-4', 'Group H-5',
+                'Group I', 'Group M', 'Group R', 'Group R-1', 'Group R-2',
+                'Group S', 'Group S-1', 'Group S-2'
+            ];
+
+            const getPriority = (value) => {
+                const idx = priorityOrder.indexOf(value);
+                return idx >= 0 ? idx : priorityOrder.length + 1000;
+            };
+
+            allItems.sort((a, b) => {
+                const priorityA = getPriority(a.value);
+                const priorityB = getPriority(b.value);
+
+                // 둘 다 우선순위 목록에 있으면 우선순위로 정렬
+                if (priorityA < priorityOrder.length + 1000 || priorityB < priorityOrder.length + 1000) {
+                    if (priorityA !== priorityB) return priorityA - priorityB;
+                }
+
+                // 나머지는 영어 먼저, 한글은 가나다순
+                return sortEnglishFirst(a.value, b.value);
+            });
+        }
+
         // 자음별 그룹화 (색인용)
         const consonantGroups = {};
         if (needsConsonantIndex) {
@@ -4209,22 +4256,22 @@ function renderAdvancedFilters(filtersByDiscipline, disciplines) {
                 : '';
 
             if (hasChildren) {
-                // 소방기계: 모두 펼침, 다른 분야: 접힘
-                const isExpanded = isFireMech;
+                // 건축구조/소방기계: 모두 펼침, 소방전기: 접힘
+                const isExpanded = isAlwaysExpanded;
                 const hiddenClass = isExpanded ? '' : 'hidden';
                 const toggleSymbol = isExpanded ? '−' : '+';
 
                 html += `
                 <div class="mb-1" ${consonantAnchor}>
-                    <div class="flex items-center justify-between ${isFireMech ? '' : 'cursor-pointer'} hover:bg-gray-50 py-1.5 px-2 rounded transition-colors"
-                         ${isFireMech ? '' : `onclick="toggleFilterGroup('${parentId}')"`}>
+                    <div class="flex items-center justify-between ${isAlwaysExpanded ? '' : 'cursor-pointer'} hover:bg-gray-50 py-1.5 px-2 rounded transition-colors"
+                         ${isAlwaysExpanded ? '' : `onclick="toggleFilterGroup('${parentId}')"`}>
                         <label class="flex items-center gap-2" onclick="event.stopPropagation()">
                             <input class="filter-checkbox"
                                    name="${categoryName}Category" type="checkbox" value="${item.value}"
                                    onchange="toggleParentCheckbox(this, '${parentId}'); updateClearButton('${categoryName}')"/>
                             <span class="text-sm text-gray-800">${item.value}</span>
                         </label>
-                        ${isFireMech ? '' : `<span class="text-xs text-gray-400 font-mono" id="${parentId}Toggle">${toggleSymbol}</span>`}
+                        ${isAlwaysExpanded ? '' : `<span class="text-xs text-gray-400 font-mono" id="${parentId}Toggle">${toggleSymbol}</span>`}
                     </div>
                     <div class="${hiddenClass} mt-1 ml-5 space-y-0.5" id="${parentId}">
                 `;
@@ -4235,21 +4282,21 @@ function renderAdvancedFilters(filtersByDiscipline, disciplines) {
                     const hasGrandchildren = child.grandchildren && child.grandchildren.length > 0;
 
                     if (hasGrandchildren) {
-                        const childExpanded = isFireMech;
+                        const childExpanded = isAlwaysExpanded;
                         const childHiddenClass = childExpanded ? '' : 'hidden';
                         const childToggleSymbol = childExpanded ? '−' : '+';
 
                         html += `
                         <div class="mb-0.5">
-                            <div class="flex items-center justify-between ${isFireMech ? '' : 'cursor-pointer'} hover:bg-gray-50 py-1.5 px-2 rounded transition-colors"
-                                 ${isFireMech ? '' : `onclick="toggleFilterGroup('${childId}')"`}>
+                            <div class="flex items-center justify-between ${isAlwaysExpanded ? '' : 'cursor-pointer'} hover:bg-gray-50 py-1.5 px-2 rounded transition-colors"
+                                 ${isAlwaysExpanded ? '' : `onclick="toggleFilterGroup('${childId}')"`}>
                                 <label class="flex items-center gap-2" onclick="event.stopPropagation()">
                                     <input class="filter-checkbox-sm"
                                            name="${categoryName}Category" type="checkbox" value="${child.fullValue}"
                                            onchange="updateClearButton('${categoryName}')"/>
                                     <span class="text-[13px] text-gray-700">${child.value}</span>
                                 </label>
-                                ${isFireMech ? '' : `<span class="text-xs text-gray-400 font-mono" id="${childId}Toggle">${childToggleSymbol}</span>`}
+                                ${isAlwaysExpanded ? '' : `<span class="text-xs text-gray-400 font-mono" id="${childId}Toggle">${childToggleSymbol}</span>`}
                             </div>
                             <div class="${childHiddenClass} mt-1 ml-5 space-y-0.5" id="${childId}">
                                 ${child.grandchildren.map(gc => `
