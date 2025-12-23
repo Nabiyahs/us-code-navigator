@@ -2199,9 +2199,17 @@
 <div class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center" id="tagSectionsPopup" onclick="if(event.target === this) closeTagSectionsPopup()">
   <div class="bg-white rounded-xl shadow-2xl w-[90%] max-w-3xl max-h-[80vh] overflow-hidden flex flex-col">
     <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between bg-gradient-to-r from-[#F8E9A1] to-[#FFF9DB]">
-      <div>
-        <h2 class="text-lg font-bold text-[#24305E]" id="tagPopupTitle">태그명</h2>
-        <p class="text-sm text-gray-600" id="tagPopupCount">0개 섹션</p>
+      <div class="flex items-center gap-3">
+        <!-- View Mode Toggle Button -->
+        <button id="tagPopupViewToggle" class="p-2 hover:bg-white/50 rounded-lg transition-colors" onclick="toggleTagPopupViewMode()" title="보기 모드 전환">
+          <svg id="tagPopupViewIcon" class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path>
+          </svg>
+        </button>
+        <div>
+          <h2 class="text-lg font-bold text-[#24305E]" id="tagPopupTitle">태그명</h2>
+          <p class="text-sm text-gray-600"><span id="tagPopupCount">0개 섹션</span> · <span id="tagPopupViewLabel">전체보기</span></p>
+        </div>
       </div>
       <button class="p-2 hover:bg-white/50 rounded-lg transition-colors" onclick="closeTagSectionsPopup()">
         <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -2221,10 +2229,18 @@
 <div class="section-content" id="librarySection">
 <header class="bg-white border-b border-gray-200 shadow-sm sticky top-0 z-10 h-auto min-h-[80px]">
 <div class="flex items-center justify-between px-6 py-3">
+<div class="flex items-center gap-3">
+<!-- 뒤로가기 버튼 -->
+<button onclick="history.back()" class="p-2 hover:bg-gray-100 rounded-lg transition-colors" title="뒤로가기">
+  <svg class="w-5 h-5 text-[#24305E]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+  </svg>
+</button>
 <div>
-<h1 class="font-bold text-[#24305E]" id="codeTitle">IBC 2024</h1>
+<h1 class="font-bold text-[#24305E]" id="codeTitle">IBC (2024)</h1>
 <p class="text-gray-600" id="codeSubtitle">International Building Code</p>
 <p class="code-title-kr hidden" id="codeTitleKR"></p>
+</div>
 </div>
 <!-- REMOVED -->
 <!-- <select id="versionSelect" class="px-4 py-2 border-2 border-gray-300 rounded-lg text-sm font-medium text-gray-700 focus:outline-none focus:border-[#A8D0E6]">
@@ -3893,6 +3909,12 @@ function showTagSectionsPopup(tag, versionId) {
   titleEl.textContent = tag;
   countEl.textContent = `${matchingSections.length}개 섹션`;
 
+  // 보기 모드 라벨 초기화
+  const viewLabel = document.getElementById('tagPopupViewLabel');
+  if (viewLabel) {
+    viewLabel.textContent = tagPopupFullView ? '전체보기' : '목록보기';
+  }
+
   // 섹션 목록 생성
   if (matchingSections.length === 0) {
     listEl.innerHTML = '<p class="text-gray-500 text-center py-8">관련 섹션이 없습니다.</p>';
@@ -3901,22 +3923,29 @@ function showTagSectionsPopup(tag, versionId) {
       const chapter = appData.CodeChapter.find(ch => ch.ChapterID === content.ChapterID);
       const version = appData.ModelCodeVersion.find(v => v.ModelCodeVersionID === chapter?.ModelCodeVersionID);
       const modelCode = appData.ModelCode.find(mc => mc.ModelCodeID === version?.ModelCodeID);
-      const codeLabel = modelCode ? modelCode.ModelCodeName : '';
+      const codeName = modelCode ? modelCode.ModelCodeName : '';
+      const codeYear = version && version.Year ? Math.floor(version.Year) : '';
+      const codeLabel = codeYear ? `${codeName} (${codeYear})` : codeName;
       const chapterNum = chapter ? chapter.Chapter : '';
-      const sectionNum = content.Section || '';
-      const subsection = content.Subsection ? `.${content.Subsection}` : '';
-      const sectionNumber = `${sectionNum}${subsection}`;
+      // Use OrderKey for consistent section number formatting
+      const sectionNumber = getFullSectionDisplayFromOrderKey(content.OrderKey) ||
+                           (content.Section ? `${content.Section}${content.Subsection ? '.' + content.Subsection : ''}` : '');
       const chapterId = chapter ? chapter.ChapterID : '';
-      const sectionId = getSectionId(chapterId, sectionNumber);
+
+      // 콘텐츠 미리보기 (150자)
+      const contentPreview = (content.ContentEN || '').slice(0, 150) + ((content.ContentEN || '').length > 150 ? '...' : '');
 
       return `
         <div class="bg-gray-50 p-3 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer" onclick="goToTagSection('${chapterId}', '${sectionNumber}')">
           <div class="flex items-center gap-2 mb-1">
             <span class="text-xs bg-[#A8D0E6] text-[#24305E] font-semibold px-2 py-0.5 rounded">${codeLabel}</span>
-            <span class="text-xs text-gray-500">Chapter ${chapterNum} - ${sectionNumber}</span>
+            <span class="text-xs text-gray-500">Chapter ${chapterNum}, Section ${sectionNumber}</span>
           </div>
           <h4 class="text-sm font-medium text-[#24305E]">${sectionNumber} ${content.TitleEN || ''}</h4>
-          ${content.TitleKR ? `<p class="text-xs text-gray-600 mt-0.5">${content.TitleKR}</p>` : ''}
+          <div class="tag-section-content ${tagPopupFullView ? '' : 'hidden'}">
+            ${content.TitleKR ? `<p class="text-xs text-gray-600 mt-0.5 italic">${content.TitleKR}</p>` : ''}
+            ${contentPreview ? `<p class="text-xs text-gray-500 mt-1">${contentPreview}</p>` : ''}
+          </div>
         </div>
       `;
     }).join('');
@@ -3934,9 +3963,35 @@ function closeTagSectionsPopup() {
   document.body.style.overflow = '';
 }
 
-// 태그 섹션으로 이동
+// 태그 팝업 보기 모드 상태 (true = 전체보기, false = 목록보기)
+let tagPopupFullView = true;
+
+// 태그 팝업 보기 모드 토글
+function toggleTagPopupViewMode() {
+  tagPopupFullView = !tagPopupFullView;
+
+  const viewLabel = document.getElementById('tagPopupViewLabel');
+  const viewIcon = document.getElementById('tagPopupViewIcon');
+  const sectionsList = document.getElementById('tagSectionsList');
+
+  if (tagPopupFullView) {
+    viewLabel.textContent = '전체보기';
+    // 전체보기 아이콘 (4줄 리스트)
+    viewIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path>';
+    // 모든 콘텐츠 영역 표시
+    sectionsList.querySelectorAll('.tag-section-content').forEach(el => el.classList.remove('hidden'));
+  } else {
+    viewLabel.textContent = '목록보기';
+    // 목록보기 아이콘 (2줄 리스트)
+    viewIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16"></path>';
+    // 콘텐츠 영역 숨기기 (제목만 표시)
+    sectionsList.querySelectorAll('.tag-section-content').forEach(el => el.classList.add('hidden'));
+  }
+}
+
+// 태그 섹션으로 이동 (팝업 유지)
 function goToTagSection(chapterId, sectionNumber) {
-  closeTagSectionsPopup();
+  // 팝업은 닫지 않음 - 사용자가 직접 닫기 버튼으로 닫아야 함
 
   // 해당 챕터와 섹션으로 스크롤
   const sectionId = getSectionId(chapterId, sectionNumber);
@@ -4667,10 +4722,52 @@ function getSectionFromOrderKey(orderKey) {
 }
 
 // Get section display string from OrderKey (preserves special prefixes for display)
+// Converts "0304" to "304" by removing leading zeros from numeric part
 function getSectionDisplayFromOrderKey(orderKey) {
     if (!orderKey) return null;
     const parts = orderKey.split('.');
-    return parts[1] || null;
+    if (!parts[1]) return null;
+
+    // Check for special prefixes like [F], [BE], [BS]
+    const prefixMatch = parts[1].match(/^(\[[A-Za-z]+\])?(.*)$/);
+    if (prefixMatch) {
+        const prefix = prefixMatch[1] || '';
+        const numericPart = prefixMatch[2];
+        // Remove leading zeros from numeric part
+        const cleanedNumeric = numericPart.replace(/^0+/, '') || '0';
+        return prefix + cleanedNumeric;
+    }
+    return parts[1];
+}
+
+// Get formatted section.subsection display string from OrderKey
+// Converts "0003.0304.001" to "304.1" format
+function getFullSectionDisplayFromOrderKey(orderKey) {
+    if (!orderKey) return null;
+    const parts = orderKey.split('.');
+
+    // Get section (remove leading zeros)
+    let section = '';
+    if (parts[1]) {
+        const prefixMatch = parts[1].match(/^(\[[A-Za-z]+\])?(.*)$/);
+        if (prefixMatch) {
+            const prefix = prefixMatch[1] || '';
+            const numericPart = prefixMatch[2];
+            section = prefix + (numericPart.replace(/^0+/, '') || '0');
+        } else {
+            section = parts[1];
+        }
+    }
+
+    // Get subsection if exists (remove leading zeros)
+    let subsection = '';
+    if (parts[2]) {
+        // Handle comma-separated subsections like "1,1"
+        const subParts = parts[2].split(',');
+        subsection = '.' + subParts.map(p => p.replace(/^0+/, '') || '0').join('.');
+    }
+
+    return section + subsection;
 }
 
 function getAttachments(versionId, chapter, section, subsection) {
@@ -4766,7 +4863,7 @@ function loadChapters(versionId, codeId) {
 
         if (modelCode) {
             const codeName = modelCode.ModelCodeName.split(':')[0].trim();
-            const year = version && version.Year ? ' ' + Math.floor(version.Year) : '';
+            const year = version && version.Year ? ' (' + Math.floor(version.Year) + ')' : '';
             document.getElementById('codeTitle').textContent = codeName + year;
             document.getElementById('codeSubtitle').textContent = modelCode.DescriptionEN || modelCode.Description || '';
 
@@ -4905,7 +5002,7 @@ function loadChapterContent(chapterId, versionId) {
         const modelCode = version ? appData.ModelCode.find(mc => mc.ModelCodeID === version.ModelCodeID) : null;
         const codeName = modelCode ? modelCode.ModelCodeName : 'Code';
         const codeYear = version ? Math.floor(version.Year) : '';
-        const codeLabel = `${codeName} ${codeYear}`;
+        const codeLabel = codeYear ? `${codeName} (${codeYear})` : codeName;
 
         // 챕터 활성화 표시
         document.querySelectorAll('.chapter-item').forEach(item => {
@@ -4983,8 +5080,8 @@ function loadChapterContent(chapterId, versionId) {
 
             // 각 subsection 출력
             sectionContents.forEach(content => {
-                const subsection = content.Subsection ? `.${content.Subsection}` : '';
-                const sectionNumber = `${sectionNum}${subsection}`;
+                // Use getFullSectionDisplayFromOrderKey to get formatted section.subsection number
+                const sectionNumber = getFullSectionDisplayFromOrderKey(content.OrderKey) || sectionNum;
                 // Section ID에 chapterId 포함 (scrollToSection과 일치)
                 const sectionId = getSectionId(chapterId, sectionNumber);
 
@@ -5120,7 +5217,7 @@ function loadAllChaptersContent(versionId, codeId) {
         const modelCode = version ? appData.ModelCode.find(mc => mc.ModelCodeID === version.ModelCodeID) : null;
         const codeName = modelCode ? modelCode.ModelCodeName : 'Code';
         const codeYear = version ? Math.floor(version.Year) : '';
-        const codeLabel = `${codeName} ${codeYear}`;
+        const codeLabel = codeYear ? `${codeName} (${codeYear})` : codeName;
 
         // 연속 스크롤을 위한 단일 컨테이너 시작
         let allHtml = '<div class="bg-white rounded-lg shadow-sm p-6 md:p-8">';
@@ -5174,8 +5271,8 @@ function loadAllChaptersContent(versionId, codeId) {
                     `;
 
                     sectionContents.forEach(content => {
-                        const subsection = content.Subsection ? `.${content.Subsection}` : '';
-                        const sectionNumber = `${sectionNum}${subsection}`;
+                        // Use getFullSectionDisplayFromOrderKey to get formatted section.subsection number
+                        const sectionNumber = getFullSectionDisplayFromOrderKey(content.OrderKey) || sectionNum;
                         const sectionId = getSectionId(chapter.ChapterID, sectionNumber);
                         const attachments = content.AttachmentID ? getAttachmentsByIds(content.AttachmentID) : [];
                         const indexTags = content.IndexTags || [];
@@ -5619,13 +5716,15 @@ function performTopSearch() {
             const version = appData.ModelCodeVersion.find(v => v.ModelCodeVersionID === content.ModelCodeVersionID);
 
             if (modelCode && version && chapter) {
+                // Use OrderKey for consistent section number formatting
+                const fullSection = getFullSectionDisplayFromOrderKey(content.OrderKey) || 'General';
                 const result = {
                     code: modelCode.ModelCodeName.split(':')[0].trim(),
                     year: version.Year ? Math.floor(version.Year) : '',
                     chapter: chapter.Chapter,
                     chapterTitle: chapter.TitleEN || '',
-                    section: content.Section || 'General',
-                    subsection: content.Subsection || '',
+                    section: fullSection,
+                    subsection: '', // subsection is now included in section from OrderKey
                     titleEN: content.TitleEN || '',
                     titleKR: content.TitleKR || '',
                     contentEN: content.ContentEN || '',
@@ -5801,7 +5900,7 @@ function displayTopSearchResults(exactMatches, partialMatches, keyword, attachme
 
                     <!-- Badge and Title -->
                     <div class="flex items-center gap-2 mb-3 flex-wrap">
-                        <span class="text-xs bg-[#A8D0E6] text-[#24305E] font-semibold px-2 py-0.5 rounded">${result.code} ${result.year}: Ch.${result.chapter} - ${sectionNum}</span>
+                        <span class="text-xs bg-[#A8D0E6] text-[#24305E] font-semibold px-2 py-0.5 rounded">${result.code} (${result.year}): Ch.${result.chapter} - ${sectionNum}</span>
                         <span class="text-xs bg-[#F76C6C] text-white px-2 py-0.5 rounded">${badgeText}</span>
                     </div>
                     <h4 class="font-semibold text-[#24305E] text-sm mb-2">${highlightedTitleEN}</h4>
@@ -5861,7 +5960,7 @@ function displayTopSearchResults(exactMatches, partialMatches, keyword, attachme
                     <!-- Summary (always visible) -->
                     <div class="ml-12 pr-20">
                         <div class="flex items-center gap-2 mb-2 flex-wrap">
-                            <span class="text-xs bg-[#A8D0E6] text-[#24305E] font-semibold px-2 py-0.5 rounded">${result.code} ${result.year}: Ch.${result.chapter} - ${sectionNum}</span>
+                            <span class="text-xs bg-[#A8D0E6] text-[#24305E] font-semibold px-2 py-0.5 rounded">${result.code} (${result.year}): Ch.${result.chapter} - ${sectionNum}</span>
                         </div>
                         <h4 class="font-semibold text-[#24305E] text-sm cursor-pointer" onclick="toggleSearchResult(${index})">${sectionNum}${result.titleEN ? ' ' + highlightedTitleEN : ''}</h4>
                     </div>
@@ -5997,13 +6096,15 @@ function performAdvancedSearchReal() {
             const chapter = appData.CodeChapter.find(ch => ch.ChapterID === content.ChapterID);
 
             if (modelCode && version && chapter) {
+                // Use OrderKey for consistent section number formatting
+                const fullSection = getFullSectionDisplayFromOrderKey(content.OrderKey) || '';
                 results.push({
                     code: modelCode.ModelCodeName.split(':')[0].trim(),
                     year: version.Year ? Math.floor(version.Year) : '',
                     chapter: chapter.Chapter,
                     chapterTitle: chapter.TitleEN || '',
-                    section: content.Section || '',
-                    subsection: content.Subsection || '',
+                    section: fullSection,
+                    subsection: '', // subsection is now included in section from OrderKey
                     titleEN: content.TitleEN || '',
                     titleKR: content.TitleKR || '',
                     contentEN: content.ContentEN || '',
@@ -6076,7 +6177,7 @@ function renderAdvancedSearchResults(results, keyword) {
 
     results.forEach((result, index) => {
         const sectionNum = result.section + (result.subsection ? '.' + result.subsection : '');
-        const codeLabel = `${result.code} ${result.year}`;
+        const codeLabel = result.year ? `${result.code} (${result.year})` : result.code;
 
         // 코드별 색상 결정
         const isIBC = result.code.includes('IBC');
@@ -6360,16 +6461,16 @@ function performSearch() {
         }
 
         if (chapter) {
-            // Extract section from OrderKey since CodeContent doesn't have Section field
-            // Use display version (with prefixes like [F], [BE]) for display
-            const sectionDisplay = getSectionDisplayFromOrderKey(content.OrderKey) || 'General';
+            // Extract full section.subsection from OrderKey
+            // getFullSectionDisplayFromOrderKey returns formatted section.subsection (e.g., "304.1")
+            const fullSection = getFullSectionDisplayFromOrderKey(content.OrderKey) || 'General';
             const result = {
                 code: modelCode ? modelCode.ModelCodeName.split(':')[0].trim() : 'Code',
                 year: version && version.Year ? Math.floor(version.Year) : '',
                 chapter: chapter.Chapter,
                 chapterTitle: chapter.TitleEN || '',
-                section: sectionDisplay,
-                subsection: content.Subsection || '',
+                section: fullSection,
+                subsection: '', // subsection is now included in section from OrderKey
                 titleEN: content.TitleEN || '',
                 titleKR: content.TitleKR || '',
                 contentEN: content.ContentEN || '',
@@ -6590,7 +6691,7 @@ function displaySearchResults(exactMatches, partialMatches, allFilteredResults, 
                                 <div class="flex-1">
                                     <!-- Badge and Title -->
                                     <div class="flex items-center gap-2 mb-1">
-                                        <span class="bg-[#A8D0E6] text-[#24305E] text-xs font-semibold px-2 py-1 rounded">${result.code} ${result.year}</span>
+                                        <span class="bg-[#A8D0E6] text-[#24305E] text-xs font-semibold px-2 py-1 rounded">${result.code} (${result.year})</span>
                                         <span class="text-sm text-gray-500">Chapter ${result.chapter}, Section ${sectionNum}</span>
                                         <span class="text-xs bg-[#F76C6C] text-white px-2 py-1 rounded">${badgeText}</span>
                                     </div>
@@ -6644,7 +6745,7 @@ function displaySearchResults(exactMatches, partialMatches, allFilteredResults, 
                                 <div class="flex-1">
                                     <!-- Location and Index tags -->
                                     <div class="flex items-center gap-2 mb-1">
-                                        <span class="bg-[#F76C6C] text-white text-xs font-semibold px-2 py-1 rounded">${result.code} ${result.year}</span>
+                                        <span class="bg-[#F76C6C] text-white text-xs font-semibold px-2 py-1 rounded">${result.code} (${result.year})</span>
                                         <span class="text-sm text-gray-500">Chapter ${result.chapter}, Section ${sectionNum}</span>
                                     </div>
                                     <h3 class="font-semibold text-[#24305E]">${sectionNum}${result.titleEN ? ' ' + result.titleEN : ''}</h3>
@@ -6782,7 +6883,7 @@ function openSearchResultModal(result) {
 
             <!-- Location and Index tags -->
             <div class="flex items-center gap-2 mb-3 flex-wrap">
-                <span class="text-xs bg-[#A8D0E6] text-[#24305E] font-semibold px-2 py-0.5 rounded">${result.code} ${result.year}: Chapter ${result.chapter} - ${sectionNum}</span>
+                <span class="text-xs bg-[#A8D0E6] text-[#24305E] font-semibold px-2 py-0.5 rounded">${result.code} (${result.year}): Chapter ${result.chapter} - ${sectionNum}</span>
                 <span class="text-xs bg-[#F8E9A1] text-[#24305E] px-2 py-0.5 rounded">건축</span>
             </div>
 
@@ -6811,7 +6912,7 @@ function openSearchResultModal(result) {
 
     // Update modal title and location
     document.getElementById('modalTitle').textContent = sectionNum + (result.titleEN ? ' ' + result.titleEN : '');
-    document.getElementById('modalLocation').textContent = `${result.code} ${result.year} - Chapter ${result.chapter}: ${result.chapterTitle}`;
+    document.getElementById('modalLocation').textContent = `${result.code} (${result.year}) - Chapter ${result.chapter}: ${result.chapterTitle}`;
     document.getElementById('modalContent').innerHTML = contentHTML;
 
     // Show modal
@@ -6871,7 +6972,7 @@ function copySearchResultContent(event, button) {
     if (resultData) {
         try {
             const result = JSON.parse(resultData);
-            const copyText = `${result.code} ${result.year} - Chapter ${result.chapter}: Section ${result.section}${result.subsection ? '.' + result.subsection : ''}
+            const copyText = `${result.code} (${result.year}) - Chapter ${result.chapter}: Section ${result.section}${result.subsection ? '.' + result.subsection : ''}
 
 ${result.titleEN || ''}
 ${result.titleKR || ''}
