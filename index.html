@@ -3927,20 +3927,20 @@ function showTagSectionsPopup(tag, versionId) {
       const codeYear = version && version.Year ? Math.floor(version.Year) : '';
       const codeLabel = codeYear ? `${codeName} (${codeYear})` : codeName;
       const chapterNum = chapter ? chapter.Chapter : '';
-      // Use Section from OrderKey + Subsection field for display
-      const sectionNumber = getFullSectionDisplay(content.OrderKey, content.Subsection) || 'General';
+      // Use Subsection field only for section display
+      const sectionNumber = getSectionDisplay(content.Subsection);
       const chapterId = chapter ? chapter.ChapterID : '';
 
       // 콘텐츠 미리보기 (150자)
       const contentPreview = (content.ContentEN || '').slice(0, 150) + ((content.ContentEN || '').length > 150 ? '...' : '');
 
       return `
-        <div class="bg-gray-50 p-3 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer" onclick="goToTagSection('${chapterId}', '${sectionNumber}')">
+        <div class="bg-gray-50 p-3 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer" onclick="goToTagSection('${chapterId}', '${sectionNumber || ''}')">
           <div class="flex items-center gap-2 mb-1">
             <span class="text-xs bg-[#A8D0E6] text-[#24305E] font-semibold px-2 py-0.5 rounded">${codeLabel}</span>
-            <span class="text-xs text-gray-500">Chapter ${chapterNum}, Section ${sectionNumber}</span>
+            <span class="text-xs text-gray-500">Chapter ${chapterNum}${sectionNumber ? ', Section ' + sectionNumber : ''}</span>
           </div>
-          <h4 class="text-sm font-medium text-[#24305E]">${sectionNumber} ${content.TitleEN || ''}</h4>
+          <h4 class="text-sm font-medium text-[#24305E]">${sectionNumber ? sectionNumber + ' ' : ''}${content.TitleEN || ''}</h4>
           <div class="tag-section-content ${tagPopupFullView ? '' : 'hidden'}">
             ${content.TitleKR ? `<p class="text-xs text-gray-600 mt-0.5 italic">${content.TitleKR}</p>` : ''}
             ${contentPreview ? `<p class="text-xs text-gray-500 mt-1">${contentPreview}</p>` : ''}
@@ -4695,89 +4695,16 @@ function getContents(chapterId) {
         });
 }
 
-// Helper function to parse OrderKey into chapter, section, subsection
-// Handles special prefixes like [F], [BE], [BS] by stripping them for numeric parsing
-function parseOrderKey(orderKey) {
-    if (!orderKey) return { chapter: 0, section: 0, item: 0, sectionRaw: null };
-    const parts = orderKey.split('.');
-    // Extract numeric parts while preserving original for display
-    const sectionRaw = parts[1] || null; // Keep original with prefix for display
-    return {
-        chapter: parseInt(parts[0]) || 0,
-        section: parseInt((parts[1] || '').replace(/[\[\]A-Za-z]/g, '')) || 0,
-        item: parseInt((parts[2] || '').replace(/[\[\]A-Za-z,]/g, '')) || 0,
-        sectionRaw: sectionRaw // Original section string with prefix
-    };
-}
-
-// Get section number from OrderKey (strips special prefixes for numeric value)
-function getSectionFromOrderKey(orderKey) {
-    if (!orderKey) return null;
-    const parts = orderKey.split('.');
-    if (!parts[1]) return null;
-    // Remove special prefixes like [F], [BE], [BS] for numeric parsing
-    const numericSection = parts[1].replace(/[\[\]A-Za-z]/g, '');
-    return parseInt(numericSection) || null;
-}
-
-// Get section display string from OrderKey (preserves special prefixes for display)
-// Extracts section part from OrderKey and removes leading zeros
-// Example: "0003.0306.001" → "306", "0004.[F]414" → "[F]414"
-function getSectionDisplayFromOrderKey(orderKey) {
-    if (!orderKey) return null;
-    const parts = orderKey.split('.');
-    if (!parts[1]) return null;
-
-    // Check for special prefixes like [F], [BE], [BS]
-    const prefixMatch = parts[1].match(/^(\[[A-Za-z]+\])?(.*)$/);
-    if (prefixMatch) {
-        const prefix = prefixMatch[1] || '';
-        const numericPart = prefixMatch[2];
-        // Remove leading zeros from numeric part
-        const cleanedNumeric = numericPart.replace(/^0+/, '') || '0';
-        return prefix + cleanedNumeric;
+// Get section display from Subsection field ONLY
+// Returns Subsection value as-is, or null if not present
+// Example: Subsection=1 → "1", Subsection=1.1 → "1.1", Subsection="5.3.1" → "5.3.1"
+// If Subsection is null/undefined → returns null (don't display)
+function getSectionDisplay(subsection) {
+    if (subsection === null || subsection === undefined || subsection === '') {
+        return null;
     }
-    return parts[1];
-}
-
-// Get formatted section.subsection display string
-// Uses OrderKey for Section and content.Subsection field for subsection
-// Example: OrderKey="0003.0306.001", Subsection="1" → "306.1"
-// Example: OrderKey="0003.0307.001", Subsection="1.1" → "307.1.1"
-function getFullSectionDisplay(orderKey, subsection) {
-    if (!orderKey) return null;
-
-    // Get section from OrderKey (remove leading zeros)
-    const section = getSectionDisplayFromOrderKey(orderKey);
-    if (!section) return null;
-
-    // Append subsection if exists
-    if (subsection !== null && subsection !== undefined && subsection !== '') {
-        return section + '.' + subsection;
-    }
-
-    return section;
-}
-
-// Legacy function for backward compatibility - uses OrderKey only
-function getFullSectionDisplayFromOrderKey(orderKey) {
-    if (!orderKey) return null;
-    const parts = orderKey.split('.');
-
-    // Get section (remove leading zeros)
-    let section = '';
-    if (parts[1]) {
-        const prefixMatch = parts[1].match(/^(\[[A-Za-z]+\])?(.*)$/);
-        if (prefixMatch) {
-            const prefix = prefixMatch[1] || '';
-            const numericPart = prefixMatch[2];
-            section = prefix + (numericPart.replace(/^0+/, '') || '0');
-        } else {
-            section = parts[1];
-        }
-    }
-
-    return section;
+    // Convert to string and handle comma as dot (e.g., "1,1" → "1.1")
+    return String(subsection).replace(/,/g, '.');
 }
 
 function getAttachments(versionId, chapter, section, subsection) {
@@ -4836,10 +4763,11 @@ function loadChapters(versionId, codeId) {
             // Create map of display string -> numeric value for sorting
             const sectionMap = {};
             contents.forEach(c => {
-                const display = getSectionDisplayFromOrderKey(c.OrderKey);
-                const numeric = getSectionFromOrderKey(c.OrderKey);
+                const display = getSectionDisplay(c.Subsection);
                 if (display && !sectionMap[display]) {
-                    sectionMap[display] = numeric || 0;
+                    // Extract first number for sorting
+                    const numeric = parseFloat(String(display).split('.')[0]) || 0;
+                    sectionMap[display] = numeric;
                 }
             });
             // Sort by numeric value while keeping display strings
@@ -5046,8 +4974,8 @@ function loadChapterContent(chapterId, versionId) {
         // Use display string (with prefixes like [F], [BE]) as key, store numeric value for sorting
         const sections = {};
         contents.forEach(content => {
-            const sectionDisplay = getSectionDisplayFromOrderKey(content.OrderKey) || 'General';
-            const sectionNumeric = getSectionFromOrderKey(content.OrderKey) || 0;
+            const sectionDisplay = getSectionDisplay(content.Subsection) || 'General';
+            const sectionNumeric = parseFloat(String(content.Subsection || '0').split('.')[0]) || 0;
             if (!sections[sectionDisplay]) {
                 sections[sectionDisplay] = {
                     contents: [],
@@ -5090,8 +5018,8 @@ function loadChapterContent(chapterId, versionId) {
 
             // 각 subsection 출력
             sectionContents.forEach(content => {
-                // Use Section from OrderKey + Subsection field for display
-                const sectionNumber = getFullSectionDisplay(content.OrderKey, content.Subsection) || sectionNum;
+                // Use Subsection field for display (e.g., "1", "1.1", "5.3.1")
+                const sectionNumber = getSectionDisplay(content.Subsection) || sectionNum;
                 // Section ID에 chapterId 포함 (scrollToSection과 일치)
                 const sectionId = getSectionId(chapterId, sectionNumber);
 
@@ -5252,8 +5180,8 @@ function loadAllChaptersContent(versionId, codeId) {
                 // Use display string (with prefixes like [F], [BE]) as key, store numeric value for sorting
                 const sections = {};
                 contents.forEach(content => {
-                    const sectionDisplay = getSectionDisplayFromOrderKey(content.OrderKey) || 'General';
-                    const sectionNumeric = getSectionFromOrderKey(content.OrderKey) || 0;
+                    const sectionDisplay = getSectionDisplay(content.Subsection) || 'General';
+                    const sectionNumeric = parseFloat(String(content.Subsection || '0').split('.')[0]) || 0;
                     if (!sections[sectionDisplay]) {
                         sections[sectionDisplay] = {
                             contents: [],
@@ -5281,8 +5209,8 @@ function loadAllChaptersContent(versionId, codeId) {
                     `;
 
                     sectionContents.forEach(content => {
-                        // Use Section from OrderKey + Subsection field for display
-                        const sectionNumber = getFullSectionDisplay(content.OrderKey, content.Subsection) || sectionNum;
+                        // Use Subsection field for display (e.g., "1", "1.1", "5.3.1")
+                        const sectionNumber = getSectionDisplay(content.Subsection) || sectionNum;
                         const sectionId = getSectionId(chapter.ChapterID, sectionNumber);
                         const attachments = content.AttachmentID ? getAttachmentsByIds(content.AttachmentID) : [];
                         const indexTags = content.IndexTags || [];
@@ -5726,8 +5654,8 @@ function performTopSearch() {
             const version = appData.ModelCodeVersion.find(v => v.ModelCodeVersionID === content.ModelCodeVersionID);
 
             if (modelCode && version && chapter) {
-                // Use Section from OrderKey + Subsection field for display
-                const fullSection = getFullSectionDisplay(content.OrderKey, content.Subsection) || 'General';
+                // Use Subsection field for display (e.g., "1", "1.1", "5.3.1")
+                const fullSection = getSectionDisplay(content.Subsection) || 'General';
                 const result = {
                     code: modelCode.ModelCodeName.split(':')[0].trim(),
                     year: version.Year ? Math.floor(version.Year) : '',
@@ -6106,8 +6034,8 @@ function performAdvancedSearchReal() {
             const chapter = appData.CodeChapter.find(ch => ch.ChapterID === content.ChapterID);
 
             if (modelCode && version && chapter) {
-                // Use Section from OrderKey + Subsection field for display
-                const fullSection = getFullSectionDisplay(content.OrderKey, content.Subsection) || '';
+                // Use Subsection field for display (e.g., "1", "1.1", "5.3.1")
+                const fullSection = getSectionDisplay(content.Subsection) || '';
                 results.push({
                     code: modelCode.ModelCodeName.split(':')[0].trim(),
                     year: version.Year ? Math.floor(version.Year) : '',
@@ -6471,9 +6399,8 @@ function performSearch() {
         }
 
         if (chapter) {
-            // Use Section from OrderKey + Subsection field for display
-            // Example: OrderKey="0003.0306.001", Subsection="1" → "306.1"
-            const fullSection = getFullSectionDisplay(content.OrderKey, content.Subsection) || 'General';
+            // Use Subsection field for display (e.g., "1", "1.1", "5.3.1")
+            const fullSection = getSectionDisplay(content.Subsection) || 'General';
             const result = {
                 code: modelCode ? modelCode.ModelCodeName.split(':')[0].trim() : 'Code',
                 year: version && version.Year ? Math.floor(version.Year) : '',
