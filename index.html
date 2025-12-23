@@ -3903,9 +3903,9 @@ function showTagSectionsPopup(tag, versionId) {
       const modelCode = appData.ModelCode.find(mc => mc.ModelCodeID === version?.ModelCodeID);
       const codeLabel = modelCode ? modelCode.ModelCodeName : '';
       const chapterNum = chapter ? chapter.Chapter : '';
-      const sectionNum = content.Section || '';
-      const subsection = content.Subsection ? `.${content.Subsection}` : '';
-      const sectionNumber = `${sectionNum}${subsection}`;
+      // Use OrderKey for consistent section number formatting
+      const sectionNumber = getFullSectionDisplayFromOrderKey(content.OrderKey) ||
+                           (content.Section ? `${content.Section}${content.Subsection ? '.' + content.Subsection : ''}` : '');
       const chapterId = chapter ? chapter.ChapterID : '';
       const sectionId = getSectionId(chapterId, sectionNumber);
 
@@ -4667,10 +4667,52 @@ function getSectionFromOrderKey(orderKey) {
 }
 
 // Get section display string from OrderKey (preserves special prefixes for display)
+// Converts "0304" to "304" by removing leading zeros from numeric part
 function getSectionDisplayFromOrderKey(orderKey) {
     if (!orderKey) return null;
     const parts = orderKey.split('.');
-    return parts[1] || null;
+    if (!parts[1]) return null;
+
+    // Check for special prefixes like [F], [BE], [BS]
+    const prefixMatch = parts[1].match(/^(\[[A-Za-z]+\])?(.*)$/);
+    if (prefixMatch) {
+        const prefix = prefixMatch[1] || '';
+        const numericPart = prefixMatch[2];
+        // Remove leading zeros from numeric part
+        const cleanedNumeric = numericPart.replace(/^0+/, '') || '0';
+        return prefix + cleanedNumeric;
+    }
+    return parts[1];
+}
+
+// Get formatted section.subsection display string from OrderKey
+// Converts "0003.0304.001" to "304.1" format
+function getFullSectionDisplayFromOrderKey(orderKey) {
+    if (!orderKey) return null;
+    const parts = orderKey.split('.');
+
+    // Get section (remove leading zeros)
+    let section = '';
+    if (parts[1]) {
+        const prefixMatch = parts[1].match(/^(\[[A-Za-z]+\])?(.*)$/);
+        if (prefixMatch) {
+            const prefix = prefixMatch[1] || '';
+            const numericPart = prefixMatch[2];
+            section = prefix + (numericPart.replace(/^0+/, '') || '0');
+        } else {
+            section = parts[1];
+        }
+    }
+
+    // Get subsection if exists (remove leading zeros)
+    let subsection = '';
+    if (parts[2]) {
+        // Handle comma-separated subsections like "1,1"
+        const subParts = parts[2].split(',');
+        subsection = '.' + subParts.map(p => p.replace(/^0+/, '') || '0').join('.');
+    }
+
+    return section + subsection;
 }
 
 function getAttachments(versionId, chapter, section, subsection) {
@@ -4983,8 +5025,8 @@ function loadChapterContent(chapterId, versionId) {
 
             // 각 subsection 출력
             sectionContents.forEach(content => {
-                const subsection = content.Subsection ? `.${content.Subsection}` : '';
-                const sectionNumber = `${sectionNum}${subsection}`;
+                // Use getFullSectionDisplayFromOrderKey to get formatted section.subsection number
+                const sectionNumber = getFullSectionDisplayFromOrderKey(content.OrderKey) || sectionNum;
                 // Section ID에 chapterId 포함 (scrollToSection과 일치)
                 const sectionId = getSectionId(chapterId, sectionNumber);
 
@@ -5174,8 +5216,8 @@ function loadAllChaptersContent(versionId, codeId) {
                     `;
 
                     sectionContents.forEach(content => {
-                        const subsection = content.Subsection ? `.${content.Subsection}` : '';
-                        const sectionNumber = `${sectionNum}${subsection}`;
+                        // Use getFullSectionDisplayFromOrderKey to get formatted section.subsection number
+                        const sectionNumber = getFullSectionDisplayFromOrderKey(content.OrderKey) || sectionNum;
                         const sectionId = getSectionId(chapter.ChapterID, sectionNumber);
                         const attachments = content.AttachmentID ? getAttachmentsByIds(content.AttachmentID) : [];
                         const indexTags = content.IndexTags || [];
@@ -5619,13 +5661,15 @@ function performTopSearch() {
             const version = appData.ModelCodeVersion.find(v => v.ModelCodeVersionID === content.ModelCodeVersionID);
 
             if (modelCode && version && chapter) {
+                // Use OrderKey for consistent section number formatting
+                const fullSection = getFullSectionDisplayFromOrderKey(content.OrderKey) || 'General';
                 const result = {
                     code: modelCode.ModelCodeName.split(':')[0].trim(),
                     year: version.Year ? Math.floor(version.Year) : '',
                     chapter: chapter.Chapter,
                     chapterTitle: chapter.TitleEN || '',
-                    section: content.Section || 'General',
-                    subsection: content.Subsection || '',
+                    section: fullSection,
+                    subsection: '', // subsection is now included in section from OrderKey
                     titleEN: content.TitleEN || '',
                     titleKR: content.TitleKR || '',
                     contentEN: content.ContentEN || '',
@@ -5997,13 +6041,15 @@ function performAdvancedSearchReal() {
             const chapter = appData.CodeChapter.find(ch => ch.ChapterID === content.ChapterID);
 
             if (modelCode && version && chapter) {
+                // Use OrderKey for consistent section number formatting
+                const fullSection = getFullSectionDisplayFromOrderKey(content.OrderKey) || '';
                 results.push({
                     code: modelCode.ModelCodeName.split(':')[0].trim(),
                     year: version.Year ? Math.floor(version.Year) : '',
                     chapter: chapter.Chapter,
                     chapterTitle: chapter.TitleEN || '',
-                    section: content.Section || '',
-                    subsection: content.Subsection || '',
+                    section: fullSection,
+                    subsection: '', // subsection is now included in section from OrderKey
                     titleEN: content.TitleEN || '',
                     titleKR: content.TitleKR || '',
                     contentEN: content.ContentEN || '',
@@ -6360,16 +6406,16 @@ function performSearch() {
         }
 
         if (chapter) {
-            // Extract section from OrderKey since CodeContent doesn't have Section field
-            // Use display version (with prefixes like [F], [BE]) for display
-            const sectionDisplay = getSectionDisplayFromOrderKey(content.OrderKey) || 'General';
+            // Extract full section.subsection from OrderKey
+            // getFullSectionDisplayFromOrderKey returns formatted section.subsection (e.g., "304.1")
+            const fullSection = getFullSectionDisplayFromOrderKey(content.OrderKey) || 'General';
             const result = {
                 code: modelCode ? modelCode.ModelCodeName.split(':')[0].trim() : 'Code',
                 year: version && version.Year ? Math.floor(version.Year) : '',
                 chapter: chapter.Chapter,
                 chapterTitle: chapter.TitleEN || '',
-                section: sectionDisplay,
-                subsection: content.Subsection || '',
+                section: fullSection,
+                subsection: '', // subsection is now included in section from OrderKey
                 titleEN: content.TitleEN || '',
                 titleKR: content.TitleKR || '',
                 contentEN: content.ContentEN || '',
