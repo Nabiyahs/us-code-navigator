@@ -3927,9 +3927,8 @@ function showTagSectionsPopup(tag, versionId) {
       const codeYear = version && version.Year ? Math.floor(version.Year) : '';
       const codeLabel = codeYear ? `${codeName} (${codeYear})` : codeName;
       const chapterNum = chapter ? chapter.Chapter : '';
-      // Use OrderKey for consistent section number formatting
-      const sectionNumber = getFullSectionDisplayFromOrderKey(content.OrderKey) ||
-                           (content.Section ? `${content.Section}${content.Subsection ? '.' + content.Subsection : ''}` : '');
+      // Use Section from OrderKey + Subsection field for display
+      const sectionNumber = getFullSectionDisplay(content.OrderKey, content.Subsection) || 'General';
       const chapterId = chapter ? chapter.ChapterID : '';
 
       // 콘텐츠 미리보기 (150자)
@@ -4722,7 +4721,8 @@ function getSectionFromOrderKey(orderKey) {
 }
 
 // Get section display string from OrderKey (preserves special prefixes for display)
-// Converts "0304" to "304" by removing leading zeros from numeric part
+// Extracts section part from OrderKey and removes leading zeros
+// Example: "0003.0306.001" → "306", "0004.[F]414" → "[F]414"
 function getSectionDisplayFromOrderKey(orderKey) {
     if (!orderKey) return null;
     const parts = orderKey.split('.');
@@ -4740,8 +4740,26 @@ function getSectionDisplayFromOrderKey(orderKey) {
     return parts[1];
 }
 
-// Get formatted section.subsection display string from OrderKey
-// Converts "0003.0304.001" to "304.1" format
+// Get formatted section.subsection display string
+// Uses OrderKey for Section and content.Subsection field for subsection
+// Example: OrderKey="0003.0306.001", Subsection="1" → "306.1"
+// Example: OrderKey="0003.0307.001", Subsection="1.1" → "307.1.1"
+function getFullSectionDisplay(orderKey, subsection) {
+    if (!orderKey) return null;
+
+    // Get section from OrderKey (remove leading zeros)
+    const section = getSectionDisplayFromOrderKey(orderKey);
+    if (!section) return null;
+
+    // Append subsection if exists
+    if (subsection !== null && subsection !== undefined && subsection !== '') {
+        return section + '.' + subsection;
+    }
+
+    return section;
+}
+
+// Legacy function for backward compatibility - uses OrderKey only
 function getFullSectionDisplayFromOrderKey(orderKey) {
     if (!orderKey) return null;
     const parts = orderKey.split('.');
@@ -4759,15 +4777,7 @@ function getFullSectionDisplayFromOrderKey(orderKey) {
         }
     }
 
-    // Get subsection if exists (remove leading zeros)
-    let subsection = '';
-    if (parts[2]) {
-        // Handle comma-separated subsections like "1,1"
-        const subParts = parts[2].split(',');
-        subsection = '.' + subParts.map(p => p.replace(/^0+/, '') || '0').join('.');
-    }
-
-    return section + subsection;
+    return section;
 }
 
 function getAttachments(versionId, chapter, section, subsection) {
@@ -5080,8 +5090,8 @@ function loadChapterContent(chapterId, versionId) {
 
             // 각 subsection 출력
             sectionContents.forEach(content => {
-                // Use getFullSectionDisplayFromOrderKey to get formatted section.subsection number
-                const sectionNumber = getFullSectionDisplayFromOrderKey(content.OrderKey) || sectionNum;
+                // Use Section from OrderKey + Subsection field for display
+                const sectionNumber = getFullSectionDisplay(content.OrderKey, content.Subsection) || sectionNum;
                 // Section ID에 chapterId 포함 (scrollToSection과 일치)
                 const sectionId = getSectionId(chapterId, sectionNumber);
 
@@ -5271,8 +5281,8 @@ function loadAllChaptersContent(versionId, codeId) {
                     `;
 
                     sectionContents.forEach(content => {
-                        // Use getFullSectionDisplayFromOrderKey to get formatted section.subsection number
-                        const sectionNumber = getFullSectionDisplayFromOrderKey(content.OrderKey) || sectionNum;
+                        // Use Section from OrderKey + Subsection field for display
+                        const sectionNumber = getFullSectionDisplay(content.OrderKey, content.Subsection) || sectionNum;
                         const sectionId = getSectionId(chapter.ChapterID, sectionNumber);
                         const attachments = content.AttachmentID ? getAttachmentsByIds(content.AttachmentID) : [];
                         const indexTags = content.IndexTags || [];
@@ -5716,15 +5726,15 @@ function performTopSearch() {
             const version = appData.ModelCodeVersion.find(v => v.ModelCodeVersionID === content.ModelCodeVersionID);
 
             if (modelCode && version && chapter) {
-                // Use OrderKey for consistent section number formatting
-                const fullSection = getFullSectionDisplayFromOrderKey(content.OrderKey) || 'General';
+                // Use Section from OrderKey + Subsection field for display
+                const fullSection = getFullSectionDisplay(content.OrderKey, content.Subsection) || 'General';
                 const result = {
                     code: modelCode.ModelCodeName.split(':')[0].trim(),
                     year: version.Year ? Math.floor(version.Year) : '',
                     chapter: chapter.Chapter,
                     chapterTitle: chapter.TitleEN || '',
                     section: fullSection,
-                    subsection: '', // subsection is now included in section from OrderKey
+                    subsection: '', // subsection is now included in section
                     titleEN: content.TitleEN || '',
                     titleKR: content.TitleKR || '',
                     contentEN: content.ContentEN || '',
@@ -6096,15 +6106,15 @@ function performAdvancedSearchReal() {
             const chapter = appData.CodeChapter.find(ch => ch.ChapterID === content.ChapterID);
 
             if (modelCode && version && chapter) {
-                // Use OrderKey for consistent section number formatting
-                const fullSection = getFullSectionDisplayFromOrderKey(content.OrderKey) || '';
+                // Use Section from OrderKey + Subsection field for display
+                const fullSection = getFullSectionDisplay(content.OrderKey, content.Subsection) || '';
                 results.push({
                     code: modelCode.ModelCodeName.split(':')[0].trim(),
                     year: version.Year ? Math.floor(version.Year) : '',
                     chapter: chapter.Chapter,
                     chapterTitle: chapter.TitleEN || '',
                     section: fullSection,
-                    subsection: '', // subsection is now included in section from OrderKey
+                    subsection: '', // subsection is now included in section
                     titleEN: content.TitleEN || '',
                     titleKR: content.TitleKR || '',
                     contentEN: content.ContentEN || '',
@@ -6461,16 +6471,16 @@ function performSearch() {
         }
 
         if (chapter) {
-            // Extract full section.subsection from OrderKey
-            // getFullSectionDisplayFromOrderKey returns formatted section.subsection (e.g., "304.1")
-            const fullSection = getFullSectionDisplayFromOrderKey(content.OrderKey) || 'General';
+            // Use Section from OrderKey + Subsection field for display
+            // Example: OrderKey="0003.0306.001", Subsection="1" → "306.1"
+            const fullSection = getFullSectionDisplay(content.OrderKey, content.Subsection) || 'General';
             const result = {
                 code: modelCode ? modelCode.ModelCodeName.split(':')[0].trim() : 'Code',
                 year: version && version.Year ? Math.floor(version.Year) : '',
                 chapter: chapter.Chapter,
                 chapterTitle: chapter.TitleEN || '',
                 section: fullSection,
-                subsection: '', // subsection is now included in section from OrderKey
+                subsection: '', // subsection is now included in section
                 titleEN: content.TitleEN || '',
                 titleKR: content.TitleKR || '',
                 contentEN: content.ContentEN || '',
