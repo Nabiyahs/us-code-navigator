@@ -5226,18 +5226,31 @@ function loadChapterContent(chapterId, versionId) {
             return;
         }
 
-        // 섹션별로 그룹화 (Subsection 기반)
+        // 섹션별로 그룹화 (Section 기준 - OrderKey에서 추출)
+        // Section만으로 그룹화하고, 각 Subsection은 그룹 내에서 표시
         const sections = {};
         contents.forEach(content => {
-            const sectionDisplay = getSectionDisplay(content.Subsection, content.OrderKey) || 'General';
-            const sectionNumeric = parseFloat(String(content.Subsection || '0').replace(/[\[\]A-Za-z]/g, '').split('.')[0]) || 0;
-            if (!sections[sectionDisplay]) {
-                sections[sectionDisplay] = {
+            // Section 번호만 추출 (leading zero 제거)
+            const sectionOnly = parseSectionFromOrderKey(content.OrderKey) || 'General';
+            const sectionNumeric = parseFloat(sectionOnly) || 0;
+
+            if (!sections[sectionOnly]) {
+                sections[sectionOnly] = {
                     contents: [],
-                    numericValue: sectionNumeric
+                    numericValue: sectionNumeric,
+                    headerRow: null  // Subsection이 없는 헤더 행
                 };
             }
-            sections[sectionDisplay].contents.push(content);
+
+            // Subsection이 없는 행은 헤더로 사용 (TitleEN이 있는 경우)
+            const hasSubsection = content.Subsection !== null &&
+                                  content.Subsection !== undefined &&
+                                  content.Subsection !== '';
+            if (!hasSubsection && content.TitleEN && !sections[sectionOnly].headerRow) {
+                sections[sectionOnly].headerRow = content;
+            }
+
+            sections[sectionOnly].contents.push(content);
         });
 
         // HTML 생성 - 연속 스크롤 경험을 위한 단일 컨테이너
@@ -5260,22 +5273,32 @@ function loadChapterContent(chapterId, versionId) {
         }).forEach(sectionNum => {
             const sectionData = sections[sectionNum];
             const sectionContents = sectionData.contents;
-            const firstContent = sectionContents[0];
+            // 헤더 행이 있으면 사용, 없으면 첫 번째 콘텐츠 사용
+            const headerRow = sectionData.headerRow || sectionContents[0];
 
             // Section 헤더: "Section {번호} {TitleEN}" 한 줄 표시
-            // sectionNum은 이미 Section.Subsection 형태 (예: "306.1")
             const sectionTitle = sectionNum === 'General' ? 'General' :
-                `Section ${sectionNum}${firstContent.TitleEN ? ' ' + firstContent.TitleEN : ''}`;
+                `Section ${sectionNum}${headerRow.TitleEN ? ' ' + headerRow.TitleEN : ''}`;
 
             html += `
                 <div class="content-section mb-8">
                     <h3 class="text-xl font-semibold text-[#374785] mb-1 pb-2 border-b border-gray-200">${sectionTitle}</h3>
-                    ${firstContent.TitleKR ? `<p class="text-base font-semibold text-gray-600 mb-4">${firstContent.TitleKR}</p>` : ''}
+                    ${headerRow.TitleKR ? `<p class="text-base font-semibold text-gray-600 mb-4">${headerRow.TitleKR}</p>` : ''}
                     <div class="space-y-5">
             `;
 
             // 각 subsection 출력 - buildContentViewModel 사용
             sectionContents.forEach(content => {
+                // Subsection이 없고 ContentEN/ContentKR도 없는 헤더 행은 스킵
+                // (Section 헤더에서 이미 TitleEN/TitleKR 표시됨)
+                const hasSubsection = content.Subsection !== null &&
+                                      content.Subsection !== undefined &&
+                                      content.Subsection !== '';
+                const hasContent = content.ContentEN || content.ContentKR;
+                if (!hasSubsection && !hasContent) {
+                    return; // 헤더 전용 행은 스킵
+                }
+
                 const vm = buildContentViewModel(content, null, chapter);
                 const sectionNumber = vm.subsectionText || sectionNum;
                 const sectionId = getSectionId(chapterId, sectionNumber);
@@ -5416,18 +5439,28 @@ function loadAllChaptersContent(versionId, codeId) {
             if (!contents || contents.length === 0) {
                 // 빈 챕터는 메시지 없이 자연스럽게 다음 챕터로 이어지도록 함
             } else {
-                // 섹션별로 그룹화 (Subsection 기반)
+                // 섹션별로 그룹화 (Section 기준 - OrderKey에서 추출)
                 const sections = {};
                 contents.forEach(content => {
-                    const sectionDisplay = getSectionDisplay(content.Subsection, content.OrderKey) || 'General';
-                    const sectionNumeric = parseFloat(String(content.Subsection || '0').replace(/[\[\]A-Za-z]/g, '').split('.')[0]) || 0;
-                    if (!sections[sectionDisplay]) {
-                        sections[sectionDisplay] = {
+                    const sectionOnly = parseSectionFromOrderKey(content.OrderKey) || 'General';
+                    const sectionNumeric = parseFloat(sectionOnly) || 0;
+
+                    if (!sections[sectionOnly]) {
+                        sections[sectionOnly] = {
                             contents: [],
-                            numericValue: sectionNumeric
+                            numericValue: sectionNumeric,
+                            headerRow: null
                         };
                     }
-                    sections[sectionDisplay].contents.push(content);
+
+                    const hasSubsection = content.Subsection !== null &&
+                                          content.Subsection !== undefined &&
+                                          content.Subsection !== '';
+                    if (!hasSubsection && content.TitleEN && !sections[sectionOnly].headerRow) {
+                        sections[sectionOnly].headerRow = content;
+                    }
+
+                    sections[sectionOnly].contents.push(content);
                 });
 
                 Object.keys(sections).sort((a, b) => {
@@ -5437,21 +5470,30 @@ function loadAllChaptersContent(versionId, codeId) {
                 }).forEach(sectionNum => {
                     const sectionData = sections[sectionNum];
                     const sectionContents = sectionData.contents;
-                    const firstContent = sectionContents[0];
+                    const headerRow = sectionData.headerRow || sectionContents[0];
 
                     // Section 헤더: "Section {번호} {TitleEN}" 한 줄 표시
                     const sectionTitle = sectionNum === 'General' ? 'General' :
-                        `Section ${sectionNum}${firstContent.TitleEN ? ' ' + firstContent.TitleEN : ''}`;
+                        `Section ${sectionNum}${headerRow.TitleEN ? ' ' + headerRow.TitleEN : ''}`;
 
                     allHtml += `
                         <div class="content-section mb-8">
                             <h3 class="text-xl font-semibold text-[#374785] mb-1 pb-2 border-b border-gray-200">${sectionTitle}</h3>
-                            ${firstContent.TitleKR ? `<p class="text-base font-semibold text-gray-600 mb-4">${firstContent.TitleKR}</p>` : ''}
+                            ${headerRow.TitleKR ? `<p class="text-base font-semibold text-gray-600 mb-4">${headerRow.TitleKR}</p>` : ''}
                             <div class="space-y-5">
                     `;
 
                     // 각 subsection 출력 - buildContentViewModel 사용
                     sectionContents.forEach(content => {
+                        // Subsection이 없고 ContentEN/ContentKR도 없는 헤더 행은 스킵
+                        const hasSubsection = content.Subsection !== null &&
+                                              content.Subsection !== undefined &&
+                                              content.Subsection !== '';
+                        const hasContent = content.ContentEN || content.ContentKR;
+                        if (!hasSubsection && !hasContent) {
+                            return;
+                        }
+
                         const vm = buildContentViewModel(content, prevRenderedChapterId, chapter);
                         prevRenderedChapterId = content.ChapterID;
 
