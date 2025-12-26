@@ -4727,6 +4727,86 @@ function getSectionDisplayFromOrderKey(orderKey) {
     return parts[1] || null;
 }
 
+/**
+ * parseSectionFromOrderKey - OrderKey에서 Section 번호만 추출 (SSSS 부분)
+ * OrderKey 형식: CCCC.SSSS.III (예: 0003.0307.001)
+ *
+ * @param {string} orderKey - OrderKey 문자열
+ * @returns {string|null} Section 번호 (leading zero 제거됨, 예: "307")
+ */
+function parseSectionFromOrderKey(orderKey) {
+    if (!orderKey) return null;
+    const parts = orderKey.split('.');
+    if (!parts[1]) return null;
+
+    // SSSS 부분 추출 후 접두어 제거, leading zero 제거
+    const sectionPart = parts[1];
+    // 접두어([F], [BE] 등) 제거하고 숫자만 추출
+    const numericOnly = sectionPart.replace(/[\[\]A-Za-z]/g, '');
+    // leading zero 제거
+    const normalized = parseInt(numericOnly, 10);
+    return isNaN(normalized) ? null : String(normalized);
+}
+
+/**
+ * normalizeSectionForSidebar - 사이드바 표시용 Section 번호 정규화
+ * - 접두어([F], [BE] 등) 제거
+ * - leading zero 제거
+ * - Subsection 부분 제거 (예: "307.1.1" → "307")
+ *
+ * @param {string|number} sectionLike - Section 또는 Subsection 값
+ * @returns {string|null} 정규화된 Section 번호
+ */
+function normalizeSectionForSidebar(sectionLike) {
+    if (sectionLike === null || sectionLike === undefined || sectionLike === '') {
+        return null;
+    }
+
+    const str = String(sectionLike);
+
+    // dot 이전 부분만 추출 (Subsection 제거: "307.1.1" → "307")
+    const beforeDot = str.split('.')[0];
+
+    // 접두어([F], [BE] 등) 제거하고 숫자만 추출
+    const numericOnly = beforeDot.replace(/[\[\]A-Za-z]/g, '');
+
+    // leading zero 제거
+    const normalized = parseInt(numericOnly, 10);
+    return isNaN(normalized) ? null : String(normalized);
+}
+
+/**
+ * getSectionForSidebar - 사이드바용 Section 번호 추출
+ * CodeContent 행에서 사이드바에 표시할 Section 번호만 추출
+ *
+ * 우선순위:
+ * 1. CodeContent.Section 필드가 있으면 사용 (방어)
+ * 2. 없으면 OrderKey에서 SSSS 파싱
+ *
+ * @param {Object} content - CodeContent 행
+ * @returns {string|null} 정규화된 Section 번호 (숫자만, 예: "307")
+ */
+function getSectionForSidebar(content) {
+    if (!content) return null;
+
+    // 1. Section 필드가 있으면 사용 (방어)
+    if (content.Section !== null && content.Section !== undefined && content.Section !== '') {
+        return normalizeSectionForSidebar(content.Section);
+    }
+
+    // 2. OrderKey에서 Section 파싱
+    if (content.OrderKey) {
+        return parseSectionFromOrderKey(content.OrderKey);
+    }
+
+    // 3. Subsection에서 Section 부분만 추출 (fallback)
+    if (content.Subsection !== null && content.Subsection !== undefined && content.Subsection !== '') {
+        return normalizeSectionForSidebar(content.Subsection);
+    }
+
+    return null;
+}
+
 // Get section display - uses Subsection if available, falls back to OrderKey
 // Returns Subsection value as-is, or parses from OrderKey if Subsection is null
 // Example: Subsection=1 → "1", Subsection=1.1 → "1.1", Subsection="5.3.1" → "5.3.1"
@@ -4887,20 +4967,31 @@ function loadChapters(versionId, codeId) {
 
         // 챕터 리스트 생성 (Chapter 번호만 표시, title 제거)
         chapterList.innerHTML = chapters.map((ch, i) => {
-            // 해당 챕터의 섹션들 가져오기 - preserve display strings with prefixes
+            // 해당 챕터의 섹션들 가져오기
             const contents = getContents(ch.ChapterID);
-            // Create map of display string -> numeric value for sorting
+
+            // 사이드바용: Section 번호만 추출 (정규화 + 중복 제거)
+            // - 표시: 정규화된 Section 번호 (예: "307")
+            // - 스크롤 타겟: 본문의 첫 번째 matching content
             const sectionMap = {};
             contents.forEach(c => {
-                const display = getSectionDisplay(c.Subsection, c.OrderKey);
-                if (display && !sectionMap[display]) {
-                    // Extract first number for sorting
-                    const numeric = parseFloat(String(display).replace(/[\[\]A-Za-z]/g, '').split('.')[0]) || 0;
-                    sectionMap[display] = numeric;
+                // 사이드바 표시용: Section 번호만 (Subsection 제거, 접두어 제거, leading zero 제거)
+                const sidebarSection = getSectionForSidebar(c);
+                // 본문 스크롤용: 원본 표시값 (첫 번째 것만 저장)
+                const originalDisplay = getSectionDisplay(c.Subsection, c.OrderKey);
+
+                if (sidebarSection && !sectionMap[sidebarSection]) {
+                    sectionMap[sidebarSection] = {
+                        numeric: parseInt(sidebarSection, 10) || 0,
+                        scrollTarget: originalDisplay || sidebarSection // 본문 스크롤용 값
+                    };
                 }
             });
-            // Sort by numeric value while keeping display strings
-            const sectionDisplays = Object.keys(sectionMap).sort((a, b) => sectionMap[a] - sectionMap[b]);
+
+            // 정수값 기준 정렬
+            const sortedSections = Object.keys(sectionMap).sort((a, b) =>
+                sectionMap[a].numeric - sectionMap[b].numeric
+            );
 
             return `
             <div class="chapter-group">
@@ -4913,9 +5004,9 @@ function loadChapters(versionId, codeId) {
                     </svg>
                 </div>
                 <div id="chapterSections-${ch.ChapterID}" class="pl-6 mt-1 space-y-1 ${i === 0 ? '' : 'hidden'}">
-                    ${sectionDisplays.map(sec => `
+                    ${sortedSections.map(sec => `
                     <div class="section-item px-4 py-2 text-sm text-gray-700 hover:bg-[#A8D0E6] rounded cursor-pointer"
-                         data-section="${sec}" onclick="scrollToSection('${ch.ChapterID}', '${sec}', '${versionId}', event)">
+                         data-section="${sectionMap[sec].scrollTarget}" onclick="scrollToSection('${ch.ChapterID}', '${sectionMap[sec].scrollTarget}', '${versionId}', event)">
                         Section ${sec}
                     </div>
                     `).join('')}
@@ -5084,10 +5175,10 @@ function loadChapterContent(chapterId, versionId) {
                 <div class="bg-white rounded-lg shadow-sm p-6 md:p-8">
                     <div class="chapter-header">
                         <h2 class="text-2xl font-bold text-[#24305E] mb-2">Chapter ${chapter.Chapter}: ${chapter.TitleEN || ''}</h2>
-                        ${chapter.TitleKR ? `<p class="text-base text-gray-600 mt-1">${chapter.TitleKR}</p>` : ''}
+                        ${chapter.TitleKR ? `<p class="text-lg text-gray-600 mt-1">${chapter.TitleKR}</p>` : ''}
                     </div>
                     ${chapter.ChapterComment ? `
-                    <div class="chapter-comment">${chapter.ChapterComment}</div>` : ''}
+                    <div class="chapter-comment text-base">${chapter.ChapterComment}</div>` : ''}
                 </div>
             `;
             return;
@@ -5113,10 +5204,10 @@ function loadChapterContent(chapterId, versionId) {
             <div class="bg-white rounded-lg shadow-sm p-6 md:p-8">
                 <div class="chapter-header">
                     <h2 class="text-2xl font-bold text-[#24305E] mb-2">Chapter ${chapter.Chapter}: ${chapter.TitleEN || ''}</h2>
-                    ${chapter.TitleKR ? `<p class="text-base text-gray-600 mt-1">${chapter.TitleKR}</p>` : ''}
+                    ${chapter.TitleKR ? `<p class="text-lg text-gray-600 mt-1">${chapter.TitleKR}</p>` : ''}
                 </div>
                 ${chapter.ChapterComment ? `
-                <div class="chapter-comment mb-6">${chapter.ChapterComment}</div>` : ''}
+                <div class="chapter-comment text-base mb-6">${chapter.ChapterComment}</div>` : ''}
         `;
 
         // 각 섹션 출력 - sort by numeric value
@@ -5135,8 +5226,8 @@ function loadChapterContent(chapterId, versionId) {
             html += `
                 <div class="content-section mb-8">
                     <h3 class="text-xl font-semibold text-[#374785] mb-1 pb-2 border-b border-gray-200">${sectionTitle}</h3>
-                    ${firstContent.TitleEN ? `<p class="text-base font-medium text-[#374785] mb-1">${firstContent.TitleEN}</p>` : ''}
-                    ${firstContent.TitleKR ? `<p class="text-sm text-gray-600 mb-4 italic">${firstContent.TitleKR}</p>` : ''}
+                    ${firstContent.TitleEN ? `<p class="text-lg font-bold text-[#374785] mb-1">${firstContent.TitleEN}</p>` : ''}
+                    ${firstContent.TitleKR ? `<p class="text-base font-semibold text-gray-600 mb-4">${firstContent.TitleKR}</p>` : ''}
                     <div class="space-y-5">
             `;
 
@@ -5166,8 +5257,8 @@ function loadChapterContent(chapterId, versionId) {
                         <!-- 타이틀 영역: Subsection + TitleEN/TitleKR (두 줄 분리) -->
                         <div class="mb-3 pr-16">
                             ${vm.subsectionText ? `<h4 class="section-title">${vm.subsectionText}</h4>` : ''}
-                            ${vm.titleEN ? `<p class="text-base font-medium text-gray-800 mt-1">${vm.titleEN}</p>` : ''}
-                            ${vm.titleKR ? `<p class="text-sm text-gray-600 mt-0.5">${vm.titleKR}</p>` : ''}
+                            ${vm.titleEN ? `<p class="text-lg font-bold text-gray-800 mt-1">${vm.titleEN}</p>` : ''}
+                            ${vm.titleKR ? `<p class="text-base font-semibold text-gray-600 mt-0.5">${vm.titleKR}</p>` : ''}
                         </div>
 
                         <!-- 키워드 태그 (Index/SubIndex) -->
@@ -5274,9 +5365,9 @@ function loadAllChaptersContent(versionId, codeId) {
                 allHtml += `
                     <div class="chapter-header">
                         <h2 class="text-2xl font-bold text-[#24305E] mb-2">Chapter ${chapter.Chapter}: ${chapter.TitleEN || ''}</h2>
-                        ${chapter.TitleKR ? `<p class="text-base text-gray-600 mt-1">${chapter.TitleKR}</p>` : ''}
+                        ${chapter.TitleKR ? `<p class="text-lg text-gray-600 mt-1">${chapter.TitleKR}</p>` : ''}
                     </div>
-                    ${chapter.ChapterComment ? `<div class="chapter-comment mb-6">${chapter.ChapterComment}</div>` : ''}
+                    ${chapter.ChapterComment ? `<div class="chapter-comment text-base mb-6">${chapter.ChapterComment}</div>` : ''}
                 `;
             }
 
@@ -5312,8 +5403,8 @@ function loadAllChaptersContent(versionId, codeId) {
                     allHtml += `
                         <div class="content-section mb-8">
                             <h3 class="text-xl font-semibold text-[#374785] mb-1 pb-2 border-b border-gray-200">${sectionTitle}</h3>
-                            ${firstContent.TitleEN ? `<p class="text-base font-medium text-[#374785] mb-1">${firstContent.TitleEN}</p>` : ''}
-                            ${firstContent.TitleKR ? `<p class="text-sm text-gray-600 mb-4 italic">${firstContent.TitleKR}</p>` : ''}
+                            ${firstContent.TitleEN ? `<p class="text-lg font-bold text-[#374785] mb-1">${firstContent.TitleEN}</p>` : ''}
+                            ${firstContent.TitleKR ? `<p class="text-base font-semibold text-gray-600 mb-4">${firstContent.TitleKR}</p>` : ''}
                             <div class="space-y-5">
                     `;
 
@@ -5343,8 +5434,8 @@ function loadAllChaptersContent(versionId, codeId) {
                                 <!-- 타이틀 영역: Subsection + TitleEN/TitleKR (두 줄 분리) -->
                                 <div class="mb-3 pr-16">
                                     ${vm.subsectionText ? `<h4 class="section-title">${vm.subsectionText}</h4>` : ''}
-                                    ${vm.titleEN ? `<p class="text-base font-medium text-gray-800 mt-1">${vm.titleEN}</p>` : ''}
-                                    ${vm.titleKR ? `<p class="text-sm text-gray-600 mt-0.5">${vm.titleKR}</p>` : ''}
+                                    ${vm.titleEN ? `<p class="text-lg font-bold text-gray-800 mt-1">${vm.titleEN}</p>` : ''}
+                                    ${vm.titleKR ? `<p class="text-base font-semibold text-gray-600 mt-0.5">${vm.titleKR}</p>` : ''}
                                 </div>
 
                                 <!-- 키워드 태그 -->
