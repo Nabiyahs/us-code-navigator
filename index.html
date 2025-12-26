@@ -4807,20 +4807,62 @@ function getSectionForSidebar(content) {
     return null;
 }
 
+/**
+ * buildSectionSubsectionDisplay - "Section.Subsection" 형식의 표시 문자열 생성
+ *
+ * 규칙:
+ * 1. Section 번호는 OrderKey에서 추출 (leading zero 제거)
+ * 2. Subsection이 있으면 Section.Subsection 형태로 결합
+ * 3. Subsection에 이미 Section이 포함되어 있으면(예: "304.1") 중복 결합하지 않음
+ * 4. 예: OrderKey=0003.0306.001, Subsection=1 → "306.1"
+ * 5. 예: OrderKey=0003.0307.001, Subsection=1.1 → "307.1.1"
+ *
+ * @param {string|number|null} subsection - Subsection 값
+ * @param {string|null} orderKey - OrderKey 문자열
+ * @returns {string|null} "Section.Subsection" 형식의 표시 문자열
+ */
+function buildSectionSubsectionDisplay(subsection, orderKey) {
+    // OrderKey에서 Section 추출 (leading zero 제거)
+    const section = parseSectionFromOrderKey(orderKey);
+
+    // Subsection 정규화 (null/undefined/빈문자열 체크)
+    const hasSubsection = subsection !== null && subsection !== undefined && subsection !== '';
+
+    if (!hasSubsection) {
+        // Subsection이 없으면 Section만 반환
+        return section;
+    }
+
+    // Subsection을 문자열로 변환하고 쉼표를 점으로 변경
+    const subsectionStr = String(subsection).replace(/,/g, '.');
+
+    if (!section) {
+        // Section을 파싱할 수 없으면 Subsection만 반환
+        return subsectionStr;
+    }
+
+    // Subsection이 이미 Section을 포함하는지 확인 (예: "304.1", "307.1.1")
+    // Section "306"이 Subsection "306.1"에 포함되어 있으면 Subsection 그대로 사용
+    const subsectionParts = subsectionStr.split('.');
+    const firstPart = subsectionParts[0].replace(/[\[\]A-Za-z]/g, '');
+    const firstPartNum = parseInt(firstPart, 10);
+
+    // Subsection의 첫 부분이 Section과 동일하면 이미 포함된 것
+    if (!isNaN(firstPartNum) && String(firstPartNum) === section) {
+        return subsectionStr;
+    }
+
+    // Section + Subsection 결합
+    return section + '.' + subsectionStr;
+}
+
 // Get section display - uses Subsection if available, falls back to OrderKey
-// Returns Subsection value as-is, or parses from OrderKey if Subsection is null
-// Example: Subsection=1 → "1", Subsection=1.1 → "1.1", Subsection="5.3.1" → "5.3.1"
-// If Subsection is null/undefined, extract from OrderKey (e.g., "0003.0307.001" → "0307")
+// Returns "Section.Subsection" format with leading zeros removed
+// Example: OrderKey=0003.0306.001, Subsection=1 → "306.1"
+// Example: OrderKey=0003.0307.001, Subsection=1.1 → "307.1.1"
+// If Subsection already contains Section (e.g., "304.1"), returns as-is
 function getSectionDisplay(subsection, orderKey) {
-    if (subsection !== null && subsection !== undefined && subsection !== '') {
-        // Convert to string and handle comma as dot (e.g., "1,1" → "1.1")
-        return String(subsection).replace(/,/g, '.');
-    }
-    // Fallback to OrderKey if Subsection is not available
-    if (orderKey) {
-        return getSectionDisplayFromOrderKey(orderKey);
-    }
-    return null;
+    return buildSectionSubsectionDisplay(subsection, orderKey);
 }
 
 /**
@@ -4853,9 +4895,9 @@ function buildContentViewModel(content, prevChapterId, chapterData) {
         chapterText = `Chapter ${chapterData.Chapter} ${chapterData.TitleEN || ''}`.trim();
     }
 
-    // Subsection 텍스트 (있으면 그대로 사용, 없으면 null)
-    const subsectionText = hasSubsection ?
-        String(content.Subsection).replace(/,/g, '.') : null;
+    // Section.Subsection 텍스트 생성 (예: "306.1", "307.1.1")
+    // OrderKey에서 Section 추출 + Subsection 결합
+    const subsectionText = buildSectionSubsectionDisplay(content.Subsection, content.OrderKey);
 
     // TitleEN / TitleKR (각각 독립된 값, null/empty 방어)
     const titleEN = (content.TitleEN && content.TitleEN.trim()) ? content.TitleEN.trim() : null;
@@ -5174,7 +5216,7 @@ function loadChapterContent(chapterId, versionId) {
             contentArea.innerHTML = `
                 <div class="bg-white rounded-lg shadow-sm p-6 md:p-8">
                     <div class="chapter-header">
-                        <h2 class="text-2xl font-bold text-[#24305E] mb-2">Chapter ${chapter.Chapter}: ${chapter.TitleEN || ''}</h2>
+                        <h2 class="text-2xl font-bold text-[#24305E] mb-2">Chapter ${chapter.Chapter} ${chapter.TitleEN || ''}</h2>
                         ${chapter.TitleKR ? `<p class="text-lg text-gray-600 mt-1">${chapter.TitleKR}</p>` : ''}
                     </div>
                     ${chapter.ChapterComment ? `
@@ -5203,7 +5245,7 @@ function loadChapterContent(chapterId, versionId) {
         let html = `
             <div class="bg-white rounded-lg shadow-sm p-6 md:p-8">
                 <div class="chapter-header">
-                    <h2 class="text-2xl font-bold text-[#24305E] mb-2">Chapter ${chapter.Chapter}: ${chapter.TitleEN || ''}</h2>
+                    <h2 class="text-2xl font-bold text-[#24305E] mb-2">Chapter ${chapter.Chapter} ${chapter.TitleEN || ''}</h2>
                     ${chapter.TitleKR ? `<p class="text-lg text-gray-600 mt-1">${chapter.TitleKR}</p>` : ''}
                 </div>
                 ${chapter.ChapterComment ? `
@@ -5220,13 +5262,14 @@ function loadChapterContent(chapterId, versionId) {
             const sectionContents = sectionData.contents;
             const firstContent = sectionContents[0];
 
-            // Section 헤더 (TitleEN/TitleKR 두 줄 분리)
-            const sectionTitle = sectionNum === 'General' ? 'General' : 'Section ' + sectionNum;
+            // Section 헤더: "Section {번호} {TitleEN}" 한 줄 표시
+            // sectionNum은 이미 Section.Subsection 형태 (예: "306.1")
+            const sectionTitle = sectionNum === 'General' ? 'General' :
+                `Section ${sectionNum}${firstContent.TitleEN ? ' ' + firstContent.TitleEN : ''}`;
 
             html += `
                 <div class="content-section mb-8">
                     <h3 class="text-xl font-semibold text-[#374785] mb-1 pb-2 border-b border-gray-200">${sectionTitle}</h3>
-                    ${firstContent.TitleEN ? `<p class="text-lg font-bold text-[#374785] mb-1">${firstContent.TitleEN}</p>` : ''}
                     ${firstContent.TitleKR ? `<p class="text-base font-semibold text-gray-600 mb-4">${firstContent.TitleKR}</p>` : ''}
                     <div class="space-y-5">
             `;
@@ -5254,10 +5297,9 @@ function loadChapterContent(chapterId, versionId) {
                             </button>
                         </div>
 
-                        <!-- 타이틀 영역: Subsection + TitleEN/TitleKR (두 줄 분리) -->
+                        <!-- 타이틀 영역: Section.Subsection + TitleEN 한 줄 표시 -->
                         <div class="mb-3 pr-16">
-                            ${vm.subsectionText ? `<h4 class="section-title">${vm.subsectionText}</h4>` : ''}
-                            ${vm.titleEN ? `<p class="text-lg font-bold text-gray-800 mt-1">${vm.titleEN}</p>` : ''}
+                            ${vm.subsectionText ? `<h4 class="section-title">${vm.subsectionText}${vm.titleEN ? ' ' + vm.titleEN : ''}</h4>` : (vm.titleEN ? `<h4 class="section-title">${vm.titleEN}</h4>` : '')}
                             ${vm.titleKR ? `<p class="text-base font-semibold text-gray-600 mt-0.5">${vm.titleKR}</p>` : ''}
                         </div>
 
@@ -5364,7 +5406,7 @@ function loadAllChaptersContent(versionId, codeId) {
             if (hasSubsectionContent) {
                 allHtml += `
                     <div class="chapter-header">
-                        <h2 class="text-2xl font-bold text-[#24305E] mb-2">Chapter ${chapter.Chapter}: ${chapter.TitleEN || ''}</h2>
+                        <h2 class="text-2xl font-bold text-[#24305E] mb-2">Chapter ${chapter.Chapter} ${chapter.TitleEN || ''}</h2>
                         ${chapter.TitleKR ? `<p class="text-lg text-gray-600 mt-1">${chapter.TitleKR}</p>` : ''}
                     </div>
                     ${chapter.ChapterComment ? `<div class="chapter-comment text-base mb-6">${chapter.ChapterComment}</div>` : ''}
@@ -5397,13 +5439,13 @@ function loadAllChaptersContent(versionId, codeId) {
                     const sectionContents = sectionData.contents;
                     const firstContent = sectionContents[0];
 
-                    // Section 헤더 (TitleEN/TitleKR 두 줄 분리)
-                    const sectionTitle = sectionNum === 'General' ? 'General' : 'Section ' + sectionNum;
+                    // Section 헤더: "Section {번호} {TitleEN}" 한 줄 표시
+                    const sectionTitle = sectionNum === 'General' ? 'General' :
+                        `Section ${sectionNum}${firstContent.TitleEN ? ' ' + firstContent.TitleEN : ''}`;
 
                     allHtml += `
                         <div class="content-section mb-8">
                             <h3 class="text-xl font-semibold text-[#374785] mb-1 pb-2 border-b border-gray-200">${sectionTitle}</h3>
-                            ${firstContent.TitleEN ? `<p class="text-lg font-bold text-[#374785] mb-1">${firstContent.TitleEN}</p>` : ''}
                             ${firstContent.TitleKR ? `<p class="text-base font-semibold text-gray-600 mb-4">${firstContent.TitleKR}</p>` : ''}
                             <div class="space-y-5">
                     `;
@@ -5431,10 +5473,9 @@ function loadAllChaptersContent(versionId, codeId) {
                                     </button>
                                 </div>
 
-                                <!-- 타이틀 영역: Subsection + TitleEN/TitleKR (두 줄 분리) -->
+                                <!-- 타이틀 영역: Section.Subsection + TitleEN 한 줄 표시 -->
                                 <div class="mb-3 pr-16">
-                                    ${vm.subsectionText ? `<h4 class="section-title">${vm.subsectionText}</h4>` : ''}
-                                    ${vm.titleEN ? `<p class="text-lg font-bold text-gray-800 mt-1">${vm.titleEN}</p>` : ''}
+                                    ${vm.subsectionText ? `<h4 class="section-title">${vm.subsectionText}${vm.titleEN ? ' ' + vm.titleEN : ''}</h4>` : (vm.titleEN ? `<h4 class="section-title">${vm.titleEN}</h4>` : '')}
                                     ${vm.titleKR ? `<p class="text-base font-semibold text-gray-600 mt-0.5">${vm.titleKR}</p>` : ''}
                                 </div>
 
