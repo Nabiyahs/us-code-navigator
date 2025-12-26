@@ -4743,6 +4743,99 @@ function getSectionDisplay(subsection, orderKey) {
     return null;
 }
 
+/**
+ * buildContentViewModel - CodeContent 행을 ViewModel로 변환
+ *
+ * @param {Object} content - CodeContent.json의 한 행
+ * @param {string|null} prevChapterId - 이전 행의 ChapterID (중복 방지용)
+ * @param {Object} chapterData - CodeChapter.json에서 조인된 Chapter 정보 (ChapterID → CodeChapter)
+ * @returns {Object} ViewModel 객체
+ *
+ * 조인 관계:
+ * - CodeContent.ChapterID → CodeChapter.ChapterID
+ * - CodeContent.AttachmentID → CodeAttachment.AttachmentID (세미콜론 구분)
+ */
+function buildContentViewModel(content, prevChapterId, chapterData) {
+    // Subsection 유효성 검사 (null, undefined, 빈 문자열 체크)
+    const hasSubsection = content.Subsection !== null &&
+                          content.Subsection !== undefined &&
+                          content.Subsection !== '';
+
+    // Chapter 표시 조건:
+    // 1. 새 Chapter 시작 시 (이전 ChapterID와 다름)
+    // 2. Subsection이 존재할 때만 (chapter-only row는 Chapter 표시 안 함)
+    const isNewChapter = content.ChapterID !== prevChapterId;
+    const showChapter = isNewChapter && hasSubsection && chapterData;
+
+    // Chapter 텍스트 생성 (CodeChapter.json 기준)
+    let chapterText = null;
+    if (showChapter && chapterData) {
+        chapterText = `Chapter ${chapterData.Chapter} ${chapterData.TitleEN || ''}`.trim();
+    }
+
+    // Subsection 텍스트 (있으면 그대로 사용, 없으면 null)
+    const subsectionText = hasSubsection ?
+        String(content.Subsection).replace(/,/g, '.') : null;
+
+    // TitleEN / TitleKR (각각 독립된 값, null/empty 방어)
+    const titleEN = (content.TitleEN && content.TitleEN.trim()) ? content.TitleEN.trim() : null;
+    const titleKR = (content.TitleKR && content.TitleKR.trim()) ? content.TitleKR.trim() : null;
+
+    // Attachments 조인 (CodeContent.AttachmentID → CodeAttachment.AttachmentID)
+    const attachments = content.AttachmentID ? getAttachmentsByIds(content.AttachmentID) : [];
+
+    // Index 태그 처리 (기존 로직 유지)
+    const indexTags = content.IndexTags || [];
+    const subIndex = content.SubIndex || '';
+    const allTags = new Set();
+    indexTags.forEach(tag => {
+        tag.split(';').forEach(t => {
+            const trimmed = t.trim();
+            if (trimmed && !['CD', 'SD', 'DD', 'IFR', 'IFC'].includes(trimmed)) {
+                allTags.add(trimmed);
+            }
+        });
+    });
+    if (subIndex) {
+        subIndex.split(';').forEach(entry => {
+            entry.trim().split('_').forEach(part => {
+                const trimmed = part.trim();
+                if (trimmed) allTags.add(trimmed);
+            });
+        });
+    }
+
+    return {
+        // Chapter 관련
+        showChapter: showChapter,
+        chapterText: chapterText,
+        chapterTitleKR: showChapter && chapterData ? chapterData.TitleKR : null,
+
+        // Section/Subsection
+        subsectionText: subsectionText,
+
+        // Title (두 줄 분리)
+        titleEN: titleEN,
+        titleKR: titleKR,
+
+        // Content
+        contentEN: content.ContentEN || null,
+        contentKR: content.ContentKR || null,
+        comment: content.Comment || null,
+        reference: content.Reference || null,
+
+        // Attachments
+        attachments: attachments,
+
+        // Tags
+        uniqueTags: Array.from(allTags),
+
+        // 원본 참조 (필요시)
+        chapterId: content.ChapterID,
+        orderKey: content.OrderKey
+    };
+}
+
 function getAttachments(versionId, chapter, section, subsection) {
     return appData.CodeAttachment.filter(att =>
         att.ModelCodeVersionID === versionId &&
@@ -4963,6 +5056,7 @@ function loadChapterContent(chapterId, versionId) {
     }
 
     try {
+        // CodeChapter.json 조인 (CodeContent.ChapterID → CodeChapter.ChapterID)
         const chapter = appData.CodeChapter.find(ch => ch.ChapterID === chapterId);
         if (!chapter) {
             console.warn('Chapter not found:', chapterId);
@@ -4970,13 +5064,6 @@ function loadChapterContent(chapterId, versionId) {
         }
 
         console.log('Found chapter:', chapter.Chapter, chapter.TitleEN);
-
-        // Get model code info for dynamic labels
-        const version = appData.ModelCodeVersion.find(v => v.ModelCodeVersionID === versionId);
-        const modelCode = version ? appData.ModelCode.find(mc => mc.ModelCodeID === version.ModelCodeID) : null;
-        const codeName = modelCode ? modelCode.ModelCodeName : 'Code';
-        const codeYear = version ? Math.floor(version.Year) : '';
-        const codeLabel = codeYear ? `${codeName} (${codeYear})` : codeName;
 
         // 챕터 활성화 표시
         document.querySelectorAll('.chapter-item').forEach(item => {
@@ -5006,12 +5093,11 @@ function loadChapterContent(chapterId, versionId) {
             return;
         }
 
-        // 섹션별로 그룹화 (OrderKey 기반)
-        // Use display string (with prefixes like [F], [BE]) as key, store numeric value for sorting
+        // 섹션별로 그룹화 (Subsection 기반)
         const sections = {};
         contents.forEach(content => {
             const sectionDisplay = getSectionDisplay(content.Subsection, content.OrderKey) || 'General';
-            const sectionNumeric = parseFloat(String(content.Subsection || '0').split('.')[0]) || 0;
+            const sectionNumeric = parseFloat(String(content.Subsection || '0').replace(/[\[\]A-Za-z]/g, '').split('.')[0]) || 0;
             if (!sections[sectionDisplay]) {
                 sections[sectionDisplay] = {
                     contents: [],
@@ -5022,6 +5108,7 @@ function loadChapterContent(chapterId, versionId) {
         });
 
         // HTML 생성 - 연속 스크롤 경험을 위한 단일 컨테이너
+        // Chapter 헤더: CodeChapter.json 기준
         let html = `
             <div class="bg-white rounded-lg shadow-sm p-6 md:p-8">
                 <div class="chapter-header">
@@ -5032,7 +5119,7 @@ function loadChapterContent(chapterId, versionId) {
                 <div class="chapter-comment mb-6">${chapter.ChapterComment}</div>` : ''}
         `;
 
-        // 각 섹션 출력 - sort by numeric value while preserving display string with prefixes
+        // 각 섹션 출력 - sort by numeric value
         Object.keys(sections).sort((a, b) => {
             if (a === 'General') return -1;
             if (b === 'General') return 1;
@@ -5042,51 +5129,22 @@ function loadChapterContent(chapterId, versionId) {
             const sectionContents = sectionData.contents;
             const firstContent = sectionContents[0];
 
-            // Display "General" for General sections, not "Section General"
+            // Section 헤더 (TitleEN/TitleKR 두 줄 분리)
             const sectionTitle = sectionNum === 'General' ? 'General' : 'Section ' + sectionNum;
 
             html += `
                 <div class="content-section mb-8">
-                    <h3 class="text-xl font-semibold text-[#374785] mb-3 pb-2 border-b border-gray-200">${sectionTitle}${firstContent.TitleEN ? ' - ' + firstContent.TitleEN : ''}</h3>
+                    <h3 class="text-xl font-semibold text-[#374785] mb-1 pb-2 border-b border-gray-200">${sectionTitle}</h3>
+                    ${firstContent.TitleEN ? `<p class="text-base font-medium text-[#374785] mb-1">${firstContent.TitleEN}</p>` : ''}
                     ${firstContent.TitleKR ? `<p class="text-sm text-gray-600 mb-4 italic">${firstContent.TitleKR}</p>` : ''}
                     <div class="space-y-5">
             `;
 
-            // 각 subsection 출력
+            // 각 subsection 출력 - buildContentViewModel 사용
             sectionContents.forEach(content => {
-                // Use Subsection field for display (e.g., "1", "1.1", "5.3.1")
-                const sectionNumber = getSectionDisplay(content.Subsection, content.OrderKey) || sectionNum;
-                // Section ID에 chapterId 포함 (scrollToSection과 일치)
+                const vm = buildContentViewModel(content, null, chapter);
+                const sectionNumber = vm.subsectionText || sectionNum;
                 const sectionId = getSectionId(chapterId, sectionNumber);
-
-                // Attachments 찾기 (새 구조: AttachmentID 필드 사용)
-                const attachments = content.AttachmentID ? getAttachmentsByIds(content.AttachmentID) : [];
-
-                // Index 태그 표시 (새 구조) - Index와 SubIndex 병합 및 중복 제거
-                const indexTags = content.IndexTags || [];
-                const subIndex = content.SubIndex || '';
-
-                // 모든 태그 수집 및 중복 제거
-                const allTags = new Set();
-                // IndexTags에서 태그 추가 (세미콜론으로 구분된 경우도 처리)
-                indexTags.forEach(tag => {
-                    tag.split(';').forEach(t => {
-                        const trimmed = t.trim();
-                        if (trimmed && !['CD', 'SD', 'DD', 'IFR', 'IFC'].includes(trimmed)) {
-                            allTags.add(trimmed);
-                        }
-                    });
-                });
-                // SubIndex에서 태그 추가 (_로 구분된 계층 구조 분리)
-                if (subIndex) {
-                    subIndex.split(';').forEach(entry => {
-                        entry.trim().split('_').forEach(part => {
-                            const trimmed = part.trim();
-                            if (trimmed) allTags.add(trimmed);
-                        });
-                    });
-                }
-                const uniqueTags = Array.from(allTags);
 
                 // 섹션 카드 스타일 적용
                 html += `
@@ -5105,37 +5163,38 @@ function loadChapterContent(chapterId, versionId) {
                             </button>
                         </div>
 
-                        <!-- 타이틀 -->
-                        <div class="flex items-start gap-2 mb-3 pr-16">
-                            <h4 class="section-title">${sectionNumber}${content.TitleEN ? ' ' + content.TitleEN : ''}</h4>
+                        <!-- 타이틀 영역: Subsection + TitleEN/TitleKR (두 줄 분리) -->
+                        <div class="mb-3 pr-16">
+                            ${vm.subsectionText ? `<h4 class="section-title">${vm.subsectionText}</h4>` : ''}
+                            ${vm.titleEN ? `<p class="text-base font-medium text-gray-800 mt-1">${vm.titleEN}</p>` : ''}
+                            ${vm.titleKR ? `<p class="text-sm text-gray-600 mt-0.5">${vm.titleKR}</p>` : ''}
                         </div>
 
-                        <!-- 키워드 태그 (Index/SubIndex) - 상단 배치 -->
-                        ${uniqueTags.length > 0 ? `
+                        <!-- 키워드 태그 (Index/SubIndex) -->
+                        ${vm.uniqueTags.length > 0 ? `
                         <div class="flex items-center gap-2 flex-wrap mb-4">
-                            ${uniqueTags.map(tag => `<span class="index-tag" onclick="showTagSectionsPopup('${tag.replace(/'/g, "\\'")}', '${versionId}')">${tag}</span>`).join('')}
+                            ${vm.uniqueTags.map(tag => `<span class="index-tag" onclick="showTagSectionsPopup('${tag.replace(/'/g, "\\'")}', '${versionId}')">${tag}</span>`).join('')}
                         </div>` : ''}
 
                         <!-- 콘텐츠 -->
                         <div class="content-wrapper">
-                            ${content.ContentEN ? `<div class="content-en">${content.ContentEN}</div>` : ''}
-                            ${content.ContentKR ? `<div class="content-kr">${content.ContentKR}</div>` : ''}
+                            ${vm.contentEN ? `<div class="content-en">${vm.contentEN}</div>` : ''}
+                            ${vm.contentKR ? `<div class="content-kr">${vm.contentKR}</div>` : ''}
                         </div>
 
                         <!-- NOTE -->
-                        ${content.Comment ? `
+                        ${vm.comment ? `
                         <div class="note-block">
                             <span class="note-label">NOTE</span>
-                            <span class="note-content">${content.Comment}</span>
+                            <span class="note-content">${vm.comment}</span>
                         </div>` : ''}
 
-                        <!-- 첨부파일 -->
-                        ${attachments.length > 0 ? `
+                        <!-- 첨부파일 (CodeContent.AttachmentID → CodeAttachment.AttachmentID) -->
+                        ${vm.attachments.length > 0 ? `
                         <div class="mt-3 pt-3 border-t border-gray-200">
                             <div class="figures-scroll">
-                                ${attachments.map(att => {
+                                ${vm.attachments.map(att => {
                                     let imageFileName = att.ActualFileName || att.FileName;
-                                    // Add .jpg extension if no extension present
                                     if (!imageFileName.match(/\.(jpg|JPG|jpeg|JPEG|png|PNG)$/)) {
                                         imageFileName = imageFileName + '.jpg';
                                     }
@@ -5191,37 +5250,44 @@ function loadAllChaptersContent(versionId, codeId) {
             return;
         }
 
-        const version = appData.ModelCodeVersion.find(v => v.ModelCodeVersionID === versionId);
-        const modelCode = version ? appData.ModelCode.find(mc => mc.ModelCodeID === version.ModelCodeID) : null;
-        const codeName = modelCode ? modelCode.ModelCodeName : 'Code';
-        const codeYear = version ? Math.floor(version.Year) : '';
-        const codeLabel = codeYear ? `${codeName} (${codeYear})` : codeName;
-
         // 연속 스크롤을 위한 단일 컨테이너 시작
         let allHtml = '<div class="bg-white rounded-lg shadow-sm p-6 md:p-8">';
+
+        // Chapter 표시 조건을 위한 상태 관리
+        let prevRenderedChapterId = null;
 
         chapters.forEach((chapter, chapterIndex) => {
             const contents = getContents(chapter.ChapterID);
             const isLastChapter = chapterIndex === chapters.length - 1;
 
-            allHtml += `
-                <div id="chapter-${chapter.ChapterID}" class="chapter-container ${isLastChapter ? '' : ''}" data-chapter-id="${chapter.ChapterID}">
+            // Chapter 헤더 조건부 렌더링:
+            // - Subsection이 있는 content가 하나라도 있을 때만 Chapter 헤더 표시
+            const hasSubsectionContent = contents && contents.some(c =>
+                c.Subsection !== null && c.Subsection !== undefined && c.Subsection !== ''
+            );
+
+            // Chapter 컨테이너 시작
+            allHtml += `<div id="chapter-${chapter.ChapterID}" class="chapter-container" data-chapter-id="${chapter.ChapterID}">`;
+
+            // Chapter 헤더: Subsection이 있는 content가 있을 때만 표시 (CodeChapter.json 기준)
+            if (hasSubsectionContent) {
+                allHtml += `
                     <div class="chapter-header">
                         <h2 class="text-2xl font-bold text-[#24305E] mb-2">Chapter ${chapter.Chapter}: ${chapter.TitleEN || ''}</h2>
                         ${chapter.TitleKR ? `<p class="text-base text-gray-600 mt-1">${chapter.TitleKR}</p>` : ''}
                     </div>
-                    ${chapter.ChapterComment ? `
-                    <div class="chapter-comment mb-6">${chapter.ChapterComment}</div>` : ''}
-            `;
+                    ${chapter.ChapterComment ? `<div class="chapter-comment mb-6">${chapter.ChapterComment}</div>` : ''}
+                `;
+            }
 
             if (!contents || contents.length === 0) {
                 // 빈 챕터는 메시지 없이 자연스럽게 다음 챕터로 이어지도록 함
             } else {
-                // Use display string (with prefixes like [F], [BE]) as key, store numeric value for sorting
+                // 섹션별로 그룹화 (Subsection 기반)
                 const sections = {};
                 contents.forEach(content => {
                     const sectionDisplay = getSectionDisplay(content.Subsection, content.OrderKey) || 'General';
-                    const sectionNumeric = parseFloat(String(content.Subsection || '0').split('.')[0]) || 0;
+                    const sectionNumeric = parseFloat(String(content.Subsection || '0').replace(/[\[\]A-Za-z]/g, '').split('.')[0]) || 0;
                     if (!sections[sectionDisplay]) {
                         sections[sectionDisplay] = {
                             contents: [],
@@ -5239,40 +5305,25 @@ function loadAllChaptersContent(versionId, codeId) {
                     const sectionData = sections[sectionNum];
                     const sectionContents = sectionData.contents;
                     const firstContent = sectionContents[0];
+
+                    // Section 헤더 (TitleEN/TitleKR 두 줄 분리)
                     const sectionTitle = sectionNum === 'General' ? 'General' : 'Section ' + sectionNum;
 
                     allHtml += `
                         <div class="content-section mb-8">
-                            <h3 class="text-xl font-semibold text-[#374785] mb-3 pb-2 border-b border-gray-200">${sectionTitle}${firstContent.TitleEN ? ' - ' + firstContent.TitleEN : ''}</h3>
+                            <h3 class="text-xl font-semibold text-[#374785] mb-1 pb-2 border-b border-gray-200">${sectionTitle}</h3>
+                            ${firstContent.TitleEN ? `<p class="text-base font-medium text-[#374785] mb-1">${firstContent.TitleEN}</p>` : ''}
                             ${firstContent.TitleKR ? `<p class="text-sm text-gray-600 mb-4 italic">${firstContent.TitleKR}</p>` : ''}
                             <div class="space-y-5">
                     `;
 
+                    // 각 subsection 출력 - buildContentViewModel 사용
                     sectionContents.forEach(content => {
-                        // Use Subsection field for display (e.g., "1", "1.1", "5.3.1")
-                        const sectionNumber = getSectionDisplay(content.Subsection, content.OrderKey) || sectionNum;
+                        const vm = buildContentViewModel(content, prevRenderedChapterId, chapter);
+                        prevRenderedChapterId = content.ChapterID;
+
+                        const sectionNumber = vm.subsectionText || sectionNum;
                         const sectionId = getSectionId(chapter.ChapterID, sectionNumber);
-                        const attachments = content.AttachmentID ? getAttachmentsByIds(content.AttachmentID) : [];
-                        const indexTags = content.IndexTags || [];
-                        const subIndex = content.SubIndex || '';
-                        const allTags = new Set();
-                        indexTags.forEach(tag => {
-                            tag.split(';').forEach(t => {
-                                const trimmed = t.trim();
-                                if (trimmed && !['CD', 'SD', 'DD', 'IFR', 'IFC'].includes(trimmed)) {
-                                    allTags.add(trimmed);
-                                }
-                            });
-                        });
-                        if (subIndex) {
-                            subIndex.split(';').forEach(entry => {
-                                entry.trim().split('_').forEach(part => {
-                                    const trimmed = part.trim();
-                                    if (trimmed) allTags.add(trimmed);
-                                });
-                            });
-                        }
-                        const uniqueTags = Array.from(allTags);
 
                         allHtml += `
                             <div class="section-card relative" id="${sectionId}" data-section="${sectionNum}">
@@ -5288,28 +5339,37 @@ function loadAllChaptersContent(versionId, codeId) {
                                         </svg>
                                     </button>
                                 </div>
-                                <div class="flex items-start gap-2 mb-3 pr-16">
-                                    <h4 class="section-title">${sectionNumber}${content.TitleEN ? ' ' + content.TitleEN : ''}</h4>
+
+                                <!-- 타이틀 영역: Subsection + TitleEN/TitleKR (두 줄 분리) -->
+                                <div class="mb-3 pr-16">
+                                    ${vm.subsectionText ? `<h4 class="section-title">${vm.subsectionText}</h4>` : ''}
+                                    ${vm.titleEN ? `<p class="text-base font-medium text-gray-800 mt-1">${vm.titleEN}</p>` : ''}
+                                    ${vm.titleKR ? `<p class="text-sm text-gray-600 mt-0.5">${vm.titleKR}</p>` : ''}
                                 </div>
-                                ${uniqueTags.length > 0 ? `
+
+                                <!-- 키워드 태그 -->
+                                ${vm.uniqueTags.length > 0 ? `
                                 <div class="flex items-center gap-2 flex-wrap mb-4">
-                                    ${uniqueTags.map(tag => `<span class="index-tag" onclick="showTagSectionsPopup('${tag.replace(/'/g, "\\'")}', '${versionId}')">${tag}</span>`).join('')}
+                                    ${vm.uniqueTags.map(tag => `<span class="index-tag" onclick="showTagSectionsPopup('${tag.replace(/'/g, "\\'")}', '${versionId}')">${tag}</span>`).join('')}
                                 </div>` : ''}
+
                                 <div class="content-wrapper">
-                                    ${content.ContentEN ? `<div class="content-en">${content.ContentEN}</div>` : ''}
-                                    ${content.ContentKR ? `<div class="content-kr">${content.ContentKR}</div>` : ''}
+                                    ${vm.contentEN ? `<div class="content-en">${vm.contentEN}</div>` : ''}
+                                    ${vm.contentKR ? `<div class="content-kr">${vm.contentKR}</div>` : ''}
                                 </div>
-                                ${content.Comment ? `
+
+                                ${vm.comment ? `
                                 <div class="note-block">
                                     <span class="note-label">NOTE</span>
-                                    <span class="note-content">${content.Comment}</span>
+                                    <span class="note-content">${vm.comment}</span>
                                 </div>` : ''}
-                                ${attachments.length > 0 ? `
+
+                                <!-- 첨부파일 (CodeContent.AttachmentID → CodeAttachment.AttachmentID) -->
+                                ${vm.attachments.length > 0 ? `
                                 <div class="mt-3 pt-3 border-t border-gray-200">
                                     <div class="figures-scroll">
-                                        ${attachments.map(att => {
+                                        ${vm.attachments.map(att => {
                                             let imageFileName = att.ActualFileName || att.FileName;
-                                            // Add .jpg extension if no extension present
                                             if (!imageFileName.match(/\.(jpg|JPG|jpeg|JPEG|png|PNG)$/)) {
                                                 imageFileName = imageFileName + '.jpg';
                                             }
