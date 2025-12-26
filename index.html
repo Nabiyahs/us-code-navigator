@@ -4647,8 +4647,21 @@ function mapChapterIDsToContent() {
     });
 
     // Map each CodeContent to its ChapterID, ModelCodeVersionID, and ModelCodeID
+    // Skip entries that already have ChapterID from data (new JSON format)
     let mappedCount = 0;
+    let skippedCount = 0;
     appData.CodeContent.forEach(content => {
+        // If ChapterID already exists in data, skip mapping
+        if (content.ChapterID) {
+            skippedCount++;
+            // Just ensure ModelCodeID is set if missing
+            if (!content.ModelCodeID && content.ModelCodeVersionID) {
+                content.ModelCodeID = versionToModelCode[content.ModelCodeVersionID] || null;
+            }
+            return;
+        }
+
+        // Fallback: infer from OrderKey for legacy data without ChapterID
         const { versionId, chapterNum } = determineVersionAndChapter(content.OrderKey);
 
         if (versionId && chapterNum !== null && chapterLookup[versionId]) {
@@ -4663,7 +4676,7 @@ function mapChapterIDsToContent() {
         }
     });
 
-    console.log(`Mapped ${mappedCount} CodeContent entries to ChapterIDs and ModelCodeIDs`);
+    console.log(`ChapterID mapping: ${skippedCount} from data, ${mappedCount} inferred from OrderKey`);
 }
 
 // === Schema-based Data Access Functions ===
