@@ -2518,7 +2518,7 @@
 <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
 <span class="text-white font-bold text-lg">+</span>
 </div>
-<span class="font-bold text-2xl text-green-800" id="compareAddedCount">0</span>
+<span class="font-bold text-2xl text-green-800" id="compareAddedCount">1</span>
 </div>
 </div>
 <div class="bg-gradient-to-br from-yellow-50 to-amber-50 border-l-4 border-yellow-500 p-3 rounded-lg shadow-sm">
@@ -2528,7 +2528,7 @@
 <path clip-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" fill-rule="evenodd"></path>
 </svg>
 </div>
-<span class="font-bold text-2xl text-yellow-800" id="compareModifiedCount">1</span>
+<span class="font-bold text-2xl text-yellow-800" id="compareModifiedCount">2</span>
 </div>
 </div>
 <div class="bg-gradient-to-br from-red-50 to-rose-50 border-l-4 border-red-500 p-3 rounded-lg shadow-sm">
@@ -2538,19 +2538,21 @@
 <path clip-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 001.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" fill-rule="evenodd"></path>
 </svg>
 </div>
-<span class="font-bold text-2xl text-red-800" id="compareRemovedCount">0</span>
+<span class="font-bold text-2xl text-red-800" id="compareRemovedCount">1</span>
 </div>
 </div>
 </div>
 </div>
-<!-- Updated comparison results with dummy data: IBC 2021 (A) vs IBC 2024 (B) -->
+<!-- Comparison results dummy data: IBC 2021 (A) vs IBC 2024 (B), Section 903 -->
 <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="comparisonResults">
+<!-- Code A: IBC 2021 -->
 <div class="compare-panel bg-white rounded-lg shadow-md overflow-hidden">
 <div class="bg-[#374785] text-white p-4">
 <h3 class="font-semibold">IBC 2021 - Section 903</h3>
 <p class="text-sm text-gray-200 mt-1">국제건축법규</p>
 </div>
-<div class="p-6 space-y-4">
+<div class="p-6 space-y-5">
+<!-- 903.3.1.2: Modified (2021 version) -->
 <div class="diff-section">
 <div class="flex items-center gap-2 mb-2">
 <div class="w-6 h-6 bg-yellow-500 rounded-full flex items-center justify-center">
@@ -2560,37 +2562,57 @@
 </div>
 <span class="text-sm font-semibold text-yellow-700">수정됨</span>
 </div>
-<h4 class="font-semibold text-[#24305E] mb-1">903.2.1.1 Group A-1</h4>
+<h4 class="font-semibold text-[#24305E] mb-1">903.3.1.2 NFPA 13R Sprinkler Systems</h4>
+<p class="search-result-title-kr mb-2">NFPA 13R 스프링클러 시스템</p>
 <p class="text-gray-700 leading-relaxed">
-An automatic sprinkler system shall be provided throughout <span class="bg-yellow-200 px-1 rounded">stories containing</span> Group A-1 occupancies where one of the following conditions exists:
+Where allowed in buildings of Group R, up to and including four stories in height, automatic sprinkler systems shall be installed throughout in accordance with NFPA 13R where the floor level of the highest story is <span class="bg-yellow-200 px-1 rounded">30 feet (9144 mm)</span> or less above the lowest level of fire department vehicle access.
 </p>
 <p class="text-gray-600 text-lg mt-2 leading-relaxed">
-다음 조건 중 하나에 해당하는 경우, A-1 용도를 <span class="bg-yellow-200 px-1 rounded">포함하는 층</span> 전체에 자동 스프링클러 설비를 설치해야 한다:
+R용도 건물에서 4층 이하에 허용되는 경우, 최상층 바닥이 소방차 접근 최저층으로부터 <span class="bg-yellow-200 px-1 rounded">30 feet (9144 mm)</span> 이하인 경우 NFPA 13R에 따라 건물 전체에 자동 스프링클러를 설치해야 한다.
 </p>
 </div>
+<!-- 903.2.11.6: Exists only in 2021 (removed in 2024) -->
 <div class="diff-section">
 <div class="flex items-center gap-2 mb-2">
-<div class="w-6 h-6 bg-gray-400 rounded-full flex items-center justify-center">
-<span class="text-white font-bold text-sm">=</span>
+<div class="w-6 h-6 bg-red-500 rounded-full flex items-center justify-center">
+<svg class="w-4 h-4 text-white" fill="currentColor" viewbox="0 0 20 20">
+<path clip-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 001.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" fill-rule="evenodd"></path>
+</svg>
 </div>
-<span class="text-sm font-semibold text-gray-600">동일</span>
+<span class="text-sm font-semibold text-red-700">삭제됨</span>
 </div>
-<h4 class="font-semibold text-[#24305E] mb-1">903.2.1.2 Group A-2</h4>
+<h4 class="font-semibold text-[#24305E] mb-1">903.4.1 Monitoring</h4>
+<p class="search-result-title-kr mb-2">감시</p>
 <p class="text-gray-700 leading-relaxed">
-An automatic sprinkler system shall be provided for Group A-2 occupancies where one of the following conditions exists:
+Alarm, supervisory and trouble signals shall be distinctly different and shall be automatically transmitted to an approved <span class="bg-red-100 px-1 rounded line-through">electronic</span> supervising station or, where approved by the fire code official, shall sound an audible signal at a constantly attended location.
 </p>
 <p class="text-gray-600 text-lg mt-2 leading-relaxed">
-다음 조건 중 하나에 해당하는 경우, A-2 용도에 자동 스프링클러 설비를 설치해야 한다:
+경보, 감시 및 고장 신호는 명확히 구분되어야 하며, 승인된 <span class="bg-red-100 px-1 rounded line-through">전자식</span> 감시국에 자동 전송되거나, 소방관이 승인한 경우 상시 근무 장소에서 가청 신호를 발해야 한다.
+</p>
+</div>
+<!-- 903.2.11.7: No lithium battery clause in 2021 -->
+<div class="diff-section opacity-40">
+<div class="flex items-center gap-2 mb-2">
+<div class="w-6 h-6 bg-gray-300 rounded-full flex items-center justify-center">
+<span class="text-white font-bold text-sm">-</span>
+</div>
+<span class="text-sm font-semibold text-gray-500">해당 없음</span>
+</div>
+<h4 class="font-semibold text-gray-400 mb-1">903.2.11.7</h4>
+<p class="text-gray-400 leading-relaxed italic">
+2021 Edition에 해당 조항 없음
 </p>
 </div>
 </div>
 </div>
+<!-- Code B: IBC 2024 -->
 <div class="compare-panel bg-white rounded-lg shadow-md overflow-hidden">
 <div class="bg-[#24305E] text-white p-4">
 <h3 class="font-semibold">IBC 2024 - Section 903</h3>
 <p class="text-sm text-gray-200 mt-1">국제건축법규</p>
 </div>
-<div class="p-6 space-y-4">
+<div class="p-6 space-y-5">
+<!-- 903.3.1.2: Modified (2024 version) -->
 <div class="diff-section">
 <div class="flex items-center gap-2 mb-2">
 <div class="w-6 h-6 bg-yellow-500 rounded-full flex items-center justify-center">
@@ -2600,27 +2622,49 @@ An automatic sprinkler system shall be provided for Group A-2 occupancies where 
 </div>
 <span class="text-sm font-semibold text-yellow-700">수정됨</span>
 </div>
-<h4 class="font-semibold text-[#24305E] mb-1">903.2.1.1 Group A-1</h4>
+<h4 class="font-semibold text-[#24305E] mb-1">903.3.1.2 NFPA 13R Sprinkler Systems</h4>
+<p class="search-result-title-kr mb-2">NFPA 13R 스프링클러 시스템</p>
 <p class="text-gray-700 leading-relaxed">
-An automatic sprinkler system shall be provided throughout <span class="bg-yellow-200 px-1 rounded">buildings containing</span> Group A-1 occupancies where one of the following conditions exists:
+Where allowed in buildings of Group R, up to and including four stories in height, automatic sprinkler systems shall be installed throughout in accordance with NFPA 13R where the <span class="bg-yellow-200 px-1 rounded">highest point of the roof assembly</span> is <span class="bg-yellow-200 px-1 rounded">45 feet (13716 mm)</span> or less above the lowest level of fire department vehicle access.
 </p>
 <p class="text-gray-600 text-lg mt-2 leading-relaxed">
-다음 조건 중 하나에 해당하는 경우, A-1 용도를 <span class="bg-yellow-200 px-1 rounded">포함하는 건물</span> 전체에 자동 스프링클러 설비를 설치해야 한다:
+R용도 건물에서 4층 이하에 허용되는 경우, <span class="bg-yellow-200 px-1 rounded">지붕 최고점</span>이 소방차 접근 최저층으로부터 <span class="bg-yellow-200 px-1 rounded">45 feet (13716 mm)</span> 이하인 경우 NFPA 13R에 따라 건물 전체에 자동 스프링클러를 설치해야 한다.
 </p>
 </div>
+<!-- 903.4.1: Updated wording in 2024 -->
 <div class="diff-section">
 <div class="flex items-center gap-2 mb-2">
-<div class="w-6 h-6 bg-gray-400 rounded-full flex items-center justify-center">
-<span class="text-white font-bold text-sm">=</span>
+<div class="w-6 h-6 bg-yellow-500 rounded-full flex items-center justify-center">
+<svg class="w-4 h-4 text-white" fill="currentColor" viewbox="0 0 20 20">
+<path clip-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" fill-rule="evenodd"></path>
+</svg>
 </div>
-<span class="text-sm font-semibold text-gray-600">동일</span>
+<span class="text-sm font-semibold text-yellow-700">수정됨</span>
 </div>
-<h4 class="font-semibold text-[#24305E] mb-1">903.2.1.2 Group A-2</h4>
+<h4 class="font-semibold text-[#24305E] mb-1">903.4.1 Monitoring</h4>
+<p class="search-result-title-kr mb-2">감시</p>
 <p class="text-gray-700 leading-relaxed">
-An automatic sprinkler system shall be provided for Group A-2 occupancies where one of the following conditions exists:
+Alarm, supervisory and trouble signals shall be distinctly different and shall be automatically transmitted to an approved <span class="bg-yellow-200 px-1 rounded">electrical</span> supervising station or, where approved by the fire code official, shall sound an audible signal at a constantly attended location.
 </p>
 <p class="text-gray-600 text-lg mt-2 leading-relaxed">
-다음 조건 중 하나에 해당하는 경우, A-2 용도에 자동 스프링클러 설비를 설치해야 한다:
+경보, 감시 및 고장 신호는 명확히 구분되어야 하며, 승인된 <span class="bg-yellow-200 px-1 rounded">전기식</span> 감시국에 자동 전송되거나, 소방관이 승인한 경우 상시 근무 장소에서 가청 신호를 발해야 한다.
+</p>
+</div>
+<!-- 903.2.11.7: New lithium battery clause in 2024 -->
+<div class="diff-section">
+<div class="flex items-center gap-2 mb-2">
+<div class="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
+<span class="text-white font-bold text-sm">+</span>
+</div>
+<span class="text-sm font-semibold text-green-700">추가됨</span>
+</div>
+<h4 class="font-semibold text-[#24305E] mb-1">903.2.11.7 Lithium-ion and Lithium Metal Batteries</h4>
+<p class="search-result-title-kr mb-2">리튬이온 및 리튬금속 배터리</p>
+<p class="text-gray-700 leading-relaxed">
+<span class="bg-green-100 px-1 rounded">An automatic sprinkler system shall be provided throughout buildings containing Group B, F-1, M, or S-1 occupancies where lithium-ion or lithium metal batteries are fabricated, stored, repaired, or sold, regardless of whether the batteries are used in conjunction with an energy storage system.</span>
+</p>
+<p class="text-gray-600 text-lg mt-2 leading-relaxed">
+<span class="bg-green-100 px-1 rounded">리튬이온 또는 리튬금속 배터리를 제조, 저장, 수리 또는 판매하는 B, F-1, M, S-1 용도를 포함하는 건물 전체에 자동 스프링클러 설비를 설치해야 한다. 이는 해당 배터리가 에너지저장시스템과 연계 사용되는지 여부와 무관하게 적용된다.</span>
 </p>
 </div>
 </div>
