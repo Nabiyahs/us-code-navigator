@@ -814,6 +814,15 @@
       white-space: pre-line;
     }
 
+    /* Search result Korean title - matching library code-title-kr style */
+    .search-result-title-kr {
+      font-size: 1rem;
+      color: #374785;
+      font-weight: 500;
+      letter-spacing: 0.01em;
+      line-height: 1.5;
+    }
+
     /* NOTE block - natural wrapping with enhanced visibility */
     .note-block {
       display: block;
@@ -6412,7 +6421,7 @@ function renderAdvancedSearchResults(results, keyword) {
           <div id="advResult${index}" class="result-content">
             <div class="px-4 pb-4 text-sm text-gray-600 leading-relaxed border-t pt-3 space-y-2">
               <p class="text-gray-700">${contentHighlighted}</p>
-              ${result.titleKR ? `<p class="text-gray-500 italic">${highlightText(result.titleKR, keyword)}</p>` : ''}
+              ${result.titleKR ? `<p class="search-result-title-kr">${highlightText(result.titleKR, keyword)}</p>` : ''}
               ${result.indexTags.length > 0 ? `
               <div class="flex flex-wrap gap-1 mt-2">
                 ${result.indexTags.map(tag => `<span class="bg-gray-100 text-gray-600 text-xs px-2 py-0.5 rounded">${tag}</span>`).join('')}
@@ -6888,7 +6897,7 @@ function displaySearchResults(exactMatches, partialMatches, allFilteredResults, 
                                         <span class="text-xs bg-[#F76C6C] text-white px-2 py-1 rounded">${badgeText}</span>
                                     </div>
                                     <h3 class="font-semibold text-[#24305E]">${displayTitleEN}</h3>
-                                    ${displayTitleKR ? `<p class="text-gray-600 text-sm mt-1">${displayTitleKR}</p>` : ''}
+                                    ${displayTitleKR ? `<p class="search-result-title-kr mt-1">${displayTitleKR}</p>` : ''}
                                 </div>
                             </div>
                             <!-- Copy button -->
@@ -6954,7 +6963,7 @@ function displaySearchResults(exactMatches, partialMatches, allFilteredResults, 
                     ${displayTitleKR || displayContentEN || displayContentKR ? `
                     <div id="${uniqueId}" class="result-content">
                         <div class="px-4 pb-4 border-t pt-3">
-                            ${displayTitleKR ? `<p class="text-sm text-gray-600 leading-relaxed mb-2">${displayTitleKR}</p>` : ''}
+                            ${displayTitleKR ? `<p class="search-result-title-kr mb-2">${displayTitleKR}</p>` : ''}
                             ${displayContentEN ? `<div class="content-en">${displayContentEN}</div>` : ''}
                             ${displayContentKR ? `<div class="content-kr">${displayContentKR}</div>` : ''}
                         </div>
