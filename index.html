@@ -2230,12 +2230,6 @@
 <header class="bg-white border-b border-gray-200 shadow-sm sticky top-0 z-10 h-auto min-h-[80px]">
 <div class="flex items-center justify-between px-6 py-3">
 <div class="flex items-center gap-3">
-<!-- 뒤로가기 버튼 -->
-<button onclick="history.back()" class="p-2 hover:bg-gray-100 rounded-lg transition-colors" title="뒤로가기">
-  <svg class="w-5 h-5 text-[#24305E]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-  </svg>
-</button>
 <div>
 <h1 class="font-bold text-[#24305E]" id="codeTitle">IBC (2024)</h1>
 <p class="text-gray-600" id="codeSubtitle">International Building Code</p>
@@ -5429,25 +5423,17 @@ function loadAllChaptersContent(versionId, codeId) {
             const contents = getContents(chapter.ChapterID);
             const isLastChapter = chapterIndex === chapters.length - 1;
 
-            // Chapter 헤더 조건부 렌더링:
-            // - Subsection이 있는 content가 하나라도 있을 때만 Chapter 헤더 표시
-            const hasSubsectionContent = contents && contents.some(c =>
-                c.Subsection !== null && c.Subsection !== undefined && c.Subsection !== ''
-            );
-
             // Chapter 컨테이너 시작
             allHtml += `<div id="chapter-${chapter.ChapterID}" class="chapter-container" data-chapter-id="${chapter.ChapterID}">`;
 
-            // Chapter 헤더: Subsection이 있는 content가 있을 때만 표시 (CodeChapter.json 기준)
-            if (hasSubsectionContent) {
-                allHtml += `
-                    <div class="chapter-header">
-                        <h2 class="text-2xl font-bold text-[#24305E] mb-2">Chapter ${chapter.Chapter} ${chapter.TitleEN || ''}</h2>
-                        ${chapter.TitleKR ? `<p class="text-lg text-gray-600 mt-1">${chapter.TitleKR}</p>` : ''}
-                    </div>
-                    ${chapter.ChapterComment ? `<div class="chapter-comment text-base mb-6">${chapter.ChapterComment}</div>` : ''}
-                `;
-            }
+            // Chapter 헤더: 항상 표시 (CodeChapter.json 기준)
+            allHtml += `
+                <div class="chapter-header">
+                    <h2 class="text-2xl font-bold text-[#24305E] mb-2">Chapter ${chapter.Chapter} ${chapter.TitleEN || ''}</h2>
+                    ${chapter.TitleKR ? `<p class="text-lg text-gray-600 mt-1">${chapter.TitleKR}</p>` : ''}
+                </div>
+                ${chapter.ChapterComment ? `<div class="chapter-comment text-base mb-6">${chapter.ChapterComment}</div>` : ''}
+            `;
 
             if (!contents || contents.length === 0) {
                 // 빈 챕터는 메시지 없이 자연스럽게 다음 챕터로 이어지도록 함
