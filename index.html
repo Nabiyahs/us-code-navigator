@@ -5,6 +5,7 @@
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>US CODE NAVIGATOR</title>
 <script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
@@ -832,6 +833,42 @@
       border-left: 4px solid #F76C6C;
       border-radius: 0 8px 8px 0;
       max-width: 100%;
+    }
+
+    /* Floating back-to-search button */
+    .back-to-search-btn {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      width: 3rem;
+      height: 3rem;
+      border-radius: 50%;
+      background-color: #F76C6C;
+      color: white;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.125rem;
+      box-shadow: 0 4px 12px rgba(247, 108, 108, 0.4);
+      z-index: 45;
+      transition: all 0.3s ease;
+      opacity: 0;
+      transform: scale(0);
+      pointer-events: none;
+    }
+
+    .back-to-search-btn.visible {
+      opacity: 1;
+      transform: scale(1);
+      pointer-events: auto;
+    }
+
+    .back-to-search-btn:hover {
+      background-color: #e55a5a;
+      transform: scale(1.1);
+      box-shadow: 0 6px 16px rgba(247, 108, 108, 0.5);
     }
 
     .note-label {
@@ -1802,6 +1839,10 @@
       </div>
 </nav>
 </aside>
+<!-- Floating back-to-search button -->
+<button id="backToSearchBtn" class="back-to-search-btn" onclick="returnToSearchResults()" title="검색 결과로 돌아가기">
+  <i class="fas fa-search"></i>
+</button>
 <!-- Main Content -->
 <main class="ml-64 min-h-screen">
 <!-- Top Search Bar -->
@@ -2680,17 +2721,22 @@
       Object.values(sections).forEach(section => {
         section.classList.remove('active');
       });
-      
+
       if (sections[sectionName]) {
         sections[sectionName].classList.add('active');
       }
-      
+
       sidebarItems.forEach(item => {
         item.classList.remove('active');
         if (item.dataset.section === sectionName) {
           item.classList.add('active');
         }
       });
+
+      // Hide back-to-search button when navigating away from library
+      if (sectionName !== 'library') {
+        hideBackToSearchBtn();
+      }
     }
 
     sidebarItems.forEach(item => {
@@ -4537,6 +4583,9 @@ function goToHome() {
     document.querySelectorAll('.section-content').forEach(s => s.classList.remove('active'));
     const homeSection = document.getElementById('homeSection');
     if (homeSection) homeSection.classList.add('active');
+
+    // Hide back-to-search button
+    hideBackToSearchBtn();
 }
 
 // === ChapterID Mapping Function ===
@@ -6406,7 +6455,7 @@ function renderAdvancedSearchResults(results, keyword) {
                 </div>
               </div>
               <button class="ml-4 p-2 bg-[#A8D0E6] text-[#24305E] rounded-lg hover:bg-[#8fc0d9] transition-colors flex-shrink-0"
-                      onclick="event.stopPropagation(); loadCodeFromSidebar('${result.versionId}', '${result.codeId}');"
+                      onclick="event.stopPropagation(); window.searchReturnSection='search'; loadCodeFromSidebar('${result.versionId}', '${result.codeId}'); showBackToSearchBtn();"
                       title="코드 라이브러리에서 보기">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
@@ -7129,8 +7178,15 @@ function navigateToLibraryFromModal() {
         const result = window.currentModalResult;
         closeSearchResultModal();
 
+        // Remember which search section to return to
+        window.searchReturnSection = document.getElementById('searchResultsSection')?.classList.contains('active')
+            ? 'searchResults' : 'search';
+
         // Switch to library and load the code
         switchToLibraryCode(result.codeId, result.versionId);
+
+        // Show floating back-to-search button
+        showBackToSearchBtn();
 
         // Scroll to the section after a short delay
         setTimeout(() => {
@@ -7140,8 +7196,15 @@ function navigateToLibraryFromModal() {
 }
 
 function openSearchResult(codeId, versionId, chapterId, section) {
+    // Remember which search section to return to
+    window.searchReturnSection = document.getElementById('searchResultsSection')?.classList.contains('active')
+        ? 'searchResults' : 'search';
+
     // Switch to library and load the code
     switchToLibraryCode(codeId, versionId);
+
+    // Show floating back-to-search button
+    showBackToSearchBtn();
 
     // Scroll to the section after a short delay with history save
     setTimeout(() => {
@@ -7151,6 +7214,36 @@ function openSearchResult(codeId, versionId, chapterId, section) {
 
 function clearSearchInput() {
     document.getElementById('topSearchInput').value = '';
+}
+
+// === Floating back-to-search button ===
+function showBackToSearchBtn() {
+    const btn = document.getElementById('backToSearchBtn');
+    if (btn) btn.classList.add('visible');
+}
+
+function hideBackToSearchBtn() {
+    const btn = document.getElementById('backToSearchBtn');
+    if (btn) btn.classList.remove('visible');
+}
+
+function returnToSearchResults() {
+    const targetSection = window.searchReturnSection || 'searchResults';
+
+    // Switch to the search results section
+    document.querySelectorAll('.section-content').forEach(s => s.classList.remove('active'));
+    const sectionId = targetSection === 'search' ? 'searchSection' : 'searchResultsSection';
+    const target = document.getElementById(sectionId);
+    if (target) target.classList.add('active');
+
+    // Update sidebar
+    document.querySelectorAll('.sidebar-item').forEach(item => item.classList.remove('active'));
+    const searchSidebarItem = document.querySelector('.sidebar-item[data-section="search"]');
+    if (searchSidebarItem) searchSidebarItem.classList.add('active');
+
+    // Hide the floating button
+    hideBackToSearchBtn();
+    window.searchReturnSection = null;
 }
 
 // === Chapter/Section Navigation ===
