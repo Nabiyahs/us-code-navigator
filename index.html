@@ -4235,16 +4235,7 @@ function renderAdvancedFilters(filtersByDiscipline, disciplines) {
         // SubIndex 계층 구조 추가 (영어 먼저 정렬)
         const sortedParents = Object.keys(data.subIndexHierarchy).sort(sortEnglishFirst);
 
-        // 소방기계: 자동화재탐지설비 중복 제거
-        const processedParents = new Set();
-
         sortedParents.forEach(parent => {
-            // 소방기계에서 자동화재탐지설비 중복 처리
-            if (isFireMech && parent === '자동화재탐지설비') {
-                if (processedParents.has('자동화재탐지설비')) return;
-                processedParents.add('자동화재탐지설비');
-            }
-
             const children = data.subIndexHierarchy[parent];
             const childKeys = Object.keys(children).sort(sortEnglishFirst);
             allItems.push({
@@ -4271,13 +4262,13 @@ function renderAdvancedFilters(filtersByDiscipline, disciplines) {
         // 전체 allItems도 영어 먼저 정렬
         allItems.sort((a, b) => sortEnglishFirst(a.value, b.value));
 
-        // 건축구조(D001) 전용: 사용자 정의 정렬 순서 및 중복 제거
-        const isArch = disc.id === 'D001';
-        if (isArch) {
-            // 1. 중복 제거 (같은 value를 가진 항목은 하나만 유지)
+        // 모든 discipline 공통: 중복 제거 (같은 value를 가진 항목은 하나만 유지, parent 우선)
+        {
             const seenValues = new Set();
             const uniqueItems = [];
-            allItems.forEach(item => {
+            // parent 타입을 먼저 배치해서 parent가 우선 유지되도록
+            const sorted = [...allItems].sort((a, b) => (a.type === 'parent' ? -1 : 1) - (b.type === 'parent' ? -1 : 1));
+            sorted.forEach(item => {
                 if (!seenValues.has(item.value)) {
                     seenValues.add(item.value);
                     uniqueItems.push(item);
@@ -4285,8 +4276,14 @@ function renderAdvancedFilters(filtersByDiscipline, disciplines) {
             });
             allItems.length = 0;
             allItems.push(...uniqueItems);
+            // 다시 정렬
+            allItems.sort((a, b) => sortEnglishFirst(a.value, b.value));
+        }
 
-            // 2. 사용자 정의 정렬 순서
+        // 건축구조(D001) 전용: 사용자 정의 정렬 순서
+        const isArch = disc.id === 'D001';
+        if (isArch) {
+            // 사용자 정의 정렬 순서
             const priorityOrder = [
                 'SD', 'DD', 'CD', 'IFC', 'IFR',
                 'Class B', 'Class C', 'Class D', 'ESS',
