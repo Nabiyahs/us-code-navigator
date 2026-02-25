@@ -835,40 +835,32 @@
       max-width: 100%;
     }
 
-    /* Floating back-to-search button */
+    /* Back-to-search button in library header */
     .back-to-search-btn {
-      position: fixed;
-      bottom: 2rem;
-      right: 2rem;
-      width: 3rem;
-      height: 3rem;
+      width: 2.25rem;
+      height: 2.25rem;
       border-radius: 50%;
       background-color: #F76C6C;
       color: white;
       border: none;
       cursor: pointer;
-      display: flex;
+      display: none;
       align-items: center;
       justify-content: center;
-      font-size: 1.125rem;
-      box-shadow: 0 4px 12px rgba(247, 108, 108, 0.4);
-      z-index: 45;
-      transition: all 0.3s ease;
-      opacity: 0;
-      transform: scale(0);
-      pointer-events: none;
+      font-size: 0.875rem;
+      box-shadow: 0 2px 8px rgba(247, 108, 108, 0.4);
+      transition: all 0.2s ease;
+      flex-shrink: 0;
     }
 
     .back-to-search-btn.visible {
-      opacity: 1;
-      transform: scale(1);
-      pointer-events: auto;
+      display: flex;
     }
 
     .back-to-search-btn:hover {
       background-color: #e55a5a;
       transform: scale(1.1);
-      box-shadow: 0 6px 16px rgba(247, 108, 108, 0.5);
+      box-shadow: 0 4px 12px rgba(247, 108, 108, 0.5);
     }
 
     .note-label {
@@ -1839,10 +1831,6 @@
       </div>
 </nav>
 </aside>
-<!-- Floating back-to-search button -->
-<button id="backToSearchBtn" class="back-to-search-btn" onclick="returnToSearchResults()" title="검색 결과로 돌아가기">
-  <i class="fas fa-search"></i>
-</button>
 <!-- Main Content -->
 <main class="ml-64 min-h-screen">
 <!-- Top Search Bar -->
@@ -2288,6 +2276,9 @@
 <header class="bg-white border-b border-gray-200 shadow-sm sticky top-0 z-10 h-auto min-h-[80px]">
 <div class="flex items-center justify-between px-6 py-3">
 <div class="flex items-center gap-3">
+<button id="backToSearchBtn" class="back-to-search-btn" onclick="returnToSearchResults()" title="검색 결과로 돌아가기">
+  <i class="fas fa-arrow-left"></i>
+</button>
 <div>
 <h1 class="font-bold text-[#24305E]" id="codeTitle">IBC (2024)</h1>
 <p class="text-gray-600" id="codeSubtitle">International Building Code</p>
