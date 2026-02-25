@@ -3221,6 +3221,19 @@ ${note}
         });
     }
 
+    function textSimilarity(textA, textB) {
+        if (!textA && !textB) return 1;
+        if (!textA || !textB) return 0;
+        const normalize = t => t.toLowerCase().replace(/<[^>]*>/g, ' ').replace(/[^a-z0-9\s]/g, ' ');
+        const wordsA = new Set(normalize(textA).split(/\s+/).filter(Boolean));
+        const wordsB = new Set(normalize(textB).split(/\s+/).filter(Boolean));
+        if (wordsA.size === 0 && wordsB.size === 0) return 1;
+        let intersection = 0;
+        wordsA.forEach(w => { if (wordsB.has(w)) intersection++; });
+        const union = wordsA.size + wordsB.size - intersection;
+        return union === 0 ? 0 : intersection / union;
+    }
+
     function renderComparisonResults(contentsA, contentsB, codeA, codeB, versionA, versionB, sectionA, sectionB) {
         const resultsDiv = document.getElementById('comparisonResults');
 
@@ -3260,16 +3273,53 @@ ${note}
             contentsA.forEach(c => mapA.set(`${c.Section}.${c.Subsection ?? 'null'}`, c));
             contentsB.forEach(c => mapB.set(`${c.Section}.${c.Subsection ?? 'null'}`, c));
 
+            // Pass 1: Match by Subsection number
+            const matchedBKeys = new Set();
+            const unmatchedA = [];
+
             mapA.forEach((val, key) => {
-                if (!mapB.has(key)) { added++; }
-                else {
+                if (mapB.has(key)) {
+                    matchedBKeys.add(key);
                     const bVal = mapB.get(key);
                     if ((val.ContentEN || '') !== (bVal.ContentEN || '') || (val.ContentKR || '') !== (bVal.ContentKR || '')) {
                         modified++;
                     }
+                } else {
+                    unmatchedA.push({ key, content: val });
                 }
             });
-            mapB.forEach((_, key) => { if (!mapA.has(key)) removed++; });
+
+            const unmatchedB = [];
+            mapB.forEach((val, key) => {
+                if (!matchedBKeys.has(key)) unmatchedB.push({ key, content: val });
+            });
+
+            // Pass 2: Match unmatched items by ContentEN text similarity
+            const SIMILARITY_THRESHOLD = 0.6;
+            const similarityMatchedB = new Set();
+
+            unmatchedA.forEach(itemA => {
+                let bestIdx = -1, bestSim = 0;
+                unmatchedB.forEach((itemB, idx) => {
+                    if (similarityMatchedB.has(idx)) return;
+                    const sim = textSimilarity(
+                        itemA.content.ContentEN || '',
+                        itemB.content.ContentEN || ''
+                    );
+                    if (sim > bestSim) { bestSim = sim; bestIdx = idx; }
+                });
+
+                if (bestIdx >= 0 && bestSim >= SIMILARITY_THRESHOLD) {
+                    similarityMatchedB.add(bestIdx);
+                    modified++; // Same content moved to different subsection number
+                } else {
+                    added++;
+                }
+            });
+
+            unmatchedB.forEach((_, idx) => {
+                if (!similarityMatchedB.has(idx)) removed++;
+            });
         } else {
             added = contentsA.length;
             removed = contentsB.length;
