@@ -5228,6 +5228,11 @@ function loadChapterContent(chapterId, versionId) {
         }).forEach(sectionNum => {
             const sectionData = sections[sectionNum];
             const sectionContents = sectionData.contents;
+
+            // ContentEN 또는 ContentKR이 있는 행이 하나도 없으면 섹션 자체를 스킵
+            const hasRenderableContent = sectionContents.some(c => c.ContentEN || c.ContentKR);
+            if (!hasRenderableContent) return;
+
             // 헤더 행이 있으면 사용, 없으면 첫 번째 콘텐츠 사용
             const headerRow = sectionData.headerRow || sectionContents[0];
 
@@ -5244,14 +5249,11 @@ function loadChapterContent(chapterId, versionId) {
 
             // 각 subsection 출력 - buildContentViewModel 사용
             sectionContents.forEach(content => {
-                // Subsection이 없고 ContentEN/ContentKR도 없는 헤더 행은 스킵
-                // (Section 헤더에서 이미 TitleEN/TitleKR 표시됨)
-                const hasSubsection = content.Subsection !== null &&
-                                      content.Subsection !== undefined &&
-                                      content.Subsection !== '';
+                // ContentEN/ContentKR이 없는 행은 스킵 (Title만 있는 행은 Section 헤더로 이미 표시됨)
+                // Index/SubIndex 값이 있더라도 콘텐츠가 없으면 무시
                 const hasContent = content.ContentEN || content.ContentKR;
-                if (!hasSubsection && !hasContent) {
-                    return; // 헤더 전용 행은 스킵
+                if (!hasContent) {
+                    return; // Title-only 행은 스킵 (중복 표시 방지)
                 }
 
                 const vm = buildContentViewModel(content, null, chapter);
@@ -5417,6 +5419,11 @@ function loadAllChaptersContent(versionId, codeId) {
                 }).forEach(sectionNum => {
                     const sectionData = sections[sectionNum];
                     const sectionContents = sectionData.contents;
+
+                    // ContentEN 또는 ContentKR이 있는 행이 하나도 없으면 섹션 자체를 스킵
+                    const hasRenderableContent = sectionContents.some(c => c.ContentEN || c.ContentKR);
+                    if (!hasRenderableContent) return;
+
                     const headerRow = sectionData.headerRow || sectionContents[0];
 
                     // Section 헤더: "Section {번호} {TitleEN}" 한 줄 표시
@@ -5432,13 +5439,11 @@ function loadAllChaptersContent(versionId, codeId) {
 
                     // 각 subsection 출력 - buildContentViewModel 사용
                     sectionContents.forEach(content => {
-                        // Subsection이 없고 ContentEN/ContentKR도 없는 헤더 행은 스킵
-                        const hasSubsection = content.Subsection !== null &&
-                                              content.Subsection !== undefined &&
-                                              content.Subsection !== '';
+                        // ContentEN/ContentKR이 없는 행은 스킵 (Title만 있는 행은 Section 헤더로 이미 표시됨)
+                        // Index/SubIndex 값이 있더라도 콘텐츠가 없으면 무시
                         const hasContent = content.ContentEN || content.ContentKR;
-                        if (!hasSubsection && !hasContent) {
-                            return;
+                        if (!hasContent) {
+                            return; // Title-only 행은 스킵 (중복 표시 방지)
                         }
 
                         const vm = buildContentViewModel(content, prevRenderedChapterId, chapter);
