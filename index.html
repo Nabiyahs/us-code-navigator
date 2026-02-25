@@ -2446,14 +2446,8 @@
 <div>
 <label class="block text-sm font-semibold text-[#24305E] mb-2">Code A</label>
 <select class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg mb-3 focus:outline-none focus:border-[#A8D0E6]" id="codeAType">
-<option value="IBC">IBC - International Building Code</option>
-<option value="NFPA13">NFPA 13 - Sprinkler Systems</option>
-<option value="NFPA14">NFPA 14 - Standpipe Systems</option>
 </select>
 <select class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg mb-3 focus:outline-none focus:border-[#A8D0E6]" id="codeAVersion">
-<option value="2024">2024 Edition</option>
-<option value="2021">2021 Edition</option>
-<option value="2018">2018 Edition</option>
 </select>
 <!-- Split section input into Section and Subsection fields -->
 <div class="grid grid-cols-2 gap-3">
@@ -2466,12 +2460,6 @@
 </svg>
 </button>
 <datalist id="sectionListA">
-<option value="101">101 - General</option>
-<option value="102">102 - Applicability</option>
-<option value="103">103 - Department of Building Safety</option>
-<option value="104">104 - Duties and Powers</option>
-<option value="105">105 - Permits</option>
-<option value="106">106 - Floor and Roof Design</option>
 </datalist>
 </div>
 <div class="relative">
@@ -2488,14 +2476,8 @@
 <div>
 <label class="block text-sm font-semibold text-[#24305E] mb-2">Code B</label>
 <select class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg mb-3 focus:outline-none focus:border-[#A8D0E6]" id="codeBType">
-<option value="IBC">IBC - International Building Code</option>
-<option value="NFPA13">NFPA 13 - Sprinkler Systems</option>
-<option value="NFPA14">NFPA 14 - Standpipe Systems</option>
 </select>
 <select class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg mb-3 focus:outline-none focus:border-[#A8D0E6]" id="codeBVersion">
-<option selected="" value="2021">2021 Edition</option>
-<option value="2024">2024 Edition</option>
-<option value="2018">2018 Edition</option>
 </select>
 <!-- Split section input into Section and Subsection fields -->
 <div class="grid grid-cols-2 gap-3">
@@ -2508,12 +2490,6 @@
 </svg>
 </button>
 <datalist id="sectionListB">
-<option value="101">101 - General</option>
-<option value="102">102 - Applicability</option>
-<option value="103">103 - Department of Building Safety</option>
-<option value="104">104 - Duties and Powers</option>
-<option value="105">105 - Permits</option>
-<option value="106">106 - Floor and Roof Design</option>
 </datalist>
 </div>
 <div class="relative">
@@ -2542,7 +2518,7 @@
 <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
 <span class="text-white font-bold text-lg">+</span>
 </div>
-<span class="font-bold text-2xl text-green-800">1</span>
+<span class="font-bold text-2xl text-green-800" id="compareAddedCount">1</span>
 </div>
 </div>
 <div class="bg-gradient-to-br from-yellow-50 to-amber-50 border-l-4 border-yellow-500 p-3 rounded-lg shadow-sm">
@@ -2552,7 +2528,7 @@
 <path clip-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" fill-rule="evenodd"></path>
 </svg>
 </div>
-<span class="font-bold text-2xl text-yellow-800">1</span>
+<span class="font-bold text-2xl text-yellow-800" id="compareModifiedCount">1</span>
 </div>
 </div>
 <div class="bg-gradient-to-br from-red-50 to-rose-50 border-l-4 border-red-500 p-3 rounded-lg shadow-sm">
@@ -2562,7 +2538,7 @@
 <path clip-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 001.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" fill-rule="evenodd"></path>
 </svg>
 </div>
-<span class="font-bold text-2xl text-red-800">0</span>
+<span class="font-bold text-2xl text-red-800" id="compareRemovedCount">0</span>
 </div>
 </div>
 </div>
@@ -2862,23 +2838,7 @@
     });
 
     const compareBtn = document.getElementById('compareBtn');
-
-    compareBtn?.addEventListener('click', function() {
-      const codeAType = document.getElementById('codeAType').value;
-      const codeAVersion = document.getElementById('codeAVersion').value;
-      const codeASection = document.getElementById('codeASection').value;
-      const codeASubsection = document.getElementById('codeASubsection').value;
-      
-      const codeBType = document.getElementById('codeBType').value;
-      const codeBVersion = document.getElementById('codeBVersion').value;
-      const codeBSection = document.getElementById('codeBSection').value;
-      const codeBSubsection = document.getElementById('codeBSubsection').value;
-
-      console.log('[v0] Comparing codes:', {
-        codeA: { type: codeAType, version: codeAVersion, section: `${codeASection}${codeASubsection ? '.' + codeASubsection : ''}` },
-        codeB: { type: codeBType, version: codeBVersion, section: `${codeBSection}${codeBSubsection ? '.' + codeBSubsection : ''}` }
-      });
-    });
+    compareBtn?.addEventListener('click', performCodeCompare);
 
     function copySection(sectionId) {
       const sectionElement = document.getElementById(`section-${sectionId}`);
@@ -3115,6 +3075,210 @@ ${note}
       }
     }
 
+    // === Code Compare Functions ===
+    function initCompareSection() {
+        if (!dataLoaded) return;
+
+        // Get codes that have actual CodeContent
+        const codesWithContent = new Set(appData.CodeContent.map(c => c.ModelCodeID));
+        const availableCodes = appData.ModelCode
+            .filter(mc => codesWithContent.has(mc.ModelCodeID))
+            .sort((a, b) => a.ModelCodeName.localeCompare(b.ModelCodeName, 'en', { numeric: true }));
+
+        populateCompareCodeSelect('codeAType', availableCodes);
+        populateCompareCodeSelect('codeBType', availableCodes);
+
+        document.getElementById('codeAType').addEventListener('change', () => updateCompareVersionSelect('A'));
+        document.getElementById('codeBType').addEventListener('change', () => updateCompareVersionSelect('B'));
+        document.getElementById('codeAVersion').addEventListener('change', () => updateCompareSectionList('A'));
+        document.getElementById('codeBVersion').addEventListener('change', () => updateCompareSectionList('B'));
+
+        updateCompareVersionSelect('A');
+        updateCompareVersionSelect('B');
+    }
+
+    function populateCompareCodeSelect(selectId, codes) {
+        const select = document.getElementById(selectId);
+        select.innerHTML = '';
+        codes.forEach(mc => {
+            const opt = document.createElement('option');
+            opt.value = mc.ModelCodeID;
+            opt.textContent = `${mc.ModelCodeName} - ${mc.DescriptionKR}`;
+            select.appendChild(opt);
+        });
+    }
+
+    function updateCompareVersionSelect(side) {
+        const codeId = document.getElementById(`code${side}Type`).value;
+        const versionSelect = document.getElementById(`code${side}Version`);
+        const versions = appData.ModelCodeVersion
+            .filter(v => v.ModelCodeID === codeId)
+            .sort((a, b) => b.Year - a.Year);
+
+        versionSelect.innerHTML = '';
+        versions.forEach(v => {
+            const opt = document.createElement('option');
+            opt.value = v.ModelCodeVersionID;
+            opt.textContent = `${v.Year} Edition`;
+            versionSelect.appendChild(opt);
+        });
+
+        updateCompareSectionList(side);
+    }
+
+    function updateCompareSectionList(side) {
+        const versionId = document.getElementById(`code${side}Version`).value;
+        if (!versionId) return;
+
+        const datalist = document.getElementById(`sectionList${side}`);
+        const contents = appData.CodeContent.filter(c => c.ModelCodeVersionID === versionId);
+        const sections = new Map();
+        contents.forEach(c => {
+            if (c.Section != null) {
+                const key = String(c.Section);
+                if (!sections.has(key)) {
+                    sections.set(key, c.TitleEN || c.TitleKR || '');
+                }
+            }
+        });
+
+        datalist.innerHTML = '';
+        [...sections.entries()]
+            .sort((a, b) => {
+                const numA = parseFloat(a[0]), numB = parseFloat(b[0]);
+                if (!isNaN(numA) && !isNaN(numB)) return numA - numB;
+                return a[0].localeCompare(b[0]);
+            })
+            .forEach(([sec, title]) => {
+                const opt = document.createElement('option');
+                opt.value = sec;
+                if (title) opt.textContent = `${sec} - ${title}`;
+                datalist.appendChild(opt);
+            });
+    }
+
+    function performCodeCompare() {
+        if (!dataLoaded) {
+            alert('데이터를 로딩 중입니다. 잠시 후 다시 시도해주세요.');
+            return;
+        }
+
+        const versionIdA = document.getElementById('codeAVersion').value;
+        const sectionA = document.getElementById('codeASection').value.trim();
+        const subsectionA = document.getElementById('codeASubsection').value.trim();
+
+        const versionIdB = document.getElementById('codeBVersion').value;
+        let sectionB = document.getElementById('codeBSection').value.trim();
+        const subsectionB = document.getElementById('codeBSubsection').value.trim();
+
+        if (!sectionA && !sectionB) {
+            alert('Section 번호를 하나 이상 입력해주세요.');
+            return;
+        }
+
+        // Auto-fill B section with A section if empty
+        if (!sectionB && sectionA) sectionB = sectionA;
+
+        const contentsA = findCompareContent(versionIdA, sectionA, subsectionA);
+        const contentsB = findCompareContent(versionIdB, sectionB, subsectionB);
+
+        const versionA = appData.ModelCodeVersion.find(v => v.ModelCodeVersionID === versionIdA);
+        const versionB = appData.ModelCodeVersion.find(v => v.ModelCodeVersionID === versionIdB);
+        const codeA = appData.ModelCode.find(mc => mc.ModelCodeID === versionA?.ModelCodeID);
+        const codeB = appData.ModelCode.find(mc => mc.ModelCodeID === versionB?.ModelCodeID);
+
+        renderComparisonResults(contentsA, contentsB, codeA, codeB, versionA, versionB, sectionA, sectionB);
+    }
+
+    function findCompareContent(versionId, section, subsection) {
+        return appData.CodeContent.filter(c => {
+            if (c.ModelCodeVersionID !== versionId) return false;
+            if (!section) return false;
+            if (String(c.Section) !== section) return false;
+            if (subsection && String(c.Subsection) !== subsection) return false;
+            return true;
+        }).sort((a, b) => {
+            if (a.OrderKey && b.OrderKey) return a.OrderKey.localeCompare(b.OrderKey);
+            return 0;
+        });
+    }
+
+    function renderComparisonResults(contentsA, contentsB, codeA, codeB, versionA, versionB, sectionA, sectionB) {
+        const resultsDiv = document.getElementById('comparisonResults');
+
+        const headerA = `${codeA?.ModelCodeName || '?'} ${versionA?.Year || ''} - Section ${sectionA}`;
+        const headerB = `${codeB?.ModelCodeName || '?'} ${versionB?.Year || ''} - Section ${sectionB}`;
+        const subtitleA = codeA?.DescriptionKR || codeA?.DescriptionEN || '';
+        const subtitleB = codeB?.DescriptionKR || codeB?.DescriptionEN || '';
+
+        function buildSideHTML(contents) {
+            if (!contents || contents.length === 0) {
+                return '<div class="p-6 text-gray-400 text-center py-12">해당 섹션의 데이터가 없습니다.</div>';
+            }
+            let html = '<div class="p-6 space-y-5">';
+            contents.forEach(c => {
+                const sub = c.Subsection != null ? `${c.Section}.${c.Subsection}` : (c.Section != null ? String(c.Section) : '');
+                const title = c.TitleEN || '';
+                html += '<div class="diff-section">';
+                if (title || c.TitleKR) {
+                    html += `<h4 class="font-semibold text-[#24305E] mb-1">${sub ? sub + ' ' : ''}${title}</h4>`;
+                    if (c.TitleKR && title) html += `<p class="search-result-title-kr mb-2">${c.TitleKR}</p>`;
+                }
+                if (c.ContentEN) html += `<div class="content-en">${c.ContentEN}</div>`;
+                if (c.ContentKR) html += `<div class="content-kr">${c.ContentKR}</div>`;
+                html += '</div>';
+            });
+            html += '</div>';
+            return html;
+        }
+
+        // Calculate summary for same-code version comparison
+        let added = 0, modified = 0, removed = 0;
+        const isSameCode = codeA?.ModelCodeID === codeB?.ModelCodeID;
+
+        if (isSameCode && sectionA === sectionB) {
+            const mapA = new Map();
+            const mapB = new Map();
+            contentsA.forEach(c => mapA.set(`${c.Section}.${c.Subsection ?? 'null'}`, c));
+            contentsB.forEach(c => mapB.set(`${c.Section}.${c.Subsection ?? 'null'}`, c));
+
+            mapA.forEach((val, key) => {
+                if (!mapB.has(key)) { added++; }
+                else {
+                    const bVal = mapB.get(key);
+                    if ((val.ContentEN || '') !== (bVal.ContentEN || '') || (val.ContentKR || '') !== (bVal.ContentKR || '')) {
+                        modified++;
+                    }
+                }
+            });
+            mapB.forEach((_, key) => { if (!mapA.has(key)) removed++; });
+        } else {
+            added = contentsA.length;
+            removed = contentsB.length;
+        }
+
+        document.getElementById('compareAddedCount').textContent = added;
+        document.getElementById('compareModifiedCount').textContent = modified;
+        document.getElementById('compareRemovedCount').textContent = removed;
+
+        resultsDiv.innerHTML = `
+            <div class="compare-panel bg-white rounded-lg shadow-md overflow-hidden">
+                <div class="bg-[#374785] text-white p-4">
+                    <h3 class="font-semibold">${headerA}</h3>
+                    <p class="text-sm text-gray-200 mt-1">${subtitleA}</p>
+                </div>
+                ${buildSideHTML(contentsA)}
+            </div>
+            <div class="compare-panel bg-white rounded-lg shadow-md overflow-hidden">
+                <div class="bg-[#24305E] text-white p-4">
+                    <h3 class="font-semibold">${headerB}</h3>
+                    <p class="text-sm text-gray-200 mt-1">${subtitleB}</p>
+                </div>
+                ${buildSideHTML(contentsB)}
+            </div>
+        `;
+    }
+
     function clearInput(inputId) {
       document.getElementById(inputId).value = '';
       document.getElementById(inputId).focus();
@@ -3311,6 +3475,8 @@ document.addEventListener('DOMContentLoaded', function() {
       console.log('Data initialization complete');
       // Initialize advanced search filters
       initAdvancedSearchFilters();
+      // Initialize compare section dropdowns
+      initCompareSection();
     }
   });
 });
